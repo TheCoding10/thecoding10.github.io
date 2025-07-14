@@ -1,143 +1,123 @@
-from pathlib import Path
-
-# HTML content for a detailed, game-styled Calculus 1 page
-calc1_html_content = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calculus 1 - MemoLearning</title>
+  <title>Calculus 1 | MemoLearning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      background: linear-gradient(to right, #20232a, #282c34);
-      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      color: #222;
     }
+
     header {
-      background: #61dafb;
-      color: #000;
-      padding: 1rem 2rem;
+      background: #222;
+      color: white;
+      padding: 1em;
       text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
+      font-family: 'Press Start 2P', cursive;
     }
-    section {
-      padding: 2rem;
+
+    .container {
+      padding: 2em;
     }
+
     h2 {
-      color: #61dafb;
-      margin-bottom: 1rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 18px;
+      margin-bottom: 1em;
     }
+
     .unit {
-      background: #333;
-      padding: 1rem;
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      padding: 1.5em;
+      margin-bottom: 2em;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
     }
-    .unit h3 {
-      margin: 0 0 0.5rem 0;
-      color: #ffd700;
+
+    .unit:hover {
+      border-color: #4b6cb7;
+      transform: scale(1.02);
     }
-    .unit ul {
-      list-style: none;
-      padding-left: 1rem;
-    }
-    .unit ul li {
-      margin: 0.25rem 0;
-      padding-left: 1rem;
-      position: relative;
-    }
-    .unit ul li::before {
-      content: "🎮";
-      position: absolute;
-      left: 0;
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      color: #61dafb;
-      text-decoration: none;
+
+    .unit-title {
+      font-size: 1.2em;
       font-weight: bold;
+      margin-bottom: 0.5em;
+    }
+
+    ul {
+      padding-left: 1.2em;
+    }
+
+    a.back {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      background: #222;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    a.back:hover {
+      background: #444;
     }
   </style>
 </head>
 <body>
-  <header>Calculus 1 - MemoLearning</header>
-  <section>
-    <h2>Master the Basics of Calculus 1</h2>
+
+  <header>
+    CALCULUS 1
+  </header>
+
+  <div class="container">
+    <h2>Units</h2>
 
     <div class="unit">
-      <h3>Unit 1: Limits & Continuity</h3>
+      <div class="unit-title">Unit 1: Limits and Continuity</div>
       <ul>
-        <li>Understanding Limits</li>
-        <li>Limits at Infinity</li>
-        <li>Continuity & Discontinuities</li>
-        <li>Intermediate Value Theorem</li>
+        <li>Understanding limits graphically and algebraically</li>
+        <li>One-sided and infinite limits</li>
+        <li>Continuity and the Intermediate Value Theorem</li>
       </ul>
     </div>
 
     <div class="unit">
-      <h3>Unit 2: Derivatives</h3>
+      <div class="unit-title">Unit 2: Derivatives</div>
       <ul>
-        <li>Definition of a Derivative</li>
-        <li>Rules of Differentiation</li>
-        <li>Chain Rule</li>
-        <li>Implicit Differentiation</li>
-        <li>Applications: Velocity, Rate of Change</li>
+        <li>Definition of the derivative</li>
+        <li>Rules: Power, Product, Quotient, and Chain</li>
+        <li>Implicit differentiation</li>
       </ul>
     </div>
 
     <div class="unit">
-      <h3>Unit 3: Analyzing Derivatives</h3>
+      <div class="unit-title">Unit 3: Applications of Derivatives</div>
       <ul>
-        <li>Critical Points & Extrema</li>
-        <li>Mean Value Theorem</li>
-        <li>First & Second Derivative Tests</li>
-        <li>Graphing with Derivatives</li>
+        <li>Maxima and minima</li>
+        <li>Concavity and inflection points</li>
+        <li>Optimization problems</li>
       </ul>
     </div>
 
     <div class="unit">
-      <h3>Unit 4: Applications of Derivatives</h3>
+      <div class="unit-title">Unit 4: Integrals</div>
       <ul>
-        <li>Optimization Problems</li>
-        <li>Related Rates</li>
-        <li>Linear Approximation</li>
-        <li>Differentials</li>
-      </ul>
-    </div>
-
-    <div class="unit">
-      <h3>Unit 5: Integrals</h3>
-      <ul>
-        <li>Antiderivatives & Indefinite Integrals</li>
-        <li>Definite Integrals</li>
+        <li>Definite and indefinite integrals</li>
         <li>Fundamental Theorem of Calculus</li>
-        <li>Integration Techniques</li>
+        <li>u-substitution</li>
       </ul>
     </div>
 
-    <div class="unit">
-      <h3>Unit 6: Applications of Integrals</h3>
-      <ul>
-        <li>Area Between Curves</li>
-        <li>Volumes of Solids of Revolution</li>
-        <li>Work, Averages, and Accumulation</li>
-      </ul>
-    </div>
+    <a class="back" href="math_courses.html">← Back to Math Courses</a>
+  </div>
 
-    <a class="back-btn" href="math_courses.html">← Back to Math Courses</a>
-  </section>
 </body>
 </html>
-"""
-
-# Save to a new HTML file
-output_path = Path("/mnt/data/calc1.html")
-output_path.write_text(calc1_html_content)
-
-output_path.name
-
