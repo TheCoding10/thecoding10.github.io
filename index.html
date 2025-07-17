@@ -4,28 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MemoLearning</title>
-  <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
   <style>
-    /* Existing styles unchanged */
+    :root {
+      --primary: #4f46e5;
+      --dark-bg: #1a1a2e;
+      --light-bg: #f4f4f4;
+    }
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Inter', sans-serif;
     }
-
     body {
-      line-height: 1.6;
+      background-color: white;
       color: #333;
+      line-height: 1.6;
     }
-
     header {
-      background-color: #1a1a2e;
+      background-color: var(--dark-bg);
       color: white;
-      padding: 1rem 2rem;
+      padding: 1.2rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -33,147 +39,142 @@
       max-width: 1200px;
       margin: auto;
     }
-
     .logo {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 800;
+      color: #fff;
     }
-
     nav ul {
       display: flex;
       gap: 1.5rem;
+      list-style: none;
     }
-
     nav a {
       color: white;
       text-decoration: none;
       font-weight: 600;
+      transition: 0.3s;
     }
-
     nav a:hover {
-      text-decoration: underline;
+      color: var(--primary);
     }
-
     .hero {
       background: linear-gradient(to right, #667eea, #764ba2);
       color: white;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .btn-primary {
+      background-color: white;
+      color: var(--primary);
+      padding: 0.9rem 2rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 1.5rem;
+    }
+    .btn-primary:hover {
+      background-color: #ddd;
+    }
+    .courses {
+      max-width: 1200px;
+      margin: auto;
+      padding: 4rem 2rem;
+    }
+    .courses h2 {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: var(--light-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+    }
+    .card h3 {
+      margin-bottom: 1rem;
+    }
+    .btn-secondary {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .btn-secondary:hover {
+      background-color: #3730a3;
+    }
+    .about, .contact {
+      background: #fafafa;
       padding: 4rem 2rem;
       text-align: center;
     }
-
-    .hero h1 {
-      font-size: 2.5rem;
+    .about h2, .contact h2 {
+      font-size: 2rem;
       margin-bottom: 1rem;
     }
-
-    .btn-primary {
-      background-color: white;
-      color: #333;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: 5px;
-      margin-top: 1rem;
-      display: inline-block;
-    }
-
-    .btn-primary:hover {
-      background-color: #eee;
-    }
-
-    .courses,
-    .about,
-    .contact {
-      max-width: 1200px;
-      margin: auto;
-      padding: 3rem 2rem;
-    }
-
-    .courses-layout {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .course-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      padding: 1.5rem;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
-      min-height: 220px;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .btn-secondary {
-      margin-top: 1rem;
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background-color: #1a1a2e;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .btn-secondary:hover {
-      background-color: #333;
-    }
-
-    .sidebar {
-      flex-basis: 280px;
-      flex-shrink: 0;
-      max-width: 280px;
-    }
-
     .about p {
-      margin-top: 1rem;
+      max-width: 800px;
+      margin: auto;
       font-size: 1.1rem;
     }
-
     .contact form {
+      max-width: 600px;
+      margin: 2rem auto 0;
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      margin-top: 1rem;
     }
-
-    .contact input,
-    .contact textarea {
-      padding: 0.75rem;
+    .contact input, .contact textarea {
+      padding: 1rem;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
       font-size: 1rem;
     }
-
     .contact button {
-      padding: 0.75rem;
-      border: none;
-      background-color: #764ba2;
+      padding: 1rem;
+      background-color: var(--primary);
       color: white;
+      border: none;
       font-size: 1rem;
-      border-radius: 5px;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
+      transition: 0.3s;
     }
-
     .contact button:hover {
-      background-color: #5e3e89;
+      background-color: #3730a3;
     }
-
     footer {
       text-align: center;
-      background-color: #1a1a2e;
+      background-color: var(--dark-bg);
       color: white;
       padding: 1rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -193,57 +194,55 @@
   </header>
 
   <section id="home" class="hero">
-    <h1>Master Concepts in Math, Computer Science, Finance, and More</h1>
-    <p>Modern learning powered by clarity, practice, and purpose.</p>
-    <a href="#courses" class="btn-primary">Explore Courses</a>
+    <h1>Learn Smarter. Achieve More.</h1>
+    <p>Master Math, Computer Science, Business, and more with bite-sized, engaging content.</p>
+    <button class="btn-primary">Explore Courses</button>
   </section>
 
   <section id="courses" class="courses">
-    <h2>Featured Learning Tracks</h2>
-    <div class="courses-layout">
-      <div class="course-grid">
-        <div class="card">
-          <h3>Applied Mathematics</h3>
-          <p>From precalc to linear algebra, problem-solving made simple.</p>
-          <a href="memolearning/math_courses_themed.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Computer Science</h3>
-          <p>Learn Python, algorithms, data structures, and more.</p>
-          <a href="memolearning/cs_courses.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Finance & Investing</h3>
-          <p>Understand markets, build wealth, and think long-term.</p>
-          <a href="memolearning/finance_courses.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Economics</h3>
-          <p>Understand how economies function, make decisions, and allocate resources.</p>
-          <a href="memolearning/economics_courses.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Business</h3>
-          <p>Explore entrepreneurship, marketing, branding, and strategy.</p>
-          <a href="memolearning/business_courses.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Data Science</h3>
-          <p>Learn data analysis, visualization, and machine learning with real-world projects.</p>
-          <a href="memolearning/data_science.html" class="btn-secondary">Start Learning</a>
-        </div>
-        <div class="card">
-          <h3>Machine Learning</h3>
-          <p>Train models, explore neural networks, and understand data-driven intelligence.</p>
-          <a href="memolearning/ml_courses.html" class="btn-secondary">Start Learning</a>
-        </div>
+    <h2>Explore Learning Tracks</h2>
+    <div class="course-grid">
+      <div class="card">
+        <h3>Applied Mathematics</h3>
+        <p>Precalculus, linear algebra, and problem-solving — simplified and visualized.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
       </div>
-
-      <aside class="sidebar">
-        <h3>Why MemoLearning?</h3>
-        <p>MemoLearning exists to simplify and supercharge your education. With interactive, video-rich content and guided practice, we aim to be the Academy of high-performance learners — for both students and professionals.</p>
-      </aside>
+      <div class="card">
+        <h3>Computer Science</h3>
+        <p>Learn Python, algorithms, data structures, and system design.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
+      <div class="card">
+        <h3>Finance & Investing</h3>
+        <p>Understand money, markets, and smart financial decisions.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
+      <div class="card">
+        <h3>Data Science</h3>
+        <p>Analyze data, build models, and extract insights using Python & tools.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
+      <div class="card">
+        <h3>Machine Learning</h3>
+        <p>Understand neural networks, AI logic, and ML tools hands-on.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
+      <div class="card">
+        <h3>Business</h3>
+        <p>Explore entrepreneurship, branding, marketing, and business models.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
+      <div class="card">
+        <h3>Economics</h3>
+        <p>Understand how the economy works—from micro to macro—with clear examples.</p>
+        <a href="#" class="btn-secondary">Start Learning</a>
+      </div>
     </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2>Why MemoLearning?</h2>
+    <p>MemoLearning is built to revolutionize your learning experience. Whether you're a student, creator, or professional, we offer clean, engaging, and practical lessons that help you learn deeply and apply confidently.</p>
   </section>
 
   <section id="contact" class="contact">
@@ -251,13 +250,13 @@
     <form>
       <input type="text" placeholder="Your Name" required />
       <input type="email" placeholder="Your Email" required />
-      <textarea placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
+      <textarea placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
     </form>
   </section>
 
   <footer>
-    <p>&copy; 2025 MemoLearning. All rights reserved.</p>
+    <p>&copy; 2025 MemoLearning.</p>
   </footer>
 </body>
 </html>
