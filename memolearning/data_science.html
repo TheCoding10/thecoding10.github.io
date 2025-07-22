@@ -23,6 +23,16 @@
       font-size: 36px;
       margin: 0;
     }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
     .container {
       padding: 30px 20px;
       max-width: 1200px;
@@ -30,60 +40,4 @@
     }
     .course-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .course-card {
-      background-color: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-    }
-    .course-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
-    .course-card h3 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #4f46e5;
-      margin-bottom: 8px;
-    }
-    .course-card p {
-      font-size: 14px;
-      color: #374151;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>MemoLearning Data Science Track</h1>
-    <p>Master the art of data—from fundamentals to real-world machine learning pipelines.</p>
-  </header>
-
-  <div class="container">
-    <div class="course-grid">
-      <div class="course-card"><h3>Introduction to Data Science</h3><p>Overview of data science, workflow, and tools.</p></div>
-      <div class="course-card"><h3>Python for Data Science</h3><p>Python programming, libraries like NumPy and Pandas.</p></div>
-      <div class="course-card"><h3>Data Wrangling</h3><p>Cleaning, transforming, and preparing real-world datasets.</p></div>
-      <div class="course-card"><h3>Data Visualization</h3><p>Creating insightful visuals using Matplotlib and Seaborn.</p></div>
-      <div class="course-card"><h3>Descriptive Statistics</h3><p>Mean, median, variance, distributions, and visual analysis.</p></div>
-      <div class="course-card"><h3>Inferential Statistics</h3><p>Hypothesis testing, p-values, confidence intervals.</p></div>
-      <div class="course-card"><h3>SQL for Data Analysis</h3><p>Querying, filtering, and aggregating data with SQL.</p></div>
-      <div class="course-card"><h3>Exploratory Data Analysis (EDA)</h3><p>Identifying trends, patterns, and anomalies in data.</p></div>
-      <div class="course-card"><h3>Linear Regression</h3><p>Predictive modeling using linear approaches.</p></div>
-      <div class="course-card"><h3>Classification Algorithms</h3><p>Logistic regression, decision trees, k-NN, and SVM.</p></div>
-      <div class="course-card"><h3>Clustering Techniques</h3><p>K-means, DBSCAN, hierarchical clustering.</p></div>
-      <div class="course-card"><h3>Dimensionality Reduction</h3><p>PCA, t-SNE, and feature selection techniques.</p></div>
-      <div class="course-card"><h3>Model Evaluation & Validation</h3><p>Train/test split, cross-validation, accuracy metrics.</p></div>
-      <div class="course-card"><h3>Machine Learning Pipelines</h3><p>From raw data to deployable models using scikit-learn.</p></div>
-      <div class="course-card"><h3>Deep Learning Introduction</h3><p>Neural networks basics with TensorFlow or PyTorch.</p></div>
-      <div class="course-card"><h3>Time Series Analysis</h3><p>Forecasting trends and seasonality in sequential data.</p></div>
-      <div class="course-card"><h3>Big Data Tools</h3><p>Working with large datasets using Spark and Hadoop.</p></div>
-      <div class="course-card"><h3>Natural Language Processing (NLP)</h3><p>Text preprocessing, sentiment analysis, and vectorization.</p></div>
-    </div>
-  </div>
-</body>
-</html>
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1f
