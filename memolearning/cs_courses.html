@@ -1,70 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemoLearning | Computer Science Courses</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoLearning Computer Science Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
     .course-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
     }
-    .card {
-      background: #f9f9f9;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
-    .back-btn {
-      display: inline-block;
-      margin-top: 2rem;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      background: #1a1a2e;
-      color: white;
-      border-radius: 5px;
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="navbar">
-      <div class="logo">MemoLearning</div>
-      <nav>
-        <ul>
-          <li><a href="../index.html">Home</a></li>
-        </ul>
-      </nav>
-    </div>
+    <h1>MemoLearning Computer Science Track</h1>
+    <p>Master computer science from programming fundamentals to advanced systems and theory—interactive, engaging, and structured for growth.</p>
   </header>
 
-  <section class="courses">
-    <h2>Computer Science Courses</h2>
+  <div class="container">
     <div class="course-grid">
-      <div class="card">
-        <h3>Intro to Programming</h3>
-        <p>Learn Python from the ground up — syntax, logic, and problem-solving.</p>
-        <a href="#">View Lessons</a>
-      </div>
-      <div class="card">
-        <h3>Data Structures & Algorithms</h3>
-        <p>Master arrays, linked lists, trees, sorting, recursion and more.</p>
-        <a href="#">View Lessons</a>
-      </div>
-      <div class="card">
-        <h3>Web Development</h3>
-        <p>Build websites with HTML, CSS, JavaScript, and front-end frameworks.</p>
-        <a href="#">View Lessons</a>
-      </div>
+      <div class="course-card"><h3>Introduction to Programming</h3><p>Learn Python/Java, functions, loops, and problem solving.</p></div>
+      <div class="course-card"><h3>Discrete Mathematics</h3><p>Logic, sets, proofs, recursion, and graphs.</p></div>
+      <div class="course-card"><h3>Data Structures & Algorithms I</h3><p>Arrays, stacks, queues, recursion, and Big-O.</p></div>
+      <div class="course-card"><h3>Object-Oriented Programming</h3><p>Classes, inheritance, encapsulation, and polymorphism.</p></div>
+      <div class="course-card"><h3>Computer Organization & Architecture</h3><p>Memory, binary, CPU structure, and machine-level programming.</p></div>
+      <div class="course-card"><h3>Data Structures & Algorithms II</h3><p>Trees, heaps, hashing, graphs, and sorting algorithms.</p></div>
+      <div class="course-card"><h3>Systems Programming</h3><p>C programming, memory, processes, and scripting.</p></div>
+      <div class="course-card"><h3>Web Development</h3><p>HTML, CSS, JavaScript, and responsive UI design.</p></div>
+      <div class="course-card"><h3>Software Engineering</h3><p>Agile methods, Git, testing, and collaborative design.</p></div>
+      <div class="course-card"><h3>Databases & SQL</h3><p>Relational models, queries, joins, and normalization.</p></div>
+      <div class="course-card"><h3>Operating Systems</h3><p>Processes, scheduling, memory management, and file systems.</p></div>
+      <div class="course-card"><h3>Computer Networks</h3><p>TCP/IP, DNS, sockets, routing, and protocols.</p></div>
+      <div class="course-card"><h3>Programming Languages</h3><p>OOP, functional, procedural paradigms, and interpreters.</p></div>
+      <div class="course-card"><h3>Theory of Computation</h3><p>Automata, Turing machines, regular languages, and complexity.</p></div>
+      <div class="course-card"><h3>Cybersecurity Fundamentals</h3><p>Cryptography, ethical hacking, vulnerabilities, and security.</p></div>
+      <div class="course-card"><h3>Capstone Project</h3><p>Team-based real-world full-stack or systems project.</p></div>
+      <div class="course-card"><h3>Electives</h3><p>Mobile dev, cloud, HCI, blockchain, advanced web.</p></div>
     </div>
-    <a class="back-btn" href="../index.html">← Back to Home</a>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 MemoLearning. All rights reserved.</p>
-  </footer>
+  </div>
 </body>
 </html>
