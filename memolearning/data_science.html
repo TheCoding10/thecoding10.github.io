@@ -23,6 +23,10 @@
       font-size: 36px;
       margin: 0;
     }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
     header a.back-link {
       display: inline-block;
       margin-top: 20px;
@@ -40,4 +44,115 @@
     }
     .course-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1f
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MemoLearning Data Science Track</h1>
+    <p>Master the art of data—from fundamentals to real-world machine learning pipelines.</p>
+    <a class="back-link" href="index.html">← Back to Homepage</a>
+  </header>
+
+  <div class="container">
+    <div class="course-grid">
+      <div class="course-card">
+        <h3>Introduction to Data Science</h3>
+        <p>Overview of DS workflow, tools, and mindset.</p>
+      </div>
+      <div class="course-card">
+        <h3>Python for Data Science</h3>
+        <p>Learn NumPy, Pandas, and essential programming.</p>
+      </div>
+      <div class="course-card">
+        <h3>Data Wrangling</h3>
+        <p>Clean, transform, and prepare messy datasets.</p>
+      </div>
+      <div class="course-card">
+        <h3>Data Visualization</h3>
+        <p>Charts and visual insights using Matplotlib and Seaborn.</p>
+      </div>
+      <div class="course-card">
+        <h3>Descriptive Statistics</h3>
+        <p>Summarizing data and identifying patterns.</p>
+      </div>
+      <div class="course-card">
+        <h3>SQL for Data Analysis</h3>
+        <p>Query, join, and extract insights from databases.</p>
+      </div>
+      <div class="course-card">
+        <h3>Exploratory Data Analysis</h3>
+        <p>Discover trends and insights through visualization and summaries.</p>
+      </div>
+      <div class="course-card">
+        <h3>Inferential Statistics</h3>
+        <p>Hypothesis testing and confidence intervals.</p>
+      </div>
+      <div class="course-card">
+        <h3>Linear Regression</h3>
+        <p>Understand trends and relationships in data.</p>
+      </div>
+      <div class="course-card">
+        <h3>Classification Algorithms</h3>
+        <p>Use decision trees, logistic regression, and more.</p>
+      </div>
+      <div class="course-card">
+        <h3>Clustering Techniques</h3>
+        <p>Find natural groupings with k-means and DBSCAN.</p>
+      </div>
+      <div class="course-card">
+        <h3>Dimensionality Reduction</h3>
+        <p>Use PCA and t-SNE to reduce features.</p>
+      </div>
+      <div class="course-card">
+        <h3>Model Evaluation & Validation</h3>
+        <p>Test accuracy and avoid overfitting with cross-validation.</p>
+      </div>
+      <div class="course-card">
+        <h3>Machine Learning Pipelines</h3>
+        <p>Scikit-learn pipelines to automate model building.</p>
+      </div>
+      <div class="course-card">
+        <h3>Deep Learning Introduction</h3>
+        <p>Build neural networks using TensorFlow or PyTorch.</p>
+      </div>
+      <div class="course-card">
+        <h3>Time Series Analysis</h3>
+        <p>Analyze trends and forecast with ARIMA and others.</p>
+      </div>
+      <div class="course-card">
+        <h3>Big Data Tools</h3>
+        <p>Use Spark and Hadoop to process large datasets.</p>
+      </div>
+      <div class="course-card">
+        <h3>Natural Language Processing (NLP)</h3>
+        <p>Work with text data and embeddings.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
