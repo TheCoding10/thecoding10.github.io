@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoLearning Cybersecurity Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MemoLearning Cybersecurity Track</h1>
+    <p>Protect digital systems and data through hands-on training in security fundamentals, networks, ethical hacking, and more.</p>
+    <a class="back-link" href="/">← Back to Homepage</a>
+  </header>
 
+  <div class="container">
+    <div class="course-grid">
+      <div class="course-card"><h3>Introduction to Cybersecurity</h3><p>Foundational principles, history, and security mindset.</p></div>
+      <div class="course-card"><h3>Networking Basics</h3><p>TCP/IP, protocols, DNS, IP addressing, and OSI model.</p></div>
+      <div class="course-card"><h3>Operating System Security</h3><p>Hardening Windows, Linux, and endpoint protection.</p></div>
+      <div class="course-card"><h3>Threats and Vulnerabilities</h3><p>Common attack vectors and malware types.</p></div>
+      <div class="course-card"><h3>Network Security</h3><p>Firewalls, IDS/IPS, VPNs, proxies, and wireless protection.</p></div>
+      <div class="course-card"><h3>Cryptography</h3><p>Encryption, hashing, digital signatures, and key management.</p></div>
+      <div class="course-card"><h3>Identity & Access Management (IAM)</h3><p>Authentication, authorization, and access controls.</p></div>
+      <div class="course-card"><h3>Ethical Hacking</h3><p>Penetration testing, Kali Linux, Metasploit, and techniques.</p></div>
+      <div class="course-card"><h3>Web Application Security</h3><p>OWASP Top 10, SQL injection, XSS, and CSRF protection.</p></div>
+      <div class="course-card"><h3>Incident Response & Forensics</h3><p>Responding to breaches and investigating digital evidence.</p></div>
+      <div class="course-card"><h3>Security Operations (SOC)</h3><p>Monitoring, SIEM tools, and threat intelligence.</p></div>
+      <div class="course-card"><h3>Cloud Security</h3><p>Securing AWS, Azure, GCP, and shared responsibility model.</p></div>
+      <div class="course-card"><h3>Risk Management & Compliance</h3><p>Frameworks (NIST, ISO), risk assessment, and governance.</p></div>
+      <div class="course-card"><h3>Security Automation</h3><p>Scripting with Python and tools for automated detection.</p></div>
+      <div class="course-card"><h3>Red Team vs Blue Team</h3><p>Simulated attacks and real-time defense strategies.</p></div>
+    </div>
+  </div>
+</body>
+</html>
