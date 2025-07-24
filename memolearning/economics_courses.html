@@ -2,33 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemoLearning | Economics</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoLearning Economics Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="navbar">
-      <div class="logo">MemoLearning</div>
-      <nav><ul><li><a href="../index.html">Home</a></li></ul></nav>
-    </div>
+    <h1>MemoLearning Economics Track</h1>
+    <p>Master economic thinking—from basic principles to global macroeconomic theory and applied policy analysis.</p>
+    <a class="back-link" href="/">← Back to Homepage</a>
   </header>
 
-  <section class="courses">
-    <h2>Economics</h2>
+  <div class="container">
     <div class="course-grid">
-      <div class="card">
-        <h3>Microeconomics</h3>
-        <p>Understand consumer behavior, production, and pricing strategies.</p>
-        <a href="#">View Lessons</a>
-      </div>
-      <div class="card">
-        <h3>Macroeconomics</h3>
-        <p>Explore GDP, inflation, unemployment, and fiscal/monetary policy.</p>
-        <a href="#">View Lessons</a>
-      </div>
+      <div class="course-card"><h3>Introduction to Economics</h3><p>Understand scarcity, opportunity cost, and supply & demand.</p></div>
+      <div class="course-card"><h3>Microeconomics</h3><p>Market structures, consumer behavior, and firm decisions.</p></div>
+      <div class="course-card"><h3>Macroeconomics</h3><p>GDP, unemployment, inflation, and fiscal & monetary policy.</p></div>
+      <div class="course-card"><h3>International Economics</h3><p>Trade theories, exchange rates, and globalization.</p></div>
+      <div class="course-card"><h3>Development Economics</h3><p>Growth, poverty, inequality, and policy in developing countries.</p></div>
+      <div class="course-card"><h3>Behavioral Economics</h3><p>Psychological insights into economic decision-making.</p></div>
+      <div class="course-card"><h3>Econometrics</h3><p>Statistical analysis and causal inference using data.</p></div>
+      <div class="course-card"><h3>Public Economics</h3><p>Taxation, government spending, and welfare programs.</p></div>
+      <div class="course-card"><h3>Labor Economics</h3><p>Wages, employment, discrimination, and labor markets.</p></div>
+      <div class="course-card"><h3>Financial Economics</h3><p>Asset pricing, risk, and the role of financial markets.</p></div>
+      <div class="course-card"><h3>Environmental Economics</h3><p>Externalities, pollution, and sustainability policies.</p></div>
+      <div class="course-card"><h3>Game Theory</h3><p>Strategic interaction and decision-making models.</p></div>
+      <div class="course-card"><h3>Health Economics</h3><p>Healthcare systems, insurance markets, and access issues.</p></div>
+      <div class="course-card"><h3>Industrial Organization</h3><p>Firm behavior, antitrust law, and market power.</p></div>
+      <div class="course-card"><h3>History of Economic Thought</h3><p>Evolution of economic ideas and key thinkers.</p></div>
     </div>
-    <a class="back-btn" href="../index.html">← Back to Home</a>
-  </section>
+  </div>
 </body>
 </html>
