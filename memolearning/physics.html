@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoLearning Physics Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MemoLearning Physics Track</h1>
+    <p>Master the laws of the universe—from mechanics to quantum physics—with structured, clear lessons.</p>
+    <a class="back-link" href="/">← Back to Homepage</a>
+  </header>
 
+  <div class="container">
+    <div class="course-grid">
+      <div class="course-card"><h3>Classical Mechanics</h3><p>Motion, Newton's laws, energy, and momentum.</p></div>
+      <div class="course-card"><h3>Waves & Oscillations</h3><p>Simple harmonic motion, sound, and wave behavior.</p></div>
+      <div class="course-card"><h3>Thermodynamics</h3><p>Heat, work, energy, and the laws of thermodynamics.</p></div>
+      <div class="course-card"><h3>Electricity & Magnetism</h3><p>Circuits, fields, charges, and electromagnetic theory.</p></div>
+      <div class="course-card"><h3>Optics</h3><p>Reflection, refraction, lenses, and wave optics.</p></div>
+      <div class="course-card"><h3>Modern Physics</h3><p>Relativity, photoelectric effect, and nuclear physics.</p></div>
+      <div class="course-card"><h3>Quantum Mechanics</h3><p>Wave-particle duality, uncertainty, and quantum systems.</p></div>
+      <div class="course-card"><h3>Statistical Mechanics</h3><p>Probabilities, ensembles, and thermodynamic relations.</p></div>
+      <div class="course-card"><h3>Particle Physics</h3><p>Fundamental particles and forces of nature.</p></div>
+      <div class="course-card"><h3>Astrophysics</h3><p>Stars, galaxies, cosmology, and black holes.</p></div>
+    </div>
+  </div>
+</body>
+</html>
