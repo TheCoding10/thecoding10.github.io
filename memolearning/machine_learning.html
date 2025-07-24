@@ -3,50 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Machine Learning | MemoLearning</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <title>MemoLearning Machine Learning Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f4f7fb;
+      background-color: #f9fafb;
+      color: #111827;
       margin: 0;
       padding: 0;
-      color: #333;
     }
     header {
-      background-color: #1f2937;
+      background-color: #4f46e5;
       color: white;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
-      font-size: 28px;
     }
-    main {
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
       padding: 30px 20px;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: auto;
     }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
     }
-    ul {
-      list-style-type: disc;
-      padding-left: 20px;
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
     }
   </style>
 </head>
 <body>
-  <header>Machine Learning</header>
-  <main>
-    <h2>What You'll Learn</h2>
-    <ul>
-      <li>Supervised & Unsupervised Learning</li>
-      <li>Neural Networks & Deep Learning</li>
-      <li>Model Evaluation & Tuning</li>
-      <li>Projects: Classification, Regression, Clustering</li>
-      <li>Python Libraries: scikit-learn, TensorFlow, PyTorch</li>
-    </ul>
-    <p>Courses coming soon...</p>
-  </main>
+  <header>
+    <h1>MemoLearning Machine Learning Track</h1>
+    <p>Master machine learning from foundational theory to deep learning and real-world applications.</p>
+    <a class="back-link" href="/">← Back to Homepage</a>
+  </header>
+
+  <div class="container">
+    <div class="course-grid">
+      <div class="course-card"><h3>Machine Learning Foundations</h3><p>Learn supervised vs unsupervised learning, models, and theory.</p></div>
+      <div class="course-card"><h3>Linear Regression</h3><p>Predict continuous variables and interpret regression outputs.</p></div>
+      <div class="course-card"><h3>Logistic Regression</h3><p>Model binary outcomes and learn about classification probabilities.</p></div>
+      <div class="course-card"><h3>Decision Trees & Random Forests</h3><p>Understand decision boundaries, overfitting, and ensemble methods.</p></div>
+      <div class="course-card"><h3>Support Vector Machines (SVM)</h3><p>Learn about hyperplanes, margins, and kernel tricks.</p></div>
+      <div class="course-card"><h3>K-Nearest Neighbors (KNN)</h3><p>Simple distance-based classification and regression technique.</p></div>
+      <div class="course-card"><h3>Naive Bayes</h3><p>Probability-based classification for text and categorical data.</p></div>
+      <div class="course-card"><h3>Unsupervised Learning</h3><p>Clustering, dimensionality reduction, and anomaly detection.</p></div>
+      <div class="course-card"><h3>Principal Component Analysis (PCA)</h3><p>Reduce dimensionality while preserving variance.</p></div>
+      <div class="course-card"><h3>K-Means Clustering</h3><p>Group data into clusters using distance metrics.</p></div>
+      <div class="course-card"><h3>Model Evaluation & Metrics</h3><p>Precision, recall, F1-score, confusion matrices, and AUC.</p></div>
+      <div class="course-card"><h3>Model Selection & Tuning</h3><p>Cross-validation, hyperparameter tuning, and pipelines.</p></div>
+      <div class="course-card"><h3>Neural Networks</h3><p>Build and train artificial neural networks from scratch.</p></div>
+      <div class="course-card"><h3>Deep Learning with TensorFlow</h3><p>Train deep models using TensorFlow or Keras APIs.</p></div>
+      <div class="course-card"><h3>Convolutional Neural Networks (CNNs)</h3><p>Build models for image recognition and spatial data.</p></div>
+      <div class="course-card"><h3>Recurrent Neural Networks (RNNs)</h3><p>Sequence modeling and time-series prediction.</p></div>
+      <div class="course-card"><h3>Natural Language Processing (NLP)</h3><p>Tokenization, embeddings, transformers, and BERT.</p></div>
+      <div class="course-card"><h3>Machine Learning Capstone</h3><p>Real-world end-to-end ML project with data prep, modeling, and deployment.</p></div>
+    </div>
+  </div>
 </body>
 </html>
