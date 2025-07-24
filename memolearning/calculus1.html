@@ -1,694 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemoLearning Calculus I Curriculum</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoLearning Mathematics Track</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-color: #f9fafb;
       color: #111827;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
     }
-    
     header {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
+      background-color: #4f46e5;
       color: white;
       padding: 40px 20px;
       text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
-    
     header h1 {
-      font-size: 42px;
-      margin: 0;
-      font-weight: 800;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    }
-    
-    header p {
-      margin-top: 15px;
-      font-size: 18px;
-      opacity: 0.9;
-    }
-    
-    .back-link {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 600;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .back-link:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    
-    .container {
-      padding: 40px 20px;
-      max-width: 1400px;
-      margin: auto;
-    }
-    
-    .units-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 30px;
-      margin-top: 20px;
-    }
-    
-    .unit-card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      transition: all 0.4s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .unit-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      transition: left 0.5s;
-    }
-    
-    .unit-card:hover::before {
-      left: 100%;
-    }
-    
-    .unit-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-      background: rgba(255, 255, 255, 1);
-    }
-    
-    .unit-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .unit-number {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      margin-right: 15px;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    }
-    
-    .unit-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #1f2937;
-      margin: 0;
-      flex: 1;
-    }
-    
-    .optional-badge {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
-    
-    .unit-description {
-      color: #6b7280;
-      font-size: 16px;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-    
-    .topics-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .topics-list li {
-      padding: 8px 0;
-      border-bottom: 1px solid #f3f4f6;
-      color: #374151;
-      position: relative;
-      padding-left: 20px;
-    }
-    
-    .topics-list li:before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: #667eea;
-      font-weight: bold;
-    }
-    
-    .topics-list li:last-child {
-      border-bottom: none;
-    }
-    
-    .skills-count {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-    
-    .curriculum-stats {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 40px;
-      text-align: center;
-      color: white;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 30px;
-      margin-top: 20px;
-    }
-    
-    .stat-item {
-      text-align: center;
-    }
-    
-    .stat-number {
       font-size: 36px;
-      font-weight: 800;
-      display: block;
+      margin: 0;
     }
-    
-    .stat-label {
-      font-size: 14px;
-      opacity: 0.8;
-      margin-top: 5px;
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
     }
-
-    .page-container {
-      display: none;
-      padding: 40px 20px;
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 30px 20px;
       max-width: 1200px;
       margin: auto;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      margin-top: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     }
-
-    .page-container.active {
-      display: block;
-    }
-
-    .unit-detail-header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #e5e7eb;
-    }
-
-    .unit-detail-title {
-      font-size: 32px;
-      font-weight: 800;
-      color: #1f2937;
-      margin-bottom: 10px;
-    }
-
-    .subtopics-grid {
+    .course-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 20px;
     }
-
-    .subtopic-card {
-      background: white;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
       padding: 20px;
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
-
-    .subtopic-card:hover {
-      border-color: #667eea;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      text-decoration: none;
+      color: inherit;
     }
-
-    .subtopic-title {
+    .course-card h3 {
       font-size: 18px;
       font-weight: 600;
-      color: #667eea;
-      margin-bottom: 10px;
+      color: #4f46e5;
+      margin-bottom: 8px;
     }
-
-    .back-to-overview {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 30px;
-      transition: all 0.3s ease;
-    }
-
-    .back-to-overview:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>📐 MemoLearning Calculus I</h1>
-    <p>Complete curriculum with limits, derivatives, and integrals—the foundation of calculus</p>
-    <a class="back-link" href="/">← Back to Homepage</a>
+    <h1>MemoLearning Mathematics Track</h1>
+    <p>Master math from foundational concepts to advanced theory—interactive, engaging, and structured for growth.</p>
+    <a class="back-link" href="https://thecoding10.github.io/memolearning/">← Back to Homepage</a>
   </header>
 
-  <div class="container" id="overview">
-    <div class="curriculum-stats">
-      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-number">8</span>
-          <div class="stat-label">Total Units</div>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">~140</span>
-          <div class="stat-label">Skills to Master</div>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">6</span>
-          <div class="stat-label">Core Units</div>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">2</span>
-          <div class="stat-label">Application Units</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="units-grid">
-      <div class="unit-card" onclick="showUnitDetail(1)">
-        <div class="unit-header">
-          <div class="unit-number">1</div>
-          <h3 class="unit-title">Limits and Continuity</h3>
-        </div>
-        <p class="unit-description">Foundation of calculus: understanding limits, continuity, and the behavior of functions.</p>
-        <ul class="topics-list">
-          <li>Limit definition and intuitive understanding</li>
-          <li>Evaluating limits algebraically and graphically</li>
-          <li>One-sided limits and infinite limits</li>
-          <li>Continuity at a point and on intervals</li>
-          <li>Intermediate Value Theorem</li>
-          <li>Limits at infinity and horizontal asymptotes</li>
-          <li>Squeeze Theorem</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(2)">
-        <div class="unit-header">
-          <div class="unit-number">2</div>
-          <h3 class="unit-title">Derivatives</h3>
-        </div>
-        <p class="unit-description">Core concept: rates of change, tangent lines, and the derivative as a limit.</p>
-        <ul class="topics-list">
-          <li>Definition of derivative as a limit</li>
-          <li>Geometric interpretation: tangent lines</li>
-          <li>Differentiability vs. continuity</li>
-          <li>Basic differentiation rules</li>
-          <li>Power rule, constant rule, sum rule</li>
-          <li>Derivatives of polynomial functions</li>
-          <li>Higher-order derivatives</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(3)">
-        <div class="unit-header">
-          <div class="unit-number">3</div>
-          <h3 class="unit-title">Differentiation Rules</h3>
-        </div>
-        <p class="unit-description">Master all the techniques for finding derivatives of complex functions.</p>
-        <ul class="topics-list">
-          <li>Product rule and quotient rule</li>
-          <li>Chain rule and composite functions</li>
-          <li>Derivatives of trigonometric functions</li>
-          <li>Derivatives of exponential functions</li>
-          <li>Derivatives of logarithmic functions</li>
-          <li>Derivatives of inverse trig functions</li>
-          <li>Implicit differentiation</li>
-          <li>Related rates problems</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(4)">
-        <div class="unit-header">
-          <div class="unit-number">4</div>
-          <h3 class="unit-title">Applications of Derivatives</h3>
-        </div>
-        <p class="unit-description">Use derivatives to analyze functions and solve optimization problems.</p>
-        <ul class="topics-list">
-          <li>Critical points and local extrema</li>
-          <li>First and second derivative tests</li>
-          <li>Concavity and inflection points</li>
-          <li>Curve sketching and function analysis</li>
-          <li>Optimization problems</li>
-          <li>Mean Value Theorem</li>
-          <li>L'Hôpital's Rule</li>
-          <li>Linear approximation and differentials</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(5)">
-        <div class="unit-header">
-          <div class="unit-number">5</div>
-          <h3 class="unit-title">Integrals</h3>
-        </div>
-        <p class="unit-description">Introduce antiderivatives and the Fundamental Theorem of Calculus.</p>
-        <ul class="topics-list">
-          <li>Antiderivatives and indefinite integrals</li>
-          <li>Basic integration rules</li>
-          <li>Riemann sums and definite integrals</li>
-          <li>Fundamental Theorem of Calculus</li>
-          <li>Properties of definite integrals</li>
-          <li>Net change theorem</li>
-          <li>Average value of a function</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(6)">
-        <div class="unit-header">
-          <div class="unit-number">6</div>
-          <h3 class="unit-title">Integration Techniques</h3>
-        </div>
-        <p class="unit-description">Advanced methods for evaluating integrals and antiderivatives.</p>
-        <ul class="topics-list">
-          <li>Integration by substitution (u-substitution)</li>
-          <li>Integration by parts</li>
-          <li>Trigonometric integrals</li>
-          <li>Trigonometric substitution</li>
-          <li>Partial fractions</li>
-          <li>Improper integrals</li>
-          <li>Numerical integration methods</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(7)">
-        <div class="unit-header">
-          <div class="unit-number">7</div>
-          <h3 class="unit-title">Applications of Integration</h3>
-        </div>
-        <p class="unit-description">Use integration to find areas, volumes, and solve real-world problems.</p>
-        <ul class="topics-list">
-          <li>Area between curves</li>
-          <li>Volumes using disk and washer methods</li>
-          <li>Volumes using cylindrical shells</li>
-          <li>Arc length and surface area</li>
-          <li>Work and fluid pressure</li>
-          <li>Center of mass and moments</li>
-          <li>Differential equations and slope fields</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" onclick="showUnitDetail(8)">
-        <div class="unit-header">
-          <div class="unit-number">8</div>
-          <h3 class="unit-title">Differential Equations</h3>
-        </div>
-        <p class="unit-description">Introduction to solving basic differential equations and modeling real-world phenomena.</p>
-        <ul class="topics-list">
-          <li>Slope fields and Euler's method</li>
-          <li>Separable differential equations</li>
-          <li>Exponential growth and decay models</li>
-          <li>Logistic growth models</li>
-          <li>Newton's law of cooling</li>
-          <li>Related rates applications</li>
-          <li>Modeling with differential equations</li>
-        </ul>
-      </div>
+  <div class="container">
+    <div class="course-grid">
+      <a href="https://thecoding10.github.io/memolearning/precalc.html" class="course-card">
+        <h3>Precalculus</h3>
+        <p>Functions, trigonometry, and algebraic foundations.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/calculus1.html" class="course-card">
+        <h3>Calculus I</h3>
+        <p>Limits, derivatives, and basic applications.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/calculus2.html" class="course-card">
+        <h3>Calculus II</h3>
+        <p>Integration techniques and infinite series.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/multivariable.html" class="course-card">
+        <h3>Multivariable Calculus</h3>
+        <p>Partial derivatives, multiple integrals, and vector fields.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/differential-equations.html" class="course-card">
+        <h3>Differential Equations</h3>
+        <p>Modeling systems using ODEs.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/linear-algebra.html" class="course-card">
+        <h3>Linear Algebra</h3>
+        <p>Matrices, eigenvalues, and vector spaces.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/discrete-math.html" class="course-card">
+        <h3>Discrete Mathematics</h3>
+        <p>Logic, set theory, induction, and combinatorics.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/real-analysis.html" class="course-card">
+        <h3>Introduction to Real Analysis</h3>
+        <p>Rigor behind limits, continuity, and the real number system.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/abstract-algebra.html" class="course-card">
+        <h3>Abstract Algebra I</h3>
+        <p>Groups, rings, and mathematical structures.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/numerical-analysis.html" class="course-card">
+        <h3>Numerical Analysis</h3>
+        <p>Algorithms for solving mathematical problems computationally.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/complex-analysis.html" class="course-card">
+        <h3>Complex Analysis</h3>
+        <p>Functions of a complex variable, contour integration.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/stochastic-processes.html" class="course-card">
+        <h3>Stochastic Processes</h3>
+        <p>Random processes, Markov chains, and applications.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/differential-geometry.html" class="course-card">
+        <h3>Differential Geometry</h3>
+        <p>Geometry of curves and surfaces.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/topology.html" class="course-card">
+        <h3>Topology</h3>
+        <p>Spaces, continuity, and compactness concepts.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/pde.html" class="course-card">
+        <h3>Partial Differential Equations (PDEs)</h3>
+        <p>Solving heat, wave, and Laplace equations.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/probability.html" class="course-card">
+        <h3>Probability & Statistics</h3>
+        <p>Probability theory, distributions, and inference.</p>
+      </a>
+      <a href="https://thecoding10.github.io/memolearning/scientific-computing.html" class="course-card">
+        <h3>Scientific Computing</h3>
+        <p>Numerical simulations and high-performance computing.</p>
+      </a>
     </div>
   </div>
-
-  <!-- Individual Unit Detail Pages -->
-  <div class="page-container" id="unit-1">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 1: Limits and Continuity</h1>
-      <p>The foundation of calculus: understanding how functions behave as inputs approach specific values.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Limit Definition</h3>
-        <p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Evaluating Limits</h3>
-        <p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">One-sided Limits</h3>
-        <p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Infinite Limits</h3>
-        <p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Continuity</h3>
-        <p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
-        <p>Apply IVT to guarantee the existence of solutions and understand its geometric interpretation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Limits at Infinity</h3>
-        <p>Determine horizontal asymptotes and end behavior of rational and other functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Squeeze Theorem</h3>
-        <p>Use the squeeze theorem to evaluate limits of oscillating functions and complex expressions.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-2">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 2: Derivatives</h1>
-      <p>The derivative as the fundamental tool for measuring rates of change and slopes of curves.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Definition of Derivative</h3>
-        <p>Understand the derivative as the limit of difference quotients and its geometric meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Tangent Lines</h3>
-        <p>Find equations of tangent lines using the derivative and understand the geometric interpretation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Differentiability</h3>
-        <p>Explore the relationship between differentiability and continuity, identifying non-differentiable points.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Basic Rules</h3>
-        <p>Master the power rule, constant rule, sum rule, and difference rule for differentiation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Polynomial Derivatives</h3>
-        <p>Apply differentiation rules to find derivatives of polynomial functions of any degree.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Higher-Order Derivatives</h3>
-        <p>Calculate second, third, and higher derivatives, understanding their physical interpretations.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-3">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 3: Differentiation Rules</h1>
-      <p>Advanced techniques for finding derivatives of complex and composite functions.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Product Rule</h3>
-        <p>Differentiate products of functions using (uv)' = u'v + uv' and apply to complex problems.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Quotient Rule</h3>
-        <p>Find derivatives of quotients using (u/v)' = (u'v - uv')/v² and simplify results.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Chain Rule</h3>
-        <p>Master the chain rule for composite functions and apply to nested function compositions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Derivatives</h3>
-        <p>Learn derivatives of sin, cos, tan, sec, csc, and cot functions with applications.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Exponential Derivatives</h3>
-        <p>Differentiate exponential functions including e^x, a^x, and exponential compositions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Logarithmic Derivatives</h3>
-        <p>Find derivatives of ln(x), log base a, and logarithmic functions with chain rule.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Inverse Trig Derivatives</h3>
-        <p>Differentiate arcsin, arccos, arctan and other inverse trigonometric functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Implicit Differentiation</h3>
-        <p>Find derivatives of implicitly defined functions and solve related rate problems.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-4">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 4: Applications of Derivatives</h1>
-      <p>Use derivatives to analyze function behavior, solve optimization problems, and model real-world scenarios.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Critical Points</h3>
-        <p>Find critical points where f'(x) = 0 or undefined, and classify local maxima and minima.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">First Derivative Test</h3>
-        <p>Use the sign of f'(x) to determine increasing/decreasing intervals and local extrema.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Second Derivative Test</h3>
-        <p>Apply f''(x) to classify critical points and determine concavity of functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Concavity & Inflection</h3>
-        <p>Analyze concave up/down regions and find inflection points using the second derivative.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Curve Sketching</h3>
-        <p>Combine all derivative information to sketch accurate graphs of complex functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Optimization</h3>
-        <p>Solve real-world maximum and minimum problems using calculus techniques.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Mean Value Theorem</h3>
-        <p>Understand and apply MVT to guarantee the existence of specific derivative values.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">L'Hôpital's Rule</h3>
-        <p>Evaluate indeterminate forms using L'Hôpital's rule for limits involving derivatives.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-5">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 5: Integrals</h1>
-      <p>Introduction to antiderivatives and the Fundamental Theorem connecting derivatives and integrals.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Antiderivatives</h3>
-        <p>Understand antiderivatives as reverse derivatives and find indefinite integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Basic Integration Rules</h3>
-        <p>Learn power rule for integration, constant rule, and sum/difference rules.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Riemann Sums</h3>
-        <p>Approximate area under curves using left, right, midpoint, and trapezoidal sums.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Definite Integrals</h3>
-        <p>Understand definite integrals as limits of Riemann sums and their geometric meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Fundamental Theorem</h3>
-        <p>Master both parts of FTC connecting differentiation and integration processes.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Properties of Integrals</h3>
-        <p>Learn linearity, additivity, and comparison properties of definite integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Net Change Theorem</h3>
-        <p>Apply integration to find total change from rate of change functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Average Value</h3>
-        <p>Calculate the average value of functions over intervals using integration.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-6">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 6: Integration Techniques</h1>
-      <p>Advanced methods for evaluating complex integrals and antiderivatives.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">U-Substitution</h3>
-        <p>Master substitution method to transform integrals into simpler forms.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Integration by Parts</h3>
-        <p>Apply the formula ∫udv = uv - ∫vdu to integrate products of functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Integrals</h3>
-        <p>Integrate powers and products of trigonometric functions using identities.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Substitution</h3>
-        <p>Use trig substitutions to evaluate integrals involving √(a²-x²), √(a²+x²), etc.</p>
-      </div>
-      <div class="subtopic-card">
+</body>
+</html>
