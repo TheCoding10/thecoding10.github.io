@@ -132,16 +132,6 @@
       flex: 1;
     }
     
-    .optional-badge {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
-    
     .unit-description {
       color: #6b7280;
       font-size: 16px;
@@ -173,18 +163,6 @@
     
     .topics-list li:last-child {
       border-bottom: none;
-    }
-    
-    .skills-count {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      position: absolute;
-      top: 20px;
-      right: 20px;
     }
     
     .curriculum-stats {
@@ -298,7 +276,7 @@
   <header>
     <h1>📐 MemoLearning Calculus I</h1>
     <p>Complete curriculum with limits, derivatives, and integrals—the foundation of calculus</p>
-    <a class="back-link" href="/">← Back to Homepage</a>
+    <a class="back-link" href="math.html">← Back to Mathematics</a>
   </header>
 
   <div class="container" id="overview">
@@ -324,6 +302,7 @@
       </div>
     </div>
 
+    <!-- Units -->
     <div class="units-grid">
       <div class="unit-card" onclick="showUnitDetail(1)">
         <div class="unit-header">
@@ -341,7 +320,6 @@
           <li>Squeeze Theorem</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(2)">
         <div class="unit-header">
           <div class="unit-number">2</div>
@@ -358,7 +336,6 @@
           <li>Higher-order derivatives</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(3)">
         <div class="unit-header">
           <div class="unit-number">3</div>
@@ -376,7 +353,6 @@
           <li>Related rates problems</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(4)">
         <div class="unit-header">
           <div class="unit-number">4</div>
@@ -394,7 +370,6 @@
           <li>Linear approximation and differentials</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(5)">
         <div class="unit-header">
           <div class="unit-number">5</div>
@@ -411,7 +386,6 @@
           <li>Average value of a function</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(6)">
         <div class="unit-header">
           <div class="unit-number">6</div>
@@ -428,7 +402,6 @@
           <li>Numerical integration methods</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(7)">
         <div class="unit-header">
           <div class="unit-number">7</div>
@@ -445,7 +418,6 @@
           <li>Differential equations and slope fields</li>
         </ul>
       </div>
-
       <div class="unit-card" onclick="showUnitDetail(8)">
         <div class="unit-header">
           <div class="unit-number">8</div>
@@ -465,7 +437,7 @@
     </div>
   </div>
 
-  <!-- Individual Unit Detail Pages -->
+  <!-- Unit Details (Example for Unit 1) -->
   <div class="page-container" id="unit-1">
     <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
     <div class="unit-detail-header">
@@ -473,383 +445,9 @@
       <p>The foundation of calculus: understanding how functions behave as inputs approach specific values.</p>
     </div>
     <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Partial Fractions</h3>
-        <p>Decompose rational functions into simpler fractions for easier integration.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Improper Integrals</h3>
-        <p>Evaluate integrals with infinite limits or discontinuous integrands.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Numerical Integration</h3>
-        <p>Use Simpson's rule and other methods to approximate definite integrals.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-7">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 7: Applications of Integration</h1>
-      <p>Use integration to find areas, volumes, and solve real-world problems.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Area Between Curves</h3>
-        <p>Calculate areas between intersecting curves using definite integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Disk and Washer Methods</h3>
-        <p>Find volumes of solids of revolution using circular cross-sections.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Cylindrical Shells</h3>
-        <p>Calculate volumes using the shell method for solids of revolution.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Arc Length</h3>
-        <p>Find the length of curves using the arc length formula and integration.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Surface Area</h3>
-        <p>Calculate surface areas of solids of revolution using integration techniques.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Work and Fluid Pressure</h3>
-        <p>Apply integration to physics problems involving work and hydrostatic pressure.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Center of Mass</h3>
-        <p>Find centroids and centers of mass using moment integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Differential Equations</h3>
-        <p>Solve basic differential equations and interpret slope fields graphically.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-8">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 8: Differential Equations</h1>
-      <p>Introduction to solving basic differential equations and modeling real-world phenomena.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Slope Fields</h3>
-        <p>Visualize differential equations through slope fields and sketch solution curves.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Euler's Method</h3>
-        <p>Use numerical approximation to estimate solutions to differential equations.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Separable Equations</h3>
-        <p>Solve differential equations by separating variables and integrating.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Exponential Models</h3>
-        <p>Model exponential growth and decay using differential equations.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Logistic Growth</h3>
-        <p>Understand and solve logistic differential equations for population models.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Newton's Law of Cooling</h3>
-        <p>Apply differential equations to temperature change and cooling problems.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Related Rates</h3>
-        <p>Solve problems involving rates of change of related quantities.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Mathematical Modeling</h3>
-        <p>Create and solve differential equation models for real-world phenomena.</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function showUnitDetail(unitNumber) {
-      // Hide overview
-      document.getElementById('overview').style.display = 'none';
-      
-      // Hide all unit pages
-      const unitPages = document.querySelectorAll('.page-container');
-      unitPages.forEach(page => page.classList.remove('active'));
-      
-      // Show selected unit page
-      const targetUnit = document.getElementById(`unit-${unitNumber}`);
-      if (targetUnit) {
-        targetUnit.classList.add('active');
-      }
-      
-      // Scroll to top
-      window.scrollTo(0, 0);
-    }
-
-    function showOverview() {
-      // Hide all unit pages
-      const unitPages = document.querySelectorAll('.page-container');
-      unitPages.forEach(page => page.classList.remove('active'));
-      
-      // Show overview
-      document.getElementById('overview').style.display = 'block';
-      
-      // Scroll to top
-      window.scrollTo(0, 0);
-    }
-
-    // Add some interactive animations
-    document.addEventListener('DOMContentLoaded', function() {
-      const cards = document.querySelectorAll('.unit-card');
-      
-      cards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.style.animation = 'fadeInUp 0.6s ease forwards';
-      });
-    });
-
-    // Add CSS animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      .unit-card {
-        opacity: 0;
-      }
-    `;
-    document.head.appendChild(style);
-  </script>
-</body>
-</html>
-        <h3 class="subtopic-title">Limit Definition</h3>
-        <p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Evaluating Limits</h3>
-        <p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">One-sided Limits</h3>
-        <p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Infinite Limits</h3>
-        <p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Continuity</h3>
-        <p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
-        <p>Apply IVT to guarantee the existence of solutions and understand its geometric interpretation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Limits at Infinity</h3>
-        <p>Determine horizontal asymptotes and end behavior of rational and other functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Squeeze Theorem</h3>
-        <p>Use the squeeze theorem to evaluate limits of oscillating functions and complex expressions.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-2">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 2: Derivatives</h1>
-      <p>The derivative as the fundamental tool for measuring rates of change and slopes of curves.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Definition of Derivative</h3>
-        <p>Understand the derivative as the limit of difference quotients and its geometric meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Tangent Lines</h3>
-        <p>Find equations of tangent lines using the derivative and understand the geometric interpretation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Differentiability</h3>
-        <p>Explore the relationship between differentiability and continuity, identifying non-differentiable points.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Basic Rules</h3>
-        <p>Master the power rule, constant rule, sum rule, and difference rule for differentiation.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Polynomial Derivatives</h3>
-        <p>Apply differentiation rules to find derivatives of polynomial functions of any degree.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Higher-Order Derivatives</h3>
-        <p>Calculate second, third, and higher derivatives, understanding their physical interpretations.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-3">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 3: Differentiation Rules</h1>
-      <p>Advanced techniques for finding derivatives of complex and composite functions.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Product Rule</h3>
-        <p>Differentiate products of functions using (uv)' = u'v + uv' and apply to complex problems.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Quotient Rule</h3>
-        <p>Find derivatives of quotients using (u/v)' = (u'v - uv')/v² and simplify results.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Chain Rule</h3>
-        <p>Master the chain rule for composite functions and apply to nested function compositions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Derivatives</h3>
-        <p>Learn derivatives of sin, cos, tan, sec, csc, and cot functions with applications.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Exponential Derivatives</h3>
-        <p>Differentiate exponential functions including e^x, a^x, and exponential compositions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Logarithmic Derivatives</h3>
-        <p>Find derivatives of ln(x), log base a, and logarithmic functions with chain rule.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Inverse Trig Derivatives</h3>
-        <p>Differentiate arcsin, arccos, arctan and other inverse trigonometric functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Implicit Differentiation</h3>
-        <p>Find derivatives of implicitly defined functions and solve related rate problems.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-4">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 4: Applications of Derivatives</h1>
-      <p>Use derivatives to analyze function behavior, solve optimization problems, and model real-world scenarios.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Critical Points</h3>
-        <p>Find critical points where f'(x) = 0 or undefined, and classify local maxima and minima.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">First Derivative Test</h3>
-        <p>Use the sign of f'(x) to determine increasing/decreasing intervals and local extrema.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Second Derivative Test</h3>
-        <p>Apply f''(x) to classify critical points and determine concavity of functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Concavity & Inflection</h3>
-        <p>Analyze concave up/down regions and find inflection points using the second derivative.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Curve Sketching</h3>
-        <p>Combine all derivative information to sketch accurate graphs of complex functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Optimization</h3>
-        <p>Solve real-world maximum and minimum problems using calculus techniques.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Mean Value Theorem</h3>
-        <p>Understand and apply MVT to guarantee the existence of specific derivative values.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">L'Hôpital's Rule</h3>
-        <p>Evaluate indeterminate forms using L'Hôpital's rule for limits involving derivatives.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-5">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 5: Integrals</h1>
-      <p>Introduction to antiderivatives and the Fundamental Theorem connecting derivatives and integrals.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Antiderivatives</h3>
-        <p>Understand antiderivatives as reverse derivatives and find indefinite integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Basic Integration Rules</h3>
-        <p>Learn power rule for integration, constant rule, and sum/difference rules.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Riemann Sums</h3>
-        <p>Approximate area under curves using left, right, midpoint, and trapezoidal sums.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Definite Integrals</h3>
-        <p>Understand definite integrals as limits of Riemann sums and their geometric meaning.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Fundamental Theorem</h3>
-        <p>Master both parts of FTC connecting differentiation and integration processes.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Properties of Integrals</h3>
-        <p>Learn linearity, additivity, and comparison properties of definite integrals.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Net Change Theorem</h3>
-        <p>Apply integration to find total change from rate of change functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Average Value</h3>
-        <p>Calculate the average value of functions over intervals using integration.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-container" id="unit-6">
-    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
-    <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 6: Integration Techniques</h1>
-      <p>Advanced methods for evaluating complex integrals and antiderivatives.</p>
-    </div>
-    <div class="subtopics-grid">
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">U-Substitution</h3>
-        <p>Master substitution method to transform integrals into simpler forms.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Integration by Parts</h3>
-        <p>Apply the formula ∫udv = uv - ∫vdu to integrate products of functions.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Integrals</h3>
-        <p>Integrate powers and products of trigonometric functions using identities.</p>
-      </div>
-      <div class="subtopic-card">
-        <h3 class="subtopic-title">Trigonometric Substitution</h3>
-        <p>Use trig substitutions to evaluate integrals involving √(a²-x²), √(a²+x²), etc.</p>
-      </div>
-      <div class="subtopic-card">
+      <div class="subtopic-card"><h3 class="subtopic-title">Limit Definition</h3><p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p></div>
+      <div class="subtopic-card"><h3 class="subtopic-title">Evaluating Limits</h3><p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p></div>
+      <div class="subtopic-card"><h3 class="subtopic-title">One-sided Limits</h3><p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p></div>
+      <div class="subtopic-card"><h3 class="subtopic-title">Infinite Limits</h3><p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p></div>
+      <div class="subtopic-card"><h3 class="subtopic-title">Continuity</h3><p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p></div>
+      <div class="subtopic-card"><h3 class="subtopic
