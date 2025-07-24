@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning AI Engineering Track</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4f46e5;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    header a.back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: white;
+      color: #4f46e5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .course-card {
+      background-color: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .course-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .course-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+    .course-card p {
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MemoLearning AI Engineering Track</h1>
+    <p>Build real-world AI systems—from machine learning fundamentals to MLOps deployment pipelines.</p>
+    <a class="back-link" href="/">← Back to Homepage</a>
+  </header>
 
+  <div class="container">
+    <div class="course-grid">
+      <div class="course-card"><h3>Python for AI</h3><p>Master the basics of Python, NumPy, and pandas.</p></div>
+      <div class="course-card"><h3>Math for Machine Learning</h3><p>Linear algebra, calculus, probability, and statistics.</p></div>
+      <div class="course-card"><h3>Intro to Machine Learning</h3><p>Supervised, unsupervised, and model evaluation.</p></div>
+      <div class="course-card"><h3>Deep Learning</h3><p>Neural networks, activation functions, and backpropagation.</p></div>
+      <div class="course-card"><h3>TensorFlow & PyTorch</h3><p>Build and train models using industry frameworks.</p></div>
+      <div class="course-card"><h3>Computer Vision</h3><p>Image classification, object detection, and CNNs.</p></div>
+      <div class="course-card"><h3>NLP & Transformers</h3><p>Tokenization, embeddings, and attention models.</p></div>
+      <div class="course-card"><h3>Model Evaluation</h3><p>Accuracy, precision, recall, confusion matrix, AUC.</p></div>
+      <div class="course-card"><h3>Data Engineering Basics</h3><p>ETL pipelines, cleaning, and feature engineering.</p></div>
+      <div class="course-card"><h3>APIs for AI</h3><p>Build and consume RESTful APIs for model serving.</p></div>
+      <div class="course-card"><h3>Deploying AI Models</h3><p>Flask, FastAPI, Docker, and web integration.</p></div>
+      <div class="course-card"><h3>Cloud Services (AWS, GCP)</h3><p>Deploy and monitor models in production environments.</p></div>
+      <div class="course-card"><h3>MLOps</h3><p>CI/CD pipelines, version control, and automation for ML.</p></div>
+      <div class="course-card"><h3>AI Project Design</h3><p>Problem scoping, data pipelines, and metrics.</p></div>
+      <div class="course-card"><h3>Responsible AI</h3><p>Bias, fairness, interpretability, and ethics in AI.</p></div>
+      <div class="course-card"><h3>Capstone Project</h3><p>End-to-end AI project with deployment.</p></div>
+    </div>
+  </div>
+</body>
+</html>
