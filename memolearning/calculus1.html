@@ -437,7 +437,7 @@
     </div>
   </div>
 
-  <!-- Unit Details (Example for Unit 1) -->
+  <!-- Unit Details -->
   <div class="page-container" id="unit-1">
     <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
     <div class="unit-detail-header">
@@ -445,9 +445,91 @@
       <p>The foundation of calculus: understanding how functions behave as inputs approach specific values.</p>
     </div>
     <div class="subtopics-grid">
-      <div class="subtopic-card"><h3 class="subtopic-title">Limit Definition</h3><p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p></div>
-      <div class="subtopic-card"><h3 class="subtopic-title">Evaluating Limits</h3><p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p></div>
-      <div class="subtopic-card"><h3 class="subtopic-title">One-sided Limits</h3><p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p></div>
-      <div class="subtopic-card"><h3 class="subtopic-title">Infinite Limits</h3><p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p></div>
-      <div class="subtopic-card"><h3 class="subtopic-title">Continuity</h3><p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p></div>
-      <div class="subtopic-card"><h3 class="subtopic
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limit Definition</h3>
+        <p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Evaluating Limits</h3>
+        <p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">One-sided Limits</h3>
+        <p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Infinite Limits</h3>
+        <p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Continuity</h3>
+        <p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
+        <p>Apply this important theorem to prove the existence of solutions and understand continuous function behavior.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Derivatives</h1>
+      <p>Core concept: rates of change, tangent lines, and the derivative as a limit.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Derivative</h3>
+        <p>Master the limit definition of derivatives and understand the geometric interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tangent Lines</h3>
+        <p>Find equations of tangent lines and understand their relationship to derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Differentiability</h3>
+        <p>Understand when functions are differentiable and the relationship to continuity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Rules</h3>
+        <p>Learn power rule, constant rule, and sum rule for differentiation.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript functions to handle navigation
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const unitPages = document.querySelectorAll('.page-container');
+      unitPages.forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+      });
+      
+      // Show the selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.style.display = 'block';
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const unitPages = document.querySelectorAll('.page-container');
+      unitPages.forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+      });
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
