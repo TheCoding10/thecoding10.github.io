@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemoLearning Calculus I Curriculum</title>
+  <title>MemoLearning Calculus II Curriculum</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
@@ -270,13 +270,26 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
+
+    /* Fade transition effects */
+    .fade-out {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>📐 MemoLearning Calculus I</h1>
-    <p>Complete curriculum with limits, derivatives, and integrals—the foundation of calculus</p>
-    <a class="back-link" href="math_courses.html">← Back to Mathematics</a>
+    <h1>🔬 MemoLearning Calculus II</h1>
+    <p>Advanced integration techniques, sequences, series, and polar coordinates</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
   </header>
 
   <div class="container" id="overview">
@@ -284,11 +297,11 @@
       <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
       <div class="stats-grid">
         <div class="stat-item">
-          <span class="stat-number">8</span>
+          <span class="stat-number">9</span>
           <div class="stat-label">Total Units</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">~140</span>
+          <span class="stat-number">~160</span>
           <div class="stat-label">Skills to Master</div>
         </div>
         <div class="stat-item">
@@ -296,8 +309,8 @@
           <div class="stat-label">Core Units</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">2</span>
-          <div class="stat-label">Application Units</div>
+          <span class="stat-number">3</span>
+          <div class="stat-label">Advanced Units</div>
         </div>
       </div>
     </div>
@@ -307,131 +320,152 @@
       <div class="unit-card" onclick="showUnitDetail(1)">
         <div class="unit-header">
           <div class="unit-number">1</div>
-          <h3 class="unit-title">Limits and Continuity</h3>
+          <h3 class="unit-title">Advanced Integration Techniques</h3>
         </div>
-        <p class="unit-description">Foundation of calculus: understanding limits, continuity, and the behavior of functions.</p>
+        <p class="unit-description">Master sophisticated integration methods for complex functions.</p>
         <ul class="topics-list">
-          <li>Limit definition and intuitive understanding</li>
-          <li>Evaluating limits algebraically and graphically</li>
-          <li>One-sided limits and infinite limits</li>
-          <li>Continuity at a point and on intervals</li>
-          <li>Intermediate Value Theorem</li>
-          <li>Limits at infinity and horizontal asymptotes</li>
-          <li>Squeeze Theorem</li>
+          <li>Integration by parts and repeated integration by parts</li>
+          <li>Trigonometric integrals and trigonometric substitution</li>
+          <li>Partial fraction decomposition</li>
+          <li>Improper integrals with infinite limits</li>
+          <li>Improper integrals with discontinuous integrands</li>
+          <li>Comparison tests for improper integrals</li>
+          <li>Integration using tables and computer algebra systems</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(2)">
         <div class="unit-header">
           <div class="unit-number">2</div>
-          <h3 class="unit-title">Derivatives</h3>
+          <h3 class="unit-title">Applications of Integration</h3>
         </div>
-        <p class="unit-description">Core concept: rates of change, tangent lines, and the derivative as a limit.</p>
+        <p class="unit-description">Solve real-world problems using advanced integration applications.</p>
         <ul class="topics-list">
-          <li>Definition of derivative as a limit</li>
-          <li>Geometric interpretation: tangent lines</li>
-          <li>Differentiability vs. continuity</li>
-          <li>Basic differentiation rules</li>
-          <li>Power rule, constant rule, sum rule</li>
-          <li>Derivatives of polynomial functions</li>
-          <li>Higher-order derivatives</li>
+          <li>Arc length of curves in Cartesian and parametric form</li>
+          <li>Surface area of revolution</li>
+          <li>Volumes using disk, washer, and shell methods</li>
+          <li>Work, force, and fluid pressure problems</li>
+          <li>Center of mass and moments of inertia</li>
+          <li>Economic applications: consumer and producer surplus</li>
+          <li>Probability density functions and expected values</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(3)">
         <div class="unit-header">
           <div class="unit-number">3</div>
-          <h3 class="unit-title">Differentiation Rules</h3>
+          <h3 class="unit-title">Differential Equations</h3>
         </div>
-        <p class="unit-description">Master all the techniques for finding derivatives of complex functions.</p>
+        <p class="unit-description">Solve first-order differential equations and their applications.</p>
         <ul class="topics-list">
-          <li>Product rule and quotient rule</li>
-          <li>Chain rule and composite functions</li>
-          <li>Derivatives of trigonometric functions</li>
-          <li>Derivatives of exponential functions</li>
-          <li>Derivatives of logarithmic functions</li>
-          <li>Derivatives of inverse trig functions</li>
-          <li>Implicit differentiation</li>
-          <li>Related rates problems</li>
+          <li>Separable differential equations</li>
+          <li>Linear first-order differential equations</li>
+          <li>Exact differential equations and integrating factors</li>
+          <li>Homogeneous differential equations</li>
+          <li>Bernoulli equations</li>
+          <li>Modeling with differential equations</li>
+          <li>Exponential growth and decay models</li>
+          <li>Logistic growth and carrying capacity</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(4)">
         <div class="unit-header">
           <div class="unit-number">4</div>
-          <h3 class="unit-title">Applications of Derivatives</h3>
+          <h3 class="unit-title">Sequences and Series</h3>
         </div>
-        <p class="unit-description">Use derivatives to analyze functions and solve optimization problems.</p>
+        <p class="unit-description">Explore infinite sequences, series convergence, and series representations.</p>
         <ul class="topics-list">
-          <li>Critical points and local extrema</li>
-          <li>First and second derivative tests</li>
-          <li>Concavity and inflection points</li>
-          <li>Curve sketching and function analysis</li>
-          <li>Optimization problems</li>
-          <li>Mean Value Theorem</li>
-          <li>L'Hôpital's Rule</li>
-          <li>Linear approximation and differentials</li>
+          <li>Sequences: limits, monotonic sequences, bounded sequences</li>
+          <li>Infinite series and partial sums</li>
+          <li>Geometric series and p-series</li>
+          <li>Integral test and comparison tests</li>
+          <li>Alternating series and alternating series test</li>
+          <li>Ratio test and root test</li>
+          <li>Absolute vs. conditional convergence</li>
+          <li>Strategy for testing series convergence</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(5)">
         <div class="unit-header">
           <div class="unit-number">5</div>
-          <h3 class="unit-title">Integrals</h3>
+          <h3 class="unit-title">Power Series</h3>
         </div>
-        <p class="unit-description">Introduce antiderivatives and the Fundamental Theorem of Calculus.</p>
+        <p class="unit-description">Understand power series, Taylor series, and function approximations.</p>
         <ul class="topics-list">
-          <li>Antiderivatives and indefinite integrals</li>
-          <li>Basic integration rules</li>
-          <li>Riemann sums and definite integrals</li>
-          <li>Fundamental Theorem of Calculus</li>
-          <li>Properties of definite integrals</li>
-          <li>Net change theorem</li>
-          <li>Average value of a function</li>
+          <li>Power series and radius of convergence</li>
+          <li>Interval of convergence and endpoint behavior</li>
+          <li>Differentiation and integration of power series</li>
+          <li>Taylor and Maclaurin series</li>
+          <li>Taylor polynomials and remainder theorems</li>
+          <li>Common Maclaurin series (e^x, sin x, cos x, ln(1+x))</li>
+          <li>Binomial series</li>
+          <li>Applications: approximation and error estimation</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(6)">
         <div class="unit-header">
           <div class="unit-number">6</div>
-          <h3 class="unit-title">Integration Techniques</h3>
+          <h3 class="unit-title">Parametric Equations</h3>
         </div>
-        <p class="unit-description">Advanced methods for evaluating integrals and antiderivatives.</p>
+        <p class="unit-description">Work with parametric curves, calculus with parametric equations.</p>
         <ul class="topics-list">
-          <li>Integration by substitution (u-substitution)</li>
-          <li>Integration by parts</li>
-          <li>Trigonometric integrals</li>
-          <li>Trigonometric substitution</li>
-          <li>Partial fractions</li>
-          <li>Improper integrals</li>
-          <li>Numerical integration methods</li>
+          <li>Parametric equations and parametric curves</li>
+          <li>Eliminating parameters</li>
+          <li>Calculus with parametric equations</li>
+          <li>Derivatives of parametric equations (dy/dx)</li>
+          <li>Second derivatives and concavity</li>
+          <li>Arc length of parametric curves</li>
+          <li>Surface area with parametric equations</li>
+          <li>Parametric equations in physics: projectile motion</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(7)">
         <div class="unit-header">
           <div class="unit-number">7</div>
-          <h3 class="unit-title">Applications of Integration</h3>
+          <h3 class="unit-title">Polar Coordinates</h3>
         </div>
-        <p class="unit-description">Use integration to find areas, volumes, and solve real-world problems.</p>
+        <p class="unit-description">Master polar coordinate system and calculus in polar form.</p>
         <ul class="topics-list">
-          <li>Area between curves</li>
-          <li>Volumes using disk and washer methods</li>
-          <li>Volumes using cylindrical shells</li>
-          <li>Arc length and surface area</li>
-          <li>Work and fluid pressure</li>
-          <li>Center of mass and moments</li>
-          <li>Differential equations and slope fields</li>
+          <li>Polar coordinate system and polar graphs</li>
+          <li>Converting between rectangular and polar coordinates</li>
+          <li>Common polar curves: circles, cardioids, roses, lemniscates</li>
+          <li>Calculus in polar coordinates</li>
+          <li>Derivatives in polar form (dy/dx)</li>
+          <li>Area in polar coordinates</li>
+          <li>Arc length in polar coordinates</li>
+          <li>Surface area of revolution in polar coordinates</li>
         </ul>
       </div>
       <div class="unit-card" onclick="showUnitDetail(8)">
         <div class="unit-header">
           <div class="unit-number">8</div>
-          <h3 class="unit-title">Differential Equations</h3>
+          <h3 class="unit-title">Vectors and Vector-Valued Functions</h3>
         </div>
-        <p class="unit-description">Introduction to solving basic differential equations and modeling real-world phenomena.</p>
+        <p class="unit-description">Introduction to vectors in 2D and 3D space and vector calculus.</p>
         <ul class="topics-list">
-          <li>Slope fields and Euler's method</li>
-          <li>Separable differential equations</li>
-          <li>Exponential growth and decay models</li>
-          <li>Logistic growth models</li>
-          <li>Newton's law of cooling</li>
-          <li>Related rates applications</li>
-          <li>Modeling with differential equations</li>
+          <li>Vectors in 2D and 3D: components, magnitude, direction</li>
+          <li>Vector operations: addition, scalar multiplication, dot product</li>
+          <li>Cross product and applications</li>
+          <li>Vector-valued functions and space curves</li>
+          <li>Derivatives and integrals of vector functions</li>
+          <li>Arc length and curvature of space curves</li>
+          <li>Velocity, acceleration, and motion in space</li>
+          <li>Unit tangent and normal vectors</li>
+        </ul>
+      </div>
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Multivariable Calculus Introduction</h3>
+        </div>
+        <p class="unit-description">Begin exploration of functions of several variables.</p>
+        <ul class="topics-list">
+          <li>Functions of several variables</li>
+          <li>Three-dimensional coordinate systems</li>
+          <li>Limits and continuity in several variables</li>
+          <li>Partial derivatives and their geometric interpretation</li>
+          <li>Higher-order partial derivatives</li>
+          <li>Chain rule for multivariable functions</li>
+          <li>Directional derivatives and gradient vectors</li>
+          <li>Tangent planes and linear approximation</li>
         </ul>
       </div>
     </div>
@@ -441,33 +475,33 @@
   <div class="page-container" id="unit-1">
     <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
     <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 1: Limits and Continuity</h1>
-      <p>The foundation of calculus: understanding how functions behave as inputs approach specific values.</p>
+      <h1 class="unit-detail-title">Unit 1: Advanced Integration Techniques</h1>
+      <p>Master sophisticated integration methods for complex functions that go beyond basic antiderivatives.</p>
     </div>
     <div class="subtopics-grid">
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Limit Definition</h3>
-        <p>Understand the formal and intuitive definitions of limits, including notation and conceptual meaning.</p>
+        <h3 class="subtopic-title">Integration by Parts</h3>
+        <p>Master the integration by parts formula and strategy, including repeated applications and tabular integration.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Evaluating Limits</h3>
-        <p>Learn algebraic techniques like factoring, rationalizing, and direct substitution to find limits.</p>
+        <h3 class="subtopic-title">Trigonometric Integrals</h3>
+        <p>Integrate products of trigonometric functions using identities and substitution techniques.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">One-sided Limits</h3>
-        <p>Explore left-hand and right-hand limits, and understand when two-sided limits exist.</p>
+        <h3 class="subtopic-title">Trigonometric Substitution</h3>
+        <p>Use trigonometric substitutions to evaluate integrals involving square roots and quadratic expressions.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Infinite Limits</h3>
-        <p>Analyze behavior near vertical asymptotes and understand when limits approach infinity.</p>
+        <h3 class="subtopic-title">Partial Fractions</h3>
+        <p>Decompose rational functions into partial fractions for easier integration.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Continuity</h3>
-        <p>Define continuity at a point and on intervals, identifying different types of discontinuities.</p>
+        <h3 class="subtopic-title">Improper Integrals</h3>
+        <p>Evaluate integrals with infinite limits or discontinuous integrands using limit processes.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
-        <p>Apply this important theorem to prove the existence of solutions and understand continuous function behavior.</p>
+        <h3 class="subtopic-title">Integration Strategies</h3>
+        <p>Develop systematic approaches for choosing the best integration technique for any given integral.</p>
       </div>
     </div>
   </div>
@@ -475,60 +509,251 @@
   <div class="page-container" id="unit-2">
     <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
     <div class="unit-detail-header">
-      <h1 class="unit-detail-title">Unit 2: Derivatives</h1>
-      <p>Core concept: rates of change, tangent lines, and the derivative as a limit.</p>
+      <h1 class="unit-detail-title">Unit 2: Applications of Integration</h1>
+      <p>Apply integration techniques to solve complex real-world problems involving geometry, physics, and economics.</p>
     </div>
     <div class="subtopics-grid">
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Definition of Derivative</h3>
-        <p>Master the limit definition of derivatives and understand the geometric interpretation.</p>
+        <h3 class="subtopic-title">Arc Length</h3>
+        <p>Calculate the length of curves in Cartesian, parametric, and polar coordinate systems.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Tangent Lines</h3>
-        <p>Find equations of tangent lines and understand their relationship to derivatives.</p>
+        <h3 class="subtopic-title">Surface Area</h3>
+        <p>Find surface areas of solids of revolution using integration techniques.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Differentiability</h3>
-        <p>Understand when functions are differentiable and the relationship to continuity.</p>
+        <h3 class="subtopic-title">Advanced Volume Problems</h3>
+        <p>Solve complex volume problems using multiple methods and coordinate systems.</p>
       </div>
       <div class="subtopic-card">
-        <h3 class="subtopic-title">Basic Rules</h3>
-        <p>Learn power rule, constant rule, and sum rule for differentiation.</p>
+        <h3 class="subtopic-title">Physics Applications</h3>
+        <p>Apply integration to work, force, fluid pressure, and center of mass problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Differential Equations</h1>
+      <p>Learn to solve first-order differential equations and model real-world phenomena.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separable Equations</h3>
+        <p>Solve differential equations by separating variables and integrating both sides.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear First-Order</h3>
+        <p>Use integrating factors to solve linear first-order differential equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exact Equations</h3>
+        <p>Identify and solve exact differential equations, including finding integrating factors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications and Modeling</h3>
+        <p>Model population growth, radioactive decay, cooling, and mixing problems with differential equations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Sequences and Series</h1>
+      <p>Explore infinite sequences and series, learning convergence tests and applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sequences</h3>
+        <p>Analyze convergence and divergence of infinite sequences using limits and theorems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Series Basics</h3>
+        <p>Understand infinite series, partial sums, and basic convergence concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convergence Tests</h3>
+        <p>Master integral test, comparison tests, ratio test, root test, and alternating series test.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Absolute vs Conditional</h3>
+        <p>Distinguish between absolute and conditional convergence and understand their implications.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Power Series</h1>
+      <p>Master power series, Taylor series, and function approximations using infinite polynomials.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Power Series Convergence</h3>
+        <p>Find radius and interval of convergence for power series using ratio and root tests.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Taylor Series</h3>
+        <p>Derive Taylor and Maclaurin series representations for common functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Series Operations</h3>
+        <p>Differentiate, integrate, and perform operations on power series term by term.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Approximation and Error</h3>
+        <p>Use Taylor polynomials for approximation and estimate errors using remainder theorems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Parametric Equations</h1>
+      <p>Work with parametric curves and apply calculus techniques to parametrically defined functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parametric Curves</h3>
+        <p>Graph and analyze curves defined by parametric equations, eliminating parameters when needed.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parametric Calculus</h3>
+        <p>Find derivatives, second derivatives, and analyze concavity for parametric equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arc Length Parametric</h3>
+        <p>Calculate arc length for curves defined parametrically using the parametric arc length formula.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Motion Problems</h3>
+        <p>Apply parametric equations to projectile motion and other physics applications.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Polar Coordinates</h1>
+      <p>Master the polar coordinate system and apply calculus techniques to polar functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polar System</h3>
+        <p>Convert between rectangular and polar coordinates, graph common polar curves.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polar Calculus</h3>
+        <p>Find derivatives and slopes of tangent lines for curves in polar coordinates.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Area in Polar</h3>
+        <p>Calculate areas enclosed by polar curves and areas between polar curves.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arc Length Polar</h3>
+        <p>Find arc length and surface area for curves defined in polar coordinates.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Vectors and Vector-Valued Functions</h1>
+      <p>Introduction to vector algebra and calculus with vector-valued functions in 2D and 3D space.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Operations</h3>
+        <p>Master vector addition, scalar multiplication, dot products, and cross products.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Functions</h3>
+        <p>Work with vector-valued functions, their derivatives, and integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Space Curves</h3>
+        <p>Analyze curves in 3D space, finding arc length, curvature, and torsion.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Motion in Space</h3>
+        <p>Apply vector calculus to problems involving velocity, acceleration, and motion in 3D.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Multivariable Calculus Introduction</h1>
+      <p>Begin exploring functions of several variables and partial derivatives.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functions of Several Variables</h3>
+        <p>Understand and visualize functions of two or more variables using level curves and surfaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Partial Derivatives</h3>
+        <p>Compute partial derivatives and understand their geometric interpretation as slopes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chain Rule Multivariable</h3>
+        <p>Apply the chain rule to composite functions of several variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradients and Directional Derivatives</h3>
+        <p>Find directional derivatives and gradients, understanding their relationship to optimization.</p>
       </div>
     </div>
   </div>
 
   <script>
-    // JavaScript functions to handle navigation
     function showUnitDetail(unitNumber) {
       // Hide overview
       document.getElementById('overview').style.display = 'none';
       
-      // Hide all unit detail pages
-      const unitPages = document.querySelectorAll('.page-container');
-      unitPages.forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-      });
+      // Hide all unit details
+      for (let i = 1; i <= 9; i++) {
+        const unit = document.getElementById(`unit-${i}`);
+        if (unit) {
+          unit.classList.remove('active');
+          unit.style.display = 'none';
+        }
+      }
       
-      // Show the selected unit
+      // Show selected unit
       const selectedUnit = document.getElementById(`unit-${unitNumber}`);
       if (selectedUnit) {
         selectedUnit.style.display = 'block';
         selectedUnit.classList.add('active');
       }
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
     }
 
     function showOverview() {
-      // Hide all unit detail pages
-      const unitPages = document.querySelectorAll('.page-container');
-      unitPages.forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-      });
+      // Hide all unit details
+      for (let i = 1; i <= 9; i++) {
+        const unit = document.getElementById(`unit-${i}`);
+        if (unit) {
+          unit.classList.remove('active');
+          unit.style.display = 'none';
+        }
+      }
       
       // Show overview
       document.getElementById('overview').style.display = 'block';
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
     }
   </script>
 </body>
