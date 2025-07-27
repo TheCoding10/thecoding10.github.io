@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Multivariable Calculus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #10B981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '∇';
+      position: absolute;
+      left: 0;
+      color: #8B5CF6;
+      font-weight: bold;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8B5CF6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #8B5CF6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>∇ MemoLearning Multivariable Calculus</h1>
+    <p>Partial derivatives, multiple integrals, and vector fields</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">7</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Units -->
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Functions of Several Variables</h3>
+        </div>
+        <p class="unit-description">Understand and visualize functions of multiple variables in 3D space.</p>
+        <ul class="topics-list">
+          <li>Functions of two and three variables</li>
+          <li>3D coordinate systems and graphing</li>
+          <li>Level curves and contour maps</li>
+          <li>Level surfaces and 3D visualization</li>
+          <li>Limits and continuity in several variables</li>
+          <li>Squeeze theorem for multivariable functions</li>
+          <li>Domain and range of multivariable functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Partial Derivatives</h3>
+        </div>
+        <p class="unit-description">Master partial differentiation and understand geometric interpretations.</p>
+        <ul class="topics-list">
+          <li>Partial derivatives and their notation</li>
+          <li>Geometric interpretation as slopes</li>
+          <li>Higher-order partial derivatives</li>
+          <li>Mixed partial derivatives and Clairaut's theorem</li>
+          <li>Tangent planes and linear approximation</li>
+          <li>Differentiability and the total differential</li>
+          <li>Applications to error estimation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Chain Rule and Implicit Differentiation</h3>
+        </div>
+        <p class="unit-description">Apply chain rule to composite functions and solve implicit problems.</p>
+        <ul class="topics-list">
+          <li>Chain rule for functions of several variables</li>
+          <li>Tree diagrams for chain rule</li>
+          <li>Implicit differentiation in several variables</li>
+          <li>Related rates in multivariable context</li>
+          <li>Parametric surfaces and their derivatives</li>
+          <li>Change of variables in differentiation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Directional Derivatives and Gradients</h3>
+        </div>
+        <p class="unit-description">Explore directional derivatives, gradients, and optimization.</p>
+        <ul class="topics-list">
+          <li>Directional derivatives and unit vectors</li>
+          <li>Gradient vector and its properties</li>
+          <li>Relationship between gradient and directional derivatives</li>
+          <li>Gradient as normal to level curves/surfaces</li>
+          <li>Maximum rate of change and steepest ascent</li>
+          <li>Applications to optimization problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Optimization in Several Variables</h3>
+        </div>
+        <p class="unit-description">Find extrema using critical points and Lagrange multipliers.</p>
+        <ul class="topics-list">
+          <li>Critical points and local extrema</li>
+          <li>Second derivative test for several variables</li>
+          <li>Absolute extrema on closed bounded regions</li>
+          <li>Constrained optimization with Lagrange multipliers</li>
+          <li>Multiple constraints and Lagrange multipliers</li>
+          <li>Applications to economics and physics</li>
+          <li>Optimization in business and engineering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Double Integrals</h3>
+        </div>
+        <p class="unit-description">Integrate functions over regions in the xy-plane.</p>
+        <ul class="topics-list">
+          <li>Double integrals over rectangular regions</li>
+          <li>Iterated integrals and Fubini's theorem</li>
+          <li>Double integrals over general regions</li>
+          <li>Changing the order of integration</li>
+          <li>Applications: area, volume, and average value</li>
+          <li>Mass, center of mass, and moments of inertia</li>
+          <li>Probability and joint density functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Double Integrals in Polar Coordinates</h3>
+        </div>
+        <p class="unit-description">Use polar coordinates for double integrals over circular regions.</p>
+        <ul class="topics-list">
+          <li>Converting to polar coordinates</li>
+          <li>Jacobian for polar coordinate transformation</li>
+          <li>Double integrals in polar form</li>
+          <li>Applications to circular and annular regions</li>
+          <li>Volume of solids with circular symmetry</li>
+          <li>Center of mass for circular regions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Triple Integrals</h3>
+        </div>
+        <p class="unit-description">Extend integration to three dimensions and various coordinate systems.</p>
+        <ul class="topics-list">
+          <li>Triple integrals in rectangular coordinates</li>
+          <li>Applications: volume, mass, and center of mass</li>
+          <li>Triple integrals in cylindrical coordinates</li>
+          <li>Triple integrals in spherical coordinates</li>
+          <li>Choosing appropriate coordinate systems</li>
+          <li>Moments of inertia in three dimensions</li>
+          <li>Applications to physics and engineering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Vector Fields</h3>
+        </div>
+        <p class="unit-description">Understand vector fields and their fundamental properties.</p>
+        <ul class="topics-list">
+          <li>Vector fields in 2D and 3D</li>
+          <li>Gradient fields and conservative vector fields</li>
+          <li>Divergence and curl of vector fields</li>
+          <li>Physical interpretation of divergence and curl</li>
+          <li>Potential functions and conservative fields</li>
+          <li>Line integrals and path independence</li>
+          <li>Applications to fluid flow and electromagnetism</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Line and Surface Integrals</h3>
+        </div>
+        <p class="unit-description">Master line integrals, surface integrals, and fundamental theorems.</p>
+        <ul class="topics-list">
+          <li>Line integrals of scalar functions</li>
+          <li>Line integrals of vector fields</li>
+          <li>Green's theorem and applications</li>
+          <li>Surface integrals of scalar functions</li>
+          <li>Surface integrals of vector fields (flux)</li>
+          <li>Stokes' theorem</li>
+          <li>Divergence theorem (Gauss's theorem)</li>
+          <li>Applications to physics and engineering</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Functions of Several Variables</h1>
+      <p>Learn to work with and visualize functions that depend on multiple input variables.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multivariable Functions</h3>
+        <p>Define and understand functions of two, three, and more variables with their domains and ranges.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">3D Coordinate Systems</h3>
+        <p>Master the 3D rectangular coordinate system and learn to plot points and surfaces in space.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Level Curves</h3>
+        <p>Create and interpret contour maps and level curves for functions of two variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Level Surfaces</h3>
+        <p>Visualize and analyze level surfaces for functions of three variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limits and Continuity</h3>
+        <p>Understand limits and continuity for multivariable functions using precise definitions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">3D Graphing Techniques</h3>
+        <p>Learn various methods for sketching and understanding graphs of multivariable functions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Partial Derivatives</h1>
+      <p>Master the concept of partial differentiation and its geometric interpretations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Partial Derivative Basics</h3>
+        <p>Understand the definition and notation of partial derivatives for multivariable functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geometric Interpretation</h3>
+        <p>Visualize partial derivatives as slopes of tangent lines to curves on surfaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Higher-Order Partials</h3>
+        <p>Compute second and higher-order partial derivatives, including mixed partials.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Clairaut's Theorem</h3>
+        <p>Understand when mixed partial derivatives are equal and apply Clairaut's theorem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tangent Planes</h3>
+        <p>Find equations of tangent planes to surfaces using partial derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Approximation</h3>
+        <p>Use tangent planes and total differentials for linear approximation and error estimation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Chain Rule and Implicit Differentiation</h1>
+      <p>Apply the chain rule to composite multivariable functions and solve implicit problems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multivariable Chain Rule</h3>
+        <p>Master the chain rule for functions of several variables with multiple intermediate variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tree Diagrams</h3>
+        <p>Use tree diagrams to organize and apply the chain rule systematically.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Implicit Differentiation</h3>
+        <p>Find partial derivatives of implicitly defined functions using implicit differentiation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Related Rates</h3>
+        <p>Solve related rates problems in multivariable contexts using the chain rule.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parametric Surfaces</h3>
+        <p>Work with parametrically defined surfaces and compute their derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Change of Variables</h3>
+        <p>Apply chain rule concepts to change of variables in differentiation problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Directional Derivatives and Gradients</h1>
+      <p>Understand how functions change in any direction and find paths of steepest ascent.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Directional Derivatives</h3>
+        <p>Compute the rate of change of functions in any specified direction using unit vectors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradient Vector</h3>
+        <p>Understand the gradient as a vector of partial derivatives and its geometric meaning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradient Properties</h3>
+        <p>Explore key properties of gradients including their relationship to directional derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Normal to Level Sets</h3>
+        <p>Understand how gradients are perpendicular to level curves and level surfaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximum Rate of Change</h3>
+        <p>Find directions of steepest ascent and descent using gradient vectors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications</h3>
+        <p>Apply directional derivatives and gradients to optimization and physics problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Optimization in Several Variables</h1>
+      <p>Find maximum and minimum values of multivariable functions with and without constraints.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Critical Points</h3>
+        <p>Find critical points by setting partial derivatives equal to zero.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Second Derivative Test</h3>
+        <p>Use the discriminant and Hessian matrix to classify critical points.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Absolute Extrema</h3>
+        <p>Find absolute maximum and minimum values on closed and bounded regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lagrange Multipliers</h3>
+        <p>Solve constrained optimization problems using the method of Lagrange multipliers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiple Constraints</h3>
+        <p>Handle optimization problems with multiple constraints using multiple Lagrange multipliers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-World Applications</h3>
+        <p>Apply optimization techniques to problems in economics, engineering, and physics.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Double Integrals</h1>
+      <p>Integrate functions of two variables over regions in the plane.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rectangular Regions</h3>
+        <p>Evaluate double integrals over rectangular regions using iterated integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fubini's Theorem</h3>
+        <p>Understand when and how to change the order of integration in double integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">General Regions</h3>
+        <p>Set up and evaluate double integrals over more complex, non-rectangular regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order of Integration</h3>
+        <p>Choose the best order of integration and change orders when beneficial.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications</h3>
+        <p>Use double integrals to find areas, volumes, average values, and centers of mass.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Applications</h3>
+        <p>Apply double integrals to joint probability density functions and expected values.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Double Integrals in Polar Coordinates</h1>
+      <p>Use polar coordinates to simplify double integrals over circular regions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polar Coordinate Conversion</h3>
+        <p>Convert between Cartesian and polar coordinates for double integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Jacobian Transformation</h3>
+        <p>Understand and apply the Jacobian factor r in polar coordinate transformations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polar Double Integrals</h3>
+        <p>Set up and evaluate double integrals in polar coordinates with proper limits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Circular Regions</h3>
+        <p>Apply polar coordinates to problems involving circles, annuli, and sectors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Volume Applications</h3>
+        <p>Calculate volumes of solids with circular symmetry using polar double integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mass and Center of Mass</h3>
+        <p>Find mass and centroid of laminas with circular boundaries using polar coordinates.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Triple Integrals</h1>
+      <p>Extend integration to three dimensions using rectangular, cylindrical, and spherical coordinates.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rectangular Coordinates</h3>
+        <p>Set up and evaluate triple integrals in standard xyz-coordinate system.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Volume and Mass</h3>
+        <p>Use triple integrals to find volumes of 3D regions and mass of solid objects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cylindrical Coordinates</h3>
+        <p>Transform to cylindrical coordinates (r,θ,z) for problems with circular symmetry.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spherical Coordinates</h3>
+        <p>Use spherical coordinates (ρ,θ,φ) for problems involving spheres and cones.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Coordinate System Selection</h3>
+        <p>Choose the most appropriate coordinate system based on the geometry of the region.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Moments of Inertia</h3>
+        <p>Calculate moments of inertia for 3D objects using triple integrals.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Vector Fields</h1>
+      <p>Understand vector fields and their fundamental properties including divergence and curl.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Field Basics</h3>
+        <p>Visualize and understand vector fields in 2D and 3D space with direction and magnitude.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradient Fields</h3>
+        <p>Recognize and work with gradient fields and their relationship to scalar functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conservative Fields</h3>
+        <p>Identify conservative vector fields and find their potential functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Divergence</h3>
+        <p>Compute divergence of vector fields and understand its physical meaning as source/sink strength.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Curl</h3>
+        <p>Calculate curl of vector fields and interpret it as measure of rotation or circulation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Physical Applications</h3>
+        <p>Apply vector field concepts to fluid flow, electromagnetism, and gravitational fields.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Line and Surface Integrals</h1>
+      <p>Master line integrals, surface integrals, and the fundamental theorems of vector calculus.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Line Integrals of Scalars</h3>
+        <p>Evaluate line integrals of scalar functions along curves in 2D and 3D space.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Line Integrals of Vectors</h3>
+        <p>Compute work done by vector fields along paths and understand path independence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Green's Theorem</h3>
+        <p>Apply Green's theorem to relate line integrals around closed curves to double integrals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Surface Integrals of Scalars</h3>
+        <p>Integrate scalar functions over surfaces in 3D space using parameterizations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Surface Integrals of Vectors (Flux)</h3>
+        <p>Calculate flux of vector fields through surfaces and understand orientation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stokes' Theorem</h3>
+        <p>Connect line integrals around closed curves to surface integrals using Stokes' theorem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Divergence Theorem</h3>
+        <p>Relate surface integrals to triple integrals using the divergence theorem (Gauss's theorem).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications</h3>
+        <p>Apply these theorems to problems in physics, engineering, and fluid dynamics.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit details
+      for (let i = 1; i <= 10; i++) {
+        const unit = document.getElementById(`unit-${i}`);
+        if (unit) {
+          unit.classList.remove('active');
+          unit.style.display = 'none';
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.style.display = 'block';
+        selectedUnit.classList.add('active');
+      }
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function showOverview() {
+      // Hide all unit details
+      for (let i = 1; i <= 10; i++) {
+        const unit = document.getElementById(`unit-${i}`);
+        if (unit) {
+          unit.classList.remove('active');
+          unit.style.display = 'none';
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+</html>
