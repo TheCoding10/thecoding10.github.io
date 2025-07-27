@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Differential Equations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #FF6B6B;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #FF6B6B;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Differential Equations</h1>
+    <p>Complete mastery of ordinary differential equations and their applications</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Differential Equations</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental concepts and terminology of differential equations.</p>
+        <ul class="topics-list">
+          <li>What are differential equations?</li>
+          <li>Order and degree of differential equations</li>
+          <li>Linear vs. nonlinear equations</li>
+          <li>Ordinary vs. partial differential equations</li>
+          <li>Initial value problems (IVPs)</li>
+          <li>Boundary value problems (BVPs)</li>
+          <li>Solution curves and direction fields</li>
+          <li>Existence and uniqueness theorems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">First-Order Separable Equations</h3>
+        </div>
+        <p class="unit-description">Master the technique of separation of variables for first-order equations.</p>
+        <ul class="topics-list">
+          <li>Separable differential equations</li>
+          <li>Method of separation of variables</li>
+          <li>Initial value problems with separable equations</li>
+          <li>Applications: population growth models</li>
+          <li>Exponential growth and decay</li>
+          <li>Radioactive decay problems</li>
+          <li>Newton's law of cooling</li>
+          <li>Mixing problems and tank problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">First-Order Linear Equations</h3>
+        </div>
+        <p class="unit-description">Solve first-order linear equations using integrating factors.</p>
+        <ul class="topics-list">
+          <li>Standard form of first-order linear equations</li>
+          <li>Integrating factor method</li>
+          <li>Finding integrating factors</li>
+          <li>Solving linear first-order IVPs</li>
+          <li>Applications to circuit problems</li>
+          <li>Mixture problems with varying rates</li>
+          <li>Population models with immigration</li>
+          <li>Bernoulli equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Exact Equations and Special Methods</h3>
+        </div>
+        <p class="unit-description">Learn to solve exact equations and other special first-order methods.</p>
+        <ul class="topics-list">
+          <li>Exact differential equations</li>
+          <li>Test for exactness</li>
+          <li>Solving exact equations</li>
+          <li>Integrating factors for exact equations</li>
+          <li>Homogeneous equations</li>
+          <li>Substitution methods</li>
+          <li>Equations reducible to separable form</li>
+          <li>Special substitutions and transformations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Applications of First-Order Equations</h3>
+        </div>
+        <p class="unit-description">Apply first-order differential equations to real-world modeling problems.</p>
+        <ul class="topics-list">
+          <li>Mathematical modeling with differential equations</li>
+          <li>Population dynamics and logistic growth</li>
+          <li>Predator-prey models</li>
+          <li>Economics: supply and demand models</li>
+          <li>Physics: motion with air resistance</li>
+          <li>Chemistry: reaction kinetics</li>
+          <li>Engineering: RC and RL circuits</li>
+          <li>Orthogonal trajectories</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Second-Order Linear Equations</h3>
+        </div>
+        <p class="unit-description">Understand the theory and general solutions of second-order linear equations.</p>
+        <ul class="topics-list">
+          <li>Second-order linear differential equations</li>
+          <li>Homogeneous vs. nonhomogeneous equations</li>
+          <li>Linear independence and Wronskian</li>
+          <li>Fundamental set of solutions</li>
+          <li>General solution structure</li>
+          <li>Initial value problems for second-order equations</li>
+          <li>Boundary value problems</li>
+          <li>Superposition principle</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Constant Coefficient Equations</h3>
+        </div>
+        <p class="unit-description">Solve second-order equations with constant coefficients using characteristic equations.</p>
+        <ul class="topics-list">
+          <li>Homogeneous equations with constant coefficients</li>
+          <li>Characteristic equation method</li>
+          <li>Real distinct roots</li>
+          <li>Repeated roots</li>
+          <li>Complex conjugate roots</li>
+          <li>Euler's formula and complex solutions</li>
+          <li>Real-valued solutions from complex solutions</li>
+          <li>Applications to mechanical vibrations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Method of Undetermined Coefficients</h3>
+        </div>
+        <p class="unit-description">Find particular solutions to nonhomogeneous equations with specific forcing functions.</p>
+        <ul class="topics-list">
+          <li>Nonhomogeneous linear equations</li>
+          <li>Method of undetermined coefficients</li>
+          <li>Polynomial forcing functions</li>
+          <li>Exponential forcing functions</li>
+          <li>Trigonometric forcing functions</li>
+          <li>Products and sums of basic functions</li>
+          <li>Modification rule for repeated roots</li>
+          <li>Complete solutions to IVPs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Variation of Parameters</h3>
+        </div>
+        <p class="unit-description">Use variation of parameters for nonhomogeneous equations with any forcing function.</p>
+        <ul class="topics-list">
+          <li>Variation of parameters method</li>
+          <li>Finding particular solutions</li>
+          <li>Wronskian in variation of parameters</li>
+          <li>General procedure for second-order equations</li>
+          <li>Comparison with undetermined coefficients</li>
+          <li>Applications to equations with variable coefficients</li>
+          <li>Higher-order equations</li>
+          <li>Applications to forced oscillations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Applications of Second-Order Equations</h3>
+        </div>
+        <p class="unit-description">Model mechanical and electrical systems using second-order differential equations.</p>
+        <ul class="topics-list">
+          <li>Spring-mass systems and Hooke's law</li>
+          <li>Free oscillations: undamped and damped</li>
+          <li>Forced oscillations and resonance</li>
+          <li>RLC electrical circuits</li>
+          <li>Mechanical vibrations with damping</li>
+          <li>Critical damping and overdamping</li>
+          <li>Beats and amplitude modulation</li>
+          <li>Pendulum motion and nonlinear equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Laplace Transform Methods</h3>
+        </div>
+        <p class="unit-description">Use Laplace transforms to solve differential equations with discontinuous forcing.</p>
+        <ul class="topics-list">
+          <li>Definition of Laplace transform</li>
+          <li>Laplace transforms of elementary functions</li>
+          <li>Properties: linearity, shifting, scaling</li>
+          <li>Inverse Laplace transforms</li>
+          <li>Solving IVPs with Laplace transforms</li>
+          <li>Unit step function and discontinuous forces</li>
+          <li>Delta function and impulse response</li>
+          <li>Convolution and transfer functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Systems of Differential Equations</h3>
+        </div>
+        <p class="unit-description">Solve systems of first-order differential equations using matrix methods.</p>
+        <ul class="topics-list">
+          <li>Systems of first-order linear equations</li>
+          <li>Matrix form of systems</li>
+          <li>Eigenvalue method for homogeneous systems</li>
+          <li>Real distinct eigenvalues</li>
+          <li>Complex eigenvalues</li>
+          <li>Repeated eigenvalues</li>
+          <li>Phase portraits and stability</li>
+          <li>Applications to coupled oscillators</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Differential Equations</h1>
+      <p>Build foundational understanding of differential equations, their classification, and basic concepts.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Integrating Factors for Non-Exact</h3>
+        <p>Find integrating factors when equations are not exact, making them exact for solution. Learn systematic approaches for finding μ(x) or μ(y).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homogeneous Equations</h3>
+        <p>Solve homogeneous equations dy/dx = f(y/x) using the substitution v = y/x. Transform to separable form and solve.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Substitution Methods</h3>
+        <p>Use various substitutions to transform difficult equations into solvable forms. Learn when and how to apply different substitution techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reducible Forms</h3>
+        <p>Identify equations that can be reduced to separable form through appropriate substitutions. Master systematic approaches to equation transformation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Special Transformations</h3>
+        <p>Apply specialized transformations and substitutions for specific equation types, including equations of the form dy/dx = f(ax + by + c).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Applications of First-Order Equations</h1>
+      <p>Apply first-order differential equations to model and solve real-world problems across various fields.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mathematical Modeling Process</h3>
+        <p>Learn the systematic approach to mathematical modeling: problem identification, assumption making, equation formulation, solving, and interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Population Dynamics</h3>
+        <p>Model various population scenarios including exponential growth, logistic growth with carrying capacity, and populations with harvesting or immigration.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Predator-Prey Models</h3>
+        <p>Understand basic predator-prey interactions using first-order equations. Model competition and cooperation between species.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Models</h3>
+        <p>Apply differential equations to economics: supply and demand dynamics, price equilibrium, and market behavior over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Motion with Resistance</h3>
+        <p>Model falling objects with air resistance, terminal velocity problems, and motion in viscous media using first-order equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chemical Kinetics</h3>
+        <p>Model chemical reaction rates, first-order reactions, and concentration changes over time using differential equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Electrical Circuits</h3>
+        <p>Analyze RC and RL circuits, charging and discharging capacitors, and current behavior in simple electrical systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Orthogonal Trajectories</h3>
+        <p>Find families of curves that intersect given curve families at right angles. Applications to heat flow and electric field lines.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Second-Order Linear Equations</h1>
+      <p>Build theoretical foundation for second-order linear differential equations and their solution structure.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Second-Order Linear Form</h3>
+        <p>Understand the general form a(x)y″ + b(x)y′ + c(x)y = f(x) and distinguish between homogeneous and nonhomogeneous equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homogeneous vs Nonhomogeneous</h3>
+        <p>Distinguish between homogeneous equations (f(x) = 0) and nonhomogeneous equations (f(x) ≠ 0). Understand solution structure differences.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Independence</h3>
+        <p>Understand linear independence of functions and its importance in forming general solutions. Learn to test independence using various methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wronskian Determinant</h3>
+        <p>Calculate and use the Wronskian W(y₁,y₂) = y₁y₂′ - y₂y₁′ to test linear independence of solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fundamental Sets</h3>
+        <p>Identify fundamental sets of solutions for homogeneous equations. Understand how any solution can be expressed as their linear combination.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">General Solution Structure</h3>
+        <p>Learn that general solutions to nonhomogeneous equations have the form y = y_h + y_p, where y_h is homogeneous and y_p is particular.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Second-Order IVPs</h3>
+        <p>Solve initial value problems for second-order equations with conditions y(x₀) = y₀ and y′(x₀) = y₁. Apply initial conditions to find constants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Superposition Principle</h3>
+        <p>Apply the superposition principle: if y₁ and y₂ are solutions to a linear homogeneous equation, then c₁y₁ + c₂y₂ is also a solution.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Constant Coefficient Equations</h1>
+      <p>Master the characteristic equation method for solving second-order equations with constant coefficients.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homogeneous Constant Coefficients</h3>
+        <p>Solve equations of the form ay″ + by′ + cy = 0 where a, b, c are constants. Learn the systematic approach using characteristic equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Characteristic Equation</h3>
+        <p>Form and solve the characteristic equation ar² + br + c = 0 by assuming solutions of the form y = e^(rx). Apply the quadratic formula.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real Distinct Roots</h3>
+        <p>Handle the case when the characteristic equation has two real, distinct roots r₁ and r₂. General solution: y = c₁e^(r₁x) + c₂e^(r₂x).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Repeated Roots</h3>
+        <p>Solve cases with repeated roots (r₁ = r₂ = r). General solution: y = (c₁ + c₂x)e^(rx). Understand why the x factor appears.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Conjugate Roots</h3>
+        <p>Handle complex roots r = α ± βi. Use Euler's formula to find real-valued solutions involving sine and cosine functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Euler's Formula Applications</h3>
+        <p>Apply Euler's formula e^(iθ) = cos(θ) + i sin(θ) to convert complex exponential solutions to real trigonometric solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-Valued Solutions</h3>
+        <p>Convert complex solutions to real form: y = e^(αx)(c₁cos(βx) + c₂sin(βx)) when roots are α ± βi.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mechanical Vibrations</h3>
+        <p>Apply constant coefficient equations to model spring-mass systems, pendulums, and other mechanical oscillators.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Method of Undetermined Coefficients</h1>
+      <p>Learn to find particular solutions for nonhomogeneous equations with polynomial, exponential, and trigonometric forcing functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nonhomogeneous Equations</h3>
+        <p>Understand the structure ay″ + by′ + cy = f(x) where f(x) ≠ 0. Learn that solutions combine homogeneous and particular parts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method Overview</h3>
+        <p>Learn the systematic approach: guess the form of particular solution based on f(x), substitute into equation, solve for coefficients.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polynomial Forcing</h3>
+        <p>Handle forcing functions f(x) = polynomial. Guess particular solutions as polynomials of the same or higher degree.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exponential Forcing</h3>
+        <p>Solve equations with f(x) = Ae^(kx). Guess y_p = Be^(kx) and determine coefficient B by substitution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Trigonometric Forcing</h3>
+        <p>Handle f(x) involving sin(kx) or cos(kx). Guess combinations of both sine and cosine terms even if only one appears in f(x).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Products and Sums</h3>
+        <p>Deal with forcing functions that are products (like xe^x) or sums of basic functions. Apply linearity and product rules for guessing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modification Rule</h3>
+        <p>Handle cases where the guessed particular solution is also a solution to the homogeneous equation. Multiply by x or x² as needed.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complete IVP Solutions</h3>
+        <p>Combine homogeneous and particular solutions, then apply initial conditions to find the complete solution to initial value problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Variation of Parameters</h1>
+      <p>Master the variation of parameters method for finding particular solutions to any nonhomogeneous linear equation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method Foundation</h3>
+        <p>Learn the variation of parameters approach: assume particular solution y_p = u₁y₁ + u₂y₂ where u₁, u₂ are functions to be determined.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finding Particular Solutions</h3>
+        <p>Derive the system of equations for u₁′ and u₂′, then integrate to find u₁ and u₂. Construct the particular solution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wronskian in Variation</h3>
+        <p>Use the Wronskian W(y₁,y₂) in the formulas: u₁′ = -y₂f(x)/W and u₂′ = y₁f(x)/W where f(x) is the forcing function.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">General Procedure</h3>
+        <p>Master the systematic steps: find homogeneous solutions, compute Wronskian, apply variation formulas, integrate to find u₁ and u₂.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Comparison with Undetermined Coefficients</h3>
+        <p>Understand when to use each method: undetermined coefficients for specific f(x) types, variation of parameters for any f(x).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Coefficient Equations</h3>
+        <p>Apply variation of parameters to equations with variable coefficients, where undetermined coefficients cannot be used.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Higher-Order Extensions</h3>
+        <p>Extend the method to third-order and higher-order linear equations. Understand the general pattern for n-th order equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forced Oscillation Applications</h3>
+        <p>Apply variation of parameters to analyze forced mechanical and electrical oscillations with arbitrary driving functions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Applications of Second-Order Equations</h1>
+      <p>Model and analyze mechanical and electrical systems using second-order differential equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spring-Mass Systems</h3>
+        <p>Model spring-mass systems using Hooke's law and Newton's second law: mx″ + kx = 0. Understand natural frequency and period.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Free Oscillations</h3>
+        <p>Analyze undamped free oscillations (simple harmonic motion) and damped oscillations with friction or air resistance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forced Oscillations</h3>
+        <p>Study forced oscillations mx″ + cx′ + kx = F(t) with external driving forces. Understand steady-state and transient responses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">RLC Circuits</h3>
+        <p>Model RLC electrical circuits using Kirchhoff's laws: LI″ + RI′ + I/C = E′(t). Analyze current and voltage behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Damping Types</h3>
+        <p>Classify damping: underdamped (oscillatory), critically damped (fastest return to equilibrium), and overdamped (slow return).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Resonance Phenomena</h3>
+        <p>Understand resonance when driving frequency matches natural frequency. Analyze amplitude response and phase relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Beats and Modulation</h3>
+        <p>Study beats phenomenon when driving frequency is close to natural frequency. Understand amplitude modulation effects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nonlinear Pendulum</h3>
+        <p>Introduce nonlinear effects in pendulum motion. Compare small-angle approximation with exact nonlinear equation behavior.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 11: Laplace Transform Methods</h1>
+      <p>Use Laplace transforms to solve differential equations with discontinuous forcing functions and initial conditions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Laplace Transform Definition</h3>
+        <p>Understand the Laplace transform L{f(t)} = ∫₀^∞ e^(-st)f(t)dt. Learn when transforms exist and their basic properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Elementary Function Transforms</h3>
+        <p>Memorize and derive Laplace transforms of basic functions: constants, powers, exponentials, trigonometric, and hyperbolic functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Transform Properties</h3>
+        <p>Master linearity, first and second shifting theorems, scaling, and transforms of derivatives: L{f′} = sL{f} - f(0).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inverse Transforms</h3>
+        <p>Find inverse Laplace transforms using tables, partial fractions, and completing the square. Understand uniqueness of inverse transforms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solving IVPs</h3>
+        <p>Apply Laplace transforms to solve initial value problems: transform equation, solve algebraically, then inverse transform.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Unit Step Function</h3>
+        <p>Use the unit step function u(t-a) to model discontinuous forces. Apply the second shifting theorem for delayed functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Delta Function</h3>
+        <p>Understand the Dirac delta function δ(t-a) for modeling impulses. Learn L{δ(t-a)} = e^(-as) and impulse response applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convolution</h3>
+        <p>Apply the convolution theorem: L^(-1){F(s)G(s)} = (f*g)(t) where (f*g)(t) = ∫₀^t f(τ)g(t-τ)dτ. Find transfer functions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-12">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 12: Systems of Differential Equations</h1>
+      <p>Solve systems of first-order linear differential equations using matrix methods and eigenvalue techniques.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">System Formulation</h3>
+        <p>Convert higher-order equations and coupled systems into first-order systems. Write in matrix form x′ = Ax + b.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Form</h3>
+        <p>Express systems as x′ = Ax where x is the vector of unknown functions and A is the coefficient matrix. Understand matrix notation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Eigenvalue Method</h3>
+        <p>Find eigenvalues and eigenvectors of coefficient matrix A. Use them to construct fundamental matrix and general solution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real Distinct Eigenvalues</h3>
+        <p>Handle cases with real, distinct eigenvalues λ₁, λ₂. General solution: x = c₁v₁e^(λ₁t) + c₂v₂e^(λ₂t).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Eigenvalues</h3>
+        <p>Deal with complex eigenvalues λ = α ± βi. Use Euler's formula to find real-valued solutions involving sine and cosine.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Repeated Eigenvalues</h3>
+        <p>Handle repeated eigenvalues with insufficient eigenvectors. Find generalized eigenvectors and use Jordan canonical form methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Phase Portraits</h3>
+        <p>Sketch phase portraits showing solution trajectories in the phase plane. Classify equilibrium points: nodes, spirals, saddles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stability Analysis</h3>
+        <p>Determine stability of equilibrium points based on eigenvalues. Understand asymptotic stability, instability, and neutrally stable cases.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      for (let i = 1; i <= 12; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+    
+    function showOverview() {
+      // Hide all unit detail pages
+      for (let i = 1; i <= 12; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html><h3 class="subtopic-title">What are Differential Equations?</h3>
+        <p>Understand equations involving derivatives and their relationship to rates of change in real-world phenomena. Learn to identify differential equations and distinguish them from algebraic equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order and Degree</h3>
+        <p>Classify differential equations by order (highest derivative present) and degree (power of the highest derivative term). Practice identifying first, second, and higher-order equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear vs Nonlinear</h3>
+        <p>Distinguish between linear and nonlinear differential equations based on how the dependent variable and its derivatives appear. Understand the implications for solution methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ODE vs PDE</h3>
+        <p>Differentiate between ordinary differential equations (functions of one variable) and partial differential equations (functions of multiple variables). Focus on ODEs in this course.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Initial and Boundary Conditions</h3>
+        <p>Understand initial value problems (IVPs) where conditions are given at one point, and boundary value problems (BVPs) where conditions are given at multiple points.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Direction Fields</h3>
+        <p>Visualize solution curves using slope fields to understand the geometric interpretation of differential equations. Learn to sketch solution curves through direction fields.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Existence and Uniqueness</h3>
+        <p>Learn fundamental theorems that guarantee when solutions exist and when they are unique. Understand conditions for well-posed problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solution Verification</h3>
+        <p>Verify that functions are solutions to differential equations by substitution. Check that solutions satisfy both the equation and initial/boundary conditions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: First-Order Separable Equations</h1>
+      <p>Master separation of variables, the most fundamental technique for solving first-order differential equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separable Form Recognition</h3>
+        <p>Identify when a differential equation can be written in separable form dy/dx = f(x)g(y). Learn to rearrange equations to separate variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separation Technique</h3>
+        <p>Apply the method of separating variables: rewrite as dy/g(y) = f(x)dx and integrate both sides. Handle the constant of integration properly.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Initial Value Problems</h3>
+        <p>Solve separable IVPs by finding the particular solution that satisfies given initial conditions. Determine the constant of integration from initial data.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Population Growth Models</h3>
+        <p>Model exponential population growth (dP/dt = kP) and logistic growth (dP/dt = kP(1-P/M)) using separable differential equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exponential Growth/Decay</h3>
+        <p>Solve problems involving exponential growth and decay, including radioactive decay, compound interest, and bacterial growth applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Newton's Law of Cooling</h3>
+        <p>Apply separable equations to model temperature change according to Newton's law: dT/dt = -k(T - T_ambient). Solve cooling and heating problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mixing Problems</h3>
+        <p>Set up and solve tank mixing problems where substances flow in and out at constant rates. Model salt concentration and similar applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Singular Solutions</h3>
+        <p>Identify and handle singular solutions that may be lost during the separation process. Understand when g(y) = 0 leads to constant solutions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: First-Order Linear Equations</h1>
+      <p>Learn the integrating factor method for solving first-order linear differential equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Standard Linear Form</h3>
+        <p>Recognize and convert equations to standard linear form: dy/dx + P(x)y = Q(x). Identify P(x) and Q(x) functions correctly.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Integrating Factor Method</h3>
+        <p>Find integrating factors μ(x) = e^(∫P(x)dx) and use them to solve linear equations. Understand why this method works mathematically.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computing Integrating Factors</h3>
+        <p>Calculate integrating factors for various forms of P(x). Handle integration techniques including substitution and partial fractions when necessary.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear IVPs</h3>
+        <p>Solve initial value problems for first-order linear equations. Find particular solutions that satisfy given initial conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Circuit Applications</h3>
+        <p>Model RC and RL electrical circuits using first-order linear differential equations. Analyze charging and discharging behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Rate Mixing</h3>
+        <p>Solve mixing problems where the flow rates or concentrations vary with time, leading to linear rather than separable equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Population with Immigration</h3>
+        <p>Model population growth with constant immigration or emigration rates: dP/dt = kP + I, where I is the immigration rate.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bernoulli Equations</h3>
+        <p>Transform and solve Bernoulli equations dy/dx + P(x)y = Q(x)y^n using the substitution v = y^(1-n) to convert to linear form.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Exact Equations and Special Methods</h1>
+      <p>Master exact equations and learn special techniques for solving specific types of first-order equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exact Equations Definition</h3>
+        <p>Understand exact differential equations M(x,y)dx + N(x,y)dy = 0 where there exists F(x,y) such that dF = M dx + N dy.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Test for Exactness</h3>
+        <p>Apply the exactness condition ∂M/∂y = ∂N/∂x to determine if an equation is exact. Compute partial derivatives accurately.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solving Exact Equations</h3>
+        <p>Find solutions to exact equations by integrating to find the function F(x,y) = c. Use systematic integration methods.</p>
+      </div>
+      <div class="subtopic-card">
