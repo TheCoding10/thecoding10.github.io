@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Abstract Algebra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⊗';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⊗ MemoLearning Abstract Algebra</h1>
+    <p>Master groups, rings, fields, and algebraic structures</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Key Theorems</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Groups</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental concept of groups and their basic properties.</p>
+        <ul class="topics-list">
+          <li>Binary operations and closure</li>
+          <li>Definition of groups</li>
+          <li>Group axioms: associativity, identity, inverses</li>
+          <li>Examples of groups</li>
+          <li>Abelian (commutative) groups</li>
+          <li>Order of elements and groups</li>
+          <li>Subgroups and subgroup tests</li>
+          <li>Cyclic groups and generators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Permutation Groups</h3>
+        </div>
+        <p class="unit-description">Study symmetric groups and the fundamental role of permutations.</p>
+        <ul class="topics-list">
+          <li>Permutations as bijective functions</li>
+          <li>Symmetric groups Sₙ</li>
+          <li>Cycle notation and cycle decomposition</li>
+          <li>Transpositions and parity</li>
+          <li>Alternating groups Aₙ</li>
+          <li>Dihedral groups</li>
+          <li>Group actions on sets</li>
+          <li>Cayley's theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Cosets and Lagrange's Theorem</h3>
+        </div>
+        <p class="unit-description">Explore the structure of groups through cosets and fundamental counting principles.</p>
+        <ul class="topics-list">
+          <li>Left and right cosets</li>
+          <li>Coset representatives</li>
+          <li>Lagrange's theorem</li>
+          <li>Consequences of Lagrange's theorem</li>
+          <li>Index of subgroups</li>
+          <li>Normal subgroups</li>
+          <li>Quotient groups</li>
+          <li>Simple groups</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Group Homomorphisms</h3>
+        </div>
+        <p class="unit-description">Study structure-preserving maps between groups and their properties.</p>
+        <ul class="topics-list">
+          <li>Definition of group homomorphisms</li>
+          <li>Kernels and images</li>
+          <li>Properties of homomorphisms</li>
+          <li>Group isomorphisms</li>
+          <li>First isomorphism theorem</li>
+          <li>Second and third isomorphism theorems</li>
+          <li>Correspondence theorem</li>
+          <li>Automorphisms and inner automorphisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Rings and Ring Theory</h3>
+        </div>
+        <p class="unit-description">Introduction to rings, integral domains, and their fundamental properties.</p>
+        <ul class="topics-list">
+          <li>Definition of rings</li>
+          <li>Ring axioms and basic properties</li>
+          <li>Units and zero divisors</li>
+          <li>Integral domains</li>
+          <li>Fields</li>
+          <li>Subrings and ring homomorphisms</li>
+          <li>Ideals and quotient rings</li>
+          <li>Prime and maximal ideals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Polynomial Rings</h3>
+        </div>
+        <p class="unit-description">Study polynomial rings and their arithmetic properties.</p>
+        <ul class="topics-list">
+          <li>Polynomial rings R[x]</li>
+          <li>Degree and leading coefficients</li>
+          <li>Division algorithm for polynomials</li>
+          <li>Greatest common divisors</li>
+          <li>Irreducible polynomials</li>
+          <li>Unique factorization in polynomial rings</li>
+          <li>Roots and factor theorem</li>
+          <li>Polynomial rings over fields</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Field Theory</h3>
+        </div>
+        <p class="unit-description">Explore field extensions and algebraic structures of fields.</p>
+        <ul class="topics-list">
+          <li>Field extensions</li>
+          <li>Simple and finite extensions</li>
+          <li>Algebraic and transcendental elements</li>
+          <li>Minimal polynomials</li>
+          <li>Degree of extensions</li>
+          <li>Splitting fields</li>
+          <li>Algebraic closures</li>
+          <li>Finite fields</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Galois Theory</h3>
+        </div>
+        <p class="unit-description">Connect field extensions with group theory through Galois theory.</p>
+        <ul class="topics-list">
+          <li>Galois extensions</li>
+          <li>Galois groups</li>
+          <li>Fixed fields</li>
+          <li>Fundamental theorem of Galois theory</li>
+          <li>Solvability by radicals</li>
+          <li>Insolvability of quintic equations</li>
+          <li>Cyclotomic polynomials</li>
+          <li>Applications to ruler and compass constructions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Advanced Group Theory</h3>
+        </div>
+        <p class="unit-description">Explore advanced topics in group theory and classification.</p>
+        <ul class="topics-list">
+          <li>Sylow theorems</li>
+          <li>p-groups and Sylow p-subgroups</li>
+          <li>Group actions and orbit-stabilizer theorem</li>
+          <li>Burnside's lemma</li>
+          <li>Solvable groups</li>
+          <li>Nilpotent groups</li>
+          <li>Free groups</li>
+          <li>Group presentations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore connections to other areas of mathematics and advanced structures.</p>
+        <ul class="topics-list">
+          <li>Modules over rings</li>
+          <li>Vector spaces as modules</li>
+          <li>Category theory foundations</li>
+          <li>Representation theory</li>
+          <li>Algebraic number theory</li>
+          <li>Commutative algebra</li>
+          <li>Applications to cryptography</li>
+          <li>Connections to topology and geometry</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Groups</h1>
+      <p>Build the foundation of abstract algebra with the fundamental concept of groups.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Binary Operations</h3>
+        <p>Understand binary operations as functions from S × S to S. Learn closure property and explore examples like addition, multiplication, and composition.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Group Definition</h3>
+        <p>Master the formal definition of a group (G, ∗) as a set with a binary operation satisfying four axioms: closure, associativity, identity, and inverses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Group Axioms</h3>
+        <p>Study each axiom in detail: associativity (a∗b)∗c = a∗(b∗c), identity element e, and inverse elements. Learn to verify these properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Examples of Groups</h3>
+        <p>Explore concrete examples: (ℤ, +), (ℚ*, ·), matrix groups, symmetry groups. Understand how abstract concepts apply to familiar structures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Abelian Groups</h3>
+        <p>Study commutative groups where a∗b = b∗a for all elements. Learn that commutativity is not required for groups but creates important special cases.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order of Elements</h3>
+        <p>Define the order of an element as the smallest positive integer n such that aⁿ = e. Understand finite and infinite order elements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Subgroups</h3>
+        <p>Learn when a subset H of group G forms a subgroup. Master the subgroup test: H is non-empty and closed under the operation and inverses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cyclic Groups</h3>
+        <p>Study groups generated by a single element. Understand that ⟨a⟩ = {aⁿ : n ∈ ℤ} and learn properties of finite and infinite cyclic groups.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Permutation Groups</h1>
+      <p>Explore the symmetric groups and understand groups through permutations and symmetries.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Permutations as Functions</h3>
+        <p>Understand permutations as bijective functions from a set to itself. Learn function composition as the group operation for permutations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Symmetric Groups</h3>
+        <p>Study Sₙ, the group of all permutations of n elements. Understand that |Sₙ| = n! and learn the fundamental role of symmetric groups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cycle Notation</h3>
+        <p>Master cycle notation for writing permutations. Learn to decompose permutations into disjoint cycles and understand why disjoint cycles commute.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Transpositions</h3>
+        <p>Study 2-cycles (transpositions) and learn that every permutation can be written as a product of transpositions. Understand even and odd permutations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Alternating Groups</h3>
+        <p>Learn about Aₙ, the group of even permutations. Understand that Aₙ is a normal subgroup of Sₙ with index 2 for n ≥ 2.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dihedral Groups</h3>
+        <p>Study Dₙ, the symmetry group of regular n-gons. Learn the presentation Dₙ = ⟨r, s | rⁿ = s² = e, srs = r⁻¹⟩ and geometric interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Group Actions</h3>
+        <p>Understand how groups can act on sets. Learn the connection between group actions and permutation representations of abstract groups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cayley's Theorem</h3>
+        <p>Prove that every group is isomorphic to a subgroup of some symmetric group. Understand this fundamental result showing permutation groups' universality.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Cosets and Lagrange's Theorem</h1>
+      <p>Discover the structure of groups through cosets and prove fundamental counting results.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Left and Right Cosets</h3>
+        <p>Define left cosets aH = {ah : h ∈ H} and right cosets Ha. Learn that cosets partition the group and understand their geometric interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Coset Representatives</h3>
+        <p>Understand that each coset can be represented by any of its elements. Learn to find complete sets of coset representatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lagrange's Theorem</h3>
+        <p>Prove that |G| = |H| · [G:H] where [G:H] is the index of H in G. Understand this fundamental counting principle in group theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Consequences of Lagrange</h3>
+        <p>Apply Lagrange's theorem: order of elements divides group order, groups of prime order are cyclic, and Fermat's Little Theorem connections.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Index of Subgroups</h3>
+        <p>Study the index [G:H] as the number of left (or right) cosets of H in G. Learn properties of index and its multiplicative behavior in towers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Normal Subgroups</h3>
+        <p>Define normal subgroups N ⊴ G where left and right cosets coincide: gN = Ng for all g ∈ G. Learn equivalent characterizations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quotient Groups</h3>
+        <p>Construct quotient groups G/N when N is normal. Understand the group operation (aN)(bN) = (ab)N and verify it's well-defined.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Simple Groups</h3>
+        <p>Study groups with no non-trivial normal subgroups. Understand their role as "building blocks" and learn examples like prime cyclic groups.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Group Homomorphisms</h1>
+      <p>Study structure-preserving maps between groups and the fundamental isomorphism theorems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homomorphism Definition</h3>
+        <p>Learn that φ: G → H is a homomorphism if φ(ab) = φ(a)φ(b). Understand how homomorphisms preserve group structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Kernels and Images</h3>
+        <p>Define ker(φ) = {g ∈ G : φ(g) = eH} and im(φ) = {φ(g) : g ∈ G}. Learn that kernels are normal subgroups and images are subgroups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Properties of Homomorphisms</h3>
+        <p>Prove that homomorphisms preserve identities, inverses, and powers. Learn that φ is injective iff ker(φ) = {e}.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Group Isomorphisms</h3>
+        <p>Study bijective homomorphisms that preserve all group structure. Understand that isomorphic groups are "essentially the same" algebraically.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Isomorphism Theorem</h3>
+        <p>Prove G/ker(φ) ≅ im(φ) for any homomorphism φ: G → H. Understand this fundamental connection between quotients and images.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Second Isomorphism Theorem</h3>
+        <p>Learn the Diamond Isomorphism Theorem: for subgroups H, K with K normal in HK, we have HK/K ≅ H/(H ∩ K).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Third Isomorphism Theorem</h3>
+        <p>Study the correspondence between subgroups of G/N and subgroups of G containing N. Understand (G/N)/(H/N) ≅ G/H when N ⊆ H.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Automorphisms</h3>
+        <p>Study isomorphisms from a group to itself. Learn about inner automorphisms φₐ(x) = axa⁻¹ and the automorphism group Aut(G).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Rings and Ring Theory</h1>
+      <p>Introduction to rings, integral domains, and their fundamental properties.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ring Definition</h3>
+        <p>Learn that a ring (R, +, ·) is a set with two operations where (R, +) is an abelian group and multiplication is associative with distributive laws.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ring Axioms</h3>
+        <p>Master the ring axioms: additive group structure, associativity of multiplication, and left/right distributive laws connecting the operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Units and Zero Divisors</h3>
+        <p>Study units (invertible elements) and zero divisors (non-zero elements whose product is zero). Understand that units and zero divisors are disjoint.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Integral Domains</h3>
+        <p>Learn that integral domains are commutative rings with unity and no zero divisors. Study the cancellation property in integral domains.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fields</h3>
+        <p>Understand fields as commutative rings where every non-zero element is a unit. Learn that fields are integral domains with additional structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Subrings</h3>
+        <p>Study when a subset forms a subring. Master the subring test: non-empty, closed under subtraction and multiplication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ring Homomorphisms</h3>
+        <p>Learn structure-preserving maps φ: R → S where φ(a + b) = φ(a) + φ(b) and φ(ab) = φ(a)φ(b). Study kernels and images.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ideals</h3>
+        <p>Study ideals as special subsets that "absorb" multiplication from the ring. Learn that kernels of ring homomorphisms are ideals.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Polynomial Rings</h1>
+      <p>Study polynomial rings and their arithmetic properties in detail.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polynomial Rings R[x]</h3>
+        <p>Construct polynomial rings as formal expressions with coefficients in R. Understand polynomial addition and multiplication operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Degree and Leading Coefficients</h3>
+        <p>Define degree of polynomials and leading coefficients. Learn how degrees behave under addition and multiplication of polynomials.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Division Algorithm</h3>
+        <p>Master polynomial long division: for f, g ∈ F[x] with g ≠ 0, there exist unique q, r with f = gq + r and deg(r) < deg(g).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Greatest Common Divisors</h3>
+        <p>Extend gcd concepts to polynomials. Learn the Euclidean algorithm for polynomials and how to express gcd as linear combinations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Irreducible Polynomials</h3>
+        <p>Study polynomials that cannot be factored into lower-degree polynomials. Learn irreducibility tests and examples over different fields.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Unique Factorization</h3>
+        <p>Prove that polynomial rings over fields have unique factorization into irreducible factors. Understand the role of principal ideal domains.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Roots and Factor Theorem</h3>
+        <p>Learn that a is a root of f(x) iff (x - a) divides f(x). Study the relationship between roots and factorization over fields.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polynomials over Fields</h3>
+        <p>Study special properties when the coefficient ring is a field. Learn that F[x] is a principal ideal domain and Euclidean domain.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Field Theory</h1>
+      <p>Explore field extensions and algebraic structures of fields.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Field Extensions</h3>
+        <p>Study field extensions E/F where F ⊆ E are fields. Understand how E can be viewed as a vector space over F.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Simple Extensions</h3>
+        <p>Learn about extensions F(α) generated by a single element. Understand the difference between F(α) and F[α] and when they coincide.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Algebraic Elements</h3>
+        <p>Study elements α where some polynomial with coefficients in F has α as a root. Learn the distinction between algebraic and transcendental elements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Minimal Polynomials</h3>
+        <p>For algebraic elements, study the unique monic irreducible polynomial having α as a root. Learn properties and applications of minimal polynomials.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Degree of Extensions</h3>
+        <p>Define [E:F] as the dimension of E as an F-vector space. Learn the multiplicativity of degrees: [E:F] = [E:K][K:F].</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Splitting Fields</h3>
+        <p>Study the smallest field containing F and all roots of a polynomial. Learn that splitting fields exist and are unique up to isomorphism.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Algebraic Closures</h3>
+        <p>Understand algebraically closed fields where every polynomial has a root. Learn about algebraic closures and their uniqueness properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Fields</h3>
+        <p>Study fields with finitely many elements. Learn that finite fields have prime power order and understand their structure and uniqueness.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Galois Theory</h1>
+      <p>Connect field extensions with group theory through the beautiful theory of Galois.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Galois Extensions</h3>
+        <p>Study extensions E/F that are both normal (splitting field of separable polynomials) and separable. These are the extensions where Galois theory applies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Galois Groups</h3>
+        <p>Learn that Gal(E/F) is the group of field automorphisms of E that fix F pointwise. Study how this group encodes the extension's structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fixed Fields</h3>
+        <p>For a group G of automorphisms, study E^G = {α ∈ E : σ(α) = α for all σ ∈ G}. This creates a correspondence between groups and fields.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fundamental Theorem</h3>
+        <p>Master the bijective correspondence between subgroups of Gal(E/F) and intermediate fields of E/F, with inclusion order reversed.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solvability by Radicals</h3>
+        <p>Understand when polynomial equations can be solved using arithmetic operations and nth roots. Connect this to solvable groups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Insolvability of Quintics</h3>
+        <p>Learn why general quintic equations cannot be solved by radicals. Understand how Galois theory provides the definitive answer to this classical problem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cyclotomic Polynomials</h3>
+        <p>Study polynomials whose roots are primitive nth roots of unity. Learn their irreducibility and connections to number theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geometric Constructions</h3>
+        <p>Apply Galois theory to classical problems: which regular polygons are constructible, impossibility of trisecting angles and doubling cubes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Advanced Group Theory</h1>
+      <p>Explore advanced topics in group theory including Sylow theorems and group actions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sylow Theorems</h3>
+        <p>Master the three Sylow theorems about the existence, conjugacy, and counting of Sylow p-subgroups. These are fundamental tools for group analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">p-Groups</h3>
+        <p>Study groups whose order is a prime power. Learn their special properties and role in the structure theory of finite groups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Group Actions</h3>
+        <p>Formalize group actions as homomorphisms G → Sym(X). Study orbits, stabilizers, and how actions reveal group structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Orbit-Stabilizer Theorem</h3>
+        <p>Prove |G| = |Orb(x)| · |Stab(x)| for group actions. Apply this fundamental counting principle to various problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Burnside's Lemma</h3>
+        <p>Learn to count orbits using |X/G| = (1/|G|) Σ_{g∈G} |X^g|. Apply this to combinatorial problems and symmetry counting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solvable Groups</h3>
+        <p>Study groups with composition series where all factors are abelian. Learn their connection to polynomial solvability by radicals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nilpotent Groups</h3>
+        <p>Understand groups where the upper central series reaches the whole group. Learn properties and examples of nilpotent groups.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Free Groups</h3>
+        <p>Study groups with no relations except those forced by group axioms. Learn universal properties and applications to group presentations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Advanced Topics</h1>
+      <p>Explore connections to other areas of mathematics and advanced algebraic structures.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modules over Rings</h3>
+        <p>Generalize vector spaces to modules over arbitrary rings. Learn how this unifies many algebraic structures and provides powerful tools.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Spaces as Modules</h3>
+        <p>Understand how vector spaces are modules over fields. See how linear algebra theorems generalize to module theory over different rings.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Category Theory Foundations</h3>
+        <p>Introduction to categories, functors, and natural transformations. See how algebra fits into the broader categorical framework of mathematics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Representation Theory</h3>
+        <p>Study how abstract groups act as matrix groups. Learn characters, irreducible representations, and connections to other areas of mathematics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Algebraic Number Theory</h3>
+        <p>Apply ring and field theory to number theory problems. Study rings of integers in number fields and unique factorization questions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Commutative Algebra</h3>
+        <p>Focus on commutative rings and their ideals. Learn tools for algebraic geometry and deepen understanding of polynomial rings.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications to Cryptography</h3>
+        <p>See how group theory, field theory, and number theory provide the mathematical foundation for modern cryptographic systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Connections to Geometry</h3>
+        <p>Explore how algebraic structures appear in geometry and topology. Understand symmetry groups and their role in classification problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+    
+    function showOverview() {
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
