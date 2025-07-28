@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Stochastic Processes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #f093fb 50%, #667eea 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '∼';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>∼ MemoLearning Stochastic Processes</h1>
+    <p>Random processes, Markov chains, and probabilistic modeling</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~110</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Probability Review and Foundations</h3>
+        </div>
+        <p class="unit-description">Review essential probability theory needed for stochastic processes.</p>
+        <ul class="topics-list">
+          <li>Probability spaces and sigma-algebras</li>
+          <li>Random variables and distributions</li>
+          <li>Expectation and moments</li>
+          <li>Conditional probability and expectation</li>
+          <li>Independence and correlation</li>
+          <li>Characteristic functions</li>
+          <li>Limit theorems</li>
+          <li>Convergence concepts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Introduction to Stochastic Processes</h3>
+        </div>
+        <p class="unit-description">Learn the basic concepts and classification of stochastic processes.</p>
+        <ul class="topics-list">
+          <li>Definition of stochastic processes</li>
+          <li>Sample paths and trajectories</li>
+          <li>Classification by state space</li>
+          <li>Classification by time parameter</li>
+          <li>Stationary processes</li>
+          <li>Independent increment processes</li>
+          <li>Examples of common processes</li>
+          <li>Filtrations and adapted processes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Discrete-Time Markov Chains</h3>
+        </div>
+        <p class="unit-description">Master the theory and applications of discrete-time Markov chains.</p>
+        <ul class="topics-list">
+          <li>Markov property and transition matrices</li>
+          <li>Chapman-Kolmogorov equations</li>
+          <li>Classification of states</li>
+          <li>Irreducibility and periodicity</li>
+          <li>Stationary distributions</li>
+          <li>Limiting behavior and ergodicity</li>
+          <li>Absorption probabilities</li>
+          <li>First passage times</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Continuous-Time Markov Chains</h3>
+        </div>
+        <p class="unit-description">Study Markov chains in continuous time and their generator matrices.</p>
+        <ul class="topics-list">
+          <li>Poisson processes</li>
+          <li>Exponential holding times</li>
+          <li>Generator matrices and Q-matrices</li>
+          <li>Forward and backward equations</li>
+          <li>Birth and death processes</li>
+          <li>Steady-state behavior</li>
+          <li>Uniformization</li>
+          <li>Applications to queueing theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Renewal Theory</h3>
+        </div>
+        <p class="unit-description">Learn renewal processes and their applications to reliability and maintenance.</p>
+        <ul class="topics-list">
+          <li>Renewal processes</li>
+          <li>Renewal function and equations</li>
+          <li>Elementary renewal theorem</li>
+          <li>Key renewal theorem</li>
+          <li>Delayed renewal processes</li>
+          <li>Alternating renewal processes</li>
+          <li>Age and excess life</li>
+          <li>Applications to reliability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Brownian Motion and Diffusion</h3>
+        </div>
+        <p class="unit-description">Study Brownian motion and diffusion processes in continuous time.</p>
+        <ul class="topics-list">
+          <li>Definition of Brownian motion</li>
+          <li>Properties of Brownian paths</li>
+          <li>Martingale properties</li>
+          <li>First passage times</li>
+          <li>Reflection principle</li>
+          <li>Geometric Brownian motion</li>
+          <li>Diffusion processes</li>
+          <li>Stochastic differential equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Martingales</h3>
+        </div>
+        <p class="unit-description">Master martingale theory and its applications to stochastic processes.</p>
+        <ul class="topics-list">
+          <li>Definition and examples of martingales</li>
+          <li>Stopping times</li>
+          <li>Optional stopping theorem</li>
+          <li>Doob's inequalities</li>
+          <li>Martingale convergence theorems</li>
+          <li>Submartingales and supermartingales</li>
+          <li>Doob decomposition</li>
+          <li>Applications to gambling and finance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Queueing Theory</h3>
+        </div>
+        <p class="unit-description">Apply stochastic processes to model waiting lines and service systems.</p>
+        <ul class="topics-list">
+          <li>Basic queueing models</li>
+          <li>M/M/1 and M/M/c queues</li>
+          <li>Birth-death queueing systems</li>
+          <li>M/G/1 queue</li>
+          <li>Little's law</li>
+          <li>Networks of queues</li>
+          <li>Jackson networks</li>
+          <li>Applications to computer systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Stationary Processes and Time Series</h3>
+        </div>
+        <p class="unit-description">Study stationary processes and their spectral analysis.</p>
+        <ul class="topics-list">
+          <li>Weak and strong stationarity</li>
+          <li>Autocovariance and autocorrelation</li>
+          <li>Spectral representation</li>
+          <li>Power spectral density</li>
+          <li>AR, MA, and ARMA processes</li>
+          <li>Filtering and prediction</li>
+          <li>Ergodic theory</li>
+          <li>Applications to signal processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Explore advanced stochastic processes and modern applications.</p>
+        <ul class="topics-list">
+          <li>Lévy processes</li>
+          <li>Jump diffusion processes</li>
+          <li>Stochastic calculus and Itô's lemma</li>
+          <li>Financial mathematics applications</li>
+          <li>Branching processes</li>
+          <li>Random walks and electrical networks</li>
+          <li>Percolation theory</li>
+          <li>Stochastic control and optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Probability Review and Foundations</h1>
+      <p>Review essential probability theory and establish the mathematical foundations for stochastic processes.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Spaces</h3>
+        <p>Review the measure-theoretic foundation: (Ω, ℱ, P) where Ω is sample space, ℱ is sigma-algebra, and P is probability measure. Understand sigma-algebras and measurability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Random Variables and Distributions</h3>
+        <p>Master random variables as measurable functions X: Ω → ℝ. Review discrete and continuous distributions, CDFs, PDFs, and transformations of random variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expectation and Moments</h3>
+        <p>Study expectation E[X] = ∫X dP, variance, higher moments, and their properties. Learn Fubini's theorem and change of variables for expectations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Probability</h3>
+        <p>Review conditional probability P(A|B) and conditional expectation E[X|Y]. Understand the law of total expectation and law of total variance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Independence and Correlation</h3>
+        <p>Master independence of events and random variables. Study correlation, covariance, and understand that independence implies uncorrelatedness but not vice versa.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Characteristic Functions</h3>
+        <p>Learn φ_X(t) = E[e^(itX)] and their properties. Understand uniqueness theorem, continuity theorem, and applications to sums of independent random variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limit Theorems</h3>
+        <p>Review Law of Large Numbers (weak and strong) and Central Limit Theorem. Understand their importance for asymptotic behavior of stochastic processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convergence Concepts</h3>
+        <p>Study convergence in probability, almost surely, in distribution, and in L^p. Learn relationships between different modes of convergence.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Introduction to Stochastic Processes</h1>
+      <p>Learn the fundamental concepts and classification of stochastic processes.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Stochastic Processes</h3>
+        <p>Understand {X(t), t ∈ T} as a family of random variables indexed by time parameter T. Learn finite-dimensional distributions and consistency conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sample Paths</h3>
+        <p>Study sample paths ω ↦ X(·,ω) as realizations of the process. Understand continuity, differentiability, and other path properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">State Space Classification</h3>
+        <p>Classify processes by state space: discrete (countable states) vs. continuous (uncountable states). Learn examples of each type.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Parameter Classification</h3>
+        <p>Distinguish discrete-time {X_n, n = 0,1,2,...} from continuous-time {X(t), t ≥ 0} processes. Understand modeling implications of each choice.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stationary Processes</h3>
+        <p>Learn strict stationarity (distribution invariant under time shifts) vs. weak stationarity (first two moments invariant). Understand practical importance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Independent Increment Processes</h3>
+        <p>Study processes where increments over disjoint intervals are independent. Learn that this leads to Lévy processes and includes Brownian motion and Poisson processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Process Examples</h3>
+        <p>Study fundamental examples: random walk, Poisson process, Brownian motion, birth-death processes, and autoregressive processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Filtrations</h3>
+        <p>Learn filtration {ℱ_t} as increasing family of sigma-algebras representing information available up to time t. Understand adapted processes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Discrete-Time Markov Chains</h1>
+      <p>Master the theory and applications of discrete-time Markov chains.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Markov Property</h3>
+        <p>Learn the memoryless property: P(X_{n+1} = j | X_0,...,X_n) = P(X_{n+1} = j | X_n). Understand transition probabilities and matrices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chapman-Kolmogorov Equations</h3>
+        <p>Study P^{(n+m)} = P^{(n)} · P^{(m)} relating n-step and m-step transition probabilities. Understand matrix exponentiation in discrete time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classification of States</h3>
+        <p>Learn recurrent vs. transient states, periodic vs. aperiodic states. Understand positive recurrent, null recurrent, and absorbing states.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Irreducibility and Periodicity</h3>
+        <p>Study irreducible chains where all states communicate. Learn period of a state and aperiodic chains. Understand decomposition into communicating classes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stationary Distributions</h3>
+        <p>Find stationary distributions π satisfying π = πP. Learn existence and uniqueness conditions, and connection to eigenvectors of transition matrix.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limiting Behavior</h3>
+        <p>Study convergence to stationary distribution: lim P^{(n)} = π for irreducible, aperiodic, positive recurrent chains. Learn ergodic theorem for Markov chains.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Absorption Probabilities</h3>
+        <p>Calculate probability of eventual absorption into absorbing states. Learn to solve linear systems arising from first-step analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Passage Times</h3>
+        <p>Study hitting times T_j = inf{n ≥ 1: X_n = j} and their distributions. Learn mean return times and their relationship to stationary probabilities.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Continuous-Time Markov Chains</h1>
+      <p>Study Markov chains in continuous time and their infinitesimal generators.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Poisson Processes</h3>
+        <p>Master the fundamental continuous-time process: homogeneous Poisson process with rate λ. Learn counting process properties and exponential inter-arrival times.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exponential Holding Times</h3>
+        <p>Understand that Markov chains spend exponentially distributed time in each state. Learn the memoryless property of exponential distribution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Generator Matrices</h3>
+        <p>Study infinitesimal generator Q where Q_{ij} is rate of transition from i to j. Learn that row sums equal zero and P(t) = e^{Qt}.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Kolmogorov Equations</h3>
+        <p>Learn forward equation P'(t) = P(t)Q and backward equation P'(t) = QP(t). Understand their probabilistic interpretations and solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Birth and Death Processes</h3>
+        <p>Study processes where transitions are only to neighboring states. Learn birth rates λ_i and death rates μ_i, and detailed balance equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Steady-State Behavior</h3>
+        <p>Find limiting distributions π satisfying πQ = 0. Learn conditions for existence and uniqueness, and connection to discrete-time embedded chain.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniformization</h3>
+        <p>Transform continuous-time chain to discrete-time by uniformizing with rate ν ≥ max_i |Q_{ii}|. Learn how this enables computational methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Queueing Applications</h3>
+        <p>Apply continuous-time Markov chains to model queueing systems. Study M/M/1 queue as birth-death process with arrival rate λ and service rate μ.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-
