@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Real Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '∞';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>∞ MemoLearning Real Analysis</h1>
+    <p>Rigorous foundations of limits, continuity, and the real number system</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Theorems to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">The Real Number System</h3>
+        </div>
+        <p class="unit-description">Build rigorous foundations with the construction and properties of real numbers.</p>
+        <ul class="topics-list">
+          <li>Axiomatic construction of real numbers</li>
+          <li>Field axioms and ordered field properties</li>
+          <li>Completeness axiom and least upper bound</li>
+          <li>Archimedean property</li>
+          <li>Density of rationals and irrationals</li>
+          <li>Supremum and infimum</li>
+          <li>Nested interval theorem</li>
+          <li>Cardinality of real numbers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Sequences and Convergence</h3>
+        </div>
+        <p class="unit-description">Master the fundamental concept of convergence for sequences of real numbers.</p>
+        <ul class="topics-list">
+          <li>Definition of sequences and convergence</li>
+          <li>Limit theorems for sequences</li>
+          <li>Bounded and monotonic sequences</li>
+          <li>Monotone convergence theorem</li>
+          <li>Subsequences and Bolzano-Weierstrass theorem</li>
+          <li>Cauchy sequences and completeness</li>
+          <li>Limsup and liminf</li>
+          <li>Series and convergence tests</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Limits and Continuity</h3>
+        </div>
+        <p class="unit-description">Develop rigorous understanding of limits and continuous functions.</p>
+        <ul class="topics-list">
+          <li>Epsilon-delta definition of limits</li>
+          <li>One-sided limits and infinite limits</li>
+          <li>Limit theorems for functions</li>
+          <li>Definition of continuity</li>
+          <li>Types of discontinuities</li>
+          <li>Intermediate value theorem</li>
+          <li>Extreme value theorem</li>
+          <li>Uniform continuity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Differentiation</h3>
+        </div>
+        <p class="unit-description">Study derivatives with complete rigor and their fundamental properties.</p>
+        <ul class="topics-list">
+          <li>Definition of derivative</li>
+          <li>Differentiability and continuity</li>
+          <li>Mean value theorem</li>
+          <li>Rolle's theorem</li>
+          <li>L'Hôpital's rule</li>
+          <li>Taylor's theorem with remainder</li>
+          <li>Inverse function theorem</li>
+          <li>Implicit function theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Integration Theory</h3>
+        </div>
+        <p class="unit-description">Master the Riemann integral and fundamental theorem of calculus.</p>
+        <ul class="topics-list">
+          <li>Riemann sums and definition of integral</li>
+          <li>Riemann integrability conditions</li>
+          <li>Properties of Riemann integrals</li>
+          <li>Fundamental theorem of calculus</li>
+          <li>Integration by parts and substitution</li>
+          <li>Improper integrals</li>
+          <li>Comparison with Lebesgue integration</li>
+          <li>Applications to area and volume</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Sequences and Series of Functions</h3>
+        </div>
+        <p class="unit-description">Study convergence of function sequences and power series expansions.</p>
+        <ul class="topics-list">
+          <li>Pointwise and uniform convergence</li>
+          <li>Uniform convergence and continuity</li>
+          <li>Uniform convergence and integration</li>
+          <li>Uniform convergence and differentiation</li>
+          <li>Power series and radius of convergence</li>
+          <li>Taylor and Maclaurin series</li>
+          <li>Weierstrass approximation theorem</li>
+          <li>Equicontinuity and Arzelà-Ascoli theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Metric Spaces</h3>
+        </div>
+        <p class="unit-description">Generalize analysis concepts to abstract metric spaces.</p>
+        <ul class="topics-list">
+          <li>Definition and examples of metric spaces</li>
+          <li>Open and closed sets</li>
+          <li>Convergence in metric spaces</li>
+          <li>Continuity in metric spaces</li>
+          <li>Compactness and Heine-Borel theorem</li>
+          <li>Connectedness</li>
+          <li>Complete metric spaces</li>
+          <li>Contraction mapping theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Topology of Real Numbers</h3>
+        </div>
+        <p class="unit-description">Explore topological properties of the real line and Euclidean spaces.</p>
+        <ul class="topics-list">
+          <li>Open and closed sets in ℝ</li>
+          <li>Interior, closure, and boundary</li>
+          <li>Compact sets and finite subcover property</li>
+          <li>Connected sets and intervals</li>
+          <li>Cantor set and fractal properties</li>
+          <li>Baire category theorem</li>
+          <li>Nowhere dense and dense sets</li>
+          <li>Perfect sets and uncountability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Multivariable Analysis</h3>
+        </div>
+        <p class="unit-description">Extend analysis to functions of several variables with rigorous treatment.</p>
+        <ul class="topics-list">
+          <li>Limits and continuity in ℝⁿ</li>
+          <li>Partial derivatives and differentiability</li>
+          <li>Chain rule in several variables</li>
+          <li>Implicit and inverse function theorems</li>
+          <li>Multiple integrals and Fubini's theorem</li>
+          <li>Change of variables formula</li>
+          <li>Vector fields and line integrals</li>
+          <li>Green's theorem and applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore advanced concepts connecting to modern analysis and applications.</p>
+        <ul class="topics-list">
+          <li>Lebesgue measure and integration</li>
+          <li>Dominated convergence theorem</li>
+          <li>Fourier series and convergence</li>
+          <li>Stone-Weierstrass theorem</li>
+          <li>Functional analysis foundations</li>
+          <li>Differential equations and existence theorems</li>
+          <li>Calculus of variations</li>
+          <li>Applications to optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: The Real Number System</h1>
+      <p>Establish the rigorous foundations of real analysis through the construction and properties of real numbers.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Axiomatic Construction</h3>
+        <p>Understand the axiomatic approach to defining real numbers. Learn how reals can be constructed from rationals using Dedekind cuts or Cauchy sequences of rationals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Field Axioms</h3>
+        <p>Master the field axioms for addition and multiplication: associativity, commutativity, distributivity, and existence of identities and inverses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ordered Field Properties</h3>
+        <p>Study the order axioms that make ℝ an ordered field. Understand trichotomy, transitivity, and compatibility of order with field operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Completeness Axiom</h3>
+        <p>Learn the least upper bound property that distinguishes ℝ from ℚ. Understand how completeness enables the fundamental theorems of analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Archimedean Property</h3>
+        <p>Prove and apply the Archimedean property: for any real numbers x and y with y > 0, there exists a positive integer n such that ny > x.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Density Properties</h3>
+        <p>Understand that both rationals and irrationals are dense in ℝ. Learn to prove density using the Archimedean property and rational approximations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Supremum and Infimum</h3>
+        <p>Master the concepts of least upper bound (supremum) and greatest lower bound (infimum). Learn to find and prove suprema and infima for various sets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nested Interval Theorem</h3>
+        <p>Prove the nested interval theorem and understand its connection to completeness. Use it to prove the Bolzano-Weierstrass theorem for bounded sequences.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Sequences and Convergence</h1>
+      <p>Develop the fundamental theory of convergent sequences and their properties.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Convergence</h3>
+        <p>Master the epsilon-N definition of sequence convergence. Learn to prove convergence and divergence using the formal definition with quantifiers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limit Theorems</h3>
+        <p>Prove and apply limit theorems: limits of sums, products, quotients. Understand the algebra of limits and squeeze theorem for sequences.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bounded Sequences</h3>
+        <p>Study bounded sequences and their properties. Prove that convergent sequences are bounded and learn counterexamples for the converse.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Monotone Convergence</h3>
+        <p>Master the monotone convergence theorem: every bounded monotonic sequence converges. Apply this powerful tool to prove convergence without finding limits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Subsequences</h3>
+        <p>Understand subsequences and their convergence properties. Learn that convergent sequences have all subsequences converging to the same limit.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bolzano-Weierstrass Theorem</h3>
+        <p>Prove that every bounded sequence has a convergent subsequence. Understand this as a fundamental compactness property of bounded sets in ℝ.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cauchy Sequences</h3>
+        <p>Study Cauchy sequences and prove they are equivalent to convergent sequences in ℝ. Understand how this characterization reveals completeness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limsup and Liminf</h3>
+        <p>Master limit superior and limit inferior for bounded sequences. Learn their relationship to convergence and applications to series convergence tests.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Limits and Continuity</h1>
+      <p>Develop rigorous understanding of function limits and continuous functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Epsilon-Delta Definition</h3>
+        <p>Master the epsilon-delta definition of function limits. Learn to construct proofs of limits and understand the logical structure of the definition.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">One-Sided and Infinite Limits</h3>
+        <p>Extend limit concepts to one-sided limits and limits involving infinity. Understand their relationship to standard limits and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Limit Theorems for Functions</h3>
+        <p>Prove limit theorems for sums, products, quotients, and compositions. Learn the sequential characterization of function limits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Continuity</h3>
+        <p>Understand continuity at a point and on intervals. Learn equivalent characterizations: epsilon-delta, sequential, and via limits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Discontinuities</h3>
+        <p>Classify discontinuities as removable, jump, or essential. Understand the structure of discontinuity sets for monotonic functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
+        <p>Prove the Intermediate Value Theorem and understand its topological significance. Apply it to root-finding and proving existence of solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Extreme Value Theorem</h3>
+        <p>Prove that continuous functions on closed bounded intervals attain their maximum and minimum. Understand the role of compactness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniform Continuity</h3>
+        <p>Distinguish uniform continuity from pointwise continuity. Prove that continuous functions on compact sets are uniformly continuous.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Differentiation</h1>
+      <p>Study derivatives with complete rigor and prove the fundamental theorems of differential calculus.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Derivative</h3>
+        <p>Master the limit definition of derivative. Understand differentiability as a local linear approximation property and geometric interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Differentiability and Continuity</h3>
+        <p>Prove that differentiable functions are continuous. Understand examples of continuous but non-differentiable functions like |x|.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rolle's Theorem</h3>
+        <p>Prove Rolle's theorem and understand its geometric meaning. Learn its role as a stepping stone to the Mean Value Theorem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mean Value Theorem</h3>
+        <p>Prove the Mean Value Theorem and understand its fundamental importance. Apply it to prove monotonicity criteria and other results.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">L'Hôpital's Rule</h3>
+        <p>Prove L'Hôpital's rule for indeterminate forms. Understand the conditions for its application and common pitfalls in usage.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Taylor's Theorem</h3>
+        <p>Prove Taylor's theorem with various forms of remainder. Understand the role of higher-order derivatives in approximation theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inverse Function Theorem</h3>
+        <p>Prove the inverse function theorem for real functions. Understand the conditions for existence and differentiability of inverse functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications to Optimization</h3>
+        <p>Apply differentiation to optimization problems. Understand first and second derivative tests and their limitations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Integration Theory</h1>
+      <p>Master the Riemann integral and prove the fundamental theorem of calculus.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Riemann Sums</h3>
+        <p
