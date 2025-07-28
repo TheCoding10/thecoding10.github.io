@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Linear Algebra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔢 MemoLearning Linear Algebra</h1>
+    <p>Master matrices, vector spaces, and linear transformations</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Systems of Linear Equations</h3>
+        </div>
+        <p class="unit-description">Learn to solve systems of linear equations using elimination and matrix methods.</p>
+        <ul class="topics-list">
+          <li>Linear equations in multiple variables</li>
+          <li>Systems of linear equations</li>
+          <li>Gaussian elimination</li>
+          <li>Gauss-Jordan elimination</li>
+          <li>Row echelon form and reduced row echelon form</li>
+          <li>Inconsistent and dependent systems</li>
+          <li>Applications to real-world problems</li>
+          <li>Parametric solutions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Matrix Operations</h3>
+        </div>
+        <p class="unit-description">Master fundamental matrix operations and properties.</p>
+        <ul class="topics-list">
+          <li>Matrix notation and terminology</li>
+          <li>Matrix addition and scalar multiplication</li>
+          <li>Matrix multiplication</li>
+          <li>Properties of matrix operations</li>
+          <li>Transpose of a matrix</li>
+          <li>Special matrices (identity, zero, diagonal)</li>
+          <li>Symmetric and skew-symmetric matrices</li>
+          <li>Powers of matrices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Determinants</h3>
+        </div>
+        <p class="unit-description">Calculate determinants and understand their geometric and algebraic significance.</p>
+        <ul class="topics-list">
+          <li>Definition of determinants</li>
+          <li>Determinants of 2×2 and 3×3 matrices</li>
+          <li>Cofactor expansion</li>
+          <li>Properties of determinants</li>
+          <li>Row operations and determinants</li>
+          <li>Determinants of triangular matrices</li>
+          <li>Cramer's rule</li>
+          <li>Geometric interpretation of determinants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Matrix Inverses</h3>
+        </div>
+        <p class="unit-description">Find matrix inverses and solve matrix equations.</p>
+        <ul class="topics-list">
+          <li>Definition of matrix inverse</li>
+          <li>Properties of invertible matrices</li>
+          <li>Finding inverses using Gauss-Jordan</li>
+          <li>Finding inverses using cofactors</li>
+          <li>Solving matrix equations</li>
+          <li>Elementary matrices</li>
+          <li>LU decomposition</li>
+          <li>Applications of matrix inverses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Vector Spaces</h3>
+        </div>
+        <p class="unit-description">Understand abstract vector spaces and their fundamental properties.</p>
+        <ul class="topics-list">
+          <li>Definition of vector spaces</li>
+          <li>Vector space axioms</li>
+          <li>Subspaces</li>
+          <li>Linear combinations</li>
+          <li>Span of vectors</li>
+          <li>Linear independence and dependence</li>
+          <li>Basis and dimension</li>
+          <li>Coordinate systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Eigenvalues and Eigenvectors</h3>
+        </div>
+        <p class="unit-description">Find eigenvalues and eigenvectors and understand their applications.</p>
+        <ul class="topics-list">
+          <li>Definition of eigenvalues and eigenvectors</li>
+          <li>Characteristic polynomial</li>
+          <li>Finding eigenvalues and eigenvectors</li>
+          <li>Eigenspaces</li>
+          <li>Algebraic and geometric multiplicity</li>
+          <li>Diagonalization</li>
+          <li>Similar matrices</li>
+          <li>Applications to dynamical systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Linear Transformations</h3>
+        </div>
+        <p class="unit-description">Study linear transformations and their matrix representations.</p>
+        <ul class="topics-list">
+          <li>Definition of linear transformations</li>
+          <li>Properties of linear transformations</li>
+          <li>Kernel (null space) and image (range)</li>
+          <li>Matrix representation of linear transformations</li>
+          <li>Change of basis</li>
+          <li>Composition of transformations</li>
+          <li>Inverse transformations</li>
+          <li>Geometric transformations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Inner Product Spaces</h3>
+        </div>
+        <p class="unit-description">Learn about inner products, orthogonality, and orthonormal bases.</p>
+        <ul class="topics-list">
+          <li>Inner product definition and properties</li>
+          <li>Length and distance</li>
+          <li>Orthogonal and orthonormal vectors</li>
+          <li>Orthogonal projections</li>
+          <li>Gram-Schmidt process</li>
+          <li>QR factorization</li>
+          <li>Least squares solutions</li>
+          <li>Orthogonal matrices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Spectral Theory</h3>
+        </div>
+        <p class="unit-description">Study symmetric matrices, quadratic forms, and spectral decomposition.</p>
+        <ul class="topics-list">
+          <li>Symmetric matrices</li>
+          <li>Orthogonal diagonalization</li>
+          <li>Spectral theorem</li>
+          <li>Quadratic forms</li>
+          <li>Principal component analysis</li>
+          <li>Singular value decomposition (SVD)</li>
+          <li>Positive definite matrices</li>
+          <li>Applications to optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Applications</h3>
+        </div>
+        <p class="unit-description">Apply linear algebra concepts to real-world problems and advanced mathematics.</p>
+        <ul class="topics-list">
+          <li>Markov chains</li>
+          <li>Graph theory applications</li>
+          <li>Computer graphics transformations</li>
+          <li>Data analysis and machine learning</li>
+          <li>Differential equations systems</li>
+          <li>Network analysis</li>
+          <li>Cryptography</li>
+          <li>Economic models</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Systems of Linear Equations</h1>
+      <p>Build the foundation by learning to solve systems of linear equations systematically.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Equations in Multiple Variables</h3>
+        <p>Understand equations of the form a₁x₁ + a₂x₂ + ... + aₙxₙ = b. Learn to identify coefficients and interpret geometric meaning in 2D and 3D.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Systems of Linear Equations</h3>
+        <p>Work with multiple linear equations simultaneously. Understand when systems have unique solutions, infinitely many solutions, or no solution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gaussian Elimination</h3>
+        <p>Master the systematic process of using row operations to solve systems. Learn the three elementary row operations and their applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gauss-Jordan Elimination</h3>
+        <p>Extend Gaussian elimination to obtain reduced row echelon form. Use this method to find complete solutions efficiently.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Row Echelon Forms</h3>
+        <p>Recognize row echelon form (REF) and reduced row echelon form (RREF). Understand leading entries, pivot positions, and their significance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inconsistent and Dependent Systems</h3>
+        <p>Identify inconsistent systems (no solution) and dependent systems (infinitely many solutions). Interpret results from row operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-World Applications</h3>
+        <p>Apply systems of equations to solve problems in business, engineering, and science. Model situations with multiple constraints and unknowns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parametric Solutions</h3>
+        <p>Express solutions involving free variables in parametric form. Understand the relationship between free variables and solution sets.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Matrix Operations</h1>
+      <p>Learn the fundamental operations with matrices and their algebraic properties.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Notation and Terminology</h3>
+        <p>Understand matrix notation A = [aᵢⱼ], dimensions (m×n), entries, rows, columns. Learn standard matrix terminology and conventions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Addition and Scalar Multiplication</h3>
+        <p>Perform matrix addition A + B and scalar multiplication kA. Understand when operations are defined and their basic properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Multiplication</h3>
+        <p>Master matrix multiplication AB using row-column products. Understand when multiplication is defined and compute products efficiently.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Properties of Matrix Operations</h3>
+        <p>Learn algebraic properties: associativity, distributivity, and when commutativity fails. Understand differences from scalar arithmetic.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Transpose</h3>
+        <p>Compute the transpose Aᵀ by interchanging rows and columns. Learn properties of transpose and its interaction with other operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Special Matrices</h3>
+        <p>Identify and work with special matrices: identity matrix I, zero matrix O, diagonal matrices, and their unique properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Symmetric and Skew-Symmetric Matrices</h3>
+        <p>Understand symmetric matrices (A = Aᵀ) and skew-symmetric matrices (A = -Aᵀ). Learn their properties and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Powers of Matrices</h3>
+        <p>Compute matrix powers Aⁿ for square matrices. Use diagonalization and eigenvalues to simplify calculations when possible.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Determinants</h1>
+      <p>Master determinant calculations and understand their geometric and algebraic significance.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Determinants</h3>
+        <p>Understand determinants as functions that assign scalars to square matrices. Learn the fundamental properties that define determinants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">2×2 and 3×3 Determinants</h3>
+        <p>Calculate determinants of 2×2 matrices using ad - bc and 3×3 matrices using the rule of Sarrus or cofactor expansion.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cofactor Expansion</h3>
+        <p>Use cofactor expansion along any row or column to calculate determinants of larger matrices. Understand minors and cofactors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Properties of Determinants</h3>
+        <p>Learn key properties: linearity, effect of row operations, determinant of products, and determinant of transpose.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Row Operations and Determinants</h3>
+        <p>Understand how elementary row operations affect determinants: row swaps change sign, scaling multiplies determinant.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Triangular Matrix Determinants</h3>
+        <p>Calculate determinants of upper and lower triangular matrices as products of diagonal entries. Use this for efficient computation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cramer's Rule</h3>
+        <p>Solve systems of linear equations using Cramer's rule when the coefficient matrix is square and invertible.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geometric Interpretation</h3>
+        <p>Understand determinants as signed volumes: 2×2 determinants give signed areas, 3×3 determinants give signed volumes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Matrix Inverses</h1>
+      <p>Learn to find and work with matrix inverses to solve matrix equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Matrix Inverse</h3>
+        <p>Understand that A⁻¹ is the inverse of A if AA⁻¹ = A⁻¹A = I. Learn when inverses exist and their uniqueness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Properties of Invertible Matrices</h3>
+        <p>Learn the Invertible Matrix Theorem: equivalent conditions for invertibility including non-zero determinant and full rank.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gauss-Jordan Method for Inverses</h3>
+        <p>Find matrix inverses using the augmented matrix [A|I] and row operations to obtain [I|A⁻¹]. Master this systematic approach.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cofactor Method for Inverses</h3>
+        <p>Calculate inverses using the adjugate matrix: A⁻¹ = (1/det(A)) × adj(A). Understand when this method is practical.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solving Matrix Equations</h3>
+        <p>Solve equations of the form AX = B and XA = B using matrix inverses. Understand left and right multiplication by inverses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Elementary Matrices</h3>
+        <p>Understand elementary matrices as inverses of row operations. Use them to express matrix operations and understand matrix factorizations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">LU Decomposition</h3>
+        <p>Factor matrices as A = LU where L is lower triangular and U is upper triangular. Use LU factorization for efficient equation solving.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications of Matrix Inverses</h3>
+        <p>Apply matrix inverses to solve systems of equations, find inverse transformations, and solve practical problems in various fields.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Vector Spaces</h1>
+      <p>Understand abstract vector spaces and develop the theory of linear independence and bases.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Space Definition</h3>
+        <p>Learn the abstract definition of vector spaces with addition and scalar multiplication operations satisfying eight axioms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Space Axioms</h3>
+        <p>Master the eight axioms: closure, associativity, commutativity, identity elements, inverses, and distributive properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Subspaces</h3>
+        <p>Identify subspaces as subsets that are closed under addition and scalar
