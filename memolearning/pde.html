@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Partial Differential Equations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '∂';
+      position: absolute;
+      left: 0;
+      color: #ff6b6b;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ff6b6b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ff6b6b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>∂ MemoLearning Partial Differential Equations</h1>
+    <p>Solving heat, wave, and Laplace equations with rigorous mathematical methods</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Key Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to PDEs</h3>
+        </div>
+        <p class="unit-description">Learn the basic concepts, classifications, and examples of partial differential equations.</p>
+        <ul class="topics-list">
+          <li>Definition and examples of PDEs</li>
+          <li>Order and linearity</li>
+          <li>Classification: elliptic, parabolic, hyperbolic</li>
+          <li>Well-posed problems</li>
+          <li>Initial and boundary conditions</li>
+          <li>Physical origins of PDEs</li>
+          <li>Heat equation derivation</li>
+          <li>Wave equation derivation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">First-Order PDEs</h3>
+        </div>
+        <p class="unit-description">Study methods for solving first-order partial differential equations.</p>
+        <ul class="topics-list">
+          <li>Linear first-order PDEs</li>
+          <li>Method of characteristics</li>
+          <li>Quasilinear equations</li>
+          <li>Conservation laws</li>
+          <li>Traffic flow models</li>
+          <li>Shock formation</li>
+          <li>Weak solutions</li>
+          <li>Hamilton-Jacobi equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Separation of Variables</h3>
+        </div>
+        <p class="unit-description">Master the fundamental technique of separation of variables for linear PDEs.</p>
+        <ul class="topics-list">
+          <li>Method of separation of variables</li>
+          <li>Heat equation in 1D</li>
+          <li>Wave equation in 1D</li>
+          <li>Laplace equation in rectangles</li>
+          <li>Eigenvalue problems</li>
+          <li>Fourier series solutions</li>
+          <li>Boundary conditions and eigenfunctions</li>
+          <li>Multi-dimensional problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Fourier Analysis and PDEs</h3>
+        </div>
+        <p class="unit-description">Apply Fourier series and transforms to solve PDEs on various domains.</p>
+        <ul class="topics-list">
+          <li>Fourier series review</li>
+          <li>Heat equation with Fourier series</li>
+          <li>Fourier transforms</li>
+          <li>PDEs on infinite domains</li>
+          <li>Convolution and Green's functions</li>
+          <li>Parseval's theorem applications</li>
+          <li>Discrete Fourier transforms</li>
+          <li>Fast Fourier Transform (FFT)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Heat Equation</h3>
+        </div>
+        <p class="unit-description">Study the parabolic heat equation and its properties in detail.</p>
+        <ul class="topics-list">
+          <li>Heat equation derivation and interpretation</li>
+          <li>Fundamental solution</li>
+          <li>Maximum principle</li>
+          <li>Uniqueness and comparison theorems</li>
+          <li>Heat kernel and convolution</li>
+          <li>Energy methods</li>
+          <li>Asymptotic behavior</li>
+          <li>Nonhomogeneous problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Wave Equation</h3>
+        </div>
+        <p class="unit-description">Analyze the hyperbolic wave equation and wave phenomena.</p>
+        <ul class="topics-list">
+          <li>Wave equation derivation</li>
+          <li>D'Alembert's solution</li>
+          <li>Characteristics and domains of influence</li>
+          <li>Energy conservation</li>
+          <li>Wave equation in higher dimensions</li>
+          <li>Spherical waves and Huygens' principle</li>
+          <li>Nonhomogeneous wave equations</li>
+          <li>Finite speed of propagation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Laplace Equation and Harmonic Functions</h3>
+        </div>
+        <p class="unit-description">Study the elliptic Laplace equation and harmonic function theory.</p>
+        <ul class="topics-list">
+          <li>Laplace equation and harmonic functions</li>
+          <li>Mean value property</li>
+          <li>Maximum principle</li>
+          <li>Dirichlet and Neumann problems</li>
+          <li>Green's functions</li>
+          <li>Poisson's formula</li>
+          <li>Uniqueness theorems</li>
+          <li>Potential theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Green's Functions and Fundamental Solutions</h3>
+        </div>
+        <p class="unit-description">Learn Green's functions as a unified approach to solving linear PDEs.</p>
+        <ul class="topics-list">
+          <li>Green's functions for ODEs review</li>
+          <li>Green's functions for PDEs</li>
+          <li>Fundamental solutions</li>
+          <li>Method of images</li>
+          <li>Green's identities</li>
+          <li>Reciprocity relations</li>
+          <li>Eigenfunction expansions</li>
+          <li>Applications to boundary value problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Numerical Methods for PDEs</h3>
+        </div>
+        <p class="unit-description">Study computational approaches to solving PDEs numerically.</p>
+        <ul class="topics-list">
+          <li>Finite difference methods</li>
+          <li>Stability and convergence</li>
+          <li>Explicit vs implicit schemes</li>
+          <li>CFL condition</li>
+          <li>Finite element methods</li>
+          <li>Weak formulations</li>
+          <li>Spectral methods</li>
+          <li>Method of lines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Explore advanced PDE theory and modern applications.</p>
+        <ul class="topics-list">
+          <li>Nonlinear PDEs</li>
+          <li>Solitons and integrable systems</li>
+          <li>Calculus of variations and Euler-Lagrange</li>
+          <li>Weak solutions and distributions</li>
+          <li>Sobolev spaces</li>
+          <li>Homogenization theory</li>
+          <li>Free boundary problems</li>
+          <li>Applications to mathematical biology</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to PDEs</h1>
+      <p>Build the foundation with basic concepts, classifications, and physical origins of partial differential equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition and Examples</h3>
+        <p>Learn PDEs as equations involving partial derivatives of unknown functions of multiple variables. Study classic examples: heat, wave, and Laplace equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order and Linearity</h3>
+        <p>Classify PDEs by order (highest derivative) and linearity. Distinguish linear, quasilinear, and fully nonlinear equations and their different behaviors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">PDE Classification</h3>
+        <p>Learn the fundamental classification: elliptic (Laplace), parabolic (heat), hyperbolic (wave). Understand how classification affects solution methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Well-Posed Problems</h3>
+        <p>Study Hadamard's criteria: existence, uniqueness, and continuous dependence on data. Learn why well-posedness is crucial for physical modeling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Initial and Boundary Conditions</h3>
+        <p>Understand Dirichlet, Neumann, and Robin boundary conditions. Learn how initial/boundary conditions determine unique solutions to PDEs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Physical Origins</h3>
+        <p>Discover how PDEs arise from physical principles: conservation laws, Newton's laws, thermodynamics. Connect mathematics to real-world phenomena.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Equation Derivation</h3>
+        <p>Derive ut = kuxx from Fourier's law of heat conduction and conservation of energy. Understand the physical meaning of each term.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Equation Derivation</h3>
+        <p>Derive utt = c²uxx from Newton's law applied to vibrating strings. Learn how wave speed c relates to physical parameters.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: First-Order PDEs</h1>
+      <p>Master methods for solving first-order PDEs and understand the geometric method of characteristics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear First-Order PDEs</h3>
+        <p>Solve equations of the form aux + buy + cu = f using method of characteristics. Learn how characteristics are curves along which PDEs become ODEs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method of Characteristics</h3>
+        <p>Master the geometric approach: characteristics are curves where information propagates. Learn to find characteristic curves and solve along them.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quasilinear Equations</h3>
+        <p>Study nonlinear first-order PDEs where coefficients depend on u: F(x,y,u,ux,uy) = 0. Learn how nonlinearity can cause characteristics to intersect.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conservation Laws</h3>
+        <p>Study PDEs of the form ut + f(u)x = 0 arising from conservation principles. Learn how to find weak solutions when classical solutions break down.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traffic Flow Models</h3>
+        <p>Apply conservation laws to model traffic flow: ρt + (ρv)x = 0. Understand how traffic density and velocity interact to create traffic patterns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shock Formation</h3>
+        <p>Learn how smooth initial data can develop discontinuities (shocks) in finite time. Study shock conditions and entropy solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Weak Solutions</h3>
+        <p>Define weak solutions using integral formulation when classical derivatives don't exist. Learn how to handle discontinuous solutions rigorously.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hamilton-Jacobi Equations</h3>
+        <p>Study nonlinear first-order PDEs ut + H(∇u) = 0 arising in optimal control. Learn viscosity solutions and dynamic programming connections.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Separation of Variables</h1>
+      <p>Master the fundamental technique for solving linear PDEs by reducing them to ODEs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separation of Variables Method</h3>
+        <p>Learn to assume solutions of the form u(x,t) = X(x)T(t) for linear PDEs. Understand when and why this ansatz works for linear equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Equation in 1D</h3>
+        <p>Solve ut = kuxx on bounded intervals with homogeneous boundary conditions. Learn how initial conditions determine coefficients in series solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Equation in 1D</h3>
+        <p>Solve utt = c²uxx using separation of variables. Understand standing wave solutions and their relationship to normal modes of vibration.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Laplace Equation</h3>
+        <p>Solve ∇²u = 0 in rectangular domains. Learn how to handle different boundary conditions on different sides of rectangles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Eigenvalue Problems</h3>
+        <p>Study Sturm-Liouville problems X''+ λX = 0 arising from separation. Learn orthogonality of eigenfunctions and completeness properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Series Solutions</h3>
+        <p>Express solutions as infinite series of eigenfunctions. Learn how Fourier coefficients are determined by initial or boundary data.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Boundary Conditions</h3>
+        <p>Handle various boundary conditions: Dirichlet u = 0, Neumann ux = 0, Robin αu + βux = 0. Learn how boundary conditions affect eigenvalues.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multi-dimensional Problems</h3>
+        <p>Extend separation of variables to higher dimensions. Study problems in rectangular boxes, circular domains, and other separable coordinate systems.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Fourier Analysis and PDEs</h1>
+      <p>Apply Fourier series and transforms as powerful tools for solving PDEs on various domains.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Series Review</h3>
+        <p>Review Fourier series expansion of periodic functions. Understand convergence properties and how to handle different types of boundary conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Equation with Fourier</h3>
+        <p>Solve heat equation using Fourier series on bounded domains. Learn how different boundary conditions lead to sine, cosine, or general Fourier series.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Transforms</h3>
+        <p>Learn Fourier transforms for functions on infinite domains. Study properties: linearity, convolution theorem, Parseval's identity, and derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">PDEs on Infinite Domains</h3>
+        <p>Solve heat and wave equations on infinite intervals using Fourier transforms. Learn how transforms convert PDEs to ODEs in frequency space.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convolution and Green's Functions</h3>
+        <p>Use convolution theorem to construct solutions via Green's functions. Learn how fundamental solutions relate to Fourier transforms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parseval's Theorem</h3>
+        <p>Apply energy conservation in Fourier space. Learn how Parseval's theorem helps analyze energy dissipation in heat equations and energy conservation in wave equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Discrete Fourier Transforms</h3>
+        <p>Study DFT for numerical computation. Learn relationship between continuous and discrete Fourier transforms, and aliasing effects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fast Fourier Transform</h3>
+        <p>Understand FFT algorithm for efficient computation of DFT. Learn applications to numerical solution of PDEs and spectral methods.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Heat Equation</h1>
+      <p>Study the parabolic heat equation in depth, including advanced properties and solution techniques.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Equation Properties</h3>
+        <p>Study ut = k∇²u as the fundamental parabolic PDE. Learn smoothing properties, irreversibility, and infinite speed of information propagation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fundamental Solution</h3>
+        <p>Learn the heat kernel G(x,t) = (4πkt)^(-n/2) exp(-|x|²/4kt). Understand how it describes heat spreading from a point source.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximum Principle</h3>
+        <p>Prove that solutions achieve maximum on the parabolic boundary. Learn weak maximum principle and its applications to uniqueness and comparison.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniqueness Theorems</h3>
+        <p>Use maximum principle to prove uniqueness of solutions. Learn comparison theorems and how they provide bounds on solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Kernel and Convolution</h3>
+        <p>Express general solutions as convolution with heat kernel: u(x,t) = ∫G(x-y,t)u₀(y)dy. Understand probabilistic interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Energy Methods</h3>
+        <p>Study energy E(t) = ∫u² dx and its monotonic decrease for heat equation. Learn how energy methods provide stability and convergence results.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Asymptotic Behavior</h3>
+        <p>Study long-time behavior: solutions approach mean value as t → ∞. Learn decay rates and self-similar solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nonhomogeneous Problems</h3>
+        <p>Solve ut = k∇²u + f(x,t) using Duhamel's principle. Learn how to handle time-dependent source terms and boundary conditions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Wave Equation</h1>
+      <p>Analyze the hyperbolic wave equation and understand wave phenomena and propagation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Equation Derivation</h3>
+        <p>Derive utt = c²∇²u from physical principles. Understand wave speed c and its relationship to medium properties like tension and density.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">D'Alembert's Solution</h3>
+        <p>Learn the explicit solution u(x,t) = ½[f(x+ct) + f(x-ct)] + 1/(2c)∫[x-ct to x+ct] g(s)ds for infinite string problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Characteristics and Domains</h3>
+        <p>Understand characteristics x ± ct as paths of information propagation. Learn domain of dependence and range of influence concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Energy Conservation</h3>
+        <p>Study energy E = ½∫(u²t + c²u²x)dx and its conservation for wave equation. Learn how energy provides stability and uniqueness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Higher Dimensional Waves</h3>
+        <p>Study wave equation in 2D and 3D. Learn about cylindrical and spherical waves, and how dimensionality affects wave behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Huygens' Principle</h3>
+        <p>Understand wave propagation in odd dimensions where signals have sharp wavefronts. Learn why 2D waves have "trailing" effects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forced Wave Equations</h3>
+        <p>Solve utt = c²∇²u + F(x,t) using Green's functions and retarded potentials. Understand causality and finite propagation speed.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Propagation Speed</h3>
+        <p>Learn that wave solutions have compact support if initial data has compact support. Understand the fundamental difference from heat equation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Laplace Equation and Harmonic Functions</h1>
+      <p>Study the elliptic Laplace equation and the beautiful theory of harmonic functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Harmonic Functions</h3>
+        <p>Study functions satisfying ∇²u = 0. Learn that harmonic functions model steady-state heat distribution and gravitational potentials.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mean Value Property</h3>
+        <p>Learn that harmonic functions equal their average over any sphere: u(x) = (1/|∂B|)∫∂B u dS. This is equivalent to being harmonic.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximum Principle</h3>
+        <p>Prove harmonic functions achieve maximum and minimum on the boundary. Learn strong maximum principle and its uniqueness consequences.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Boundary Value Problems</h3>
+        <p>Study Dirichlet problem (specify u on boundary) and Neumann problem (specify ∂u/∂n on boundary). Learn existence and uniqueness conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Green's Functions</h3>
+        <p>Construct Green's functions G(x,y) for Laplace equation in various domains. Learn how Green's functions solve Poisson equation ∇²u = f.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Poisson's Formula</h3>
+        <p>Learn explicit solution for Dirichlet problem in disks and balls using Poisson kernel. Understand harmonic measure interpretation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniqueness Theorems</h3>
+        <p>Use maximum principle and energy methods to prove uniqueness. Learn how different boundary conditions affect uniqueness statements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Potential Theory</h3>
+        <p>Study harmonic functions as gravitational or electrostatic potentials. Learn connections to complex analysis and conformal mapping.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Green's Functions and Fundamental Solutions</h1>
+      <p>Master Green's functions as a unified approach to solving inhomogeneous linear PDEs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Green's Functions for ODEs</h3>
+        <p>Review Green's functions for boundary value problems in ODEs. Understand how they invert differential operators and represent solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fundamental Solutions</h3>
+        <p>Learn fundamental solutions Φ as Green's functions for the free-space operator. Study how they satisfy LΦ = δ in distributional sense.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method of Images</h3>
+        <p>Construct Green's functions using method of images for simple geometries. Learn how to satisfy boundary conditions using symmetric/antisymmetric images.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Green's Identities</h3>
+        <p>Study Green's first and second identities from integration by parts. Learn how they lead to integral representations of solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reciprocity Relations</h3>
+        <p>Learn symmetry property G(x,y) = G(y,x) and its physical interpretation as reciprocity between source and observation points.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Eigenfunction Expansions</h3>
+        <p>Express Green's functions as series in eigenfunctions: G(x,y) = Σ φₙ(x)φₙ(y)/λₙ. Learn bilinear formula and its applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat and Wave Green's Functions</h3>
+        <p>Study specific Green's functions for heat and wave equations. Learn retarded Green's functions and causality for hyperbolic problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications to BVPs</h3>
+        <p>Use Green's functions to solve general boundary value problems. Learn how different boundary conditions modify the Green's function construction.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Numerical Methods for PDEs</h1>
+      <p>Learn computational approaches to solving PDEs when analytical methods are insufficient.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Difference Methods</h3>
+        <p>Approximate derivatives using finite differences. Learn forward, backward, and central difference schemes and their accuracy orders.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stability and Convergence</h3>
+        <p>Study von Neumann stability analysis and Lax equivalence theorem. Learn that consistency + stability = convergence for linear schemes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Explicit vs Implicit Schemes</h3>
+        <p>Compare explicit methods (easy to implement, stability restrictions) vs implicit methods (stable, require linear system solves).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">CFL Condition</h3>
+        <p>Learn Courant-Friedrichs-Lewy condition for hyperbolic PDEs: numerical domain of dependence must contain analytical domain of dependence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Element Methods</h3>
+        <p>Study variational formulation and finite element approximation. Learn about basis functions, assembly of stiffness matrices, and mesh refinement.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Weak Formulations</h3>
+        <p>Learn weak formulation of PDEs using integration by parts. Understand how weak solutions allow for less regular solutions and natural boundary conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spectral Methods</h3>
+        <p>Use global polynomial approximations and FFT for high accuracy. Learn about spectral accuracy and applications to smooth periodic problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method of Lines</h3>
+        <p>Discretize spatial derivatives to get ODE system in time. Learn how to apply ODE solvers to time-dependent PDEs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Advanced Topics and Applications</h1>
+      <p>Explore modern developments in PDE theory and applications to current research areas.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nonlinear PDEs</h3>
+        <p>Study nonlinear phenomena: blow-up, pattern formation, traveling waves. Learn how nonlinearity fundamentally changes PDE behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Solitons and Integrable Systems</h3>
+        <p>Study special nonlinear PDEs with soliton solutions. Learn KdV equation, inverse scattering transform, and exactly solvable systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Calculus of Variations</h3>
+        <p>Learn how PDEs arise as Euler-Lagrange equations from variational principles. Study critical points of functionals and minimal surface problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Weak Solutions and Distributions</h3>
+        <p>Study generalized solutions using distribution theory. Learn how to handle discontinuous solutions and shock waves rigorously.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sobolev Spaces</h3>
+        <p>Study function spaces with weak derivatives. Learn Sobolev embedding theorems and their applications to existence theory for PDEs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homogenization Theory</h3>
+        <p>Study PDEs with rapidly oscillating coefficients. Learn how microscopic structure affects macroscopic behavior through effective equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Free Boundary Problems</h3>
+        <p>Study problems where domain boundary is unknown (Stefan problems, obstacle problems). Learn variational inequalities and regularity theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mathematical Biology Applications</h3>
+        <p>Apply PDEs to model biological phenomena: reaction-diffusion systems, population dynamics, pattern formation in development.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+    
+    function showOverview() {
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
