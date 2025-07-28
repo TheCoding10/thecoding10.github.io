@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Topology</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '○';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>○ MemoLearning Topology</h1>
+    <p>Properties preserved under continuous deformations</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Topological Spaces</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental concepts of topology and topological spaces.</p>
+        <ul class="topics-list">
+          <li>Definition of topology</li>
+          <li>Open and closed sets</li>
+          <li>Neighborhoods and neighborhood systems</li>
+          <li>Interior, closure, and boundary</li>
+          <li>Basis and subbasis for a topology</li>
+          <li>Subspace topology</li>
+          <li>Examples of topological spaces</li>
+          <li>Discrete and indiscrete topologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Continuity and Homeomorphisms</h3>
+        </div>
+        <p class="unit-description">Study continuous functions and topological equivalence between spaces.</p>
+        <ul class="topics-list">
+          <li>Continuous functions</li>
+          <li>Equivalent characterizations of continuity</li>
+          <li>Homeomorphisms</li>
+          <li>Topological properties and invariants</li>
+          <li>Open and closed maps</li>
+          <li>Embedding and quotient maps</li>
+          <li>Examples of homeomorphic spaces</li>
+          <li>Topological classification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Metric Spaces and Metrization</h3>
+        </div>
+        <p class="unit-description">Explore the relationship between topology and metric spaces.</p>
+        <ul class="topics-list">
+          <li>Metric spaces and metric topology</li>
+          <li>Open balls and metric neighborhoods</li>
+          <li>Convergence in metric spaces</li>
+          <li>Completeness and Baire category</li>
+          <li>Metrizable topological spaces</li>
+          <li>Urysohn metrization theorem</li>
+          <li>Non-metrizable spaces</li>
+          <li>Uniform spaces</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Connectedness and Compactness</h3>
+        </div>
+        <p class="unit-description">Study two fundamental topological properties and their applications.</p>
+        <ul class="topics-list">
+          <li>Connected spaces</li>
+          <li>Path connectedness</li>
+          <li>Components and path components</li>
+          <li>Intermediate value theorem</li>
+          <li>Compact spaces</li>
+          <li>Finite subcover property</li>
+          <li>Compactness in metric spaces</li>
+          <li>Tychonoff's theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Separation Axioms</h3>
+        </div>
+        <p class="unit-description">Learn the hierarchy of separation properties in topological spaces.</p>
+        <ul class="topics-list">
+          <li>T₀, T₁, and T₂ (Hausdorff) spaces</li>
+          <li>Regular and T₃ spaces</li>
+          <li>Normal and T₄ spaces</li>
+          <li>Urysohn's lemma</li>
+          <li>Tietze extension theorem</li>
+          <li>Completely regular spaces</li>
+          <li>Stone-Čech compactification</li>
+          <li>Separation and metrization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Product and Quotient Topologies</h3>
+        </div>
+        <p class="unit-description">Study methods for constructing new topological spaces from existing ones.</p>
+        <ul class="topics-list">
+          <li>Product topology</li>
+          <li>Box topology vs product topology</li>
+          <li>Tychonoff's theorem</li>
+          <li>Quotient topology</li>
+          <li>Quotient maps and quotient spaces</li>
+          <li>Identification spaces</li>
+          <li>Adjunction spaces</li>
+          <li>CW complexes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Fundamental Group</h3>
+        </div>
+        <p class="unit-description">Introduction to algebraic topology through the fundamental group.</p>
+        <ul class="topics-list">
+          <li>Homotopy of paths</li>
+          <li>Fundamental group definition</li>
+          <li>Base point and group structure</li>
+          <li>Functoriality of fundamental group</li>
+          <li>Fundamental group of circles</li>
+          <li>van Kampen's theorem</li>
+          <li>Covering spaces</li>
+          <li>Universal covering spaces</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Surfaces and Classification</h3>
+        </div>
+        <p class="unit-description">Study 2-dimensional manifolds and their topological classification.</p>
+        <ul class="topics-list">
+          <li>Surfaces and 2-manifolds</li>
+          <li>Orientability</li>
+          <li>Euler characteristic</li>
+          <li>Classification of closed surfaces</li>
+          <li>Connected sum operation</li>
+          <li>Sphere, torus, and projective plane</li>
+          <li>Genus and classification theorem</li>
+          <li>Surfaces with boundary</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Higher Homotopy and Homology</h3>
+        </div>
+        <p class="unit-description">Explore higher-dimensional topological invariants.</p>
+        <ul class="topics-list">
+          <li>Higher homotopy groups</li>
+          <li>Homotopy equivalence</li>
+          <li>Eilenberg-MacLane spaces</li>
+          <li>Simplicial complexes</li>
+          <li>Singular homology</li>
+          <li>Homology groups and computation</li>
+          <li>Mayer-Vietoris sequence</li>
+          <li>Cohomology theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Explore advanced topology and its applications to other areas.</p>
+        <ul class="topics-list">
+          <li>Fiber bundles and fibrations</li>
+          <li>Spectral sequences</li>
+          <li>Characteristic classes</li>
+          <li>K-theory</li>
+          <li>Differential topology</li>
+          <li>Knot theory</li>
+          <li>Applications to analysis</li>
+          <li>Topological data analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Topological Spaces</h1>
+      <p>Build the foundation with the basic concepts and definitions of topology.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Topology</h3>
+        <p>Learn that a topology on a set X is a collection τ of subsets satisfying: ∅, X ∈ τ; arbitrary unions in τ; finite intersections in τ.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Open and Closed Sets</h3>
+        <p>Understand open sets as elements of the topology and closed sets as complements of open sets. Learn De Morgan's laws in topological context.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Neighborhoods</h3>
+        <p>Define neighborhoods and neighborhood systems. Learn that open sets are neighborhoods of all their points, and understand neighborhood characterization of topology.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interior, Closure, Boundary</h3>
+        <p>Study int(A) as largest open set in A, cl(A) as smallest closed set containing A, and ∂A = cl(A) ∩ cl(X\A). Learn their properties and relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basis and Subbasis</h3>
+        <p>Learn basis B as collection whose unions generate topology. Study subbasis S where finite intersections of S elements form a basis. Understand topology generation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Subspace Topology</h3>
+        <p>Define relative topology on subsets Y ⊆ X as τY = {U ∩ Y : U ∈ τ}. Learn inheritance of topological properties to subspaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Examples of Topologies</h3>
+        <p>Study standard topology on ℝ, usual topology on ℝⁿ, finite complement topology, cofinite topology, and topologies on finite sets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Discrete and Indiscrete</h3>
+        <p>Learn discrete topology (all subsets open) and indiscrete topology (only ∅ and X open). Understand these as extreme cases and their properties.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Continuity and Homeomorphisms</h1>
+      <p>Study continuous functions and when two topological spaces are essentially the same.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Continuous Functions</h3>
+        <p>Define f: X → Y continuous if f⁻¹(U) is open in X for every open U in Y. Learn this generalizes ε-δ continuity from analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Equivalent Characterizations</h3>
+        <p>Learn continuity equivalences: open set definition, closed set characterization, neighborhood preservation, and closure/interior characterizations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Homeomorphisms</h3>
+        <p>Study homeomorphisms as continuous bijections with continuous inverse. Learn that homeomorphic spaces are topologically equivalent and indistinguishable.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Topological Invariants</h3>
+        <p>Understand properties preserved by homeomorphisms: compactness, connectedness, separation axioms. Learn to prove spaces are not homeomorphic.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Open and Closed Maps</h3>
+        <p>Study maps taking open sets to open sets (open maps) and closed sets to closed sets (closed maps). Learn their relationship to quotient maps.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Embeddings and Quotients</h3>
+        <p>Learn topological embeddings as homeomorphisms onto their image. Study quotient maps as surjections with quotient topology on codomain.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Examples of Homeomorphisms</h3>
+        <p>Study homeomorphisms: open interval ≅ ℝ, stereographic projection S² \ {pt} ≅ ℝ², and Möbius strip constructions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classification Problems</h3>
+        <p>Understand topology's goal of classifying spaces up to homeomorphism. Learn invariants help distinguish non-homeomorphic spaces.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Metric Spaces and Metrization</h1>
+      <p>Explore the relationship between topology and metrics, and when topologies arise from metrics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Metric Spaces</h3>
+        <p>Learn metric d: X × X → ℝ satisfying positivity, symmetry, and triangle inequality. Study how metrics induce topologies via open balls.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Metric Topology</h3>
+        <p>Define open balls B(x,r) = {y : d(x,y) < r} and metric topology as unions of open balls. Learn relationship to ε-δ definitions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convergence in Metrics</h3>
+        <p>Study sequence convergence xₙ → x iff d(xₙ,x) → 0. Learn how this relates to topological convergence via neighborhoods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Completeness and Baire</h3>
+        <p>Learn complete metric spaces where Cauchy sequences converge. Study Baire category theorem: complete metric spaces are Baire spaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Metrizable Spaces</h3>
+        <p>Study topological spaces whose topology comes from some metric. Learn that metrizable spaces have nice properties like first countability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Urysohn Metrization</h3>
+        <p>Learn Urysohn's theorem: regular spaces with countable basis are metrizable. Understand conditions for metrizability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Non-metrizable Examples</h3>
+        <p>Study spaces that cannot arise from metrics: cofinite topology on infinite sets, product of uncountably many copies of [0,1].</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniform Spaces</h3>
+        <p>Learn uniform spaces as generalization of metric spaces. Study uniform topology and relationship to metrization theory.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Connectedness and Compactness</h1>
+      <p>Study two fundamental properties that distinguish different types of topological spaces.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Connected Spaces</h3>
+        <p>Learn X is connected if it cannot be written as union of two non-empty disjoint open sets. Understand connectedness as topological "wholeness."</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Path Connectedness</h3>
+        <p>Study path-connected spaces where any two points can be joined by a continuous path. Learn that path-connected implies connected.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Components</h3>
+        <p>Learn connected components as maximal connected subsets. Study path components and their relationship to connected components.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Intermediate Value Theorem</h3>
+        <p>Prove intermediate value theorem using connectedness: continuous image of connected set is connected. Understand topological generalization.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Compact Spaces</h3>
+        <p>Define compactness via open covers: every open cover has finite subcover. Learn compactness as topological finiteness condition.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Subcover Property</h3>
+        <p>Study characterizations of compactness: finite subcover property, finite intersection property for closed sets, and ultrafilter convergence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Compactness in Metrics</h3>
+        <p>Learn Heine-Borel theorem: subsets of ℝⁿ are compact iff closed and bounded. Study sequential compactness equivalence in metric spaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tychonoff's Theorem</h3>
+        <p>Learn arbitrary products of compact spaces are compact. Understand this fundamental theorem and its equivalence to axiom of choice.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Separation Axioms</h1>
+      <p>Learn the hierarchy of separation properties that distinguish points and sets in topological spaces.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">T₀
