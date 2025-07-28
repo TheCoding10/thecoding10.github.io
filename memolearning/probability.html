@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Probability and Statistics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: 'μ';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>μ MemoLearning Probability and Statistics</h1>
+    <p>Understanding uncertainty, data analysis, and statistical inference</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Foundations of Probability</h3>
+        </div>
+        <p class="unit-description">Learn the basic concepts and axioms of probability theory.</p>
+        <ul class="topics-list">
+          <li>Sample spaces and events</li>
+          <li>Probability axioms</li>
+          <li>Conditional probability</li>
+          <li>Independence</li>
+          <li>Law of total probability</li>
+          <li>Bayes' theorem</li>
+          <li>Counting principles</li>
+          <li>Permutations and combinations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Random Variables</h3>
+        </div>
+        <p class="unit-description">Study discrete and continuous random variables and their distributions.</p>
+        <ul class="topics-list">
+          <li>Random variable definition</li>
+          <li>Discrete random variables</li>
+          <li>Probability mass functions</li>
+          <li>Continuous random variables</li>
+          <li>Probability density functions</li>
+          <li>Cumulative distribution functions</li>
+          <li>Expectation and variance</li>
+          <li>Moment generating functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Common Probability Distributions</h3>
+        </div>
+        <p class="unit-description">Master the most important discrete and continuous probability distributions.</p>
+        <ul class="topics-list">
+          <li>Bernoulli and binomial distributions</li>
+          <li>Geometric and negative binomial</li>
+          <li>Poisson distribution</li>
+          <li>Uniform distribution</li>
+          <li>Normal (Gaussian) distribution</li>
+          <li>Exponential distribution</li>
+          <li>Chi-square, t, and F distributions</li>
+          <li>Beta and gamma distributions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Joint Distributions and Independence</h3>
+        </div>
+        <p class="unit-description">Study multiple random variables and their relationships.</p>
+        <ul class="topics-list">
+          <li>Joint probability distributions</li>
+          <li>Marginal distributions</li>
+          <li>Conditional distributions</li>
+          <li>Independence of random variables</li>
+          <li>Covariance and correlation</li>
+          <li>Bivariate normal distribution</li>
+          <li>Transformations of random variables</li>
+          <li>Order statistics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Limit Theorems</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental limit theorems that justify statistical methods.</p>
+        <ul class="topics-list">
+          <li>Convergence concepts</li>
+          <li>Law of large numbers (weak and strong)</li>
+          <li>Central limit theorem</li>
+          <li>Delta method</li>
+          <li>Continuity theorem</li>
+          <li>Applications to sampling</li>
+          <li>Berry-Esseen theorem</li>
+          <li>Large deviation theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Descriptive Statistics</h3>
+        </div>
+        <p class="unit-description">Learn to summarize and visualize data effectively.</p>
+        <ul class="topics-list">
+          <li>Measures of central tendency</li>
+          <li>Measures of variability</li>
+          <li>Percentiles and quartiles</li>
+          <li>Box plots and histograms</li>
+          <li>Scatter plots and correlation</li>
+          <li>Data cleaning and outliers</li>
+          <li>Exploratory data analysis</li>
+          <li>Graphical methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Sampling and Sampling Distributions</h3>
+        </div>
+        <p class="unit-description">Understand how sample statistics relate to population parameters.</p>
+        <ul class="topics-list">
+          <li>Sampling methods</li>
+          <li>Sample statistics</li>
+          <li>Sampling distribution of the mean</li>
+          <li>Sampling distribution of proportions</li>
+          <li>Student's t-distribution</li>
+          <li>Chi-square distribution applications</li>
+          <li>F-distribution</li>
+          <li>Bootstrap methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Statistical Estimation</h3>
+        </div>
+        <p class="unit-description">Learn methods for estimating population parameters from sample data.</p>
+        <ul class="topics-list">
+          <li>Point estimation</li>
+          <li>Method of moments</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Properties of estimators</li>
+          <li>Confidence intervals</li>
+          <li>Interval estimation for means</li>
+          <li>Interval estimation for proportions</li>
+          <li>Bayesian estimation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Hypothesis Testing</h3>
+        </div>
+        <p class="unit-description">Master the logic and methods of statistical hypothesis testing.</p>
+        <ul class="topics-list">
+          <li>Hypothesis testing framework</li>
+          <li>Type I and Type II errors</li>
+          <li>Power of statistical tests</li>
+          <li>One-sample tests for means</li>
+          <li>One-sample tests for proportions</li>
+          <li>Two-sample tests</li>
+          <li>Paired sample tests</li>
+          <li>p-values and significance levels</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Analysis of Variance (ANOVA)</h3>
+        </div>
+        <p class="unit-description">Learn to compare means across multiple groups and factors.</p>
+        <ul class="topics-list">
+          <li>One-way ANOVA</li>
+          <li>ANOVA assumptions</li>
+          <li>Post-hoc tests</li>
+          <li>Two-way ANOVA</li>
+          <li>Interaction effects</li>
+          <li>Repeated measures ANOVA</li>
+          <li>Non-parametric alternatives</li>
+          <li>Effect sizes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Regression Analysis</h3>
+        </div>
+        <p class="unit-description">Study relationships between variables using regression methods.</p>
+        <ul class="topics-list">
+          <li>Simple linear regression</li>
+          <li>Least squares estimation</li>
+          <li>Regression assumptions</li>
+          <li>Inference in regression</li>
+          <li>Multiple linear regression</li>
+          <li>Model selection</li>
+          <li>Logistic regression</li>
+          <li>Non-linear regression</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Explore modern statistical methods and their applications.</p>
+        <ul class="topics-list">
+          <li>Non-parametric methods</li>
+          <li>Survival analysis</li>
+          <li>Time series analysis</li>
+          <li>Experimental design</li>
+          <li>Quality control</li>
+          <li>Machine learning connections</li>
+          <li>Bayesian statistics</li>
+          <li>Statistical computing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Foundations of Probability</h1>
+      <p>Build the mathematical foundation for probability theory and learn the basic rules of probability.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sample Spaces and Events</h3>
+        <p>Learn sample space Ω as the set of all possible outcomes. Define events as subsets of the sample space and study set operations on events.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Axioms</h3>
+        <p>Master Kolmogorov's axioms: P(Ω) = 1, P(A) ≥ 0 for all events A, and countable additivity for disjoint events. Derive basic probability rules.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Probability</h3>
+        <p>Define P(A|B) = P(A ∩ B)/P(B) and understand it as probability of A given information about B. Learn multiplication rule and its applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Independence</h3>
+        <p>Learn that events A and B are independent if P(A ∩ B) = P(A)P(B). Understand independence vs. disjointness and mutual independence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Law of Total Probability</h3>
+        <p>For partition {B₁, B₂, ...}, learn P(A) = Σ P(A|Bᵢ)P(Bᵢ). Use this law to break complex problems into simpler conditional problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bayes' Theorem</h3>
+        <p>Learn P(Bᵢ|A) = P(A|Bᵢ)P(Bᵢ)/P(A) for updating probabilities with new information. Apply to medical diagnosis, spam filtering, and other inverse problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Counting Principles</h3>
+        <p>Master fundamental counting principle, addition principle, and inclusion-exclusion. Learn to count outcomes systematically for probability calculations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Permutations and Combinations</h3>
+        <p>Learn P(n,r) = n!/(n-r)! for arrangements and C(n,r) = n!/(r!(n-r)!) for selections. Apply to probability problems involving equal likelihood.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Random Variables</h1>
+      <p>Learn how to model uncertain quantities using random variables and their distributions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Random Variable Definition</h3>
+        <p>Define random variable X as a function from sample space to real numbers: X: Ω → ℝ. Understand how this maps outcomes to numerical values.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Discrete Random Variables</h3>
+        <p>Study random variables with countable range. Learn that all probability mass concentrates at specific values with positive probability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Mass Functions</h3>
+        <p>Define PMF as p(x) = P(X = x) for discrete X. Learn that PMF satisfies p(x) ≥ 0 and Σp(x) = 1 over all possible values.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Continuous Random Variables</h3>
+        <p>Study random variables with uncountable range. Learn that P(X = x) = 0 for any specific value, so we work with intervals instead.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Density Functions</h3>
+        <p>Define PDF f(x) where P(a ≤ X ≤ b) = ∫ₐᵇ f(x)dx. Learn that f(x) ≥ 0 and ∫₋∞^∞ f(x)dx = 1.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cumulative Distribution Functions</h3>
+        <p>Define CDF as F(x) = P(X ≤ x) for all real x. Learn properties: F is non-decreasing, right-continuous, with F(-∞) = 0 and F(∞) = 1.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expectation and Variance</h3>
+        <p>Learn E[X] = Σx·p(x) or ∫x·f(x)dx as the "center" of distribution. Define Var(X) = E[(X - μ)²] as measure of spread.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Moment Generating Functions</h3>
+        <p>Define MGF as M(t) = E[e^(tX)]. Learn how MGFs uniquely determine distributions and simplify calculations involving sums of random variables.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Common Probability Distributions</h1>
+      <p>Master the most important probability distributions and their applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bernoulli and Binomial</h3>
+        <p>Study Bernoulli(p) for single success/failure trial and Binomial(n,p) for number of successes in n independent trials. Learn formulas and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geometric and Negative Binomial</h3>
+        <p>Learn Geometric(p) for number of trials until first success and NegativeBinomial(r,p) for trials until r-th success. Understand memoryless property.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Poisson Distribution</h3>
+        <p>Study Poisson(λ) for counting rare events in fixed time/space. Learn as limit of binomial when n → ∞, p → 0, np → λ. Apply to queuing, reliability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniform Distribution</h3>
+        <p>Learn Uniform(a,b) with constant density on [a,b]. Understand as model for "equally likely" outcomes and its use in simulation and random number generation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Normal Distribution</h3>
+        <p>Master Normal(μ,σ²) as the most important continuous distribution. Learn standard normal, 68-95-99.7 rule, and central role in statistics via CLT.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exponential Distribution</h3>
+        <p>Study Exponential(λ) for modeling waiting times. Learn memoryless property and relationship to Poisson process. Apply to reliability and survival analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chi-square, t, and F</h3>
+        <p>Learn these distributions from normal: χ² for sums of squared normals, t for ratios involving sample variance, F for ratios of χ² variables. Essential for inference.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Beta and Gamma</h3>
+        <p>Study Gamma(α,β) as generalization of exponential and Beta(α,β) for probabilities on [0,1]. Learn their flexibility for modeling various phenomena.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Joint Distributions and Independence</h1>
+      <p>Study multiple random variables simultaneously and their relationships.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Joint Probability Distributions</h3>
+        <p>Define joint PMF p(x,y) = P(X=x, Y=y) for discrete variables and joint PDF f(x,y) for continuous variables. Learn to compute probabilities over regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Marginal Distributions</h3>
+        <p>Obtain marginal distributions by "summing out" or "integrating out" other variables: pₓ(x) = Σᵧ p(x,y) or fₓ(x) = ∫ f(x,y)dy.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Distributions</h3>
+        <p
