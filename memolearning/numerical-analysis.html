@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Numerical Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '≈';
+      position: absolute;
+      left: 0;
+      color: #ff6b6b;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ff6b6b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ff6b6b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>≈ MemoLearning Numerical Analysis</h1>
+    <p>Computational methods for solving mathematical problems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~130</span>
+          <div class="stat-label">Algorithms to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Error Analysis and Computer Arithmetic</h3>
+        </div>
+        <p class="unit-description">Understand sources of error and floating-point arithmetic in numerical computations.</p>
+        <ul class="topics-list">
+          <li>Sources of numerical error</li>
+          <li>Absolute and relative error</li>
+          <li>Machine epsilon and floating-point representation</li>
+          <li>Rounding and truncation errors</li>
+          <li>Error propagation</li>
+          <li>Condition numbers and stability</li>
+          <li>Significant digits and precision</li>
+          <li>Backward and forward error analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Root Finding Methods</h3>
+        </div>
+        <p class="unit-description">Learn algorithms for finding zeros of nonlinear equations.</p>
+        <ul class="topics-list">
+          <li>Bisection method</li>
+          <li>Newton's method (Newton-Raphson)</li>
+          <li>Secant method</li>
+          <li>Method of false position (regula falsi)</li>
+          <li>Fixed-point iteration</li>
+          <li>Convergence analysis</li>
+          <li>Multiple roots and modified Newton's method</li>
+          <li>Systems of nonlinear equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Linear Systems</h3>
+        </div>
+        <p class="unit-description">Master direct and iterative methods for solving systems of linear equations.</p>
+        <ul class="topics-list">
+          <li>Gaussian elimination with pivoting</li>
+          <li>LU decomposition</li>
+          <li>Cholesky decomposition</li>
+          <li>QR decomposition</li>
+          <li>Jacobi iterative method</li>
+          <li>Gauss-Seidel method</li>
+          <li>SOR (Successive Over-Relaxation)</li>
+          <li>Convergence criteria for iterative methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Interpolation</h3>
+        </div>
+        <p class="unit-description">Study methods for constructing functions that pass through given data points.</p>
+        <ul class="topics-list">
+          <li>Lagrange interpolation</li>
+          <li>Newton's divided differences</li>
+          <li>Hermite interpolation</li>
+          <li>Spline interpolation</li>
+          <li>Cubic splines</li>
+          <li>Error bounds for interpolation</li>
+          <li>Chebyshev nodes</li>
+          <li>Runge phenomenon</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Numerical Differentiation and Integration</h3>
+        </div>
+        <p class="unit-description">Learn computational methods for derivatives and integrals.</p>
+        <ul class="topics-list">
+          <li>Finite difference formulas</li>
+          <li>Forward, backward, and central differences</li>
+          <li>Richardson extrapolation</li>
+          <li>Trapezoidal rule</li>
+          <li>Simpson's rule</li>
+          <li>Gaussian quadrature</li>
+          <li>Adaptive quadrature</li>
+          <li>Monte Carlo integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Ordinary Differential Equations</h3>
+        </div>
+        <p class="unit-description">Solve initial value problems for ODEs using numerical methods.</p>
+        <ul class="topics-list">
+          <li>Euler's method</li>
+          <li>Improved Euler method (Heun's method)</li>
+          <li>Runge-Kutta methods</li>
+          <li>Fourth-order Runge-Kutta</li>
+          <li>Multistep methods</li>
+          <li>Adams-Bashforth methods</li>
+          <li>Adams-Moulton methods</li>
+          <li>Stability and stiff equations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Eigenvalue Problems</h3>
+        </div>
+        <p class="unit-description">Find eigenvalues and eigenvectors using computational methods.</p>
+        <ul class="topics-list">
+          <li>Power method</li>
+          <li>Inverse power method</li>
+          <li>Shifted power method</li>
+          <li>QR algorithm</li>
+          <li>Jacobi method for symmetric matrices</li>
+          <li>Householder transformations</li>
+          <li>Singular value decomposition (SVD)</li>
+          <li>Applications to principal component analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Approximation Theory</h3>
+        </div>
+        <p class="unit-description">Study optimal approximation of functions and data fitting.</p>
+        <ul class="topics-list">
+          <li>Least squares approximation</li>
+          <li>Linear regression</li>
+          <li>Polynomial curve fitting</li>
+          <li>Orthogonal polynomials</li>
+          <li>Chebyshev polynomials</li>
+          <li>Fourier approximation</li>
+          <li>Rational function approximation</li>
+          <li>Minimax approximation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Partial Differential Equations</h3>
+        </div>
+        <p class="unit-description">Solve PDEs using finite difference and finite element methods.</p>
+        <ul class="topics-list">
+          <li>Classification of PDEs</li>
+          <li>Finite difference methods</li>
+          <li>Heat equation (parabolic PDEs)</li>
+          <li>Wave equation (hyperbolic PDEs)</li>
+          <li>Laplace equation (elliptic PDEs)</li>
+          <li>Boundary conditions</li>
+          <li>Stability analysis</li>
+          <li>Introduction to finite element methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Optimization Methods</h3>
+        </div>
+        <p class="unit-description">Learn computational approaches to optimization problems.</p>
+        <ul class="topics-list">
+          <li>Golden section search</li>
+          <li>Newton's method for optimization</li>
+          <li>Gradient descent</li>
+          <li>Conjugate gradient method</li>
+          <li>Quasi-Newton methods (BFGS)</li>
+          <li>Linear programming (simplex method)</li>
+          <li>Constrained optimization</li>
+          <li>Lagrange multipliers and KKT conditions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Error Analysis and Computer Arithmetic</h1>
+      <p>Understand the fundamental sources of error in numerical computation and how computers represent numbers.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sources of Numerical Error</h3>
+        <p>Learn about modeling errors, data errors, truncation errors, and round-off errors. Understand how these different error sources affect numerical computations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Absolute and Relative Error</h3>
+        <p>Define absolute error |x - x̃| and relative error |x - x̃|/|x|. Learn when each measure is more appropriate and how they relate to significant digits.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Floating-Point Representation</h3>
+        <p>Understand IEEE 754 standard for floating-point numbers. Learn about mantissa, exponent, and machine epsilon. Study the limitations of computer arithmetic.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rounding and Truncation</h3>
+        <p>Distinguish between rounding (nearest representable number) and truncation (chopping). Understand how these operations introduce errors in calculations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Error Propagation</h3>
+        <p>Study how errors in input data propagate through arithmetic operations. Learn error bounds for addition, subtraction, multiplication, and division.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Condition Numbers</h3>
+        <p>Define condition numbers as measures of sensitivity to input perturbations. Learn to compute condition numbers for various problems and interpret their meaning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Numerical Stability</h3>
+        <p>Understand the difference between mathematical stability and numerical stability. Learn to identify and avoid numerically unstable algorithms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Backward Error Analysis</h3>
+        <p>Learn backward error analysis: instead of asking "how close is the computed answer to the exact answer?", ask "what problem does the computed answer solve exactly?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Root Finding Methods</h1>
+      <p>Master algorithms for finding zeros of nonlinear equations and systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bisection Method</h3>
+        <p>Learn the most robust root-finding method based on the Intermediate Value Theorem. Understand guaranteed convergence and linear convergence rate.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Newton's Method</h3>
+        <p>Master Newton-Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n). Learn about quadratic convergence and potential pitfalls like poor initial guesses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Secant Method</h3>
+        <p>Study the secant method as a finite-difference approximation to Newton's method. Understand superlinear convergence and when to use it over Newton's method.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method of False Position</h3>
+        <p>Learn regula falsi as a combination of bisection reliability with secant method efficiency. Understand how it maintains bracket while improving convergence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fixed-Point Iteration</h3>
+        <p>Study iteration schemes x_{n+1} = g(x_n) where roots correspond to fixed points. Learn convergence conditions and how to construct suitable g(x).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convergence Analysis</h3>
+        <p>Understand linear, superlinear, and quadratic convergence rates. Learn how to analyze and compare the efficiency of different root-finding methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiple Roots</h3>
+        <p>Study problems with repeated roots where standard Newton's method has linear convergence. Learn modified Newton's method for multiple roots.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Systems of Equations</h3>
+        <p>Extend root-finding to nonlinear systems F(x) = 0. Learn multidimensional Newton's method and Jacobian matrix computations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Linear Systems</h1>
+      <p>Learn direct and iterative methods for solving systems of linear equations efficiently.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gaussian Elimination</h3>
+        <p>Master the fundamental direct method for solving Ax = b. Learn partial pivoting strategies to improve numerical stability and avoid division by small numbers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">LU Decomposition</h3>
+        <p>Factor matrices as A = LU where L is lower triangular and U is upper triangular. Learn how this enables efficient solution of multiple systems with the same matrix.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cholesky Decomposition</h3>
+        <p>Study the special factorization A = LL^T for symmetric positive definite matrices. Understand computational advantages and applications to least squares problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">QR Decomposition</h3>
+        <p>Learn to factor A = QR where Q is orthogonal and R is upper triangular. Understand Gram-Schmidt process and Householder reflections for computing QR.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Jacobi Method</h3>
+        <p>Study the basic iterative method where each variable is updated using the most recent values of other variables. Learn convergence conditions and implementation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gauss-Seidel Method</h3>
+        <p>Improve upon Jacobi by using updated values immediately. Understand how this typically improves convergence rate and reduces memory requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SOR Method</h3>
+        <p>Learn Successive Over-Relaxation as an acceleration technique for Gauss-Seidel. Understand how the relaxation parameter ω affects convergence rate.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Iterative Convergence</h3>
+        <p>Study convergence criteria for iterative methods. Learn about spectral radius, diagonal dominance, and conditions that guarantee convergence.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Interpolation</h1>
+      <p>Construct functions that pass through given data points and understand interpolation error.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lagrange Interpolation</h3>
+        <p>Learn to construct polynomial interpolants using Lagrange basis functions. Understand the explicit formula and uniqueness of polynomial interpolation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Newton's Divided Differences</h3>
+        <p>Master the recursive construction of interpolating polynomials using divided differences. Learn efficient algorithms for adding new data points.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hermite Interpolation</h3>
+        <p>Extend interpolation to include derivative information. Learn to construct polynomials that match both function values and derivatives at given points.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spline Interpolation</h3>
+        <p>Study piecewise polynomial interpolation. Learn how splines provide smooth curves while avoiding oscillations of high-degree polynomial interpolation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cubic Splines</h3>
+        <p>Master the most common spline type with continuous second derivatives. Learn natural, clamped, and periodic boundary conditions for cubic splines.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interpolation Error</h3>
+        <p>Understand error bounds for polynomial interpolation. Learn how error depends on the spacing of interpolation points and smoothness of the function.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chebyshev Nodes</h3>
+        <p>Learn optimal point placement for polynomial interpolation. Understand how Chebyshev points minimize the maximum interpolation error.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Runge Phenomenon</h3>
+        <p>Study the oscillatory behavior of high-degree polynomial interpolation with equally spaced points. Learn why splines or Chebyshev points are preferred.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Numerical Differentiation and Integration</h1>
+      <p>Learn computational methods for computing derivatives and integrals numerically.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward, Backward, Central Differences</h3>
+        <p>Learn f'(x) ≈ (f(x+h) - f(x))/h, f'(x) ≈ (f(x) - f(x-h))/h, and f'(x) ≈ (f(x+h) - f(x-h))/(2h). Understand accuracy and stability trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Richardson Extrapolation</h3>
+        <p>Improve accuracy by combining estimates with different step sizes. Learn how to eliminate leading error terms systematically using Richardson's method.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Trapezoidal Rule</h3>
+        <p>Approximate integrals using ∫f(x)dx ≈ (h/2)[f(a) + 2f(x₁) + 2f(x₂) + ... + f(b)]. Learn error analysis and composite trapezoidal rule.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Simpson's Rule</h3>
+        <p>Use parabolic approximation for higher accuracy: ∫f(x)dx ≈ (h/3)[f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + ... + f(xₙ)]. Understand O(h⁴) error.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gaussian Quadrature</h3>
+        <p>Learn optimal point and weight selection for polynomial integration. Understand Legendre polynomials and how Gaussian quadrature achieves maximum degree exactness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Adaptive Quadrature</h3>
+        <p>Automatically adjust step size based on error estimates. Learn recursive algorithms that concentrate computational effort where the integrand varies most.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Monte Carlo Integration</h3>
+        <p>Use random sampling for high-dimensional integrals. Understand the probabilistic approach and its advantages for complex domains and high dimensions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Ordinary Differential Equations</h1>
+      <p>Solve initial value problems for ODEs using numerical methods with controlled accuracy.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Euler's Method</h3>
+        <p>Learn the simplest method: y_{n+1} = y_n + hf(t_n, y_n). Understand geometric interpretation and first-order accuracy of Euler's method.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Improved Euler Method</h3>
+        <p>Study Heun's method as a predictor-corrector scheme. Learn how averaging slopes improves accuracy from O(h) to O(h²).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Runge-Kutta Methods</h3>
+        <p>Master the family of methods that use multiple slope evaluations per step. Understand the general framework for constructing higher-order methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourth-Order Runge-Kutta</h3>
+        <p>Learn the classic RK4 method with O(h⁴) accuracy. Understand the optimal balance between computational cost and accuracy for most practical problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multistep Methods</h3>
+        <p>Study methods that use information from multiple previous points. Learn how multistep methods can achieve high accuracy with fewer function evaluations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Adams-Bashforth Methods</h3>
+        <p>Master explicit multistep methods using polynomial extrapolation of the derivative. Learn the trade-off between stability and step size restrictions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Adams-Moulton Methods</h3>
+        <p>Study implicit multistep methods with better stability properties. Learn predictor-corrector combinations that balance accuracy and computational efficiency.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stability and Stiff Equations</h3>
+        <p>Understand numerical stability vs. mathematical stability. Learn about stiff differential equations and implicit methods designed to handle them.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Eigenvalue Problems</h1>
+      <p>Find eigenvalues and eigenvectors of matrices using iterative and direct methods.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Power Method</h3>
+        <p>Learn the basic iterative method for finding the dominant eigenvalue. Understand convergence rate and how it depends on eigenvalue separation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inverse Power Method</h3>
+        <p>Find the smallest eigenvalue by applying power method to A⁻¹. Learn how matrix factorization makes this method practical for large matrices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shifted Power Method</h3>
+        <p>Target specific eigenvalues using (A - σI)⁻¹. Understand how shifting enables finding eigenvalues near a given value σ.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">QR Algorithm</h3>
+        <p>Master the most important method for finding all eigenvalues. Learn how repeated QR factorization leads to upper triangular form revealing eigenvalues.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Jacobi Method</h3>
+        <p>Study the classical method for symmetric matrices using plane rotations. Learn how Jacobi iterations systematically reduce off-diagonal elements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Householder Transformations</h3>
+        <p>Learn orthogonal transformations that introduce zeros systematically. Understand their role in reducing matrices to tridiagonal or Hessenberg form.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Singular Value Decomposition</h3>
+        <p>Study the factorization A = UΣV^T for any matrix. Learn applications to least squares, data compression, and principal component analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications to PCA</h3>
+        <p>Apply eigenvalue methods to principal component analysis. Understand dimensionality reduction and how eigenvalues indicate variance explained.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Approximation Theory</h1>
+      <p>Study optimal methods for approximating functions and fitting data.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Least Squares Approximation</h3>
+        <p>Learn to minimize Σ(f(x_i) - p(x_i))² over all polynomials p of given degree. Understand the normal equations and their solution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Regression</h3>
+        <p>Apply least squares to fit linear models y = ax + b to data. Learn about correlation coefficients and goodness of fit measures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polynomial Curve Fitting</h3>
+        <p>Extend least squares to higher-degree polynomials. Understand the trade-off between model complexity and overfitting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Orthogonal Polynomials</h3>
+        <p>Study polynomial families that are orthogonal with respect to specific weight functions. Learn how orthogonality simplifies least squares computations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chebyshev Polynomials</h3>
+        <p>Master the polynomials that deviate least from zero on [-1,1]. Understand their minimax property and applications to function approximation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Approximation</h3>
+        <p>Learn to approximate periodic functions using trigonometric series. Understand discrete Fourier transform and fast Fourier transform algorithms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rational Approximation</h3>
+        <p>Study approximation by ratios of polynomials P(x)/Q(x). Learn Padé approximations and their advantages for functions with poles or asymptotes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Minimax Approximation</h3>
+        <p>Find the polynomial that minimizes the maximum absolute error. Learn the Remez exchange algorithm and equioscillation theorem.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Partial Differential Equations</h1>
+      <p>Solve PDEs numerically using finite difference and finite element methods.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">PDE Classification</h3>
+        <p>Learn to classify second-order PDEs as elliptic, parabolic, or hyperbolic. Understand how classification determines appropriate numerical methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Difference Methods</h3>
+        <p>Replace derivatives with finite difference approximations. Learn how to construct difference schemes and analyze their properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heat Equation</h3>
+        <p>Solve parabolic PDEs like ∂u/∂t = α∂²u/∂x². Learn explicit and implicit time-stepping schemes and their stability requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Equation</h3>
+        <p>Handle hyperbolic PDEs like ∂²u/∂t² = c²∂²u/∂x². Understand the CFL condition and characteristic-based methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Laplace Equation</h3>
+        <p>Solve elliptic PDEs like ∇²u = 0. Learn iterative methods for the resulting linear systems and multigrid techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Boundary Conditions</h3>
+        <p>Handle Dirichlet, Neumann, and Robin boundary conditions. Learn how boundary conditions affect the numerical scheme construction.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stability Analysis</h3>
+        <p>Study von Neumann stability analysis for finite difference schemes. Learn about CFL conditions and numerical dissipation/dispersion.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Finite Element Methods</h3>
+        <p>Introduction to variational formulations and piecewise polynomial approximations. Understand the advantages for complex geometries and boundary conditions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Optimization Methods</h1>
+      <p>Learn computational approaches to finding minima and maxima of functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Golden Section Search</h3>
+        <p>Learn the optimal method for one-dimensional optimization without derivatives. Understand the golden ratio's role in minimizing function evaluations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Newton's Method for Optimization</h3>
+        <p>Apply Newton's method to find critical points: x_{k+1} = x_k - [∇²f(x_k)]⁻¹∇f(x_k). Learn about convergence and Hessian modification techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradient Descent</h3>
+        <p>Study the fundamental first-order method: x_{k+1} = x_k - α_k∇f(x_k). Learn step size selection and convergence analysis for convex functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conjugate Gradient Method</h3>
+        <p>Learn the optimal method for quadratic functions. Understand how conjugate directions accelerate convergence and applications to general optimization.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quasi-Newton Methods</h3>
+        <p>Study BFGS and other methods that approximate the Hessian. Learn how these methods achieve superlinear convergence without computing second derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Programming</h3>
+        <p>Master the simplex method for problems with linear objective and constraints. Understand basic feasible solutions and optimality conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constrained Optimization</h3>
+        <p>Learn methods for optimization subject to equality and inequality constraints. Study penalty methods, barrier methods, and sequential quadratic programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">KKT Conditions</h3>
+        <p>Understand the Karush-Kuhn-Tucker conditions as necessary conditions for constrained optima. Learn their role in algorithm development and optimality verification.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+    
+    function showOverview() {
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
