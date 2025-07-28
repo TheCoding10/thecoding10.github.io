@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Complex Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: 'ℂ';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ℂ MemoLearning Complex Analysis</h1>
+    <p>Functions of complex variables, contour integration, and analytic functions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Key Theorems</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Complex Numbers and the Complex Plane</h3>
+        </div>
+        <p class="unit-description">Master the foundations of complex numbers and their geometric interpretation.</p>
+        <ul class="topics-list">
+          <li>Complex number arithmetic</li>
+          <li>Rectangular and polar forms</li>
+          <li>De Moivre's theorem</li>
+          <li>Roots of complex numbers</li>
+          <li>Complex plane and Argand diagram</li>
+          <li>Stereographic projection</li>
+          <li>Extended complex plane</li>
+          <li>Geometric interpretations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Analytic Functions</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental concept of analyticity and complex differentiability.</p>
+        <ul class="topics-list">
+          <li>Complex derivatives and limits</li>
+          <li>Cauchy-Riemann equations</li>
+          <li>Analytic vs holomorphic functions</li>
+          <li>Harmonic functions</li>
+          <li>Harmonic conjugates</li>
+          <li>Conformal mappings</li>
+          <li>Examples of analytic functions</li>
+          <li>Singularities and branch points</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Elementary Functions</h3>
+        </div>
+        <p class="unit-description">Study complex versions of familiar functions and their properties.</p>
+        <ul class="topics-list">
+          <li>Complex exponential function</li>
+          <li>Complex logarithm and branches</li>
+          <li>Complex trigonometric functions</li>
+          <li>Complex hyperbolic functions</li>
+          <li>Complex powers and roots</li>
+          <li>Inverse trigonometric functions</li>
+          <li>Principal values and branch cuts</li>
+          <li>Riemann surfaces</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Complex Integration</h3>
+        </div>
+        <p class="unit-description">Master contour integration and its fundamental theorems.</p>
+        <ul class="topics-list">
+          <li>Complex line integrals</li>
+          <li>Contours and paths</li>
+          <li>Cauchy's theorem</li>
+          <li>Cauchy's integral formula</li>
+          <li>Cauchy's integral formula for derivatives</li>
+          <li>Maximum modulus principle</li>
+          <li>Liouville's theorem</li>
+          <li>Fundamental theorem of algebra</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Series and Sequences</h3>
+        </div>
+        <p class="unit-description">Study convergence of complex series and power series expansions.</p>
+        <ul class="topics-list">
+          <li>Complex sequences and series</li>
+          <li>Power series</li>
+          <li>Radius of convergence</li>
+          <li>Taylor series</li>
+          <li>Laurent series</li>
+          <li>Analytic continuation</li>
+          <li>Uniform convergence</li>
+          <li>Weierstrass theorems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Residue Theory</h3>
+        </div>
+        <p class="unit-description">Learn the powerful residue theorem for evaluating integrals.</p>
+        <ul class="topics-list">
+          <li>Isolated singularities</li>
+          <li>Residues and residue theorem</li>
+          <li>Classification of singularities</li>
+          <li>Computing residues</li>
+          <li>Evaluation of real integrals</li>
+          <li>Integrals involving trigonometric functions</li>
+          <li>Improper integrals</li>
+          <li>Jordan's lemma</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Conformal Mappings</h3>
+        </div>
+        <p class="unit-description">Study angle-preserving transformations and their applications.</p>
+        <ul class="topics-list">
+          <li>Conformal mappings</li>
+          <li>Linear fractional transformations</li>
+          <li>Cross-ratios</li>
+          <li>Riemann mapping theorem</li>
+          <li>Schwarz-Christoffel transformation</li>
+          <li>Applications to potential theory</li>
+          <li>Fluid flow applications</li>
+          <li>Electrostatic applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Special Functions</h3>
+        </div>
+        <p class="unit-description">Explore important special functions in complex analysis.</p>
+        <ul class="topics-list">
+          <li>Gamma function</li>
+          <li>Beta function</li>
+          <li>Zeta function</li>
+          <li>Elliptic functions</li>
+          <li>Theta functions</li>
+          <li>Bessel functions</li>
+          <li>Hypergeometric functions</li>
+          <li>Asymptotic expansions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Topics in Advanced Complex Analysis</h3>
+        </div>
+        <p class="unit-description">Explore advanced topics and applications of complex analysis.</p>
+        <ul class="topics-list">
+          <li>Argument principle</li>
+          <li>Rouché's theorem</li>
+          <li>Maximum modulus principle</li>
+          <li>Schwarz lemma</li>
+          <li>Phragmén-Lindelöf principle</li>
+          <li>Entire functions</li>
+          <li>Meromorphic functions</li>
+          <li>Normal families</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Applications and Connections</h3>
+        </div>
+        <p class="unit-description">Connect complex analysis to other areas of mathematics and physics.</p>
+        <ul class="topics-list">
+          <li>Fourier and Laplace transforms</li>
+          <li>Quantum mechanics applications</li>
+          <li>Number theory connections</li>
+          <li>Algebraic geometry connections</li>
+          <li>Differential equations</li>
+          <li>Mathematical physics</li>
+          <li>Signal processing</li>
+          <li>Control theory</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Complex Numbers and the Complex Plane</h1>
+      <p>Build the foundation with complex number arithmetic and geometric visualization.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Number Arithmetic</h3>
+        <p>Master operations with complex numbers z = a + bi. Learn addition, multiplication, division, and the properties that make ℂ a field extension of ℝ.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rectangular and Polar Forms</h3>
+        <p>Convert between z = a + bi and z = r(cos θ + i sin θ) = re^(iθ). Understand when each form is most useful for computations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">De Moivre's Theorem</h3>
+        <p>Apply (cos θ + i sin θ)^n = cos(nθ) + i sin(nθ) to compute powers and roots. Understand the geometric interpretation of multiplication as rotation and scaling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Roots of Complex Numbers</h3>
+        <p>Find all nth roots of complex numbers. Understand how the n roots are evenly distributed around a circle in the complex plane.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Plane Geometry</h3>
+        <p>Visualize complex numbers as points in the Argand diagram. Learn how complex operations correspond to geometric transformations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stereographic Projection</h3>
+        <p>Understand the mapping between the complex plane and the Riemann sphere. Learn how this provides a geometric model for the extended complex plane.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Extended Complex Plane</h3>
+        <p>Study ℂ ∪ {∞} and understand the point at infinity. Learn how this compactification is essential for certain theorems and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geometric Interpretations</h3>
+        <p>Understand |z₁ - z₂| as distance, arg(z₁/z₂) as angle between vectors, and how complex multiplication combines rotation and scaling.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Analytic Functions</h1>
+      <p>Learn the fundamental concept that distinguishes complex analysis from real analysis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Derivatives</h3>
+        <p>Define f'(z₀) = lim[z→z₀] (f(z) - f(z₀))/(z - z₀). Understand why this limit must be independent of the direction of approach in ℂ.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cauchy-Riemann Equations</h3>
+        <p>Learn the necessary conditions ∂u/∂x = ∂v/∂y and ∂u/∂y = -∂v/∂x for f = u + iv to be analytic. Understand their geometric meaning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Analytic vs Holomorphic</h3>
+        <p>Understand that complex differentiability at a point vs. in a neighborhood leads to the equivalence of "analytic" and "holomorphic" functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Harmonic Functions</h3>
+        <p>Study functions satisfying Laplace's equation ∇²u = 0. Learn the connection between harmonic functions and real/imaginary parts of analytic functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Harmonic Conjugates</h3>
+        <p>For harmonic function u, find harmonic conjugate v such that f = u + iv is analytic. Understand uniqueness up to constants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conformal Mappings</h3>
+        <p>Learn that analytic functions with non-zero derivative preserve angles. Understand the geometric significance of conformality.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Examples of Analytic Functions</h3>
+        <p>Study polynomials, exponential, and other elementary functions. Learn to verify analyticity using Cauchy-Riemann equations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Singularities</h3>
+        <p>Identify points where functions fail to be analytic. Learn about removable singularities, poles, essential singularities, and branch points.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Elementary Functions</h1>
+      <p>Extend familiar real functions to the complex domain and understand their new properties.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Exponential</h3>
+        <p>Define e^z = e^x(cos y + i sin y) for z = x + iy. Learn Euler's formula e^(iθ) = cos θ + i sin θ and the periodicity e^(z+2πi) = e^z.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Logarithm</h3>
+        <p>Define log z as the inverse of e^z. Understand multivaluedness and the need for branch cuts. Learn about principal branches and logarithmic branches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Trigonometric Functions</h3>
+        <p>Define sin z = (e^(iz) - e^(-iz))/(2i) and cos z = (e^(iz) + e^(-iz))/2. Learn how these extend real trigonometric functions and their new properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Hyperbolic Functions</h3>
+        <p>Study sinh z, cosh z, and tanh z in the complex plane. Understand their relationship to trigonometric functions and periodicity properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Powers</h3>
+        <p>Define z^w = e^(w log z) for complex z and w. Understand multivaluedness and how to choose appropriate branches for applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inverse Functions</h3>
+        <p>Study inverse trigonometric and hyperbolic functions in ℂ. Learn about branch cuts and principal values for multivalued inverse functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Branch Cuts and Principal Values</h3>
+        <p>Understand how to make multivalued functions single-valued by introducing branch cuts. Learn standard conventions for principal branches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Riemann Surfaces</h3>
+        <p>Visualize multivalued functions on Riemann surfaces where each "sheet" corresponds to a different branch. Understand how this resolves multivaluedness.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Complex Integration</h1>
+      <p>Master contour integration and prove the fundamental theorems of complex analysis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Line Integrals</h3>
+        <p>Define ∫_C f(z) dz for complex functions along curves C. Learn how to parameterize curves and compute integrals directly.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Contours and Paths</h3>
+        <p>Study piecewise smooth curves, simple closed curves, and their orientation. Understand how curve direction affects integral values.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cauchy's Theorem</h3>
+        <p>Prove that ∮_C f(z) dz = 0 for analytic f on simply connected domains. Understand this as the fundamental theorem of complex analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cauchy's Integral Formula</h3>
+        <p>Learn f(z₀) = (1/2πi) ∮_C f(z)/(z-z₀) dz. Understand how this expresses analytic functions in terms of their boundary values.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Derivatives from Integration</h3>
+        <p>Prove f^(n)(z₀) = (n!/2πi) ∮_C f(z)/(z-z₀)^(n+1) dz. Understand how this shows infinite differentiability of analytic functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximum Modulus Principle</h3>
+        <p>Prove that |f| attains its maximum on the boundary of domains for non-constant analytic functions. Learn applications to uniqueness theorems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Liouville's Theorem</h3>
+        <p>Prove that bounded entire functions are constant. Understand this as a fundamental rigidity result in complex analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fundamental Theorem of Algebra</h3>
+        <p>Use Liouville's theorem to prove that every non-constant polynomial has a root. Understand this elegant complex-analytic proof.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Series and Sequences</h1>
+      <p>Study convergence of complex series and power series expansions of analytic functions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Sequences and Series</h3>
+        <p>Extend convergence concepts to ℂ. Learn that convergence means |z_n - L| → 0, and study absolute vs. conditional convergence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Power Series</h3>
+        <p>Study series of the form Σa_n(z-z₀)^n. Learn about convergence within circles and the radius of convergence formula.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Radius of Convergence</h3>
+        <p>Apply the Cauchy-Hadamard theorem: R = 1/limsup|a_n|^(1/n). Learn ratio and root tests for determining convergence radius.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Taylor Series</h3>
+        <p>Expand analytic functions as f(z) = Σf^(n)(z₀)(z-z₀)^n/n!. Understand that analytic functions are "locally polynomial."</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Laurent Series</h3>
+        <p>Extend to series with negative powers: f(z) = Σa_n(z-z₀)^n for all integers n. Learn expansion in annular regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Analytic Continuation</h3>
+        <p>Extend analytic functions beyond their original domains using power series. Understand uniqueness and the identity theorem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Uniform Convergence</h3>
+        <p>Study when series converge uniformly on compact sets. Learn Weierstrass M-test and how uniform convergence preserves analyticity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Weierstrass Theorems</h3>
+        <p>Learn that uniform limits of analytic functions are analytic, and that series can be differentiated and integrated term by term.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Residue Theory</h1>
+      <p>Master the residue theorem and its applications to evaluating complex and real integrals.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Isolated Singularities</h3>
+        <p>Classify singularities using Laurent series: removable (no negative powers), poles (finite negative powers), essential (infinite negative powers).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Residues and Residue Theorem</h3>
+        <p>Define Res(f,z₀) as the coefficient of (z-z₀)^(-1) in Laurent expansion. Learn ∮f(z)dz = 2πi Σ residues inside contour.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classification of Singularities</h3>
+        <p>Distinguish removable singularities, poles of various orders, and essential singularities. Learn tests using limits and Laurent series.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computing Residues</h3>
+        <p>Learn formulas for residues at simple poles: Res(f,z₀) = lim(z-z₀)f(z), and higher-order poles using derivatives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real Integral Evaluation</h3>
+        <p>Use residue theorem to evaluate ∫₋∞^∞ f(x)dx by integrating over semicircular contours and applying residue theorem.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Trigonometric Integrals</h3>
+        <p>Evaluate ∫₀^(2π) R(cos θ, sin θ)dθ by substituting z = e^(iθ) and integrating around the unit circle.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Improper Integrals</h3>
+        <p>Handle integrals with branch cuts and multivalued functions. Learn keyhole contours and other specialized techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Jordan's Lemma</h3>
+        <p>Learn conditions for ∫_(semicircle) f(z)dz → 0 as radius → ∞. Essential for applying residue theorem to real integrals.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Conformal Mappings</h1>
+      <p>Study angle-preserving transformations and their applications to physics and engineering.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conformal Mappings</h3>
+        <p>Learn that analytic functions with f'(z) ≠ 0 preserve angles and shapes locally. Understand the geometric significance of conformality.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Fractional Transformations</h3>
+        <p>Study f(z) = (az+b)/(cz+d) as the most general conformal maps of the extended plane. Learn about fixed points and classification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cross-Ratios</h3>
+        <p>Learn the invariant (z,w;u,v) = ((z-u)(w-v))/((z-v)(w-u)) preserved by linear fractional transformations. Apply to mapping problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Riemann Mapping Theorem</h3>
+        <p>Understand that any simply connected domain (except ℂ) can be mapped conformally to the unit disk. Learn about the significance and limitations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Schwarz-Christoffel Formula</h3>
+        <p>Learn the explicit formula for mapping the upper half-plane to polygonal regions. Understand parameter determination and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Potential Theory Applications</h3>
+        <p>Apply conformal mappings to solve Laplace's equation in complex domains. Understand how conformality preserves harmonic functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fluid Flow Applications</h3>
+        <p>Model 2D incompressible flow using complex velocity potentials. Learn how conformal mappings transform flow patterns around obstacles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Electrostatic Applications</h3>
+        <p>Solve electrostatic problems using conformal mappings. Understand how electric field lines and equipotentials transform under conformal maps.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Special Functions</h1>
+      <p>Explore important special functions that arise naturally in complex analysis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gamma Function</h3>
+        <p>Study Γ(z) = ∫₀^∞ t^(z-1)e^(-t) dt for Re(z) > 0 and its analytic continuation. Learn functional equation Γ(z+1) = zΓ(z).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Beta Function</h3>
+        <p>Learn B(z,w) = ∫₀¹ t^(z-1)(1-t)^(w-1) dt and its relation to gamma function: B(z,w) = Γ(z)Γ(w)/Γ(z+w).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Riemann Zeta Function</h3>
+        <p>Study ζ(s) = Σn^(-s) for Re(s) > 1 and its analytic continuation. Learn about zeros, poles, and connection to prime numbers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Elliptic Functions</h3>
+        <p>Study doubly periodic functions on ℂ. Learn about fundamental domains, Weierstrass ℘-function, and modular transformations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Theta Functions</h3>
+        <p>Learn Jacobi theta functions and their role in elliptic function theory. Understand transformation properties and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bessel Functions</h3>
+        <p>Study solutions to Bessel's differential equation. Learn series representations, asymptotic behavior, and applications to physics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hypergeometric Functions</h3>
+        <p>Study ₂F₁(a,b;c;z) and its properties. Learn how many special functions are special cases of hypergeometric functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Asymptotic Expansions</h3>
+        <p>Learn to find asymptotic series for special functions. Understand the difference between convergent and asymptotic series.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Topics in Advanced Complex Analysis</h1>
+      <p>Explore advanced theorems and techniques in complex function theory.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Argument Principle</h3>
+        <p>Learn (1/2πi)∮(f'/f)dz = N - P where N = zeros, P = poles inside contour (counting multiplicity). Apply to root counting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rouché's Theorem</h3>
+        <p>If |g(z)| < |f(z)| on |z| = r, then f and f+g have the same number of zeros inside |z| = r. Learn applications to polynomial roots.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximum Modulus Principle</h3>
+        <p>Deepen understanding of maximum modulus principle and its consequences: minimum modulus principle, open mapping theorem, and uniqueness results.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Schwarz Lemma</h3>
+        <p>If f: D → D with f(0) = 0, then |f(z)| ≤ |z| and |f'(0)| ≤ 1. Learn the rigidity: equality characterizes automorphisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Phragmén-Lindelöf Principle</h3>
+        <p>Extend maximum principle to unbounded domains using growth conditions. Learn applications to uniqueness problems in strips and sectors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Entire Functions</h3>
+        <p>Study functions analytic on all of ℂ. Learn Liouville's theorem, Hadamard's factorization theorem, and order of growth classification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Meromorphic Functions</h3>
+        <p>Study functions with only poles as singularities. Learn partial fraction decompositions and the connection to rational functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Normal Families</h3>
+        <p>Study families of analytic functions with uniform bounds. Learn Montel's theorem and applications to iteration theory and dynamics.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Applications and Connections</h1>
+      <p>Connect complex analysis to other areas of mathematics, physics, and engineering.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier and Laplace Transforms</h3>
+        <p>Use complex analysis to understand transforms F(ω) = ∫f(t)e^(-iωt)dt. Learn about poles, residues, and inversion formulas.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quantum Mechanics</h3>
+        <p>Apply complex analysis to quantum mechanics: wave functions, scattering theory, and the role of analytic continuation in physics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Number Theory Connections</h3>
+        <p>Learn how complex analysis proves theorems in number theory: prime number theorem, Dirichlet's theorem on primes in arithmetic progressions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Algebraic Geometry</h3>
+        <p>Understand connections to Riemann surfaces, algebraic curves, and how complex analysis provides geometric intuition for abstract algebra.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Differential Equations</h3>
+        <p>Apply complex methods to ODEs: Laplace transforms, series solutions, and asymptotic analysis of solutions in the complex plane.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mathematical Physics</h3>
+        <p>Study applications to electromagnetism, fluid dynamics, heat conduction, and wave propagation using complex variable techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Signal Processing</h3>
+        <p>Apply complex analysis to digital signal processing: z-transforms, filter design, and stability analysis using pole-zero plots.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Control Theory</h3>
+        <p>Use complex analysis in control systems: transfer functions, stability criteria using Nyquist plots, and root-locus techniques.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+    
+    function showOverview() {
+      // Hide all unit detail pages
+      for (let i = 1; i <= 10; i++) {
+        const unitPage = document.getElementById(`unit-${i}`);
+        if (unitPage) {
+          unitPage.classList.remove('active');
+        }
+      }
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
