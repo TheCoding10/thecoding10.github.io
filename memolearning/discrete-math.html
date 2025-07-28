@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Discrete Mathematics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #f093fb 50%, #667eea 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔗 MemoLearning Discrete Mathematics</h1>
+    <p>Master logic, set theory, combinatorics, and mathematical structures</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to math courses')">← Back to Mathematics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~160</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Logic and Propositional Logic</h3>
+        </div>
+        <p class="unit-description">Master the foundations of mathematical logic and logical reasoning.</p>
+        <ul class="topics-list">
+          <li>Propositions and logical statements</li>
+          <li>Logical connectives (AND, OR, NOT, IF-THEN, IFF)</li>
+          <li>Truth tables</li>
+          <li>Logical equivalences</li>
+          <li>Tautologies and contradictions</li>
+          <li>Conditional and biconditional statements</li>
+          <li>Logical arguments and validity</li>
+          <li>Rules of inference</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Predicate Logic and Quantifiers</h3>
+        </div>
+        <p class="unit-description">Extend logic to work with predicates, variables, and quantifiers.</p>
+        <ul class="topics-list">
+          <li>Predicates and propositional functions</li>
+          <li>Universal quantifier (∀)</li>
+          <li>Existential quantifier (∃)</li>
+          <li>Nested quantifiers</li>
+          <li>Negation of quantified statements</li>
+          <li>Domain of discourse</li>
+          <li>Logical arguments with quantifiers</li>
+          <li>Equivalences involving quantifiers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Set Theory</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental concepts of sets and set operations.</p>
+        <ul class="topics-list">
+          <li>Set notation and terminology</li>
+          <li>Set operations (union, intersection, complement)</li>
+          <li>Venn diagrams</li>
+          <li>Set identities and laws</li>
+          <li>Cartesian products</li>
+          <li>Power sets</li>
+          <li>Cardinality and counting</li>
+          <li>Russell's paradox and set theory axioms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Functions and Relations</h3>
+        </div>
+        <p class="unit-description">Study mathematical functions, relations, and their properties.</p>
+        <ul class="topics-list">
+          <li>Definition of functions and relations</li>
+          <li>Domain, codomain, and range</li>
+          <li>One-to-one (injective) functions</li>
+          <li>Onto (surjective) functions</li>
+          <li>Bijective functions</li>
+          <li>Inverse functions</li>
+          <li>Composition of functions</li>
+          <li>Equivalence relations and partitions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Proof Techniques</h3>
+        </div>
+        <p class="unit-description">Master various methods of mathematical proof and reasoning.</p>
+        <ul class="topics-list">
+          <li>Direct proof</li>
+          <li>Proof by contrapositive</li>
+          <li>Proof by contradiction</li>
+          <li>Proof by cases</li>
+          <li>Mathematical induction</li>
+          <li>Strong induction</li>
+          <li>Structural induction</li>
+          <li>Existence and uniqueness proofs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Number Theory</h3>
+        </div>
+        <p class="unit-description">Explore properties of integers and fundamental number theory concepts.</p>
+        <ul class="topics-list">
+          <li>Divisibility and division algorithm</li>
+          <li>Prime numbers and factorization</li>
+          <li>Greatest common divisor (GCD)</li>
+          <li>Euclidean algorithm</li>
+          <li>Least common multiple (LCM)</li>
+          <li>Modular arithmetic</li>
+          <li>Congruences and their properties</li>
+          <li>Applications to cryptography</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Combinatorics</h3>
+        </div>
+        <p class="unit-description">Learn counting techniques and combinatorial reasoning.</p>
+        <ul class="topics-list">
+          <li>Basic counting principles</li>
+          <li>Addition and multiplication principles</li>
+          <li>Permutations</li>
+          <li>Combinations</li>
+          <li>Binomial coefficients</li>
+          <li>Pigeonhole principle</li>
+          <li>Inclusion-exclusion principle</li>
+          <li>Generating functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Graph Theory</h3>
+        </div>
+        <p class="unit-description">Study graphs, networks, and their mathematical properties.</p>
+        <ul class="topics-list">
+          <li>Graph terminology and notation</li>
+          <li>Types of graphs (directed, undirected, weighted)</li>
+          <li>Graph representation (adjacency matrix, list)</li>
+          <li>Paths, cycles, and connectivity</li>
+          <li>Euler and Hamiltonian paths</li>
+          <li>Trees and spanning trees</li>
+          <li>Graph coloring</li>
+          <li>Planar graphs and graph algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Recurrence Relations</h3>
+        </div>
+        <p class="unit-description">Solve recurrence relations and analyze recursive algorithms.</p>
+        <ul class="topics-list">
+          <li>Definition of recurrence relations</li>
+          <li>Initial conditions and solutions</li>
+          <li>Linear homogeneous recurrences</li>
+          <li>Characteristic equation method</li>
+          <li>Non-homogeneous recurrences</li>
+          <li>Generating functions for recurrences</li>
+          <li>Master theorem</li>
+          <li>Applications to algorithm analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Boolean Algebra</h3>
+        </div>
+        <p class="unit-description">Learn Boolean algebra and its applications to digital logic.</p>
+        <ul class="topics-list">
+          <li>Boolean variables and operations</li>
+          <li>Boolean expressions and functions</li>
+          <li>Truth tables for Boolean functions</li>
+          <li>Boolean identities and laws</li>
+          <li>Simplification of Boolean expressions</li>
+          <li>Karnaugh maps</li>
+          <li>Logic gates and circuits</li>
+          <li>Applications to computer science</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Algebraic Structures</h3>
+        </div>
+        <p class="unit-description">Study abstract algebraic structures and their properties.</p>
+        <ul class="topics-list">
+          <li>Binary operations</li>
+          <li>Groups and group properties</li>
+          <li>Subgroups and group homomorphisms</li>
+          <li>Rings and ring properties</li>
+          <li>Fields and field operations</li>
+          <li>Lattices and partial orders</li>
+          <li>Monoids and semigroups</li>
+          <li>Applications to computer science</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Applications and Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Apply discrete mathematics to computer science and real-world problems.</p>
+        <ul class="topics-list">
+          <li>Finite state machines</li>
+          <li>Regular expressions and formal languages</li>
+          <li>Complexity theory basics</li>
+          <li>Network flows and matching</li>
+          <li>Error-correcting codes</li>
+          <li>Cryptographic applications</li>
+          <li>Database theory connections</li>
+          <li>Algorithm design using discrete math</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Logic and Propositional Logic</h1>
+      <p>Build the foundation of mathematical reasoning with propositional logic.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Propositions and Logical Statements</h3>
+        <p>Understand what makes a statement a proposition: declarative sentences that are either true or false. Learn to identify propositions vs. questions, commands, or ambiguous statements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Connectives</h3>
+        <p>Master the five main logical connectives: conjunction (∧), disjunction (∨), negation (¬), implication (→), and biconditional (↔). Understand their meaning and usage.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Truth Tables</h3>
+        <p>Construct and interpret truth tables for compound propositions. Use truth tables to determine when complex logical statements are true or false.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Equivalences</h3>
+        <p>Learn important logical equivalences like De Morgan's laws, distributive laws, and absorption laws. Use these to simplify complex logical expressions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tautologies and Contradictions</h3>
+        <p>Identify tautologies (always true statements) and contradictions (always false statements). Understand their role in logical reasoning and proof.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Statements</h3>
+        <p>Master conditional statements (if-then) and biconditionals (if and only if). Understand the difference between converse, inverse, and contrapositive.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Arguments</h3>
+        <p>Analyze the validity of logical arguments. Distinguish between valid and invalid arguments, and between validity and soundness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rules of Inference</h3>
+        <p>Learn fundamental rules of inference like modus ponens, modus tollens, hypothetical syllogism, and disjunctive syllogism for constructing proofs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Predicate Logic and Quantifiers</h1>
+      <p>Extend logic to handle variables, predicates, and quantified statements.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Predicates and Propositional Functions</h3>
+        <p>Understand predicates as functions that return true or false values. Learn to work with predicates involving one or more variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Universal Quantifier</h3>
+        <p>Master the universal quantifier (∀x) meaning "for all x". Learn to read, write, and interpret universally quantified statements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Existential Quantifier</h3>
+        <p>Understand the existential quantifier (∃x) meaning "there exists an x". Practice constructing and interpreting existentially quantified statements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nested Quantifiers</h3>
+        <p>Work with multiple quantifiers in the same statement. Understand the importance of quantifier order and how switching order changes meaning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Negation of Quantified Statements</h3>
+        <p>Learn to negate quantified statements correctly: ¬(∀x P(x)) ≡ ∃x ¬P(x) and ¬(∃x P(x)) ≡ ∀x ¬P(x). Apply De Morgan's laws to quantifiers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Domain of Discourse</h3>
+        <p>Understand how the domain of discourse affects the truth value of quantified statements. Work with restricted domains and implicit quantification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Arguments with Quantifiers</h3>
+        <p>Analyze arguments involving quantified statements. Use rules of inference extended to predicate logic, including universal and existential instantiation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quantifier Equivalences</h3>
+        <p>Learn equivalences involving quantifiers and logical connectives. Understand when quantifiers can be distributed over conjunctions and disjunctions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Set Theory</h1>
+      <p>Master the fundamental language of mathematics through set theory.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Set Notation and Terminology</h3>
+        <p>Learn set notation including roster and set-builder notation. Understand elements, membership (∈), empty set (∅), and subset relationships (⊆).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Set Operations</h3>
+        <p>Master fundamental set operations: union (∪), intersection (∩), complement, and difference. Understand their properties and relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Venn Diagrams</h3>
+        <p>Use Venn diagrams to visualize sets and set operations. Apply them to solve problems involving multiple sets and their relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Set Identities and Laws</h3>
+        <p>Learn important set identities including commutative, associative, distributive, De Morgan's laws, and absorption laws for sets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cartesian Products</h3>
+        <p>Understand Cartesian products A × B as sets of ordered pairs. Learn properties of Cartesian products and their relationship to relations and functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Power Sets</h3>
+        <p>Master the concept of power sets P(A) containing all subsets of A. Understand the relationship between |A| and |P(A)| = 2^|A|.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cardinality and Counting</h3>
+        <p>Learn to count elements in finite sets using inclusion-exclusion principle. Understand cardinality of infinite sets and countability concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Set Theory Foundations</h3>
+        <p>Understand Russell's paradox and why naive set theory needs axioms. Learn basic axioms of set theory and their importance in mathematics.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Functions and Relations</h1>
+      <p>Study the fundamental concepts of mathematical functions and relations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functions and Relations Definition</h3>
+        <p>Understand relations as subsets of Cartesian products and functions as special relations. Learn the formal definition of functions and their notation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Domain, Codomain, and Range</h3>
+        <p>Distinguish between domain (input set), codomain (target set), and range (actual output set). Understand how these concepts define a function completely.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Injective Functions</h3>
+        <p>Master one-to-one (injective) functions where different inputs produce different outputs. Learn tests for injectivity and their applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Surjective Functions</h3>
+        <p>Understand onto (surjective) functions where every element in the codomain is mapped to. Learn to prove and disprove surjectivity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bijective Functions</h3>
+        <p>Study bijective functions that are both injective and surjective. Understand their importance in establishing one-to-one correspondence between sets.</p>
+      </div>
+      <div class="subtopic-card">
