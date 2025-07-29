@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Scientific Computing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #f093fb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ MemoLearning Scientific Computing</h1>
+    <p>Computational methods, algorithms, and numerical analysis for scientific problems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Key Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Python for Scientific Computing</h3>
+        </div>
+        <p class="unit-description">Master Python fundamentals and essential libraries for scientific computation.</p>
+        <ul class="topics-list">
+          <li>Python basics and data structures</li>
+          <li>NumPy arrays and vectorization</li>
+          <li>SciPy scientific functions</li>
+          <li>Matplotlib visualization</li>
+          <li>Pandas data manipulation</li>
+          <li>Jupyter notebooks</li>
+          <li>Performance optimization</li>
+          <li>Memory management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Numerical Linear Algebra</h3>
+        </div>
+        <p class="unit-description">Study efficient algorithms for matrix computations and linear systems.</p>
+        <ul class="topics-list">
+          <li>LU decomposition and pivoting</li>
+          <li>QR factorization</li>
+          <li>Singular Value Decomposition (SVD)</li>
+          <li>Eigenvalue algorithms</li>
+          <li>Iterative methods (Jacobi, Gauss-Seidel)</li>
+          <li>Krylov subspace methods</li>
+          <li>Sparse matrix techniques</li>
+          <li>Condition numbers and stability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Root Finding and Optimization</h3>
+        </div>
+        <p class="unit-description">Learn algorithms for solving nonlinear equations and optimization problems.</p>
+        <ul class="topics-list">
+          <li>Bisection and Newton's method</li>
+          <li>Secant and Brent's method</li>
+          <li>Fixed-point iteration</li>
+          <li>Gradient descent methods</li>
+          <li>Newton's method for optimization</li>
+          <li>Quasi-Newton methods (BFGS)</li>
+          <li>Constrained optimization</li>
+          <li>Global optimization techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Interpolation and Approximation</h3>
+        </div>
+        <p class="unit-description">Study methods for data fitting and function approximation.</p>
+        <ul class="topics-list">
+          <li>Polynomial interpolation</li>
+          <li>Lagrange and Newton forms</li>
+          <li>Spline interpolation</li>
+          <li>Least squares fitting</li>
+          <li>Orthogonal polynomials</li>
+          <li>Chebyshev approximation</li>
+          <li>Radial basis functions</li>
+          <li>Error analysis and convergence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Numerical Integration</h3>
+        </div>
+        <p class="unit-description">Learn quadrature rules and integration techniques for functions and data.</p>
+        <ul class="topics-list">
+          <li>Newton-Cotes formulas</li>
+          <li>Gaussian quadrature</li>
+          <li>Adaptive integration</li>
+          <li>Monte Carlo integration</li>
+          <li>Multidimensional integration</li>
+          <li>Improper integrals</li>
+          <li>Oscillatory integrals</li>
+          <li>Error estimation and convergence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Ordinary Differential Equations</h3>
+        </div>
+        <p class="unit-description">Study numerical methods for solving initial and boundary value problems.</p>
+        <ul class="topics-list">
+          <li>Euler's method and error analysis</li>
+          <li>Runge-Kutta methods</li>
+          <li>Multistep methods</li>
+          <li>Adaptive step size control</li>
+          <li>Stiff equations and implicit methods</li>
+          <li>Boundary value problems</li>
+          <li>Shooting methods</li>
+          <li>Systems of ODEs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Partial Differential Equations</h3>
+        </div>
+        <p class="unit-description">Learn finite difference and finite element methods for PDEs.</p>
+        <ul class="topics-list">
+          <li>Classification of PDEs</li>
+          <li>Finite difference schemes</li>
+          <li>Stability and consistency</li>
+          <li>Heat equation (parabolic)</li>
+          <li>Wave equation (hyperbolic)</li>
+          <li>Laplace equation (elliptic)</li>
+          <li>Finite element method basics</li>
+          <li>Boundary conditions and domains</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Monte Carlo Methods</h3>
+        </div>
+        <p class="unit-description">Study stochastic simulation and sampling techniques.</p>
+        <ul class="topics-list">
+          <li>Random number generation</li>
+          <li>Monte Carlo integration</li>
+          <li>Markov Chain Monte Carlo (MCMC)</li>
+          <li>Metropolis-Hastings algorithm</li>
+          <li>Gibbs sampling</li>
+          <li>Importance sampling</li>
+          <li>Variance reduction techniques</li>
+          <li>Applications in physics and finance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Fast Fourier Transform</h3>
+        </div>
+        <p class="unit-description">Master frequency domain analysis and signal processing.</p>
+        <ul class="topics-list">
+          <li>Discrete Fourier Transform (DFT)</li>
+          <li>FFT algorithms (Cooley-Tukey)</li>
+          <li>Spectral methods for PDEs</li>
+          <li>Convolution and correlation</li>
+          <li>Windowing and spectral leakage</li>
+          <li>Multidimensional FFT</li>
+          <li>Applications in image processing</li>
+          <li>Inverse problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Machine Learning Algorithms</h3>
+        </div>
+        <p class="unit-description">Learn computational aspects of machine learning and data science.</p>
+        <ul class="topics-list">
+          <li>Linear regression and regularization</li>
+          <li>Classification algorithms</li>
+          <li>Neural networks and backpropagation</li>
+          <li>Clustering algorithms</li>
+          <li>Dimensionality reduction (PCA, t-SNE)</li>
+          <li>Cross-validation and model selection</li>
+          <li>Ensemble methods</li>
+          <li>Computational complexity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">High-Performance Computing</h3>
+        </div>
+        <p class="unit-description">Study parallel computing and optimization for large-scale problems.</p>
+        <ul class="topics-list">
+          <li>Parallel algorithms and architectures</li>
+          <li>OpenMP and shared memory</li>
+          <li>MPI and distributed computing</li>
+          <li>GPU computing with CUDA</li>
+          <li>Vectorization and SIMD</li>
+          <li>Load balancing</li>
+          <li>Scalability analysis</li>
+          <li>Performance profiling and optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Scientific Software Development</h3>
+        </div>
+        <p class="unit-description">Learn best practices for developing robust scientific software.</p>
+        <ul class="topics-list">
+          <li>Software engineering principles</li>
+          <li>Version control with Git</li>
+          <li>Testing and debugging strategies</li>
+          <li>Documentation and reproducibility</li>
+          <li>Code optimization techniques</li>
+          <li>Continuous integration</li>
+          <li>Package management and deployment</li>
+          <li>Open source collaboration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Details Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Python for Scientific Computing</h1>
+      <p>Master Python fundamentals and essential libraries for scientific computation and data analysis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Python Basics and Data Structures</h3>
+        <p>Master Python syntax, control flow, functions, and built-in data structures (lists, tuples, dictionaries, sets). Learn list comprehensions and generators for efficient code.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">NumPy Arrays and Vectorization</h3>
+        <p>Learn ndarray creation, indexing, slicing, and broadcasting. Master vectorized operations, array manipulation, and linear algebra functions for efficient numerical computing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SciPy Scientific Functions</h3>
+        <p>Explore SciPy modules: optimize, integrate, interpolate, linalg, stats, and special. Learn to solve scientific problems using high-level mathematical functions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matplotlib Visualization</h3>
+        <p>Create publication-quality plots with matplotlib. Master 2D/3D plotting, subplots, styling, animations, and interactive visualizations for data exploration.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pandas Data Manipulation</h3>
+        <p>Learn DataFrame and Series operations, data cleaning, grouping, merging, and time series analysis. Master data I/O and exploratory data analysis techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Jupyter Notebooks</h3>
+        <p>Master interactive computing with Jupyter. Learn markdown, magic commands, widgets, and best practices for reproducible research and data science workflows.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Performance Optimization</h3>
+        <p>Learn profiling tools, Cython, Numba JIT compilation, and algorithm optimization. Understand bottlenecks and techniques for speeding up Python code.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Management</h3>
+        <p>Understand Python memory model, garbage collection, and memory-efficient programming. Learn techniques for handling large datasets and memory profiling.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Numerical Linear Algebra</h1>
+      <p>Study efficient algorithms for matrix computations, linear systems, and eigenvalue problems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">LU Decomposition and Pivoting</h3>
+        <p>Learn LU factorization for solving linear systems Ax = b. Understand partial and complete pivoting for numerical stability and computational complexity O(n³).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">QR Factorization</h3>
+        <p>Master QR decomposition using Householder reflections and Givens rotations. Apply to least squares problems and orthogonal transformations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Singular Value Decomposition (SVD)</h3>
+        <p>Understand SVD A = UΣV^T for matrix analysis, pseudoinverse computation, low-rank approximation, and principal component analysis applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Eigenvalue Algorithms</h3>
+        <p>Learn power method, QR algorithm, and Jacobi method for eigenvalue computation. Understand convergence properties and applications to matrix diagonalization.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Iterative Methods</h3>
+        <p>Study Jacobi, Gauss-Seidel, and SOR methods for large sparse systems. Analyze convergence conditions and computational efficiency compared to direct methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Krylov Subspace Methods</h3>
+        <p>Master Conjugate Gradient (CG) for symmetric positive definite systems and GMRES for general systems. Understand preconditioning for faster convergence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sparse Matrix Techniques</h3>
+        <p>Learn sparse matrix storage formats (CSR, CSC, COO) and specialized algorithms. Study graph-based orderings and fill-in reduction for sparse factorizations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Condition Numbers and Stability</h3>
+        <p>Understand condition numbers κ(A) = ||A|| ||A⁻¹||, error propagation, and numerical stability. Learn backward/forward error analysis for robust algorithms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Root Finding and Optimization</h1>
+      <p>Learn algorithms for solving nonlinear equations and finding optimal solutions to mathematical problems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bisection and Newton's Method</h3>
+        <p>Master bisection method for guaranteed convergence and Newton's method x_{n+1} = x_n - f(x_n)/f'(x_n) for quadratic convergence. Analyze convergence rates and requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Secant and Brent's Method</h3>
+        <p>Learn secant method for derivative-free root finding and Brent's method combining bisection with faster methods for robust and efficient root finding.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fixed-Point Iteration</h3>
+        <p>Study fixed-point problems x = g(x) and iteration schemes. Understand contraction mapping theorem and conditions for convergence of iterative methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gradient Descent Methods</h3>
+        <p>Learn steepest descent x_{k+1} = x_k - α∇f(x_k) and variants. Study step size selection, momentum methods, and adaptive learning rates for optimization.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Newton's Method for Optimization</h3>
+        <p>Apply Newton's method x_{k+1} = x_k - H⁻¹∇f(x_k) using Hessian matrix for second-order optimization. Understand quadratic convergence and computational costs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quasi-Newton Methods (BFGS)</h3>
+        <p>Learn BFGS and L-BFGS algorithms that approximate Hessian using gradient information. Study secant conditions and memory-efficient implementations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constrained Optimization</h3>
+        <p>Study Lagrange multipliers, KKT conditions, and penalty/barrier methods. Learn sequential quadratic programming (SQP) for nonlinear constrained problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Global Optimization Techniques</h3>
+        <p>Explore simulated annealing, genetic algorithms, and particle swarm optimization for finding global minima in non-convex optimization landscapes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Interpolation and Approximation</h1>
+      <p>Study methods for data fitting, function approximation, and constructing smooth representations of discrete data.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polynomial Interpolation</h3>
+        <p>Learn polynomial interpolation theory, existence and uniqueness theorems. Understand Runge's phenomenon and oscillatory behavior of high-degree polynomials.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lagrange and Newton Forms</h3>
+        <p>Master Lagrange interpolation formula and Newton's divided differences. Compare computational efficiency and numerical stability of different representations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spline Interpolation</h3>
+        <p>Study piecewise polynomial interpolation with splines. Learn cubic splines, B-splines, and smoothing splines for flexible and stable curve fitting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Least Squares Fitting</h
