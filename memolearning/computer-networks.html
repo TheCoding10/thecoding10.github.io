@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Computer Networks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #06B6D4 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1E3A8A;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E3A8A;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌐 MemoLearning Computer Networks</h1>
+    <p>Network protocols, architecture, security, and modern networking technologies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Computer Networks Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Network Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">7</span>
+          <div class="stat-label">OSI Layers</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Protocols</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Network Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand basic networking concepts, types, and the evolution of computer networks.</p>
+        <ul class="topics-list">
+          <li>What is a computer network</li>
+          <li>Network goals and applications</li>
+          <li>Network types (LAN, WAN, MAN)</li>
+          <li>Network topology types</li>
+          <li>Network hardware components</li>
+          <li>Client-server vs peer-to-peer</li>
+          <li>Network performance metrics</li>
+          <li>Network standards organizations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">OSI Reference Model</h3>
+        </div>
+        <p class="unit-description">Master the seven-layer OSI model for understanding network communication protocols.</p>
+        <ul class="topics-list">
+          <li>OSI model overview</li>
+          <li>Physical layer (Layer 1)</li>
+          <li>Data link layer (Layer 2)</li>
+          <li>Network layer (Layer 3)</li>
+          <li>Transport layer (Layer 4)</li>
+          <li>Session layer (Layer 5)</li>
+          <li>Presentation layer (Layer 6)</li>
+          <li>Application layer (Layer 7)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">TCP/IP Protocol Suite</h3>
+        </div>
+        <p class="unit-description">Learn the foundation protocols of the Internet and modern networking.</p>
+        <ul class="topics-list">
+          <li>TCP/IP model vs OSI model</li>
+          <li>Internet Protocol (IP)</li>
+          <li>Transmission Control Protocol (TCP)</li>
+          <li>User Datagram Protocol (UDP)</li>
+          <li>Internet Control Message Protocol (ICMP)</li>
+          <li>Address Resolution Protocol (ARP)</li>
+          <li>Dynamic Host Configuration Protocol (DHCP)</li>
+          <li>Domain Name System (DNS)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Physical Layer</h3>
+        </div>
+        <p class="unit-description">Explore transmission media, signals, and physical networking technologies.</p>
+        <ul class="topics-list">
+          <li>Transmission media types</li>
+          <li>Twisted pair and coaxial cables</li>
+          <li>Fiber optic communications</li>
+          <li>Wireless transmission</li>
+          <li>Signal encoding techniques</li>
+          <li>Bandwidth and throughput</li>
+          <li>Multiplexing techniques</li>
+          <li>Network interface cards</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Data Link Layer</h3>
+        </div>
+        <p class="unit-description">Understand frame formatting, error detection, and media access control.</p>
+        <ul class="topics-list">
+          <li>Frame structure and formatting</li>
+          <li>Error detection and correction</li>
+          <li>Flow control mechanisms</li>
+          <li>Medium Access Control (MAC)</li>
+          <li>Ethernet protocol</li>
+          <li>Switching and bridging</li>
+          <li>Virtual LANs (VLANs)</li>
+          <li>Wireless LAN protocols</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Network Layer</h3>
+        </div>
+        <p class="unit-description">Master routing, addressing, and internetworking concepts.</p>
+        <ul class="topics-list">
+          <li>IP addressing and subnetting</li>
+          <li>IPv4 vs IPv6</li>
+          <li>Routing algorithms</li>
+          <li>Distance vector routing</li>
+          <li>Link state routing</li>
+          <li>Border Gateway Protocol (BGP)</li>
+          <li>Network Address Translation (NAT)</li>
+          <li>Internet Control Message Protocol</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Transport Layer</h3>
+        </div>
+        <p class="unit-description">Learn end-to-end communication, reliability, and congestion control.</p>
+        <ul class="topics-list">
+          <li>Transport layer services</li>
+          <li>TCP connection management</li>
+          <li>TCP flow control</li>
+          <li>TCP congestion control</li>
+          <li>UDP characteristics</li>
+          <li>Port numbers and sockets</li>
+          <li>Multiplexing and demultiplexing</li>
+          <li>Reliable data transfer</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Application Layer Protocols</h3>
+        </div>
+        <p class="unit-description">Explore high-level protocols that enable network applications and services.</p>
+        <ul class="topics-list">
+          <li>HTTP and HTTPS</li>
+          <li>File Transfer Protocol (FTP)</li>
+          <li>Simple Mail Transfer Protocol (SMTP)</li>
+          <li>Post Office Protocol (POP)</li>
+          <li>Internet Message Access Protocol (IMAP)</li>
+          <li>Telnet and SSH</li>
+          <li>Simple Network Management Protocol (SNMP)</li>
+          <li>Network Time Protocol (NTP)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Network Security</h3>
+        </div>
+        <p class="unit-description">Implement security measures to protect network communications and data.</p>
+        <ul class="topics-list">
+          <li>Network security fundamentals</li>
+          <li>Cryptographic protocols</li>
+          <li>Firewalls and intrusion detection</li>
+          <li>Virtual Private Networks (VPNs)</li>
+          <li>Wireless security (WPA, WPA2, WPA3)</li>
+          <li>Network authentication</li>
+          <li>Common network attacks</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Wireless Networks</h3>
+        </div>
+        <p class="unit-description">Understand wireless communication technologies and mobile networking.</p>
+        <ul class="topics-list">
+          <li>Wireless communication principles</li>
+          <li>WiFi standards (802.11)</li>
+          <li>Bluetooth technology</li>
+          <li>Cellular networks (3G, 4G, 5G)</li>
+          <li>Wireless security challenges</li>
+          <li>Mobile IP and mobility management</li>
+          <li>Ad-hoc networks</li>
+          <li>Internet of Things (IoT) networks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Network Management</h3>
+        </div>
+        <p class="unit-description">Learn tools and techniques for monitoring and managing network infrastructure.</p>
+        <ul class="topics-list">
+          <li>Network management fundamentals</li>
+          <li>SNMP protocol and MIBs</li>
+          <li>Network monitoring tools</li>
+          <li>Performance monitoring</li>
+          <li>Fault management</li>
+          <li>Configuration management</li>
+          <li>Security management</li>
+          <li>Network documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Quality of Service (QoS)</h3>
+        </div>
+        <p class="unit-description">Implement traffic management and prioritization for optimal network performance.</p>
+        <ul class="topics-list">
+          <li>QoS fundamentals</li>
+          <li>Traffic classification</li>
+          <li>Bandwidth management</li>
+          <li>Packet scheduling algorithms</li>
+          <li>Traffic shaping and policing</li>
+          <li>Differentiated Services (DiffServ)</li>
+          <li>Integrated Services (IntServ)</li>
+          <li>Multimedia networking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Network Troubleshooting</h3>
+        </div>
+        <p class="unit-description">Develop skills for diagnosing and resolving network connectivity issues.</p>
+        <ul class="topics-list">
+          <li>Troubleshooting methodology</li>
+          <li>Network diagnostic tools</li>
+          <li>Ping and traceroute utilities</li>
+          <li>Packet capture and analysis</li>
+          <li>Network latency and packet loss</li>
+          <li>Common connectivity problems</li>
+          <li>Performance bottleneck identification</li>
+          <li>Documentation and reporting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Emerging Network Technologies</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge networking technologies and future trends.</p>
+        <ul class="topics-list">
+          <li>Software-Defined Networking (SDN)</li>
+          <li>Network Function Virtualization (NFV)</li>
+          <li>Cloud networking</li>
+          <li>Edge computing networks</li>
+          <li>5G and beyond</li>
+          <li>Internet of Things (IoT)</li>
+          <li>Network automation</li>
+          <li>Future networking trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Network Fundamentals</h1>
+      <p>Understand basic networking concepts, types, and the evolution of computer networks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is a Computer Network</h3>
+        <p>Learn the definition and purpose of computer networks as interconnected systems for resource sharing and communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Goals and Applications</h3>
+        <p>Understand the primary objectives of networking including resource sharing, communication, and distributed computing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Types (LAN, WAN, MAN)</h3>
+        <p>Distinguish between Local Area Networks, Wide Area Networks, and Metropolitan Area Networks by scope and characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Topology Types</h3>
+        <p>Explore physical and logical network topologies including bus, star, ring, mesh, and hybrid configurations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Hardware Components</h3>
+        <p>Identify essential networking hardware including routers, switches, hubs, repeaters, and network interface cards.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Client-Server vs Peer-to-Peer</h3>
+        <p>Compare centralized client-server architectures with distributed peer-to-peer networking models.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Performance Metrics</h3>
+        <p>Measure network effectiveness using bandwidth, throughput, latency, jitter, and packet loss metrics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Standards Organizations</h3>
+        <p>Learn about IEEE, ITU, IETF, and other organizations that develop networking standards and protocols.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: OSI Reference Model</h1>
+      <p>Master the seven-layer OSI model for understanding network communication protocols.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">OSI Model Overview</h3>
+        <p>Understand the purpose and structure of the Open Systems Interconnection reference model for network communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Physical Layer (Layer 1)</h3>
+        <p>Learn about electrical, mechanical, and physical aspects of network connections and transmission media.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Link Layer (Layer 2)</h3>
+        <p>Master frame formatting, error detection, and media access control for reliable link-level communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Layer (Layer 3)</h3>
+        <p>Understand routing, addressing, and path determination for end-to-end packet delivery across networks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Transport Layer (Layer 4)</h3>
+        <p>Learn reliable end-to-end communication, flow control, and error recovery between network endpoints.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Session Layer (Layer 5)</h3>
+        <p>Manage dialog control and session establishment, maintenance, and termination between applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Presentation Layer (Layer 6)</h3>
+        <p>Handle data formatting, encryption, compression, and translation for application compatibility.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Application Layer (Layer 7)</h3>
+        <p>Provide network services directly to end-user applications and interface with user programs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: TCP/IP Protocol Suite</h1>
+      <p>Learn the foundation protocols of the Internet and modern networking.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">TCP/IP Model vs OSI Model</h3>
+        <p>Compare the four-layer TCP/IP model with the seven-layer OSI model and understand their practical applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Internet Protocol (IP)</h3>
+        <p>Master IP addressing, packet structure, and routing fundamentals for network-layer communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Transmission Control Protocol (TCP)</h3>
+        <p>Understand reliable, connection-oriented communication with flow control and congestion management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">User Datagram Protocol (UDP)</h3>
+        <p>Learn connectionless, unreliable but efficient communication for time-sensitive applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Internet Control Message Protocol (ICMP)</h3>
+        <p>Implement error reporting and network diagnostic capabilities for IP network troubleshooting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Address Resolution Protocol (ARP)</h3>
+        <p>Map logical IP addresses to physical MAC addresses for local network communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dynamic Host Configuration Protocol (DHCP)</h3>
+        <p>Automate IP address assignment and network configuration for dynamic network management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Domain Name System (DNS)</h3>
+        <p>Translate human-readable domain names to IP addresses through hierarchical name resolution.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Physical Layer</h1>
+      <p>Explore transmission media, signals, and physical networking technologies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Transmission Media Types
