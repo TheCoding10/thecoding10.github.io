@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '</>';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💻 MemoLearning Introduction to Programming</h1>
+    <p>Learn Python/Java, functions, loops, and problem solving</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Programming Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand what programming is and learn basic concepts that apply to all languages.</p>
+        <ul class="topics-list">
+          <li>What is programming?</li>
+          <li>Algorithms and computational thinking</li>
+          <li>Programming languages overview</li>
+          <li>Compilers vs interpreters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Variables and Data Types</h3>
+        </div>
+        <p class="unit-description">Learn how to store and manipulate different types of data in your programs.</p>
+        <ul class="topics-list">
+          <li>Variables and variable naming</li>
+          <li>Primitive data types (int, float, bool)</li>
+          <li>Strings and string manipulation</li>
+          <li>Type conversion and casting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Input and Output</h3>
+        </div>
+        <p class="unit-description">Master getting input from users and displaying output in various formats.</p>
+        <ul class="topics-list">
+          <li>Basic input and output operations</li>
+          <li>Reading user input from console</li>
+          <li>Formatting output and print statements</li>
+          <li>String formatting and interpolation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Operators and Expressions</h3>
+        </div>
+        <p class="unit-description">Learn to perform calculations and logical operations using various operators.</p>
+        <ul class="topics-list">
+          <li>Arithmetic operators (+, -, *, /, %)</li>
+          <li>Assignment operators (=, +=, -=)</li>
+          <li>Comparison operators (==, !=, <, >)</li>
+          <li>Logical operators (and, or, not)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Control Flow - Conditionals</h3>
+        </div>
+        <p class="unit-description">Control program execution with if statements and decision-making structures.</p>
+        <ul class="topics-list">
+          <li>Boolean expressions and conditions</li>
+          <li>If statements and syntax</li>
+          <li>If-else statements</li>
+          <li>Elif (else-if) chains</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Control Flow - Loops</h3>
+        </div>
+        <p class="unit-description">Repeat code execution efficiently using different types of loops.</p>
+        <ul class="topics-list">
+          <li>Introduction to loops and iteration</li>
+          <li>While loops and loop conditions</li>
+          <li>For loops and counting</li>
+          <li>Range function and iteration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Functions and Modules</h3>
+        </div>
+        <p class="unit-description">Organize code into reusable functions and learn about modular programming.</p>
+        <ul class="topics-list">
+          <li>Function definition and syntax</li>
+          <li>Parameters and arguments</li>
+          <li>Return values and return statements</li>
+          <li>Local vs global scope</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Data Structures - Lists</h3>
+        </div>
+        <p class="unit-description">Work with collections of data using lists, arrays, and basic operations.</p>
+        <ul class="topics-list">
+          <li>Introduction to data structures</li>
+          <li>Lists/arrays and indexing</li>
+          <li>Adding and removing elements</li>
+          <li>List slicing and manipulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Dictionaries and Sets</h3>
+        </div>
+        <p class="unit-description">Learn key-value pair storage and unique element collections.</p>
+        <ul class="topics-list">
+          <li>Dictionary basics and key-value pairs</li>
+          <li>Dictionary operations and methods</li>
+          <li>Sets and set operations</li>
+          <li>When to use different data structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">String Manipulation</h3>
+        </div>
+        <p class="unit-description">Master text processing and string operations for data handling.</p>
+        <ul class="topics-list">
+          <li>String indexing and slicing</li>
+          <li>String methods and operations</li>
+          <li>String formatting and templates</li>
+          <li>Text parsing and processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Error Handling</h3>
+        </div>
+        <p class="unit-description">Learn to handle errors gracefully and debug programs effectively.</p>
+        <ul class="topics-list">
+          <li>Types of errors (syntax, runtime, logical)</li>
+          <li>Exception handling with try-catch</li>
+          <li>Debugging strategies and techniques</li>
+          <li>Testing and validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">File Operations</h3>
+        </div>
+        <p class="unit-description">Read from and write to files for data persistence and processing.</p>
+        <ul class="topics-list">
+          <li>File opening and closing</li>
+          <li>Reading text files line by line</li>
+          <li>Writing and appending to files</li>
+          <li>Working with CSV files</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Object-Oriented Programming</h3>
+        </div>
+        <p class="unit-description">Introduction to classes, objects, and object-oriented design principles.</p>
+        <ul class="topics-list">
+          <li>Classes and objects</li>
+          <li>Attributes and methods</li>
+          <li>Constructor methods</li>
+          <li>Inheritance basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Algorithms and Problem Solving</h3>
+        </div>
+        <p class="unit-description">Develop algorithmic thinking and learn common programming patterns.</p>
+        <ul class="topics-list">
+          <li>Problem-solving methodology</li>
+          <li>Algorithm design and analysis</li>
+          <li>Searching algorithms (linear, binary)</li>
+          <li>Sorting algorithms basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Libraries and APIs</h3>
+        </div>
+        <p class="unit-description">Learn to use external libraries and work with APIs for extended functionality.</p>
+        <ul class="topics-list">
+          <li>Standard library exploration</li>
+          <li>Installing and managing packages</li>
+          <li>API concepts and REST basics</li>
+          <li>JSON data handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Final Projects</h3>
+        </div>
+        <p class="unit-description">Apply your skills to complete projects and learn professional development practices.</p>
+        <ul class="topics-list">
+          <li>Project planning and design</li>
+          <li>Code organization and structure</li>
+          <li>Version control with Git</li>
+          <li>Final capstone projects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 1 -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Programming Fundamentals</h1>
+      <p>Build a foundation in computational thinking and understand what programming is all about.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Programming?</h3>
+        <p>Understand programming as problem-solving through instructions, learn about the relationship between humans and computers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computational Thinking</h3>
+        <p>Develop problem-solving skills: decomposition, pattern recognition, abstraction, and algorithmic thinking.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Programming Languages</h3>
+        <p>Overview of different programming languages, their purposes, and choosing the right tool for the job.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Set up your programming environment, learn about IDEs, text editors, and development tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 2 -->
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Variables and Data Types</h1>
+      <p>Learn to store and manipulate different types of data in your programs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Basics</h3>
+        <p>Understand variables as containers for data, naming conventions, and variable assignment.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Integer Data Type</h3>
+        <p>Work with whole numbers, understand integer operations, and learn about integer limitations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">String Basics</h3>
+        <p>Introduction to text data, string creation, and basic string operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Conversion</h3>
+        <p>Convert between different data types, handle type errors, and understand implicit vs explicit conversion.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 3 -->
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Input and Output</h1>
+      <p>Master getting input from users and displaying output in various formats.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Output</h3>
+        <p>Learn print functions, display text and variables, and understand output streams.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">User Input</h3>
+        <p>Get input from users, handle different data types, and validate user input.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Output Formatting</h3>
+        <p>Format numbers, strings, and create professional-looking output with alignment and spacing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interactive Programs</h3>
+        <p>Design user-friendly interfaces, create menus, and build interactive applications.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 4 -->
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Operators and Expressions</h1>
+      <p>Learn to perform calculations and logical operations using various operators.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arithmetic Operators</h3>
+        <p>Master +, -, *, /, %, and ** operators for mathematical calculations and operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Comparison Operators</h3>
+        <p>Compare values using ==, !=, <, >, <=, >= for decision-making in programs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Operators</h3>
+        <p>Combine conditions with and, or, not operators for complex logical expressions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Operator Precedence</h3>
+        <p>Understand order of operations, use parentheses effectively, and avoid precedence errors.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 5 -->
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Control Flow - Conditionals</h1>
+      <p>Control program execution with if statements and decision-making structures.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Boolean Logic</h3>
+        <p>Understand True/False values, boolean expressions, and logical evaluation in programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">If Statements</h3>
+        <p>Write basic if statements, understand indentation, and execute code conditionally.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">If-Else Structure</h3>
+        <p>Handle alternative execution paths with else clauses and binary decision making.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Elif Chains</h3>
+        <p>Create multiple condition checks with elif statements for complex decision trees.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 6 -->
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Control Flow - Loops</h1>
+      <p>Repeat code execution efficiently using different types of loops.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loop Fundamentals</h3>
+        <p>Understand iteration, repetition, and when to use loops for efficient programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">While Loops</h3>
+        <p>Create condition-based loops, understand loop termination, and avoid infinite loops.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">For Loops</h3>
+        <p>Use counting loops, iterate through sequences, and understand loop variables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loop Control</h3>
+        <p>Use break and continue statements to control loop execution and flow.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 7 -->
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Functions and Modules</h1>
+      <p>Organize code into reusable functions and learn about modular programming.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Function Definition</h3>
+        <p>Define functions with def keyword, understand function structure and naming conventions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parameters and Arguments</h3>
+        <p>Pass data to functions, understand positional vs keyword arguments, and parameter types.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Return Values</h3>
+        <p>Return data from functions, handle multiple return values, and understand function output.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Scope</h3>
+        <p>Understand local vs global variables, scope rules, and variable lifetime in functions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 8 -->
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Data Structures - Lists
