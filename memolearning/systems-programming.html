@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Systems Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #1ABC9C 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #2C3E50, #1ABC9C);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #2C3E50;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2C3E50;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #2C3E50, #1ABC9C);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(44, 62, 80, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚙️ MemoLearning Systems Programming</h1>
+    <p>Low-level programming, operating systems, memory management, and system internals</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Systems Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">System Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5</span>
+          <div class="stat-label">Programming Languages</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">OS Components</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">C Programming Fundamentals</h3>
+        </div>
+        <p class="unit-description">Master the foundation language for systems programming with memory management and pointers.</p>
+        <ul class="topics-list">
+          <li>C syntax and data types</li>
+          <li>Pointers and pointer arithmetic</li>
+          <li>Arrays and strings in C</li>
+          <li>Function pointers and callbacks</li>
+          <li>Structures and unions</li>
+          <li>Dynamic memory allocation</li>
+          <li>Memory management best practices</li>
+          <li>C standard library functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Memory Management</h3>
+        </div>
+        <p class="unit-description">Deep dive into how programs use memory and manage system resources efficiently.</p>
+        <ul class="topics-list">
+          <li>Stack vs heap memory</li>
+          <li>Virtual memory concepts</li>
+          <li>Memory allocation algorithms</li>
+          <li>Garbage collection principles</li>
+          <li>Memory leaks and debugging</li>
+          <li>Memory mapping and shared memory</li>
+          <li>Cache memory and optimization</li>
+          <li>Memory protection mechanisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Process Management</h3>
+        </div>
+        <p class="unit-description">Understand how operating systems create, schedule, and manage running programs.</p>
+        <ul class="topics-list">
+          <li>Process lifecycle and states</li>
+          <li>Process creation (fork, exec)</li>
+          <li>Process scheduling algorithms</li>
+          <li>Context switching</li>
+          <li>Process communication (IPC)</li>
+          <li>Signals and signal handling</li>
+          <li>Zombie and orphan processes</li>
+          <li>Process monitoring and control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Thread Programming</h3>
+        </div>
+        <p class="unit-description">Learn concurrent programming with threads, synchronization, and parallel execution.</p>
+        <ul class="topics-list">
+          <li>Thread creation and management</li>
+          <li>Thread synchronization primitives</li>
+          <li>Mutexes and semaphores</li>
+          <li>Deadlock detection and prevention</li>
+          <li>Producer-consumer problems</li>
+          <li>Thread pools and work queues</li>
+          <li>Lock-free programming</li>
+          <li>Thread-safe data structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">File Systems</h3>
+        </div>
+        <p class="unit-description">Explore how data is stored, organized, and accessed on persistent storage devices.</p>
+        <ul class="topics-list">
+          <li>File system architecture</li>
+          <li>Inodes and file metadata</li>
+          <li>Directory structures</li>
+          <li>File allocation methods</li>
+          <li>Journaling and crash recovery</li>
+          <li>File permissions and security</li>
+          <li>Virtual file systems (VFS)</li>
+          <li>Distributed file systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">I/O and System Calls</h3>
+        </div>
+        <p class="unit-description">Master the interface between user programs and the operating system kernel.</p>
+        <ul class="topics-list">
+          <li>System call interface</li>
+          <li>File I/O operations</li>
+          <li>Buffered vs unbuffered I/O</li>
+          <li>Asynchronous I/O</li>
+          <li>I/O multiplexing (select, poll, epoll)</li>
+          <li>Memory-mapped I/O</li>
+          <li>Device drivers and hardware</li>
+          <li>Error handling and errno</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Network Programming</h3>
+        </div>
+        <p class="unit-description">Build networked applications using sockets and network protocols.</p>
+        <ul class="topics-list">
+          <li>Socket programming basics</li>
+          <li>TCP and UDP protocols</li>
+          <li>Client-server architecture</li>
+          <li>Network byte order</li>
+          <li>Concurrent server design</li>
+          <li>HTTP protocol implementation</li>
+          <li>Network security basics</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Shell and Scripting</h3>
+        </div>
+        <p class="unit-description">Automate system tasks and build command-line tools with shell programming.</p>
+        <ul class="topics-list">
+          <li>Shell basics and command line</li>
+          <li>Bash scripting fundamentals</li>
+          <li>Variables and parameter expansion</li>
+          <li>Control flow and loops</li>
+          <li>Regular expressions</li>
+          <li>Text processing tools (awk, sed)</li>
+          <li>Process substitution</li>
+          <li>Advanced shell features</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">System Security</h3>
+        </div>
+        <p class="unit-description">Understand security principles and implement secure systems programming practices.</p>
+        <ul class="topics-list">
+          <li>Buffer overflow attacks</li>
+          <li>Privilege escalation</li>
+          <li>Access control mechanisms</li>
+          <li>Cryptographic primitives</li>
+          <li>Secure coding practices</li>
+          <li>Sandboxing and isolation</li>
+          <li>Security auditing tools</li>
+          <li>Vulnerability assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">System Performance</h3>
+        </div>
+        <p class="unit-description">Optimize system performance through profiling, monitoring, and tuning techniques.</p>
+        <ul class="topics-list">
+          <li>Performance profiling tools</li>
+          <li>CPU and memory optimization</li>
+          <li>I/O performance tuning</li>
+          <li>Benchmarking methodologies</li>
+          <li>Bottleneck identification</li>
+          <li>Cache optimization strategies</li>
+          <li>System monitoring tools</li>
+          <li>Performance debugging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Device Drivers</h3>
+        </div>
+        <p class="unit-description">Learn how to write kernel modules and device drivers for hardware interaction.</p>
+        <ul class="topics-list">
+          <li>Kernel module programming</li>
+          <li>Character and block devices</li>
+          <li>Interrupt handling</li>
+          <li>DMA (Direct Memory Access)</li>
+          <li>Hardware abstraction layers</li>
+          <li>Device tree and configuration</li>
+          <li>Power management</li>
+          <li>Driver debugging techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Assembly Language</h3>
+        </div>
+        <p class="unit-description">Understand low-level programming and computer architecture through assembly language.</p>
+        <ul class="topics-list">
+          <li>CPU architecture basics</li>
+          <li>Assembly syntax and instructions</li>
+          <li>Registers and memory addressing</li>
+          <li>Function calls and stack frames</li>
+          <li>Inline assembly in C</li>
+          <li>Optimization techniques</li>
+          <li>Debugging assembly code</li>
+          <li>Platform-specific considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Build Systems and Tools</h3>
+        </div>
+        <p class="unit-description">Master the tools and processes for building, testing, and deploying system software.</p>
+        <ul class="topics-list">
+          <li>Make and Makefiles</li>
+          <li>Compiler toolchains</li>
+          <li>Static and dynamic linking</li>
+          <li>Package management</li>
+          <li>Version control (Git)</li>
+          <li>Continuous integration</li>
+          <li>Debugging tools (GDB, Valgrind)</li>
+          <li>Documentation and testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Advanced Systems Topics</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge topics in systems programming and emerging technologies.</p>
+        <ul class="topics-list">
+          <li>Container technologies (Docker)</li>
+          <li>Virtualization and hypervisors</li>
+          <li>Microkernel architectures</li>
+          <li>Real-time systems</li>
+          <li>Embedded systems programming</li>
+          <li>System programming in Rust</li>
+          <li>WebAssembly for systems</li>
+          <li>Edge computing and IoT</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: C Programming Fundamentals</h1>
+      <p>Master the foundation language for systems programming with memory management and pointers.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">C Syntax and Data Types</h3>
+        <p>Learn C language fundamentals, primitive types, operators, and control structures for system programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pointers and Pointer Arithmetic</h3>
+        <p>Master pointer manipulation, address arithmetic, and memory access patterns essential for low-level programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arrays and Strings in C</h3>
+        <p>Understand C-style arrays, string handling, and the relationship between arrays and pointers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Function Pointers and Callbacks</h3>
+        <p>Implement dynamic function calls, callback mechanisms, and polymorphism in C programming.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structures and Unions</h3>
+        <p>Design complex data types, understand memory layout, and implement efficient data structures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dynamic Memory Allocation</h3>
+        <p>Master malloc, calloc, realloc, and free for runtime memory management and avoiding memory leaks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Management Best Practices</h3>
+        <p>Learn defensive programming techniques, memory debugging, and strategies for robust memory handling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">C Standard Library Functions</h3>
+        <p>Utilize essential library functions for string manipulation, I/O operations, and mathematical computations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Memory Management</h1>
+      <p>Deep dive into how programs use memory and manage system resources efficiently.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stack vs Heap Memory</h3>
+        <p>Understand different memory regions, their characteristics, and appropriate use cases for each.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Virtual Memory Concepts</h3>
+        <p>Learn how operating systems provide memory abstraction, paging, and address translation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Allocation Algorithms</h3>
+        <p>Study first-fit, best-fit, worst-fit algorithms and their impact on memory fragmentation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Garbage Collection Principles</h3>
+        <p>Understand automatic memory management techniques and their trade-offs in system design.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Leaks and Debugging</h3>
+        <p>Identify, diagnose, and fix memory leaks using tools like Valgrind and AddressSanitizer.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Mapping and Shared Memory</h3>
+        <p>Implement memory-mapped files and inter-process communication through shared memory regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cache Memory and Optimization</h3>
+        <p>Optimize code for cache performance through data locality and cache-friendly algorithms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Protection Mechanisms</h3>
+        <p>Learn about memory protection, segmentation faults, and hardware-assisted security features.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Process Management</h1>
+      <p>Understand how operating systems create, schedule, and manage running programs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Lifecycle and States</h3>
+        <p>Learn process states (running, ready, blocked) and transitions in the process lifecycle.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Creation (fork, exec)</h3>
+        <p>Master Unix process creation primitives and understand parent-child process relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Scheduling Algorithms</h3>
+        <p>Study FCFS, SJF, Round Robin, and priority scheduling algorithms for CPU time allocation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Context Switching</h3>
+        <p>Understand the overhead and mechanics of switching between processes and saving state.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Communication (IPC)</h3>
+        <p>Implement pipes, message queues, and shared memory for inter-process communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Signals and Signal Handling</h3>
+        <p>Learn asynchronous event handling through Unix signals and custom signal handlers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Zombie and Orphan Processes</h3>
+        <p>Understand process cleanup, preventing zombie processes, and handling orphaned processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Monitoring and Control</h3>
+        <p>Use tools like ps, top, and htop to monitor processes and implement process control mechanisms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Thread Programming</h1>
+      <p>Learn concurrent programming with threads, synchronization, and parallel execution.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Creation and Management</h3>
+        <p>Master pthread library for creating, joining, and managing threads in multithreaded applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Synchronization Primitives</h3>
+        <p>Learn mutexes, condition variables, and barriers for coordinating thread execution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mutexes and Semaphores</h3>
+        <p>Implement critical sections and resource counting using mutual exclusion and semaphore mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deadlock Detection and Prevention</h3>
+        <p>Understand deadlock conditions and implement strategies to prevent and detect deadlocks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Producer-Consumer Problems</h3>
+        <p>Solve classic concurrency problems using bounded buffers and synchronization primitives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Pools and Work Que
