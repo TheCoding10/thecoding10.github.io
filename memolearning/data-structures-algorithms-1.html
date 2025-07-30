@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Data Structures and Algorithms I</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      color: #FF6B6B;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #FF6B6B;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #FF6B6B;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ MemoLearning Data Structures and Algorithms I</h1>
+    <p>Arrays, linked lists, stacks, queues, trees, and fundamental algorithms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">9</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Algorithm Analysis and Big O</h3>
+        </div>
+        <p class="unit-description">Learn to analyze algorithm efficiency and understand time/space complexity.</p>
+        <ul class="topics-list">
+          <li>Time complexity analysis</li>
+          <li>Space complexity analysis</li>
+          <li>Big O, Omega, and Theta notation</li>
+          <li>Best, average, and worst case analysis</li>
+          <li>Asymptotic growth rates</li>
+          <li>Common complexity classes</li>
+          <li>Analyzing loops and recursion</li>
+          <li>Master theorem for recurrences</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Arrays and Dynamic Arrays</h3>
+        </div>
+        <p class="unit-description">Master the fundamental sequential data structure and its operations.</p>
+        <ul class="topics-list">
+          <li>Array fundamentals and indexing</li>
+          <li>Static vs dynamic arrays</li>
+          <li>Array operations (insert, delete, search)</li>
+          <li>Multi-dimensional arrays</li>
+          <li>Dynamic array implementation</li>
+          <li>Resizing strategies</li>
+          <li>Memory layout and cache efficiency</li>
+          <li>Array-based algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Linked Lists</h3>
+        </div>
+        <p class="unit-description">Understand pointer-based data structures and dynamic memory allocation.</p>
+        <ul class="topics-list">
+          <li>Singly linked lists</li>
+          <li>Doubly linked lists</li>
+          <li>Circular linked lists</li>
+          <li>Node structure and pointers</li>
+          <li>Insertion and deletion operations</li>
+          <li>Traversal algorithms</li>
+          <li>Memory management</li>
+          <li>Linked list vs array comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Stacks</h3>
+        </div>
+        <p class="unit-description">Learn the Last-In-First-Out (LIFO) data structure and its applications.</p>
+        <ul class="topics-list">
+          <li>Stack ADT and operations</li>
+          <li>Array-based stack implementation</li>
+          <li>Linked list-based stack implementation</li>
+          <li>Stack applications</li>
+          <li>Expression evaluation</li>
+          <li>Parentheses matching</li>
+          <li>Function call stack</li>
+          <li>Backtracking algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Queues</h3>
+        </div>
+        <p class="unit-description">Master the First-In-First-Out (FIFO) data structure and its variants.</p>
+        <ul class="topics-list">
+          <li>Queue ADT and operations</li>
+          <li>Array-based queue implementation</li>
+          <li>Linked list-based queue implementation</li>
+          <li>Circular queues</li>
+          <li>Priority queues</li>
+          <li>Deques (double-ended queues)</li>
+          <li>Queue applications</li>
+          <li>Breadth-first search foundation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Recursion</h3>
+        </div>
+        <p class="unit-description">Understand recursive problem-solving and algorithm design.</p>
+        <ul class="topics-list">
+          <li>Recursive thinking</li>
+          <li>Base cases and recursive cases</li>
+          <li>Call stack visualization</li>
+          <li>Tail recursion</li>
+          <li>Recursion vs iteration</li>
+          <li>Recursive data structures</li>
+          <li>Divide and conquer paradigm</li>
+          <li>Recursion tree analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Sorting Algorithms - Basic</h3>
+        </div>
+        <p class="unit-description">Learn fundamental sorting algorithms and their analysis.</p>
+        <ul class="topics-list">
+          <li>Bubble sort</li>
+          <li>Selection sort</li>
+          <li>Insertion sort</li>
+          <li>Sorting algorithm analysis</li>
+          <li>Stable vs unstable sorting</li>
+          <li>In-place vs out-of-place sorting</li>
+          <li>Adaptive sorting algorithms</li>
+          <li>Lower bounds for comparison sorting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Sorting Algorithms - Advanced</h3>
+        </div>
+        <p class="unit-description">Master efficient divide-and-conquer and specialized sorting algorithms.</p>
+        <ul class="topics-list">
+          <li>Merge sort</li>
+          <li>Quick sort</li>
+          <li>Heap sort</li>
+          <li>Counting sort</li>
+          <li>Radix sort</li>
+          <li>Bucket sort</li>
+          <li>Hybrid sorting algorithms</li>
+          <li>Sorting algorithm selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Searching Algorithms</h3>
+        </div>
+        <p class="unit-description">Explore various searching techniques and their optimizations.</p>
+        <ul class="topics-list">
+          <li>Linear search</li>
+          <li>Binary search</li>
+          <li>Interpolation search</li>
+          <li>Exponential search</li>
+          <li>Search in rotated arrays</li>
+          <li>Two-pointer technique</li>
+          <li>Search optimization strategies</li>
+          <li>Searching in specific data structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Trees - Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand hierarchical data structures and tree terminology.</p>
+        <ul class="topics-list">
+          <li>Tree terminology and properties</li>
+          <li>Binary trees</li>
+          <li>Tree traversals (preorder, inorder, postorder)</li>
+          <li>Level-order traversal</li>
+          <li>Tree implementation strategies</li>
+          <li>Tree height and depth</li>
+          <li>Complete and full binary trees</li>
+          <li>Tree applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Binary Search Trees</h3>
+        </div>
+        <p class="unit-description">Learn ordered binary trees for efficient searching and sorting.</p>
+        <ul class="topics-list">
+          <li>BST property and invariants</li>
+          <li>BST insertion</li>
+          <li>BST deletion</li>
+          <li>BST search operations</li>
+          <li>In-order successor and predecessor</li>
+          <li>BST validation</li>
+          <li>BST performance analysis</li>
+          <li>Degenerate cases and balancing need</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Heaps and Priority Queues</h3>
+        </div>
+        <p class="unit-description">Master heap data structure and priority queue implementations.</p>
+        <ul class="topics-list">
+          <li>Heap property (min-heap, max-heap)</li>
+          <li>Heap representation in arrays</li>
+          <li>Heap insertion (heapify up)</li>
+          <li>Heap deletion (heapify down)</li>
+          <li>Building a heap from array</li>
+          <li>Priority queue ADT</li>
+          <li>Heap sort algorithm</li>
+          <li>Applications of heaps</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Hash Tables</h3>
+        </div>
+        <p class="unit-description">Understand hash-based data structures for constant-time operations.</p>
+        <ul class="topics-list">
+          <li>Hash function design</li>
+          <li>Collision resolution strategies</li>
+          <li>Chaining (separate chaining)</li>
+          <li>Open addressing (linear, quadratic, double hashing)</li>
+          <li>Load factor and rehashing</li>
+          <li>Hash table performance analysis</li>
+          <li>Universal hashing</li>
+          <li>Applications and use cases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Graph Basics and Representations</h3>
+        </div>
+        <p class="unit-description">Introduction to graph theory and graph data structure representations.</p>
+        <ul class="topics-list">
+          <li>Graph terminology</li>
+          <li>Directed vs undirected graphs</li>
+          <li>Weighted vs unweighted graphs</li>
+          <li>Adjacency matrix representation</li>
+          <li>Adjacency list representation</li>
+          <li>Edge list representation</li>
+          <li>Space and time trade-offs</li>
+          <li>Graph ADT operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Graph Traversal Algorithms</h3>
+        </div>
+        <p class="unit-description">Learn fundamental graph traversal techniques and their applications.</p>
+        <ul class="topics-list">
+          <li>Depth-First Search (DFS)</li>
+          <li>Breadth-First Search (BFS)</li>
+          <li>DFS applications (cycle detection, topological sort)</li>
+          <li>BFS applications (shortest path, level-order)</li>
+          <li>Connected components</li>
+          <li>Bipartite graph detection</li>
+          <li>Iterative vs recursive implementations</li>
+          <li>Traversal complexity analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Algorithm Analysis and Big O</h1>
+      <p>Learn to analyze algorithm efficiency and understand time/space complexity.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Complexity Analysis</h3>
+        <p>Measure how algorithm runtime grows with input size, identify bottlenecks in code.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Space Complexity Analysis</h3>
+        <p>Analyze memory usage patterns, understand auxiliary space vs input space.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Big O Notation</h3>
+        <p>Express upper bounds on algorithm performance, compare algorithms objectively.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Best, Average, Worst Case</h3>
+        <p>Understand different scenarios for algorithm performance and their implications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Asymptotic Growth</h3>
+        <p>Focus on dominant terms in complexity analysis, ignore constants and lower-order terms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Complexity Classes</h3>
+        <p>Learn O(1), O(log n), O(n), O(n log n), O(n²), O(2ⁿ) and their characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loop Analysis</h3>
+        <p>Analyze nested loops, understand how loop structure affects time complexity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Master Theorem</h3>
+        <p>Solve recurrence relations for divide-and-conquer algorithms systematically.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Arrays and Dynamic Arrays</h1>
+      <p>Master the fundamental sequential data structure and its operations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Array Fundamentals</h3>
+        <p>Understand contiguous memory layout, zero-based indexing, and constant-time access.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Static vs Dynamic Arrays</h3>
+        <p>Compare fixed-size arrays with resizable arrays, understand trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Array Operations</h3>
+        <p>Implement insertion, deletion, and search operations with proper complexity analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multi-dimensional Arrays</h3>
+        <p>Work with 2D arrays, matrices, and understand row-major vs column-major layout.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dynamic Array Implementation</h3>
+        <p>Build resizable arrays from scratch, handle memory allocation and deallocation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Resizing Strategies</h3>
+        <p>Learn doubling strategy, amortized analysis, and when to shrink arrays.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory and Cache</h3>
+        <p>Understand spatial locality, cache-friendly algorithms, and memory access patterns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Array Algorithms</h3>
+        <p>Master two-pointer technique, sliding window, and array manipulation algorithms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Linked Lists</h1>
+      <p>Understand pointer-based data structures and dynamic memory allocation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Singly Linked Lists</h3>
+        <p>Build and manipulate one-way linked structures with head pointers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Doubly Linked Lists</h3>
+        <p>Implement bidirectional links for efficient backward traversal and deletion.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Circular Linked Lists</h3>
+        <p>Create circular structures where the last node points back to the first.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Node Structure</h3>
+        <p>Design node classes with data and pointer fields, understand reference semantics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Insertion Operations</h3>
+        <p>Insert at beginning, end, and arbitrary positions while maintaining list integrity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deletion Operations</h3>
+        <p>Remove nodes safely, handle edge cases, and prevent memory leaks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traversal Algorithms</h3>
+        <p>Iterate through lists iteratively and recursively, detect cycles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lists vs Arrays</h3>
+        <p>Compare performance characteristics, choose appropriate data structure.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Stacks</h1>
+      <p>Learn the Last-In-First-Out (LIFO) data structure and its applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stack ADT</h3>
+        <p>Understand push, pop, peek, isEmpty operations and LIFO principle.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Array-based Implementation</h3>
+        <p>Implement stacks using arrays with top pointer, handle overflow conditions.</p>
+      </div>
+      <div class
