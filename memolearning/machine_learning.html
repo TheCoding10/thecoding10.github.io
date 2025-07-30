@@ -54,10 +54,15 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .course-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      text-decoration: none;
+      color: inherit;
     }
     .course-card h3 {
       font-size: 18px;
@@ -80,24 +85,78 @@
 
   <div class="container">
     <div class="course-grid">
-      <div class="course-card"><h3>Machine Learning Foundations</h3><p>Learn supervised vs unsupervised learning, models, and theory.</p></div>
-      <div class="course-card"><h3>Linear Regression</h3><p>Predict continuous variables and interpret regression outputs.</p></div>
-      <div class="course-card"><h3>Logistic Regression</h3><p>Model binary outcomes and learn about classification probabilities.</p></div>
-      <div class="course-card"><h3>Decision Trees & Random Forests</h3><p>Understand decision boundaries, overfitting, and ensemble methods.</p></div>
-      <div class="course-card"><h3>Support Vector Machines (SVM)</h3><p>Learn about hyperplanes, margins, and kernel tricks.</p></div>
-      <div class="course-card"><h3>K-Nearest Neighbors (KNN)</h3><p>Simple distance-based classification and regression technique.</p></div>
-      <div class="course-card"><h3>Naive Bayes</h3><p>Probability-based classification for text and categorical data.</p></div>
-      <div class="course-card"><h3>Unsupervised Learning</h3><p>Clustering, dimensionality reduction, and anomaly detection.</p></div>
-      <div class="course-card"><h3>Principal Component Analysis (PCA)</h3><p>Reduce dimensionality while preserving variance.</p></div>
-      <div class="course-card"><h3>K-Means Clustering</h3><p>Group data into clusters using distance metrics.</p></div>
-      <div class="course-card"><h3>Model Evaluation & Metrics</h3><p>Precision, recall, F1-score, confusion matrices, and AUC.</p></div>
-      <div class="course-card"><h3>Model Selection & Tuning</h3><p>Cross-validation, hyperparameter tuning, and pipelines.</p></div>
-      <div class="course-card"><h3>Neural Networks</h3><p>Build and train artificial neural networks from scratch.</p></div>
-      <div class="course-card"><h3>Deep Learning with TensorFlow</h3><p>Train deep models using TensorFlow or Keras APIs.</p></div>
-      <div class="course-card"><h3>Convolutional Neural Networks (CNNs)</h3><p>Build models for image recognition and spatial data.</p></div>
-      <div class="course-card"><h3>Recurrent Neural Networks (RNNs)</h3><p>Sequence modeling and time-series prediction.</p></div>
-      <div class="course-card"><h3>Natural Language Processing (NLP)</h3><p>Tokenization, embeddings, transformers, and BERT.</p></div>
-      <div class="course-card"><h3>Machine Learning Capstone</h3><p>Real-world end-to-end ML project with data prep, modeling, and deployment.</p></div>
+      <a href="machine-learning-foundations.html" class="course-card">
+        <h3>Machine Learning Foundations</h3>
+        <p>Learn supervised vs unsupervised learning, models, and theory.</p>
+      </a>
+      <a href="linear-regression.html" class="course-card">
+        <h3>Linear Regression</h3>
+        <p>Predict continuous variables and interpret regression outputs.</p>
+      </a>
+      <a href="logistic-regression.html" class="course-card">
+        <h3>Logistic Regression</h3>
+        <p>Model binary outcomes and learn about classification probabilities.</p>
+      </a>
+      <a href="decision-trees-random-forests.html" class="course-card">
+        <h3>Decision Trees & Random Forests</h3>
+        <p>Understand decision boundaries, overfitting, and ensemble methods.</p>
+      </a>
+      <a href="support-vector-machines.html" class="course-card">
+        <h3>Support Vector Machines (SVM)</h3>
+        <p>Learn about hyperplanes, margins, and kernel tricks.</p>
+      </a>
+      <a href="k-nearest-neighbors.html" class="course-card">
+        <h3>K-Nearest Neighbors (KNN)</h3>
+        <p>Simple distance-based classification and regression technique.</p>
+      </a>
+      <a href="naive-bayes.html" class="course-card">
+        <h3>Naive Bayes</h3>
+        <p>Probability-based classification for text and categorical data.</p>
+      </a>
+      <a href="unsupervised-learning.html" class="course-card">
+        <h3>Unsupervised Learning</h3>
+        <p>Clustering, dimensionality reduction, and anomaly detection.</p>
+      </a>
+      <a href="principal-component-analysis.html" class="course-card">
+        <h3>Principal Component Analysis (PCA)</h3>
+        <p>Reduce dimensionality while preserving variance.</p>
+      </a>
+      <a href="k-means-clustering.html" class="course-card">
+        <h3>K-Means Clustering</h3>
+        <p>Group data into clusters using distance metrics.</p>
+      </a>
+      <a href="model-evaluation-metrics.html" class="course-card">
+        <h3>Model Evaluation & Metrics</h3>
+        <p>Precision, recall, F1-score, confusion matrices, and AUC.</p>
+      </a>
+      <a href="model-selection-tuning.html" class="course-card">
+        <h3>Model Selection & Tuning</h3>
+        <p>Cross-validation, hyperparameter tuning, and pipelines.</p>
+      </a>
+      <a href="neural-networks.html" class="course-card">
+        <h3>Neural Networks</h3>
+        <p>Build and train artificial neural networks from scratch.</p>
+      </a>
+      <a href="deep-learning-tensorflow.html" class="course-card">
+        <h3>Deep Learning with TensorFlow</h3>
+        <p>Train deep models using TensorFlow or Keras APIs.</p>
+      </a>
+      <a href="convolutional-neural-networks.html" class="course-card">
+        <h3>Convolutional Neural Networks (CNNs)</h3>
+        <p>Build models for image recognition and spatial data.</p>
+      </a>
+      <a href="recurrent-neural-networks.html" class="course-card">
+        <h3>Recurrent Neural Networks (RNNs)</h3>
+        <p>Sequence modeling and time-series prediction.</p>
+      </a>
+      <a href="natural-language-processing-ml.html" class="course-card">
+        <h3>Natural Language Processing (NLP)</h3>
+        <p>Tokenization, embeddings, transformers, and BERT.</p>
+      </a>
+      <a href="machine-learning-capstone.html" class="course-card">
+        <h3>Machine Learning Capstone</h3>
+        <p>Real-world end-to-end ML project with data prep, modeling, and deployment.</p>
+      </a>
     </div>
   </div>
 </body>
