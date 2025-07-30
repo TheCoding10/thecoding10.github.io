@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Software Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #74B9FF 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔧';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #6C5CE7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6C5CE7;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔧 MemoLearning Software Engineering</h1>
+    <p>Software development lifecycle, design patterns, architecture, and professional practices</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Software Engineering Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~220</span>
+          <div class="stat-label">Engineering Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Methodologies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Tools & Frameworks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Software Development Life Cycle</h3>
+        </div>
+        <p class="unit-description">Understand the phases and methodologies for managing software projects from conception to deployment.</p>
+        <ul class="topics-list">
+          <li>SDLC phases and models</li>
+          <li>Waterfall methodology</li>
+          <li>Agile and Scrum frameworks</li>
+          <li>DevOps integration</li>
+          <li>Requirements gathering</li>
+          <li>Project planning and estimation</li>
+          <li>Risk management</li>
+          <li>Quality assurance processes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Requirements Engineering</h3>
+        </div>
+        <p class="unit-description">Learn to gather, analyze, and document software requirements effectively.</p>
+        <ul class="topics-list">
+          <li>Stakeholder identification</li>
+          <li>Functional requirements</li>
+          <li>Non-functional requirements</li>
+          <li>Use case modeling</li>
+          <li>User stories and acceptance criteria</li>
+          <li>Requirements traceability</li>
+          <li>Change management</li>
+          <li>Requirements validation techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Software Design Principles</h3>
+        </div>
+        <p class="unit-description">Master fundamental design principles for creating maintainable and scalable software systems.</p>
+        <ul class="topics-list">
+          <li>SOLID principles</li>
+          <li>DRY (Don't Repeat Yourself)</li>
+          <li>KISS (Keep It Simple, Stupid)</li>
+          <li>Separation of concerns</li>
+          <li>Loose coupling and high cohesion</li>
+          <li>Abstraction and encapsulation</li>
+          <li>Design by contract</li>
+          <li>Principle of least privilege</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Design Patterns</h3>
+        </div>
+        <p class="unit-description">Implement proven solutions to common programming problems using established design patterns.</p>
+        <ul class="topics-list">
+          <li>Creational patterns (Singleton, Factory)</li>
+          <li>Structural patterns (Adapter, Decorator)</li>
+          <li>Behavioral patterns (Observer, Strategy)</li>
+          <li>MVC and MVP patterns</li>
+          <li>Repository pattern</li>
+          <li>Dependency injection</li>
+          <li>Command pattern</li>
+          <li>Anti-patterns to avoid</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Software Architecture</h3>
+        </div>
+        <p class="unit-description">Design high-level system structures and architectural patterns for complex applications.</p>
+        <ul class="topics-list">
+          <li>Architectural styles and patterns</li>
+          <li>Layered architecture</li>
+          <li>Microservices architecture</li>
+          <li>Event-driven architecture</li>
+          <li>Service-oriented architecture (SOA)</li>
+          <li>Monolithic vs distributed systems</li>
+          <li>Scalability and performance</li>
+          <li>Architecture documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Software Testing</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive testing strategies to ensure software quality and reliability.</p>
+        <ul class="topics-list">
+          <li>Testing fundamentals and types</li>
+          <li>Unit testing and TDD</li>
+          <li>Integration testing</li>
+          <li>System and acceptance testing</li>
+          <li>Performance testing</li>
+          <li>Security testing</li>
+          <li>Test automation frameworks</li>
+          <li>Code coverage and metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Version Control and Collaboration</h3>
+        </div>
+        <p class="unit-description">Master tools and practices for managing code changes and team collaboration.</p>
+        <ul class="topics-list">
+          <li>Git fundamentals and workflows</li>
+          <li>Branching strategies</li>
+          <li>Merge conflicts resolution</li>
+          <li>Code review processes</li>
+          <li>Continuous integration</li>
+          <li>Release management</li>
+          <li>Documentation practices</li>
+          <li>Team collaboration tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Project Management</h3>
+        </div>
+        <p class="unit-description">Apply project management methodologies and tools for successful software delivery.</p>
+        <ul class="topics-list">
+          <li>Agile methodologies (Scrum, Kanban)</li>
+          <li>Sprint planning and execution</li>
+          <li>Estimation techniques</li>
+          <li>Risk assessment and mitigation</li>
+          <li>Team dynamics and leadership</li>
+          <li>Stakeholder communication</li>
+          <li>Progress tracking and reporting</li>
+          <li>Change management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Software Quality Assurance</h3>
+        </div>
+        <p class="unit-description">Establish processes and standards to maintain high software quality throughout development.</p>
+        <ul class="topics-list">
+          <li>Quality metrics and KPIs</li>
+          <li>Code review standards</li>
+          <li>Static analysis tools</li>
+          <li>Quality gates and checkpoints</li>
+          <li>Defect tracking and management</li>
+          <li>Process improvement</li>
+          <li>Standards compliance</li>
+          <li>Quality assurance automation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Database Design and Management</h3>
+        </div>
+        <p class="unit-description">Design efficient database schemas and implement data management strategies.</p>
+        <ul class="topics-list">
+          <li>Database design principles</li>
+          <li>Normalization and denormalization</li>
+          <li>Entity-relationship modeling</li>
+          <li>SQL optimization</li>
+          <li>Database transactions</li>
+          <li>Backup and recovery strategies</li>
+          <li>Data migration techniques</li>
+          <li>NoSQL database considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Security Engineering</h3>
+        </div>
+        <p class="unit-description">Implement security best practices and protect applications from common vulnerabilities.</p>
+        <ul class="topics-list">
+          <li>Secure coding practices</li>
+          <li>Common vulnerabilities (OWASP Top 10)</li>
+          <li>Authentication and authorization</li>
+          <li>Data encryption and protection</li>
+          <li>Security testing methodologies</li>
+          <li>Privacy by design</li>
+          <li>Compliance and regulations</li>
+          <li>Incident response planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Performance Engineering</h3>
+        </div>
+        <p class="unit-description">Optimize software performance through profiling, monitoring, and systematic improvements.</p>
+        <ul class="topics-list">
+          <li>Performance requirements definition</li>
+          <li>Profiling and benchmarking</li>
+          <li>Load testing strategies</li>
+          <li>Performance optimization techniques</li>
+          <li>Scalability planning</li>
+          <li>Monitoring and alerting</li>
+          <li>Capacity planning</li>
+          <li>Performance regression testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">DevOps and Deployment</h3>
+        </div>
+        <p class="unit-description">Implement continuous integration and deployment practices for reliable software delivery.</p>
+        <ul class="topics-list">
+          <li>CI/CD pipeline design</li>
+          <li>Infrastructure as Code</li>
+          <li>Containerization (Docker, Kubernetes)</li>
+          <li>Configuration management</li>
+          <li>Automated testing integration</li>
+          <li>Deployment strategies</li>
+          <li>Monitoring and logging</li>
+          <li>Rollback and recovery procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Software Maintenance and Evolution</h3>
+        </div>
+        <p class="unit-description">Manage software changes, updates, and long-term system evolution effectively.</p>
+        <ul class="topics-list">
+          <li>Types of software maintenance</li>
+          <li>Legacy system modernization</li>
+          <li>Refactoring strategies</li>
+          <li>Technical debt management</li>
+          <li>Change impact analysis</li>
+          <li>Version management</li>
+          <li>Documentation maintenance</li>
+          <li>End-of-life planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Professional Development</h3>
+        </div>
+        <p class="unit-description">Develop professional skills and ethical practices for a successful software engineering career.</p>
+        <ul class="topics-list">
+          <li>Software engineering ethics</li>
+          <li>Professional communication</li>
+          <li>Technical leadership skills</li>
+          <li>Mentoring and knowledge sharing</li>
+          <li>Continuous learning strategies</li>
+          <li>Industry trends and technologies</li>
+          <li>Career development planning</li>
+          <li>Open source contribution</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Software Development Life Cycle</h1>
+      <p>Understand the phases and methodologies for managing software projects from conception to deployment.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SDLC Phases and Models</h3>
+        <p>Learn the fundamental phases of software development and compare different lifecycle models for project success.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Waterfall Methodology</h3>
+        <p>Understand the sequential approach to software development with distinct phases and documentation requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Agile and Scrum Frameworks</h3>
+        <p>Master iterative development approaches with sprints, user stories, and adaptive planning techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DevOps Integration</h3>
+        <p>Integrate development and operations practices for continuous delivery and improved collaboration.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Requirements Gathering</h3>
+        <p>Systematically collect and analyze stakeholder needs to define clear project objectives and scope.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Project Planning and Estimation</h3>
+        <p>Develop realistic timelines, resource allocation, and effort estimation using proven methodologies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk Management</h3>
+        <p>Identify, assess, and mitigate potential risks throughout the software development process.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quality Assurance Processes</h3>
+        <p>Implement systematic approaches to ensure software quality at every stage of development.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Requirements Engineering</h1>
+      <p>Learn to gather, analyze, and document software requirements effectively.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stakeholder Identification</h3>
+        <p>Identify all parties affected by the software system and understand their needs and constraints.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functional Requirements</h3>
+        <p>Define what the system should do, including specific behaviors, functions, and capabilities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Non-Functional Requirements</h3>
+        <p>Specify quality attributes like performance, security, usability, and scalability constraints.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Use Case Modeling</h3>
+        <p>Create visual representations of system interactions and user scenarios for clear communication.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">User Stories and Acceptance Criteria</h3>
+        <p>Write concise, user-focused requirements with clear definitions of completion and success.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Requirements Traceability</h3>
+        <p>Maintain links between requirements, design elements, and test cases for comprehensive coverage.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Change Management</h3>
+        <p>Handle evolving requirements through structured processes for evaluation and implementation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Requirements Validation Techniques</h3>
+        <p>Verify requirements accuracy through reviews, prototyping, and stakeholder feedback sessions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Software Design Principles</h1>
+      <p>Master fundamental design principles for creating maintainable and scalable software systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SOLID Principles</h3>
+        <p>Apply Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion principles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DRY (Don't Repeat Yourself)</h3>
+        <p>Eliminate code duplication through abstraction, functions, and reusable components for maintainability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">KISS (Keep It Simple, Stupid)</h3>
+        <p>Favor simple solutions over complex ones to improve readability, testing, and long-term maintenance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separation of Concerns</h3>
+        <p>Organize code into distinct sections that handle specific aspects of functionality independently.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loose Coupling and High Cohesion</h3>
+        <p>Design modules with minimal dependencies and strong internal relationships for flexibility.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Abstraction and Encapsulation</h3>
+        <p>Hide implementation details and expose only necessary interfaces for cleaner system architecture.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Design by Contract</h3>
+        <p>Specify precise interface contracts with preconditions, postconditions, and invariants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Principle of Least Privilege</h3>
+        <p>Grant minimal necessary access rights and permissions to enhance system security and stability.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Design Patterns</h1>
+      <p>Implement proven solutions to common programming problems using established design patterns.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Creational Patterns</h3>
+        <p>Master Singleton, Factory, Builder, and Prototype patterns for object creation and instantiation control.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structural Patterns</h3>
+        <p>Apply Adapter, Decorator, Facade, and Composite patterns for organizing classes and objects effectively.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Behavioral Patterns</h3>
+        <p>Implement Observer, Strategy, Command, and State patterns
