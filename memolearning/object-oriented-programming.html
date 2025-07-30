@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Object-Oriented Programming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔷';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔷 MemoLearning Object-Oriented Programming</h1>
+    <p>Classes, objects, inheritance, polymorphism, and design patterns</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Total Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~160</span>
+          <div class="stat-label">Skills to Master</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to OOP Concepts</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental principles and advantages of object-oriented programming.</p>
+        <ul class="topics-list">
+          <li>What is Object-Oriented Programming?</li>
+          <li>Procedural vs Object-Oriented paradigms</li>
+          <li>Core OOP principles overview</li>
+          <li>Benefits of OOP</li>
+          <li>Real-world modeling with objects</li>
+          <li>OOP terminology</li>
+          <li>Popular OOP languages</li>
+          <li>When to use OOP</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Classes and Objects</h3>
+        </div>
+        <p class="unit-description">Learn to define classes as blueprints and create objects as instances.</p>
+        <ul class="topics-list">
+          <li>Class definition and syntax</li>
+          <li>Object instantiation</li>
+          <li>Attributes and properties</li>
+          <li>Methods and behaviors</li>
+          <li>Instance vs class variables</li>
+          <li>Object identity and equality</li>
+          <li>Object lifecycle</li>
+          <li>Memory management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Constructors and Destructors</h3>
+        </div>
+        <p class="unit-description">Master object initialization and cleanup through special methods.</p>
+        <ul class="topics-list">
+          <li>Constructor fundamentals</li>
+          <li>Default constructors</li>
+          <li>Parameterized constructors</li>
+          <li>Constructor overloading</li>
+          <li>Copy constructors</li>
+          <li>Destructor basics</li>
+          <li>Resource management</li>
+          <li>Constructor chaining</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Encapsulation</h3>
+        </div>
+        <p class="unit-description">Implement data hiding and controlled access to object internals.</p>
+        <ul class="topics-list">
+          <li>Data hiding principles</li>
+          <li>Access modifiers (private, public, protected)</li>
+          <li>Getter and setter methods</li>
+          <li>Property decorators</li>
+          <li>Information hiding</li>
+          <li>Interface design</li>
+          <li>Encapsulation benefits</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Inheritance</h3>
+        </div>
+        <p class="unit-description">Understand class hierarchies and code reuse through inheritance.</p>
+        <ul class="topics-list">
+          <li>Inheritance fundamentals</li>
+          <li>Parent and child classes</li>
+          <li>Single inheritance</li>
+          <li>Multiple inheritance</li>
+          <li>Method inheritance</li>
+          <li>Attribute inheritance</li>
+          <li>Super keyword usage</li>
+          <li>Inheritance vs composition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Method Overriding</h3>
+        </div>
+        <p class="unit-description">Customize inherited behavior through method overriding.</p>
+        <ul class="topics-list">
+          <li>Method overriding concept</li>
+          <li>Override syntax and rules</li>
+          <li>Runtime method resolution</li>
+          <li>Super method calls</li>
+          <li>Overriding vs overloading</li>
+          <li>Abstract method implementation</li>
+          <li>Method signatures</li>
+          <li>Covariant return types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Polymorphism</h3>
+        </div>
+        <p class="unit-description">Achieve dynamic behavior through polymorphic method calls.</p>
+        <ul class="topics-list">
+          <li>Polymorphism concepts</li>
+          <li>Runtime polymorphism</li>
+          <li>Compile-time polymorphism</li>
+          <li>Method dispatch</li>
+          <li>Duck typing</li>
+          <li>Interface-based polymorphism</li>
+          <li>Polymorphic collections</li>
+          <li>Benefits and use cases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Abstract Classes and Interfaces</h3>
+        </div>
+        <p class="unit-description">Define contracts and enforce implementation through abstraction.</p>
+        <ul class="topics-list">
+          <li>Abstract class fundamentals</li>
+          <li>Abstract methods</li>
+          <li>Interface definition</li>
+          <li>Interface implementation</li>
+          <li>Multiple interface inheritance</li>
+          <li>Abstract vs concrete classes</li>
+          <li>Contract programming</li>
+          <li>Design by contract</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Composition and Aggregation</h3>
+        </div>
+        <p class="unit-description">Build complex objects through composition and understand object relationships.</p>
+        <ul class="topics-list">
+          <li>Composition fundamentals</li>
+          <li>Aggregation concepts</li>
+          <li>Has-a relationships</li>
+          <li>Object composition patterns</li>
+          <li>Composition vs inheritance</li>
+          <li>Dependency injection</li>
+          <li>Favor composition principle</li>
+          <li>UML relationships</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Method Overloading</h3>
+        </div>
+        <p class="unit-description">Provide multiple method signatures for flexible method calls.</p>
+        <ul class="topics-list">
+          <li>Method overloading basics</li>
+          <li>Parameter variations</li>
+          <li>Signature rules</li>
+          <li>Type resolution</li>
+          <li>Default parameters</li>
+          <li>Variable arguments</li>
+          <li>Operator overloading</li>
+          <li>Overloading best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Static Members and Class Methods</h3>
+        </div>
+        <p class="unit-description">Understand class-level members and methods shared across instances.</p>
+        <ul class="topics-list">
+          <li>Static variables</li>
+          <li>Static methods</li>
+          <li>Class vs instance members</li>
+          <li>Static initialization</li>
+          <li>Memory allocation</li>
+          <li>Utility classes</li>
+          <li>Singleton pattern</li>
+          <li>Static vs non-static access</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Exception Handling in OOP</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully in object-oriented programs.</p>
+        <ul class="topics-list">
+          <li>Exception class hierarchy</li>
+          <li>Try-catch-finally blocks</li>
+          <li>Custom exceptions</li>
+          <li>Exception propagation</li>
+          <li>Resource management</li>
+          <li>RAII principle</li>
+          <li>Exception safety</li>
+          <li>Error handling strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Design Patterns</h3>
+        </div>
+        <p class="unit-description">Apply proven solutions to common object-oriented design problems.</p>
+        <ul class="topics-list">
+          <li>Design pattern concepts</li>
+          <li>Creational patterns (Singleton, Factory)</li>
+          <li>Structural patterns (Adapter, Decorator)</li>
+          <li>Behavioral patterns (Observer, Strategy)</li>
+          <li>Pattern selection criteria</li>
+          <li>Anti-patterns</li>
+          <li>Pattern implementation</li>
+          <li>Gang of Four patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">OOP Best Practices and Design Principles</h3>
+        </div>
+        <p class="unit-description">Master advanced OOP concepts and clean code principles.</p>
+        <ul class="topics-list">
+          <li>SOLID principles</li>
+          <li>DRY (Don't Repeat Yourself)</li>
+          <li>KISS (Keep It Simple, Stupid)</li>
+          <li>Law of Demeter</li>
+          <li>Code organization</li>
+          <li>Refactoring techniques</li>
+          <li>Testing strategies</li>
+          <li>Documentation practices</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to OOP Concepts</h1>
+      <p>Understand the fundamental principles and advantages of object-oriented programming.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Object-Oriented Programming?</h3>
+        <p>Programming paradigm based on objects that contain data and code, modeling real-world entities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Procedural vs OOP</h3>
+        <p>Compare function-based programming with object-based programming approaches and their trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Core OOP Principles</h3>
+        <p>Overview of encapsulation, inheritance, polymorphism, and abstraction as foundational concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Benefits of OOP</h3>
+        <p>Code reusability, modularity, maintainability, and scalability advantages of object-oriented design.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-world Modeling</h3>
+        <p>Map real-world entities to software objects, understand abstraction and representation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">OOP Terminology</h3>
+        <p>Learn essential vocabulary: objects, classes, methods, attributes, instances, and more.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Popular OOP Languages</h3>
+        <p>Survey of Java, C++, Python, C#, and other object-oriented programming languages.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">When to Use OOP</h3>
+        <p>Identify scenarios where object-oriented programming is most beneficial and appropriate.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Classes and Objects</h1>
+      <p>Learn to define classes as blueprints and create objects as instances.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Class Definition</h3>
+        <p>Write class declarations with proper syntax, understand class as a template for objects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Object Instantiation</h3>
+        <p>Create object instances from classes, allocate memory, and initialize object state.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Attributes and Properties</h3>
+        <p>Define data members that store object state, understand instance and class attributes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Methods and Behaviors</h3>
+        <p>Implement functions within classes that define object behavior and operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Instance vs Class Variables</h3>
+        <p>Distinguish between per-object data and shared class-level data storage.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Object Identity</h3>
+        <p>Understand object references, identity comparison, and equality testing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Object Lifecycle</h3>
+        <p>Track objects from creation through usage to destruction and garbage collection.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Management</h3>
+        <p>Understand heap allocation, reference counting, and automatic memory management.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Constructors and Destructors</h1>
+      <p>Master object initialization and cleanup through special methods.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constructor Fundamentals</h3>
+        <p>Special methods called during object creation to initialize object state properly.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Default Constructors</h3>
+        <p>No-parameter constructors that provide default initialization for objects.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parameterized Constructors</h3>
+        <p>Constructors that accept arguments to customize object initialization during creation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constructor Overloading</h3>
+        <p>Multiple constructors with different parameter signatures for flexible object creation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Copy Constructors</h3>
+        <p>Create new objects as copies of existing objects, handle deep vs shallow copying.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Destructor Basics</h3>
+        <p>Cleanup methods called when objects are destroyed to release resources.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Resource Management</h3>
+        <p>Properly manage memory, file handles, and other resources through constructor/destructor pairs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constructor Chaining</h3>
+        <p>Call one constructor from another to avoid code duplication and ensure consistent initialization.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Encapsulation</h1>
+      <p>Implement data hiding and controlled access to object internals.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Hiding Principles</h3>
+        <p>Hide internal implementation details while exposing only necessary public interfaces.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Access Modifiers</h3>
+        <p>Control visibility with private, public, and protected access levels for class members.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Getter and Setter Methods</h3>
+        <p>Provide controlled access to private data through accessor and mutator methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Property Decorators</h3>
+        <p>Use language features like @property to create Pythonic getter/setter implementations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Information Hiding</h3>
+        <p>Separate what a class does from how it does it, enable implementation changes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interface Design</h3>
+        <p>Create clean, minimal public interfaces that hide complexity and promote ease of use.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Encapsulation Benefits</h3>
+        <p>Maintainability, debugging ease, and code organization advantages of proper encapsulation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Best Practices</h3>
+        <p>Guidelines for effective encapsulation: minimize public interface, validate inputs, maintain invariants.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit
