@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Databases & SQL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #9B59B6 0%, #3498DB 50%, #1ABC9C 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #9B59B6, #3498DB);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🗄️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #9B59B6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #9B59B6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #9B59B6, #3498DB);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(155, 89, 182, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🗄️ MemoLearning Databases & SQL</h1>
+    <p>Relational databases, SQL queries, design principles, and advanced database concepts</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Database & SQL Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Database Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">SQL Commands</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Database Systems</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Database Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand database concepts, models, and the role of Database Management Systems.</p>
+        <ul class="topics-list">
+          <li>What is a database</li>
+          <li>Database vs file systems</li>
+          <li>DBMS architecture</li>
+          <li>Database models (hierarchical, network, relational)</li>
+          <li>Database users and roles</li>
+          <li>Database applications</li>
+          <li>ACID properties</li>
+          <li>Database advantages and disadvantages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Relational Model</h3>
+        </div>
+        <p class="unit-description">Master the theoretical foundation of relational databases and their mathematical basis.</p>
+        <ul class="topics-list">
+          <li>Relational model concepts</li>
+          <li>Tables, rows, and columns</li>
+          <li>Domains and attributes</li>
+          <li>Primary and foreign keys</li>
+          <li>Relational constraints</li>
+          <li>Entity integrity and referential integrity</li>
+          <li>Null values and their handling</li>
+          <li>Relational algebra operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">SQL Basics</h3>
+        </div>
+        <p class="unit-description">Learn fundamental SQL syntax for creating databases and performing basic operations.</p>
+        <ul class="topics-list">
+          <li>SQL introduction and history</li>
+          <li>DDL (Data Definition Language)</li>
+          <li>Creating databases and tables</li>
+          <li>Data types and constraints</li>
+          <li>ALTER and DROP statements</li>
+          <li>DML (Data Manipulation Language)</li>
+          <li>INSERT, UPDATE, DELETE operations</li>
+          <li>Basic SELECT queries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Advanced SQL Queries</h3>
+        </div>
+        <p class="unit-description">Master complex query techniques including joins, subqueries, and advanced filtering.</p>
+        <ul class="topics-list">
+          <li>WHERE clause and conditions</li>
+          <li>ORDER BY and sorting</li>
+          <li>GROUP BY and HAVING</li>
+          <li>Aggregate functions (COUNT, SUM, AVG)</li>
+          <li>INNER and OUTER joins</li>
+          <li>Subqueries and correlated queries</li>
+          <li>UNION and set operations</li>
+          <li>Common Table Expressions (CTEs)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Database Design</h3>
+        </div>
+        <p class="unit-description">Design efficient database schemas using entity-relationship modeling and normalization.</p>
+        <ul class="topics-list">
+          <li>Database design process</li>
+          <li>Entity-Relationship (ER) modeling</li>
+          <li>Entities, attributes, and relationships</li>
+          <li>ER diagrams and notation</li>
+          <li>Conceptual, logical, and physical design</li>
+          <li>Requirements analysis</li>
+          <li>Design patterns and best practices</li>
+          <li>Schema evolution and migration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Normalization</h3>
+        </div>
+        <p class="unit-description">Eliminate data redundancy and ensure data integrity through normalization techniques.</p>
+        <ul class="topics-list">
+          <li>Functional dependencies</li>
+          <li>Normalization objectives</li>
+          <li>First Normal Form (1NF)</li>
+          <li>Second Normal Form (2NF)</li>
+          <li>Third Normal Form (3NF)</li>
+          <li>Boyce-Codd Normal Form (BCNF)</li>
+          <li>Higher normal forms</li>
+          <li>Denormalization strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Indexes and Performance</h3>
+        </div>
+        <p class="unit-description">Optimize database performance through indexing strategies and query optimization.</p>
+        <ul class="topics-list">
+          <li>Index concepts and types</li>
+          <li>B-tree and hash indexes</li>
+          <li>Clustered and non-clustered indexes</li>
+          <li>Index creation and maintenance</li>
+          <li>Query execution plans</li>
+          <li>Performance tuning techniques</li>
+          <li>Statistics and cost-based optimization</li>
+          <li>Index design best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Transactions and Concurrency</h3>
+        </div>
+        <p class="unit-description">Manage concurrent access and ensure data consistency through transaction control.</p>
+        <ul class="topics-list">
+          <li>Transaction concepts</li>
+          <li>ACID properties implementation</li>
+          <li>BEGIN, COMMIT, ROLLBACK</li>
+          <li>Isolation levels</li>
+          <li>Concurrency control mechanisms</li>
+          <li>Locking protocols</li>
+          <li>Deadlock detection and prevention</li>
+          <li>Optimistic vs pessimistic concurrency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Stored Procedures and Functions</h3>
+        </div>
+        <p class="unit-description">Create reusable database logic through stored procedures, functions, and triggers.</p>
+        <ul class="topics-list">
+          <li>Stored procedure concepts</li>
+          <li>Creating and executing procedures</li>
+          <li>Parameters and return values</li>
+          <li>Control flow statements</li>
+          <li>User-defined functions</li>
+          <li>Triggers and event handling</li>
+          <li>Exception handling</li>
+          <li>Best practices and security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Views and Security</h3>
+        </div>
+        <p class="unit-description">Implement data security and access control through views, permissions, and roles.</p>
+        <ul class="topics-list">
+          <li>View creation and management</li>
+          <li>Updatable views</li>
+          <li>Materialized views</li>
+          <li>User management</li>
+          <li>Authentication and authorization</li>
+          <li>Role-based access control</li>
+          <li>GRANT and REVOKE statements</li>
+          <li>Database security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Backup and Recovery</h3>
+        </div>
+        <p class="unit-description">Protect data through comprehensive backup strategies and disaster recovery planning.</p>
+        <ul class="topics-list">
+          <li>Backup strategies and types</li>
+          <li>Full, incremental, and differential backups</li>
+          <li>Point-in-time recovery</li>
+          <li>Transaction log backups</li>
+          <li>Recovery models</li>
+          <li>Disaster recovery planning</li>
+          <li>High availability solutions</li>
+          <li>Replication and clustering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">NoSQL Databases</h3>
+        </div>
+        <p class="unit-description">Explore non-relational database models for modern application requirements.</p>
+        <ul class="topics-list">
+          <li>NoSQL database types</li>
+          <li>Document databases (MongoDB)</li>
+          <li>Key-value stores (Redis)</li>
+          <li>Column-family (Cassandra)</li>
+          <li>Graph databases (Neo4j)</li>
+          <li>CAP theorem</li>
+          <li>When to use NoSQL</li>
+          <li>Polyglot persistence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Data Warehousing</h3>
+        </div>
+        <p class="unit-description">Design analytical systems for business intelligence and data mining applications.</p>
+        <ul class="topics-list">
+          <li>Data warehouse concepts</li>
+          <li>OLTP vs OLAP</li>
+          <li>Star and snowflake schemas</li>
+          <li>Dimension and fact tables</li>
+          <li>ETL processes</li>
+          <li>Data marts and data lakes</li>
+          <li>Business intelligence tools</li>
+          <li>Big data considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Database Administration</h3>
+        </div>
+        <p class="unit-description">Manage database systems through monitoring, maintenance, and optimization tasks.</p>
+        <ul class="topics-list">
+          <li>DBA roles and responsibilities</li>
+          <li>Database monitoring tools</li>
+          <li>Performance tuning</li>
+          <li>Capacity planning</li>
+          <li>Database maintenance tasks</li>
+          <li>Patch management</li>
+          <li>Troubleshooting techniques</li>
+          <li>Documentation and procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Emerging Database Technologies</h3>
+        </div>
+        <p class="unit-description">Explore modern database innovations and future trends in data management.</p>
+        <ul class="topics-list">
+          <li>Cloud databases</li>
+          <li>Database as a Service (DBaaS)</li>
+          <li>In-memory databases</li>
+          <li>Time-series databases</li>
+          <li>Blockchain and databases</li>
+          <li>Machine learning integration</li>
+          <li>Edge computing databases</li>
+          <li>Future database trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Database Fundamentals</h1>
+      <p>Understand database concepts, models, and the role of Database Management Systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is a Database</h3>
+        <p>Learn the definition of databases as organized collections of structured data for efficient storage and retrieval.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Database vs File Systems</h3>
+        <p>Compare traditional file storage with database systems, understanding advantages of centralized data management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DBMS Architecture</h3>
+        <p>Explore the three-schema architecture and understand how DBMS manages data independence and abstraction.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Database Models</h3>
+        <p>Study hierarchical, network, and relational database models, understanding their structures and relationships.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Database Users and Roles</h3>
+        <p>Identify different types of database users from end-users to database administrators and their responsibilities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Database Applications</h3>
+        <p>Explore various database applications across industries and understand their specific requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ACID Properties</h3>
+        <p>Master Atomicity, Consistency, Isolation, and Durability as fundamental transaction properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Advantages and Disadvantages</h3>
+        <p>Evaluate the benefits and limitations of database systems compared to alternative data storage methods.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Relational Model</h1>
+      <p>Master the theoretical foundation of relational databases and their mathematical basis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Relational Model Concepts</h3>
+        <p>Understand the mathematical foundation of relational databases based on set theory and predicate logic.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tables, Rows, and Columns</h3>
+        <p>Learn the basic structure of relational databases with relations, tuples, and attributes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Domains and Attributes</h3>
+        <p>Define attribute domains and understand how they constrain the values that can be stored.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Primary and Foreign Keys</h3>
+        <p>Master key concepts for uniquely identifying records and establishing relationships between tables.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Relational Constraints</h3>
+        <p>Implement business rules through domain, key, and general constraints in relational systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Entity and Referential Integrity</h3>
+        <p>Ensure data quality through entity integrity rules and referential integrity constraints.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Null Values and Handling</h3>
+        <p>Understand the challenges of representing unknown or missing information in relational databases.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Relational Algebra Operations</h3>
+        <p>Learn fundamental operations like selection, projection, join, and union for data manipulation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: SQL Basics</h1>
+      <p>Learn fundamental SQL syntax for creating databases and performing basic operations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SQL Introduction and History</h3>
+        <p>Understand the development of SQL as the standard language for relational database management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DDL (Data Definition Language)</h3>
+        <p>Master CREATE, ALTER, and DROP statements for defining and modifying database structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Creating Databases and Tables</h3>
+        <p>Learn to create database schemas and table structures with proper syntax and conventions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Types and Constraints</h3>
+        <p>Choose appropriate data types and implement constraints to ensure data integrity and validation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ALTER and DROP Statements</h3>
+        <p>Modify existing database objects and safely remove structures when no longer needed.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DML (Data Manipulation Language)</h3>
+        <p>Work with data using INSERT, UPDATE, DELETE, and SELECT statements for complete data management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">INSERT, UPDATE, DELETE Operations</h3>
+        <p>Master data modification operations with proper syntax, conditions, and error handling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic SELECT Queries</h3>
+        <p>Retrieve data from single tables using SELECT statements with basic filtering and formatting.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Advanced SQL Queries</h1>
+      <p>Master complex query techniques including joins, subqueries, and advanced filtering.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">WHERE Clause and Conditions</h3>
+        <p>Filter data using complex conditions with logical operators, pattern matching, and range queries.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ORDER BY and Sorting</h3>
+        <p>Sort query results using single and multiple columns with ascending and descending
