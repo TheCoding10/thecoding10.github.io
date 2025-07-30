@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Operating Systems</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #16A085 0%, #F39C12 50%, #E74C3C 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #16A085, #F39C12);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(22, 160, 133, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💻';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #16A085;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #16A085;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #16A085, #F39C12);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(22, 160, 133, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💻 MemoLearning Operating Systems</h1>
+    <p>System internals, process management, memory, file systems, and kernel programming</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Operating Systems Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">System Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Major Components</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Operating System Overview</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental role and structure of operating systems in computer architecture.</p>
+        <ul class="topics-list">
+          <li>What is an operating system</li>
+          <li>OS goals and functions</li>
+          <li>System calls and APIs</li>
+          <li>Kernel vs user mode</li>
+          <li>OS architecture types</li>
+          <li>Historical evolution</li>
+          <li>Modern OS examples</li>
+          <li>Performance metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Process Management</h3>
+        </div>
+        <p class="unit-description">Master process creation, execution, and lifecycle management in operating systems.</p>
+        <ul class="topics-list">
+          <li>Process concept and PCB</li>
+          <li>Process states and transitions</li>
+          <li>Process creation and termination</li>
+          <li>Process hierarchies</li>
+          <li>Context switching</li>
+          <li>Process communication (IPC)</li>
+          <li>Shared memory systems</li>
+          <li>Process synchronization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">CPU Scheduling</h3>
+        </div>
+        <p class="unit-description">Learn algorithms and strategies for efficiently allocating CPU time among processes.</p>
+        <ul class="topics-list">
+          <li>Scheduling criteria and metrics</li>
+          <li>FCFS scheduling</li>
+          <li>Shortest Job First (SJF)</li>
+          <li>Round Robin scheduling</li>
+          <li>Priority scheduling</li>
+          <li>Multilevel queue scheduling</li>
+          <li>Real-time scheduling</li>
+          <li>Multiprocessor scheduling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Thread Management</h3>
+        </div>
+        <p class="unit-description">Understand lightweight processes and concurrent execution within single address spaces.</p>
+        <ul class="topics-list">
+          <li>Thread concept and benefits</li>
+          <li>User vs kernel threads</li>
+          <li>Multithreading models</li>
+          <li>Thread libraries (Pthreads)</li>
+          <li>Thread synchronization</li>
+          <li>Thread pools</li>
+          <li>Thread-specific data</li>
+          <li>Threading issues and solutions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Process Synchronization</h3>
+        </div>
+        <p class="unit-description">Solve coordination problems between concurrent processes and threads.</p>
+        <ul class="topics-list">
+          <li>Critical section problem</li>
+          <li>Mutual exclusion solutions</li>
+          <li>Semaphores and implementation</li>
+          <li>Monitors and condition variables</li>
+          <li>Classic synchronization problems</li>
+          <li>Deadlock detection and prevention</li>
+          <li>Atomic operations</li>
+          <li>Lock-free programming</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Deadlock Management</h3>
+        </div>
+        <p class="unit-description">Understand and prevent system deadlocks through detection, avoidance, and recovery.</p>
+        <ul class="topics-list">
+          <li>Deadlock characterization</li>
+          <li>Necessary conditions</li>
+          <li>Resource allocation graphs</li>
+          <li>Deadlock prevention</li>
+          <li>Deadlock avoidance (Banker's algorithm)</li>
+          <li>Deadlock detection</li>
+          <li>Recovery from deadlock</li>
+          <li>Livelock and starvation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Memory Management</h3>
+        </div>
+        <p class="unit-description">Explore how operating systems manage and allocate physical and virtual memory.</p>
+        <ul class="topics-list">
+          <li>Memory hierarchy</li>
+          <li>Contiguous memory allocation</li>
+          <li>Fragmentation problems</li>
+          <li>Paging systems</li>
+          <li>Segmentation</li>
+          <li>Virtual memory concepts</li>
+          <li>Page replacement algorithms</li>
+          <li>Memory protection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Virtual Memory</h3>
+        </div>
+        <p class="unit-description">Master virtual memory systems that enable programs larger than physical memory.</p>
+        <ul class="topics-list">
+          <li>Virtual memory principles</li>
+          <li>Page fault handling</li>
+          <li>Demand paging</li>
+          <li>Page replacement algorithms (LRU, FIFO)</li>
+          <li>Allocation of frames</li>
+          <li>Thrashing and working sets</li>
+          <li>Memory-mapped files</li>
+          <li>Copy-on-write</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">File Systems</h3>
+        </div>
+        <p class="unit-description">Understand how operating systems organize and manage persistent storage.</p>
+        <ul class="topics-list">
+          <li>File system interface</li>
+          <li>File allocation methods</li>
+          <li>Directory structures</li>
+          <li>File system implementation</li>
+          <li>Journaling file systems</li>
+          <li>File system performance</li>
+          <li>Recovery and consistency</li>
+          <li>Distributed file systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">I/O Systems</h3>
+        </div>
+        <p class="unit-description">Learn how operating systems manage input/output operations and device communication.</p>
+        <ul class="topics-list">
+          <li>I/O hardware overview</li>
+          <li>Application I/O interface</li>
+          <li>Kernel I/O subsystem</li>
+          <li>Blocking vs non-blocking I/O</li>
+          <li>Buffering and caching</li>
+          <li>Error handling</li>
+          <li>Device drivers</li>
+          <li>I/O performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Security and Protection</h3>
+        </div>
+        <p class="unit-description">Implement security mechanisms to protect system resources and user data.</p>
+        <ul class="topics-list">
+          <li>Security objectives</li>
+          <li>Authentication mechanisms</li>
+          <li>Access control models</li>
+          <li>Capability-based systems</li>
+          <li>Information flow control</li>
+          <li>Security attacks and defenses</li>
+          <li>Cryptographic techniques</li>
+          <li>Secure system design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Distributed Systems</h3>
+        </div>
+        <p class="unit-description">Explore operating system concepts in networked and distributed computing environments.</p>
+        <ul class="topics-list">
+          <li>Distributed system models</li>
+          <li>Network operating systems</li>
+          <li>Distributed coordination</li>
+          <li>Distributed mutual exclusion</li>
+          <li>Election algorithms</li>
+          <li>Distributed transactions</li>
+          <li>Fault tolerance</li>
+          <li>Consistency models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">System Performance</h3>
+        </div>
+        <p class="unit-description">Analyze and optimize operating system performance through monitoring and tuning.</p>
+        <ul class="topics-list">
+          <li>Performance metrics</li>
+          <li>System monitoring tools</li>
+          <li>Bottleneck identification</li>
+          <li>Performance tuning techniques</li>
+          <li>Capacity planning</li>
+          <li>Benchmarking methodologies</li>
+          <li>Profiling and analysis</li>
+          <li>System optimization strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Modern OS Topics</h3>
+        </div>
+        <p class="unit-description">Explore contemporary developments and future directions in operating system design.</p>
+        <ul class="topics-list">
+          <li>Virtualization technologies</li>
+          <li>Container systems</li>
+          <li>Cloud operating systems</li>
+          <li>Mobile OS architectures</li>
+          <li>Real-time systems</li>
+          <li>Multicore and parallel systems</li>
+          <li>Energy-efficient computing</li>
+          <li>Future OS trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Operating System Overview</h1>
+      <p>Understand the fundamental role and structure of operating systems in computer architecture.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is an Operating System</h3>
+        <p>Learn the definition, purpose, and essential functions of operating systems as system software intermediaries.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">OS Goals and Functions</h3>
+        <p>Understand resource management, user interface provision, and system security as primary OS objectives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">System Calls and APIs</h3>
+        <p>Master the interface between user programs and the kernel through system call mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Kernel vs User Mode</h3>
+        <p>Distinguish between privileged kernel execution and restricted user program execution modes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">OS Architecture Types</h3>
+        <p>Compare monolithic, microkernel, layered, and hybrid operating system architectural approaches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Evolution</h3>
+        <p>Trace the development of operating systems from batch processing to modern distributed systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modern OS Examples</h3>
+        <p>Analyze contemporary operating systems like Linux, Windows, macOS, and their design choices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Performance Metrics</h3>
+        <p>Measure OS effectiveness through throughput, response time, utilization, and fairness metrics.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Process Management</h1>
+      <p>Master process creation, execution, and lifecycle management in operating systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Concept and PCB</h3>
+        <p>Understand processes as program instances with Process Control Blocks containing execution state.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process States and Transitions</h3>
+        <p>Learn the process lifecycle through new, ready, running, waiting, and terminated states.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Creation and Termination</h3>
+        <p>Master fork(), exec(), and exit() system calls for process lifecycle management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Hierarchies</h3>
+        <p>Understand parent-child relationships and process trees in Unix-like operating systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Context Switching</h3>
+        <p>Learn how the OS saves and restores process state during CPU scheduling transitions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Communication (IPC)</h3>
+        <p>Implement inter-process communication through pipes, message queues, and shared memory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shared Memory Systems</h3>
+        <p>Design efficient communication mechanisms using shared address spaces between processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Synchronization</h3>
+        <p>Coordinate process execution and resource access to maintain system consistency.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: CPU Scheduling</h1>
+      <p>Learn algorithms and strategies for efficiently allocating CPU time among processes.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Scheduling Criteria and Metrics</h3>
+        <p>Evaluate scheduling algorithms using turnaround time, waiting time, response time, and throughput.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">FCFS Scheduling</h3>
+        <p>Implement First-Come-First-Served scheduling with its simplicity and convoy effect characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shortest Job First (SJF)</h3>
+        <p>Optimize average waiting time through shortest job first scheduling in preemptive and non-preemptive forms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Round Robin Scheduling</h3>
+        <p>Provide fairness through time-sliced CPU allocation with configurable quantum periods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Priority Scheduling</h3>
+        <p>Allocate CPU based on process priorities while handling starvation through aging mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multilevel Queue Scheduling</h3>
+        <p>Organize processes into multiple queues with different scheduling algorithms for each level.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-Time Scheduling</h3>
+        <p>Meet timing constraints in real-time systems through deadline-driven scheduling algorithms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiprocessor Scheduling</h3>
+        <p>Distribute processes across multiple CPUs considering load balancing and processor affinity.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Thread Management</h1>
+      <p>Understand lightweight processes and concurrent execution within single address spaces.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Concept and Benefits</h3>
+        <p>Learn how threads provide concurrency within processes with shared memory and reduced overhead.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">User vs Kernel Threads</h3>
+        <p>Compare user-level thread management with kernel-level threading implementations and trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multithreading Models</h3>
+        <p>Understand many-to-one, one-to-one, and many-to-many threading models and their characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Libraries (Pthreads)</h3>
+        <p>Implement multithreaded programs using POSIX thread libraries and threading primitives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Synchronization</h3>
+        <p>Coordinate thread execution using mutexes, condition variables, and other synchronization mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread Pools</h3>
+        <p>Manage thread lifecycle efficiently through pre-allocated thread pools for better performance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Thread-Specific Data</h3>
+        <p>Maintain per-thread data storage while sharing the process address space among threads.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3
