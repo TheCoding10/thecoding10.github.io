@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Data Structures and Algorithms II</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #45B7D1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ MemoLearning Data Structures and Algorithms II</h1>
+    <p>Advanced trees, heaps, graphs, dynamic programming, and complex algorithms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Advanced Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~160</span>
+          <div class="stat-label">Advanced Skills</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Algorithm Categories</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Problem Paradigms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Advanced Tree Structures</h3>
+        </div>
+        <p class="unit-description">Master self-balancing trees and specialized tree structures for optimal performance.</p>
+        <ul class="topics-list">
+          <li>AVL Trees and rotations</li>
+          <li>Red-Black Trees</li>
+          <li>B-Trees and B+ Trees</li>
+          <li>Splay Trees</li>
+          <li>Tree balancing algorithms</li>
+          <li>Height-balanced operations</li>
+          <li>Tree rotation techniques</li>
+          <li>Performance analysis of balanced trees</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Heap Data Structures</h3>
+        </div>
+        <p class="unit-description">Deep dive into heap variations and their applications in priority-based algorithms.</p>
+        <ul class="topics-list">
+          <li>Binary Heaps (Min/Max)</li>
+          <li>Fibonacci Heaps</li>
+          <li>Binomial Heaps</li>
+          <li>Priority Queue implementations</li>
+          <li>Heap Sort algorithm</li>
+          <li>Heapify operations</li>
+          <li>Mergeable heap operations</li>
+          <li>Applications in graph algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Hash Tables & Advanced Hashing</h3>
+        </div>
+        <p class="unit-description">Explore sophisticated hashing techniques and collision resolution strategies.</p>
+        <ul class="topics-list">
+          <li>Advanced hash functions</li>
+          <li>Universal hashing</li>
+          <li>Perfect hashing</li>
+          <li>Cuckoo hashing</li>
+          <li>Robin Hood hashing</li>
+          <li>Consistent hashing</li>
+          <li>Bloom filters</li>
+          <li>Hash table optimization techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Graph Algorithms</h3>
+        </div>
+        <p class="unit-description">Master complex graph algorithms for pathfinding, connectivity, and optimization.</p>
+        <ul class="topics-list">
+          <li>Advanced graph traversal</li>
+          <li>Dijkstra's shortest path</li>
+          <li>Bellman-Ford algorithm</li>
+          <li>Floyd-Warshall algorithm</li>
+          <li>Minimum Spanning Trees (Kruskal, Prim)</li>
+          <li>Topological sorting</li>
+          <li>Strongly connected components</li>
+          <li>Network flow algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Advanced Sorting Algorithms</h3>
+        </div>
+        <p class="unit-description">Learn sophisticated sorting techniques and their specialized applications.</p>
+        <ul class="topics-list">
+          <li>Merge Sort variations</li>
+          <li>Quick Sort optimizations</li>
+          <li>Heap Sort implementation</li>
+          <li>Radix Sort and Counting Sort</li>
+          <li>Bucket Sort</li>
+          <li>External sorting algorithms</li>
+          <li>Parallel sorting algorithms</li>
+          <li>Sorting algorithm selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Dynamic Programming</h3>
+        </div>
+        <p class="unit-description">Master the art of solving complex problems through optimal substructure decomposition.</p>
+        <ul class="topics-list">
+          <li>DP principles and characteristics</li>
+          <li>Memoization vs Tabulation</li>
+          <li>Classic DP problems (Knapsack, LCS, LIS)</li>
+          <li>Matrix chain multiplication</li>
+          <li>Edit distance algorithms</li>
+          <li>DP on trees and graphs</li>
+          <li>Space optimization techniques</li>
+          <li>Advanced DP patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">String Algorithms</h3>
+        </div>
+        <p class="unit-description">Explore efficient algorithms for string processing and pattern matching.</p>
+        <ul class="topics-list">
+          <li>String matching algorithms</li>
+          <li>KMP (Knuth-Morris-Pratt)</li>
+          <li>Rabin-Karp algorithm</li>
+          <li>Boyer-Moore algorithm</li>
+          <li>Suffix arrays and trees</li>
+          <li>String hashing techniques</li>
+          <li>Longest common substring</li>
+          <li>String compression algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Greedy Algorithms</h3>
+        </div>
+        <p class="unit-description">Learn when and how to apply greedy strategies for optimal solutions.</p>
+        <ul class="topics-list">
+          <li>Greedy algorithm principles</li>
+          <li>Activity selection problem</li>
+          <li>Fractional knapsack</li>
+          <li>Huffman coding</li>
+          <li>Job scheduling algorithms</li>
+          <li>Greedy graph algorithms</li>
+          <li>Proving greedy correctness</li>
+          <li>When greedy fails</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Divide and Conquer</h3>
+        </div>
+        <p class="unit-description">Master the divide and conquer paradigm for solving complex algorithmic problems.</p>
+        <ul class="topics-list">
+          <li>Divide and conquer principles</li>
+          <li>Merge sort analysis</li>
+          <li>Quick sort variations</li>
+          <li>Binary search extensions</li>
+          <li>Closest pair of points</li>
+          <li>Matrix multiplication (Strassen)</li>
+          <li>Fast Fourier Transform basics</li>
+          <li>Recurrence relation solving</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Advanced Data Structures</h3>
+        </div>
+        <p class="unit-description">Explore specialized data structures for specific problem domains.</p>
+        <ul class="topics-list">
+          <li>Disjoint Set (Union-Find)</li>
+          <li>Segment Trees</li>
+          <li>Binary Indexed Trees (Fenwick)</li>
+          <li>Trie data structure</li>
+          <li>Suffix trees and arrays</li>
+          <li>Skip lists</li>
+          <li>Persistent data structures</li>
+          <li>Lock-free data structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Network Flow Algorithms</h3>
+        </div>
+        <p class="unit-description">Study algorithms for maximum flow and minimum cut problems in networks.</p>
+        <ul class="topics-list">
+          <li>Flow network concepts</li>
+          <li>Ford-Fulkerson method</li>
+          <li>Edmonds-Karp algorithm</li>
+          <li>Dinic's algorithm</li>
+          <li>Push-relabel algorithms</li>
+          <li>Minimum cut problems</li>
+          <li>Bipartite matching</li>
+          <li>Applications in real networks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Computational Complexity</h3>
+        </div>
+        <p class="unit-description">Understand algorithm complexity classes and computational limits.</p>
+        <ul class="topics-list">
+          <li>P vs NP problem</li>
+          <li>NP-completeness</li>
+          <li>NP-hard problems</li>
+          <li>Reduction techniques</li>
+          <li>Approximation algorithms</li>
+          <li>Randomized algorithms</li>
+          <li>Amortized analysis</li>
+          <li>Lower bound techniques</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Advanced Tree Structures</h1>
+      <p>Master self-balancing trees and specialized tree structures for optimal performance.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">AVL Trees and Rotations</h3>
+        <p>Learn height-balanced binary search trees with automatic rebalancing through single and double rotations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Red-Black Trees</h3>
+        <p>Master color-based balancing properties and understand insertion/deletion rebalancing procedures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">B-Trees and B+ Trees</h3>
+        <p>Understand multi-way search trees optimized for disk storage and database indexing systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Splay Trees</h3>
+        <p>Learn self-adjusting binary search trees that move frequently accessed elements to the root.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tree Balancing Algorithms</h3>
+        <p>Compare different balancing strategies and understand when to use each tree type.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Height-Balanced Operations</h3>
+        <p>Implement insertion, deletion, and search operations while maintaining tree balance invariants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tree Rotation Techniques</h3>
+        <p>Master left and right rotations, and understand how they preserve BST properties while rebalancing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Performance Analysis</h3>
+        <p>Analyze time complexity guarantees and understand why balanced trees ensure O(log n) operations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Heap Data Structures</h1>
+      <p>Deep dive into heap variations and their applications in priority-based algorithms.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Binary Heaps (Min/Max)</h3>
+        <p>Master complete binary tree implementation with heap property maintenance and array representation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fibonacci Heaps</h3>
+        <p>Learn advanced heap structure with better amortized performance for decrease-key operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Binomial Heaps</h3>
+        <p>Understand mergeable heaps with binomial tree structure for efficient union operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Priority Queue Implementations</h3>
+        <p>Compare different heap implementations for priority queues and their performance trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heap Sort Algorithm</h3>
+        <p>Implement in-place sorting using binary heaps with O(n log n) time complexity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heapify Operations</h3>
+        <p>Master bottom-up and top-down heapify procedures for building and maintaining heaps.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mergeable Heap Operations</h3>
+        <p>Learn how to efficiently merge two heaps while maintaining heap properties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications in Graph Algorithms</h3>
+        <p>Understand how heaps optimize Dijkstra's algorithm and Prim's minimum spanning tree algorithm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Hash Tables & Advanced Hashing</h1>
+      <p>Explore sophisticated hashing techniques and collision resolution strategies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Advanced Hash Functions</h3>
+        <p>Design and analyze cryptographic and non-cryptographic hash functions for different applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Universal Hashing</h3>
+        <p>Learn probabilistic hashing techniques that guarantee good performance regardless of input.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Perfect Hashing</h3>
+        <p>Understand collision-free hashing for static sets with guaranteed O(1) lookup time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cuckoo Hashing</h3>
+        <p>Master worst-case O(1) lookup time with two hash functions and displacement resolution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Robin Hood Hashing</h3>
+        <p>Learn open addressing with variance reduction for more predictable performance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Consistent Hashing</h3>
+        <p>Understand distributed hashing for load balancing in distributed systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bloom Filters</h3>
+        <p>Learn space-efficient probabilistic data structures for membership testing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hash Table Optimization</h3>
+        <p>Explore cache-friendly implementations and memory layout optimizations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Graph Algorithms</h1>
+      <p>Master complex graph algorithms for pathfinding, connectivity, and optimization.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Advanced Graph Traversal</h3>
+        <p>Extend DFS and BFS for cycle detection, connectivity analysis, and topological applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dijkstra's Shortest Path</h3>
+        <p>Implement single-source shortest path for non-negative weights using priority queues.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bellman-Ford Algorithm</h3>
+        <p>Handle negative weight edges and detect negative cycles in directed graphs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Floyd-Warshall Algorithm</h3>
+        <p>Compute all-pairs shortest paths using dynamic programming approach.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Minimum Spanning Trees</h3>
+        <p>Master Kruskal's and Prim's algorithms for finding minimum cost spanning trees.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Topological Sorting</h3>
+        <p>Order vertices in directed acyclic graphs for dependency resolution and scheduling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Strongly Connected Components</h3>
+        <p>Find maximal strongly connected subgraphs using Tarjan's and Kosaraju's algorithms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Network Flow Algorithms</h3>
+        <p>Solve maximum flow problems with Ford-Fulkerson and more advanced flow algorithms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Advanced Sorting Algorithms</h1>
+      <p>Learn sophisticated sorting techniques and their specialized applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Merge Sort Variations</h3>
+        <p>Explore bottom-up merge sort, natural merge sort, and space-optimized implementations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quick Sort Optimizations</h3>
+        <p>Learn pivot selection strategies, 3-way partitioning, and hybrid approaches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Heap Sort Implementation
