@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Programming Languages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8E44AD 0%, #3498DB 50%, #E67E22 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #8E44AD, #3498DB);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💻';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8E44AD;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #8E44AD;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #8E44AD, #3498DB);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(142, 68, 173, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💻 MemoLearning Programming Languages</h1>
+    <p>OOP, functional, procedural paradigms, language design, and interpreters</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to Computer Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Programming Languages Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~190</span>
+          <div class="stat-label">Language Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6</span>
+          <div class="stat-label">Paradigms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12+</span>
+          <div class="stat-label">Languages</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Language Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basic concepts, history, and classification of programming languages.</p>
+        <ul class="topics-list">
+          <li>What is a programming language</li>
+          <li>Language evolution and history</li>
+          <li>Compilation vs interpretation</li>
+          <li>Syntax and semantics</li>
+          <li>Language paradigms overview</li>
+          <li>High-level vs low-level languages</li>
+          <li>Domain-specific languages</li>
+          <li>Language design principles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Syntax and Grammar</h3>
+        </div>
+        <p class="unit-description">Learn formal methods for describing and analyzing programming language syntax.</p>
+        <ul class="topics-list">
+          <li>Context-free grammars</li>
+          <li>Backus-Naur Form (BNF)</li>
+          <li>Extended BNF (EBNF)</li>
+          <li>Parse trees and derivations</li>
+          <li>Ambiguous grammars</li>
+          <li>Precedence and associativity</li>
+          <li>Lexical analysis concepts</li>
+          <li>Syntax error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Procedural Programming</h3>
+        </div>
+        <p class="unit-description">Master the procedural paradigm with functions, procedures, and structured programming.</p>
+        <ul class="topics-list">
+          <li>Procedural paradigm principles</li>
+          <li>Functions and procedures</li>
+          <li>Parameter passing mechanisms</li>
+          <li>Local vs global scope</li>
+          <li>Recursion and iteration</li>
+          <li>Structured programming concepts</li>
+          <li>Modular programming</li>
+          <li>C language deep dive</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Object-Oriented Programming</h3>
+        </div>
+        <p class="unit-description">Explore OOP principles including encapsulation, inheritance, and polymorphism.</p>
+        <ul class="topics-list">
+          <li>OOP fundamental concepts</li>
+          <li>Classes and objects</li>
+          <li>Encapsulation and data hiding</li>
+          <li>Inheritance and code reuse</li>
+          <li>Polymorphism and dynamic binding</li>
+          <li>Abstract classes and interfaces</li>
+          <li>Method overloading and overriding</li>
+          <li>Java and C++ comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Functional Programming</h3>
+        </div>
+        <p class="unit-description">Learn the functional paradigm with immutability, higher-order functions, and recursion.</p>
+        <ul class="topics-list">
+          <li>Functional programming principles</li>
+          <li>Pure functions and immutability</li>
+          <li>Higher-order functions</li>
+          <li>Lambda expressions</li>
+          <li>Recursion and tail recursion</li>
+          <li>Map, filter, and reduce</li>
+          <li>Currying and partial application</li>
+          <li>Haskell and Lisp examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Types and Type Systems</h3>
+        </div>
+        <p class="unit-description">Understand type systems, type checking, and data type design principles.</p>
+        <ul class="topics-list">
+          <li>Primitive and composite types</li>
+          <li>Static vs dynamic typing</li>
+          <li>Strong vs weak typing</li>
+          <li>Type inference mechanisms</li>
+          <li>Polymorphic type systems</li>
+          <li>Generic programming</li>
+          <li>User-defined types</li>
+          <li>Type safety and errors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Memory Management</h3>
+        </div>
+        <p class="unit-description">Learn how programming languages handle memory allocation and deallocation.</p>
+        <ul class="topics-list">
+          <li>Stack vs heap allocation</li>
+          <li>Manual memory management</li>
+          <li>Automatic garbage collection</li>
+          <li>Reference counting</li>
+          <li>Mark and sweep algorithms</li>
+          <li>Memory leaks and dangling pointers</li>
+          <li>Smart pointers and RAII</li>
+          <li>Memory safety considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Scope and Binding</h3>
+        </div>
+        <p class="unit-description">Understand variable scope, binding, and name resolution in programming languages.</p>
+        <ul class="topics-list">
+          <li>Scope rules and visibility</li>
+          <li>Static vs dynamic scoping</li>
+          <li>Block scope and lexical scope</li>
+          <li>Name binding and resolution</li>
+          <li>Variable lifetime</li>
+          <li>Closure concepts</li>
+          <li>Environment and activation records</li>
+          <li>Scope in different languages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Control Structures</h3>
+        </div>
+        <p class="unit-description">Master various control flow mechanisms and their implementation across languages.</p>
+        <ul class="topics-list">
+          <li>Sequential execution</li>
+          <li>Conditional statements</li>
+          <li>Iteration and loops</li>
+          <li>Unconditional jumps</li>
+          <li>Exception handling</li>
+          <li>Coroutines and generators</li>
+          <li>Pattern matching</li>
+          <li>Control flow optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Language Interpreters</h3>
+        </div>
+        <p class="unit-description">Build interpreters to understand how programming languages are executed.</p>
+        <ul class="topics-list">
+          <li>Interpreter design principles</li>
+          <li>Lexical analysis (tokenization)</li>
+          <li>Parsing techniques</li>
+          <li>Abstract syntax trees</li>
+          <li>Evaluation strategies</li>
+          <li>Environment and symbol tables</li>
+          <li>Error handling and reporting</li>
+          <li>Building a simple interpreter</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Compilers and Code Generation</h3>
+        </div>
+        <p class="unit-description">Learn how high-level code is translated into executable machine code.</p>
+        <ul class="topics-list">
+          <li>Compilation process overview</li>
+          <li>Frontend vs backend</li>
+          <li>Intermediate representations</li>
+          <li>Code optimization techniques</li>
+          <li>Target code generation</li>
+          <li>Register allocation</li>
+          <li>Just-in-time compilation</li>
+          <li>Cross-compilation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Concurrent Programming</h3>
+        </div>
+        <p class="unit-description">Explore language features for concurrent and parallel programming.</p>
+        <ul class="topics-list">
+          <li>Concurrency vs parallelism</li>
+          <li>Thread-based concurrency</li>
+          <li>Message passing models</li>
+          <li>Actor model programming</li>
+          <li>Synchronization primitives</li>
+          <li>Async/await patterns</li>
+          <li>Race conditions and deadlocks</li>
+          <li>Concurrent language features</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Logic Programming</h3>
+        </div>
+        <p class="unit-description">Understand declarative programming through logic and constraint-based approaches.</p>
+        <ul class="topics-list">
+          <li>Logic programming principles</li>
+          <li>Facts, rules, and queries</li>
+          <li>Unification algorithm</li>
+          <li>Backtracking and search</li>
+          <li>Prolog language features</li>
+          <li>Constraint logic programming</li>
+          <li>Applications and use cases</li>
+          <li>Declarative vs imperative</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Language Design Principles</h3>
+        </div>
+        <p class="unit-description">Learn the principles and trade-offs involved in designing programming languages.</p>
+        <ul class="topics-list">
+          <li>Language design goals</li>
+          <li>Simplicity vs expressiveness</li>
+          <li>Orthogonality principles</li>
+          <li>Readability and writability</li>
+          <li>Reliability and safety</li>
+          <li>Performance considerations</li>
+          <li>Language evolution</li>
+          <li>Domain-specific design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Modern Language Features</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge language features and future programming paradigms.</p>
+        <ul class="topics-list">
+          <li>Type inference and checking</li>
+          <li>Pattern matching systems</li>
+          <li>Metaprogramming capabilities</li>
+          <li>Language interoperability</li>
+          <li>Domain-specific languages</li>
+          <li>Quantum programming languages</li>
+          <li>Machine learning languages</li>
+          <li>Future language trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Language Fundamentals</h1>
+      <p>Understand the basic concepts, history, and classification of programming languages.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is a Programming Language</h3>
+        <p>Learn the definition and purpose of programming languages as formal notation systems for expressing computation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Language Evolution and History</h3>
+        <p>Trace the development of programming languages from machine code to modern high-level languages.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Compilation vs Interpretation</h3>
+        <p>Compare ahead-of-time compilation with runtime interpretation and their performance trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Syntax and Semantics</h3>
+        <p>Distinguish between language syntax (form) and semantics (meaning) in program specification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Language Paradigms Overview</h3>
+        <p>Survey major programming paradigms including imperative, declarative, and hybrid approaches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">High-Level vs Low-Level Languages</h3>
+        <p>Understand the abstraction spectrum from assembly language to domain-specific languages.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Domain-Specific Languages</h3>
+        <p>Explore specialized languages designed for specific problem domains and their advantages.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Language Design Principles</h3>
+        <p>Learn fundamental principles that guide programming language design and implementation decisions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Syntax and Grammar</h1>
+      <p>Learn formal methods for describing and analyzing programming language syntax.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Context-Free Grammars</h3>
+        <p>Master formal grammar notation for specifying programming language syntax rules and structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Backus-Naur Form (BNF)</h3>
+        <p>Use BNF notation to precisely define language syntax with production rules and non-terminals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Extended BNF (EBNF)</h3>
+        <p>Apply EBNF extensions for more concise grammar specifications with repetition and optionality.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parse Trees and Derivations</h3>
+        <p>Construct parse trees to represent the syntactic structure of programs according to grammar rules.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ambiguous Grammars</h3>
+        <p>Identify and resolve grammar ambiguities that can lead to multiple valid parse interpretations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Precedence and Associativity</h3>
+        <p>Handle operator precedence and associativity rules to resolve expression parsing ambiguities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lexical Analysis Concepts</h3>
+        <p>Understand tokenization and lexical analysis as the first phase of language processing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Syntax Error Handling</h3>
+        <p>Implement robust error detection and recovery mechanisms in language processors.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Procedural Programming</h1>
+      <p>Master the procedural paradigm with functions, procedures, and structured programming.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Procedural Paradigm Principles</h3>
+        <p>Understand the core concepts of procedural programming including top-down design and modularity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functions and Procedures</h3>
+        <p>Design reusable code units with proper parameter interfaces and return value mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parameter Passing Mechanisms</h3>
+        <p>Master call-by-value, call-by-reference, and call-by-name parameter passing strategies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Local vs Global Scope</h3>
+        <p>Manage variable visibility and lifetime through proper scoping and namespace design.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Recursion and Iteration</h3>
+        <p>Compare recursive and iterative approaches to problem solving with performance considerations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structured Programming Concepts</h3>
+        <p>Apply structured programming principles to eliminate goto statements and improve code clarity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modular Programming</h3>
+        <p>Organize code into logical modules with well-defined interfaces and information hiding.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">C Language Deep Dive</h3>
+        <p>Explore C as the quintessential procedural language with systems programming capabilities.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
