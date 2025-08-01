@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Stock Market Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #60A5FA 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1E40AF, #3B82F6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1E40AF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E40AF;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1E40AF, #3B82F6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Stock Market Fundamentals</h1>
+    <p>Master stock market mechanics, analysis, and investment strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to investing courses')">← Back to Investing Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Stock Market Fundamentals Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Market Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Analysis Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Trading Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Stock Market Overview</h3>
+        </div>
+        <p class="unit-description">Understand the basic structure, purpose, and function of stock markets in the economy.</p>
+        <ul class="topics-list">
+          <li>What is the stock market</li>
+          <li>History of stock exchanges</li>
+          <li>Primary vs secondary markets</li>
+          <li>Major global stock exchanges</li>
+          <li>Market participants overview</li>
+          <li>Stock market vs economy</li>
+          <li>Market capitalization basics</li>
+          <li>Public vs private companies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">How Stocks Work</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of stocks as ownership shares in companies.</p>
+        <ul class="topics-list">
+          <li>Stock ownership basics</li>
+          <li>Common vs preferred stock</li>
+          <li>Stock certificates and shares</li>
+          <li>Voting rights and dividends</li>
+          <li>Stock splits and mergers</li>
+          <li>IPOs and new issues</li>
+          <li>Stock buybacks</li>
+          <li>Delisting and bankruptcy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Stock Exchanges & Trading</h3>
+        </div>
+        <p class="unit-description">Explore how stock exchanges operate and facilitate securities trading.</p>
+        <ul class="topics-list">
+          <li>NYSE operations</li>
+          <li>NASDAQ electronic trading</li>
+          <li>Market makers and specialists</li>
+          <li>Order matching systems</li>
+          <li>Trading hours and sessions</li>
+          <li>Circuit breakers and halts</li>
+          <li>Alternative trading systems</li>
+          <li>International exchanges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Stock Prices & Valuation</h3>
+        </div>
+        <p class="unit-description">Understand how stock prices are determined and what drives price movements.</p>
+        <ul class="topics-list">
+          <li>Supply and demand dynamics</li>
+          <li>Bid-ask spreads</li>
+          <li>Price discovery process</li>
+          <li>Market orders vs limit orders</li>
+          <li>Factors affecting stock prices</li>
+          <li>Intrinsic vs market value</li>
+          <li>Price volatility concepts</li>
+          <li>Market efficiency theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Market Indices & Benchmarks</h3>
+        </div>
+        <p class="unit-description">Learn about stock market indices and how they measure market performance.</p>
+        <ul class="topics-list">
+          <li>S&P 500 index explained</li>
+          <li>Dow Jones Industrial Average</li>
+          <li>NASDAQ Composite</li>
+          <li>Russell 2000 small-cap index</li>
+          <li>International indices</li>
+          <li>Sector-specific indices</li>
+          <li>Index construction methods</li>
+          <li>Tracking index performance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Fundamental Analysis</h3>
+        </div>
+        <p class="unit-description">Master company analysis using financial statements and business metrics.</p>
+        <ul class="topics-list">
+          <li>Financial statement analysis</li>
+          <li>Income statement basics</li>
+          <li>Balance sheet evaluation</li>
+          <li>Cash flow statement</li>
+          <li>Key financial ratios</li>
+          <li>P/E ratio analysis</li>
+          <li>Earnings per share (EPS)</li>
+          <li>Book value and ROE</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Technical Analysis</h3>
+        </div>
+        <p class="unit-description">Learn to analyze stock price patterns and market trends using charts.</p>
+        <ul class="topics-list">
+          <li>Technical analysis principles</li>
+          <li>Chart types and timeframes</li>
+          <li>Support and resistance levels</li>
+          <li>Trend identification</li>
+          <li>Moving averages</li>
+          <li>Volume analysis</li>
+          <li>Common chart patterns</li>
+          <li>Technical indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Market Psychology & Behavior</h3>
+        </div>
+        <p class="unit-description">Understand investor psychology and behavioral factors that drive market movements.</p>
+        <ul class="topics-list">
+          <li>Fear and greed cycles</li>
+          <li>Market sentiment indicators</li>
+          <li>Herd mentality effects</li>
+          <li>Behavioral biases</li>
+          <li>Emotional decision-making</li>
+          <li>Market bubbles and crashes</li>
+          <li>Contrarian investing</li>
+          <li>Investor psychology patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Bull & Bear Markets</h3>
+        </div>
+        <p class="unit-description">Recognize and understand different market cycles and their characteristics.</p>
+        <ul class="topics-list">
+          <li>Bull market characteristics</li>
+          <li>Bear market identification</li>
+          <li>Market cycle phases</li>
+          <li>Secular vs cyclical trends</li>
+          <li>Recession impact on stocks</li>
+          <li>Market recovery patterns</li>
+          <li>Sector rotation strategies</li>
+          <li>Economic indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Dividends & Income Investing</h3>
+        </div>
+        <p class="unit-description">Learn about dividend-paying stocks and income-focused investment strategies.</p>
+        <ul class="topics-list">
+          <li>Dividend basics explained</li>
+          <li>Dividend yield calculations</li>
+          <li>Dividend growth investing</li>
+          <li>Ex-dividend dates</li>
+          <li>Dividend aristocrats</li>
+          <li>REIT dividend investments</li>
+          <li>Tax implications of dividends</li>
+          <li>Dividend reinvestment plans</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Growth vs Value Investing</h3>
+        </div>
+        <p class="unit-description">Compare different investment styles and their applications in stock selection.</p>
+        <ul class="topics-list">
+          <li>Growth stock characteristics</li>
+          <li>Value investing principles</li>
+          <li>Growth vs value metrics</li>
+          <li>Warren Buffett approach</li>
+          <li>Peter Lynch strategies</li>
+          <li>Style box classifications</li>
+          <li>Market cycle preferences</li>
+          <li>Blended investment approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Risk Management</h3>
+        </div>
+        <p class="unit-description">Learn to identify, measure, and manage investment risks in stock portfolios.</p>
+        <ul class="topics-list">
+          <li>Types of investment risk</li>
+          <li>Diversification strategies</li>
+          <li>Position sizing principles</li>
+          <li>Stop-loss orders</li>
+          <li>Portfolio correlation</li>
+          <li>Risk-adjusted returns</li>
+          <li>Volatility measurements</li>
+          <li>Risk tolerance assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Stock Research & Analysis</h3>
+        </div>
+        <p class="unit-description">Develop skills for researching and analyzing individual stocks and companies.</p>
+        <ul class="topics-list">
+          <li>Company research process</li>
+          <li>Industry analysis methods</li>
+          <li>Competitive positioning</li>
+          <li>Management evaluation</li>
+          <li>Business model analysis</li>
+          <li>Growth prospects assessment</li>
+          <li>Financial health metrics</li>
+          <li>Research report reading</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Market Orders & Trading</h3>
+        </div>
+        <p class="unit-description">Master different order types and trading mechanics for stock transactions.</p>
+        <ul class="topics-list">
+          <li>Market order execution</li>
+          <li>Limit order strategies</li>
+          <li>Stop orders and stop-loss</li>
+          <li>Good-til-canceled orders</li>
+          <li>Day trading basics</li>
+          <li>Swing trading concepts</li>
+          <li>Commission and fees</li>
+          <li>Order routing and execution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Market Regulations & Ethics</h3>
+        </div>
+        <p class="unit-description">Understand regulatory framework and ethical considerations in stock market investing.</p>
+        <ul class="topics-list">
+          <li>SEC oversight and rules</li>
+          <li>Insider trading laws</li>
+          <li>Market manipulation prevention</li>
+          <li>Disclosure requirements</li>
+          <li>Investor protection measures</li>
+          <li>Fiduciary responsibilities</li>
+          <li>Ethical investing considerations</li>
+          <li>Regulatory compliance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Stock Market Overview</h1>
+      <p>Understand the basic structure, purpose, and function of stock markets in the economy.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is the Stock Market</h3>
+        <p>Learn the fundamental definition and purpose of stock markets as platforms for buying and selling company ownership shares.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">History of Stock Exchanges</h3>
+        <p>Explore the evolution of stock markets from early trading posts to modern electronic exchanges.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Primary vs Secondary Markets</h3>
+        <p>Distinguish between primary markets where new securities are issued and secondary markets where existing securities trade.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Major Global Stock Exchanges</h3>
+        <p>Learn about the world's largest stock exchanges including NYSE, NASDAQ, London Stock Exchange, and Tokyo Stock Exchange.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Participants Overview</h3>
+        <p>Identify different types of market participants including individual investors, institutions, market makers, and regulators.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Market vs Economy</h3>
+        <p>Understand the relationship between stock market performance and broader economic conditions and indicators.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Capitalization Basics</h3>
+        <p>Learn how market cap is calculated and used to categorize companies into large-cap, mid-cap, and small-cap segments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Public vs Private Companies</h3>
+        <p>Compare publicly traded companies with private companies and understand the process of going public through IPOs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: How Stocks Work</h1>
+      <p>Learn the fundamentals of stocks as ownership shares in companies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Ownership Basics</h3>
+        <p>Understand what it means to own stock in a company and the rights and responsibilities that come with ownership.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common vs Preferred Stock</h3>
+        <p>Compare the characteristics, rights, and benefits of common stock versus preferred stock investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Certificates and Shares</h3>
+        <p>Learn about physical and electronic stock certificates and how shares represent fractional ownership of companies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Voting Rights and Dividends</h3>
+        <p>Explore shareholder voting rights in corporate decisions and how dividends provide income to stockholders.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Splits and Mergers</h3>
+        <p>Understand corporate actions like stock splits that increase share count and mergers that combine companies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">IPOs and New Issues</h3>
+        <p>Learn about Initial Public Offerings and how private companies go public by issuing stock to investors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Buybacks</h3>
+        <p>Understand how companies repurchase their own shares and the impact on remaining shareholders and stock price.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Delisting and Bankruptcy</h3>
+        <p>Learn what happens when companies are removed from stock exchanges or face bankruptcy and liquidation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Stock Exchanges & Trading</h1>
+      <p>Explore how stock exchanges operate and facilitate securities trading.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">NYSE Operations</h3>
+        <p>Learn how the New York Stock Exchange operates with its hybrid floor and electronic trading systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">NASDAQ Electronic Trading</h3>
+        <p>Understand the fully electronic trading system of NASDAQ and its market maker network structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Makers and Specialists</h3>
+        <p>Explore the role of market makers and specialists in providing liquidity and facilitating smooth trading.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order Matching Systems</h3>
+        <p>Learn how electronic systems match buy and sell orders to execute trades at fair market prices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Trading Hours and Sessions</h3>
+        <p>Understand regular trading hours, pre-market, and after-hours trading sessions and their characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Circuit Breakers and Halts</h3>
+        <p>Learn about automatic trading halts and circuit breakers designed to prevent excessive market volatility.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Alternative Trading Systems</h3>
+        <p>Explore dark pools and other alternative trading venues that compete with traditional stock exchanges.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International Exchanges</h3>
+        <p>Learn about major international stock exchanges and cross-border trading opportunities and challenges.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div
