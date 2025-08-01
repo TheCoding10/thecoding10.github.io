@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Economics for Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #166534 0%, #16A34A 50%, #22C55E 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #166534, #16A34A);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(22, 101, 52, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #166534;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #166534;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #166534, #16A34A);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(22, 101, 52, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Economics for Finance</h1>
+    <p>Apply economic principles to financial markets, investment decisions, and business strategy</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Economics for Finance Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">17</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~210</span>
+          <div class="stat-label">Economic Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Financial Applications</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Market Models</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Economic Foundations</h3>
+        </div>
+        <p class="unit-description">Understand fundamental economic principles essential for financial decision-making.</p>
+        <ul class="topics-list">
+          <li>Scarcity and opportunity cost</li>
+          <li>Supply and demand basics</li>
+          <li>Market equilibrium concepts</li>
+          <li>Economic efficiency principles</li>
+          <li>Marginal analysis applications</li>
+          <li>Economic systems overview</li>
+          <li>Role of prices in markets</li>
+          <li>Economic decision-making models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Microeconomic Theory</h3>
+        </div>
+        <p class="unit-description">Master individual market behavior and its applications to financial markets.</p>
+        <ul class="topics-list">
+          <li>Consumer choice theory</li>
+          <li>Utility maximization</li>
+          <li>Demand curve derivation</li>
+          <li>Producer theory basics</li>
+          <li>Cost structure analysis</li>
+          <li>Market structures overview</li>
+          <li>Price elasticity concepts</li>
+          <li>Game theory applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Macroeconomic Fundamentals</h3>
+        </div>
+        <p class="unit-description">Explore economy-wide phenomena that impact financial markets and investment decisions.</p>
+        <ul class="topics-list">
+          <li>GDP measurement and components</li>
+          <li>Economic growth factors</li>
+          <li>Business cycle patterns</li>
+          <li>Unemployment types and rates</li>
+          <li>Inflation causes and effects</li>
+          <li>Aggregate supply and demand</li>
+          <li>Economic indicators analysis</li>
+          <li>International trade basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Monetary Policy & Central Banking</h3>
+        </div>
+        <p class="unit-description">Understand how central bank policies affect interest rates, inflation, and financial markets.</p>
+        <ul class="topics-list">
+          <li>Federal Reserve structure</li>
+          <li>Monetary policy tools</li>
+          <li>Interest rate mechanisms</li>
+          <li>Money supply control</li>
+          <li>Quantitative easing effects</li>
+          <li>Policy transmission channels</li>
+          <li>Forward guidance impacts</li>
+          <li>International monetary policy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Fiscal Policy & Government Finance</h3>
+        </div>
+        <p class="unit-description">Analyze government spending, taxation, and debt policies and their market implications.</p>
+        <ul class="topics-list">
+          <li>Government budget dynamics</li>
+          <li>Fiscal policy multipliers</li>
+          <li>Tax policy effects</li>
+          <li>Public debt implications</li>
+          <li>Automatic stabilizers</li>
+          <li>Crowding out effects</li>
+          <li>Fiscal sustainability</li>
+          <li>Political economy factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Financial Market Economics</h3>
+        </div>
+        <p class="unit-description">Apply economic theory to understand how financial markets operate and price assets.</p>
+        <ul class="topics-list">
+          <li>Market efficiency hypothesis</li>
+          <li>Information asymmetries</li>
+          <li>Risk and return relationships</li>
+          <li>Portfolio theory foundations</li>
+          <li>Capital asset pricing models</li>
+          <li>Behavioral finance insights</li>
+          <li>Market microstructure</li>
+          <li>Liquidity economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Interest Rate Theory</h3>
+        </div>
+        <p class="unit-description">Master the economic determinants of interest rates and yield curve dynamics.</p>
+        <ul class="topics-list">
+          <li>Time preference theory</li>
+          <li>Loanable funds model</li>
+          <li>Term structure theories</li>
+          <li>Risk premium components</li>
+          <li>Inflation expectations</li>
+          <li>Yield curve interpretation</li>
+          <li>Real vs nominal rates</li>
+          <li>International rate differentials</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Exchange Rate Economics</h3>
+        </div>
+        <p class="unit-description">Understand currency valuation, exchange rate determination, and international finance.</p>
+        <ul class="topics-list">
+          <li>Exchange rate systems</li>
+          <li>Purchasing power parity</li>
+          <li>Interest rate parity</li>
+          <li>Balance of payments effects</li>
+          <li>Currency risk factors</li>
+          <li>Exchange rate volatility</li>
+          <li>International capital flows</li>
+          <li>Currency crisis models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Inflation & Price Dynamics</h3>
+        </div>
+        <p class="unit-description">Analyze inflation causes, measurement, and impacts on investment and financial planning.</p>
+        <ul class="topics-list">
+          <li>Inflation measurement methods</li>
+          <li>Demand-pull vs cost-push</li>
+          <li>Phillips curve relationship</li>
+          <li>Inflation expectations formation</li>
+          <li>Hyperinflation causes</li>
+          <li>Deflation risks</li>
+          <li>Real return calculations</li>
+          <li>Inflation hedging strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Economic Growth & Development</h3>
+        </div>
+        <p class="unit-description">Explore long-term growth factors and their implications for investment opportunities.</p>
+        <ul class="topics-list">
+          <li>Solow growth model</li>
+          <li>Endogenous growth theory</li>
+          <li>Productivity determinants</li>
+          <li>Technology and innovation</li>
+          <li>Human capital investment</li>
+          <li>Infrastructure impacts</li>
+          <li>Institutional quality</li>
+          <li>Emerging market dynamics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Market Failures & Regulation</h3>
+        </div>
+        <p class="unit-description">Understand when markets fail and how regulation affects financial institutions and markets.</p>
+        <ul class="topics-list">
+          <li>Market failure types</li>
+          <li>Externalities in finance</li>
+          <li>Public goods characteristics</li>
+          <li>Monopoly power effects</li>
+          <li>Information problems</li>
+          <li>Regulatory responses</li>
+          <li>Cost-benefit analysis</li>
+          <li>Regulatory capture risks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Behavioral Economics</h3>
+        </div>
+        <p class="unit-description">Apply psychological insights to understand financial decision-making and market anomalies.</p>
+        <ul class="topics-list">
+          <li>Cognitive biases in finance</li>
+          <li>Prospect theory applications</li>
+          <li>Mental accounting effects</li>
+          <li>Heuristics and shortcuts</li>
+          <li>Overconfidence bias</li>
+          <li>Loss aversion impacts</li>
+          <li>Herding behavior</li>
+          <li>Nudge theory applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Industrial Organization</h3>
+        </div>
+        <p class="unit-description">Analyze market structure, competition, and strategic behavior in financial services.</p>
+        <ul class="topics-list">
+          <li>Market concentration measures</li>
+          <li>Barriers to entry</li>
+          <li>Product differentiation</li>
+          <li>Strategic interactions</li>
+          <li>Antitrust implications</li>
+          <li>Network effects</li>
+          <li>Platform economics</li>
+          <li>Innovation incentives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Public Economics</h3>
+        </div>
+        <p class="unit-description">Examine government role in the economy and public policy impacts on financial markets.</p>
+        <ul class="topics-list">
+          <li>Public choice theory</li>
+          <li>Tax incidence analysis</li>
+          <li>Social security systems</li>
+          <li>Healthcare economics</li>
+          <li>Education investments</li>
+          <li>Environmental economics</li>
+          <li>Income inequality</li>
+          <li>Welfare state effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Labor Economics</h3>
+        </div>
+        <p class="unit-description">Understand labor markets, wage determination, and employment impacts on economic growth.</p>
+        <ul class="topics-list">
+          <li>Labor supply and demand</li>
+          <li>Wage determination models</li>
+          <li>Human capital theory</li>
+          <li>Employment relationships</li>
+          <li>Labor market institutions</li>
+          <li>Unemployment analysis</li>
+          <li>Migration effects</li>
+          <li>Technological displacement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">International Economics</h3>
+        </div>
+        <p class="unit-description">Master international trade, finance, and their effects on global financial markets.</p>
+        <ul class="topics-list">
+          <li>Comparative advantage theory</li>
+          <li>Trade policy effects</li>
+          <li>International capital markets</li>
+          <li>Global value chains</li>
+          <li>Economic integration</li>
+          <li>Trade agreements</li>
+          <li>Sovereign risk analysis</li>
+          <li>Global economic governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Economic Forecasting & Analysis</h3>
+        </div>
+        <p class="unit-description">Learn economic modeling, forecasting techniques, and their applications in financial planning.</p>
+        <ul class="topics-list">
+          <li>Economic modeling approaches</li>
+          <li>Time series analysis</li>
+          <li>Leading indicators</li>
+          <li>Scenario planning methods</li>
+          <li>Econometric techniques</li>
+          <li>Forecast evaluation</li>
+          <li>Policy impact assessment</li>
+          <li>Risk scenario modeling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Economic Foundations</h1>
+      <p>Understand fundamental economic principles essential for financial decision-making.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Scarcity and Opportunity Cost</h3>
+        <p>Learn how limited resources force choices and understand opportunity cost as the value of the next best alternative.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Supply and Demand Basics</h3>
+        <p>Master the fundamental forces that determine prices in markets and how they interact to create equilibrium.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Equilibrium Concepts</h3>
+        <p>Understand how markets clear and prices adjust to balance supply and demand in competitive markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Efficiency Principles</h3>
+        <p>Explore allocative and productive efficiency and how markets can achieve optimal resource allocation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Marginal Analysis Applications</h3>
+        <p>Learn to make decisions by comparing marginal benefits and marginal costs in economic and financial contexts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Systems Overview</h3>
+        <p>Compare different economic systems and understand how they affect resource allocation and financial markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Role of Prices in Markets</h3>
+        <p>Understand how prices convey information, coordinate economic activity, and provide incentives for efficient allocation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Decision-Making Models</h3>
+        <p>Apply rational choice theory and other models to understand how individuals and firms make economic decisions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Microeconomic Theory</h1>
+      <p>Master individual market behavior and its applications to financial markets.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Consumer Choice Theory</h3>
+        <p>Learn how consumers make decisions under budget constraints and how preferences shape demand patterns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Utility Maximization</h3>
+        <p>Understand how rational consumers allocate their income to maximize satisfaction subject to budget constraints.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Demand Curve Derivation</h3>
+        <p>Learn how individual demand curves are derived from utility maximization and how they aggregate to market demand.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Producer Theory Basics</h3>
+        <p>Understand how firms make production decisions to maximize profits given technology and input costs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cost Structure Analysis</h3>
+        <p>Analyze different types of costs (fixed, variable, marginal) and their impact on firm decision-making.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Structures Overview</h3>
+        <p>Compare perfect competition, monopoly, oligopoly, and monopolistic competition and their implications for pricing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Price Elasticity Concepts</h3>
+        <p>Master price elasticity of demand and supply and their applications to revenue and policy analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Game Theory Applications</h3>
+        <p>Apply game theory concepts to understand strategic interactions in markets and financial decision-making.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Macroeconomic Fundamentals</h1>
+      <p>Explore economy-wide phenomena that impact financial markets and investment decisions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">GDP Measurement and Components</h3>
+        <p>Learn how Gross Domestic Product is measured and understand its components: consumption, investment, government, and net exports.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Growth Factors</h3>
+        <p>Identify the key drivers of long-term economic growth including capital, labor, and technological progress.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Business Cycle Patterns</h3>
+        <p>Understand the phases of business cycles and their impact on different sectors and investment opportunities.</p>
+      </div>
