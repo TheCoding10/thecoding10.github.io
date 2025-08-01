@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Corporate Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7C2D12 0%, #DC2626 50%, #EF4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7C2D12, #DC2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💼';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7C2D12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7C2D12;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7C2D12, #DC2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💼 MemoLearning Corporate Finance</h1>
+    <p>Master financial decision-making, valuation, and capital management for businesses</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Corporate Finance Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~220</span>
+          <div class="stat-label">Finance Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Valuation Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Financial Tools</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Corporate Finance Foundations</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental principles and objectives of corporate financial management.</p>
+        <ul class="topics-list">
+          <li>Role of corporate finance</li>
+          <li>Financial manager responsibilities</li>
+          <li>Maximizing shareholder value</li>
+          <li>Agency problems and costs</li>
+          <li>Financial markets overview</li>
+          <li>Corporate governance basics</li>
+          <li>Financial goal setting</li>
+          <li>Stakeholder relationships</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Financial Statements Analysis</h3>
+        </div>
+        <p class="unit-description">Master reading and interpreting financial statements for business decision-making.</p>
+        <ul class="topics-list">
+          <li>Income statement analysis</li>
+          <li>Balance sheet components</li>
+          <li>Cash flow statement</li>
+          <li>Statement of equity changes</li>
+          <li>Financial ratios calculation</li>
+          <li>Trend analysis techniques</li>
+          <li>Industry benchmarking</li>
+          <li>Financial statement quality</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Time Value of Money</h3>
+        </div>
+        <p class="unit-description">Learn fundamental concepts of present value, future value, and discounting techniques.</p>
+        <ul class="topics-list">
+          <li>Present value calculations</li>
+          <li>Future value concepts</li>
+          <li>Annuity valuations</li>
+          <li>Perpetuity calculations</li>
+          <li>Compounding periods</li>
+          <li>Effective interest rates</li>
+          <li>Time value applications</li>
+          <li>Financial calculator usage</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Risk & Return Analysis</h3>
+        </div>
+        <p class="unit-description">Understand the relationship between risk and return in corporate financial decisions.</p>
+        <ul class="topics-list">
+          <li>Risk measurement techniques</li>
+          <li>Expected return calculations</li>
+          <li>Portfolio theory basics</li>
+          <li>Systematic vs unsystematic risk</li>
+          <li>Beta coefficient analysis</li>
+          <li>Capital Asset Pricing Model</li>
+          <li>Risk-return trade-offs</li>
+          <li>Diversification benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Capital Budgeting</h3>
+        </div>
+        <p class="unit-description">Master techniques for evaluating and selecting long-term investment projects.</p>
+        <ul class="topics-list">
+          <li>Net present value (NPV)</li>
+          <li>Internal rate of return (IRR)</li>
+          <li>Payback period analysis</li>
+          <li>Profitability index</li>
+          <li>Modified IRR calculations</li>
+          <li>Capital rationing decisions</li>
+          <li>Project risk assessment</li>
+          <li>Real options valuation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Cost of Capital</h3>
+        </div>
+        <p class="unit-description">Calculate and apply the cost of capital for investment and financing decisions.</p>
+        <ul class="topics-list">
+          <li>Weighted average cost of capital</li>
+          <li>Cost of equity calculations</li>
+          <li>Cost of debt determination</li>
+          <li>Preferred stock costs</li>
+          <li>Market value weights</li>
+          <li>Marginal cost concepts</li>
+          <li>Flotation cost adjustments</li>
+          <li>Divisional cost of capital</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Capital Structure Theory</h3>
+        </div>
+        <p class="unit-description">Explore optimal capital structure and the mix of debt and equity financing.</p>
+        <ul class="topics-list">
+          <li>Modigliani-Miller propositions</li>
+          <li>Trade-off theory</li>
+          <li>Pecking order theory</li>
+          <li>Financial leverage effects</li>
+          <li>Debt capacity analysis</li>
+          <li>Optimal capital structure</li>
+          <li>Business risk vs financial risk</li>
+          <li>Capital structure decisions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Dividend Policy</h3>
+        </div>
+        <p class="unit-description">Understand dividend policy decisions and their impact on firm value and shareholders.</p>
+        <ul class="topics-list">
+          <li>Dividend policy theories</li>
+          <li>Dividend irrelevance theory</li>
+          <li>Clientele effects</li>
+          <li>Signaling theory</li>
+          <li>Dividend payout ratios</li>
+          <li>Stock dividends and splits</li>
+          <li>Share repurchase programs</li>
+          <li>Dividend payment procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Working Capital Management</h3>
+        </div>
+        <p class="unit-description">Manage short-term assets and liabilities for optimal liquidity and profitability.</p>
+        <ul class="topics-list">
+          <li>Working capital concepts</li>
+          <li>Cash management strategies</li>
+          <li>Accounts receivable management</li>
+          <li>Inventory management techniques</li>
+          <li>Accounts payable policies</li>
+          <li>Short-term financing options</li>
+          <li>Cash conversion cycle</li>
+          <li>Liquidity planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Long-term Financing</h3>
+        </div>
+        <p class="unit-description">Explore various sources and methods of long-term corporate financing.</p>
+        <ul class="topics-list">
+          <li>Common stock financing</li>
+          <li>Preferred stock characteristics</li>
+          <li>Bond financing options</li>
+          <li>Term loans and credit facilities</li>
+          <li>Convertible securities</li>
+          <li>Warrants and rights offerings</li>
+          <li>Lease financing</li>
+          <li>International financing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Mergers & Acquisitions</h3>
+        </div>
+        <p class="unit-description">Analyze corporate restructuring, mergers, acquisitions, and strategic combinations.</p>
+        <ul class="topics-list">
+          <li>M&A motivations and rationale</li>
+          <li>Types of mergers</li>
+          <li>Valuation in M&A</li>
+          <li>Due diligence process</li>
+          <li>Financing acquisitions</li>
+          <li>Defensive strategies</li>
+          <li>Post-merger integration</li>
+          <li>Divestitures and spin-offs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Corporate Valuation</h3>
+        </div>
+        <p class="unit-description">Master various methods for valuing companies and their securities.</p>
+        <ul class="topics-list">
+          <li>Discounted cash flow models</li>
+          <li>Free cash flow valuation</li>
+          <li>Comparable company analysis</li>
+          <li>Precedent transaction analysis</li>
+          <li>Asset-based valuation</li>
+          <li>Equity valuation models</li>
+          <li>Enterprise value calculations</li>
+          <li>Valuation multiples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Financial Planning & Forecasting</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive financial plans and forecasting models for business growth.</p>
+        <ul class="topics-list">
+          <li>Financial planning process</li>
+          <li>Pro forma financial statements</li>
+          <li>Sales forecasting methods</li>
+          <li>Percentage of sales method</li>
+          <li>External financing needs</li>
+          <li>Sustainable growth rate</li>
+          <li>Scenario and sensitivity analysis</li>
+          <li>Monte Carlo simulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">International Corporate Finance</h3>
+        </div>
+        <p class="unit-description">Navigate the complexities of international business finance and currency risk.</p>
+        <ul class="topics-list">
+          <li>Foreign exchange markets</li>
+          <li>Currency risk management</li>
+          <li>International capital budgeting</li>
+          <li>Political risk assessment</li>
+          <li>Transfer pricing</li>
+          <li>International financing sources</li>
+          <li>Multinational capital structure</li>
+          <li>Cross-border M&A</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Financial Risk Management</h3>
+        </div>
+        <p class="unit-description">Identify, measure, and manage various financial risks facing corporations.</p>
+        <ul class="topics-list">
+          <li>Risk identification process</li>
+          <li>Interest rate risk management</li>
+          <li>Credit risk assessment</li>
+          <li>Operational risk controls</li>
+          <li>Derivatives and hedging</li>
+          <li>Insurance strategies</li>
+          <li>Enterprise risk management</li>
+          <li>Risk governance frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Advanced Corporate Finance</h3>
+        </div>
+        <p class="unit-description">Explore sophisticated topics in modern corporate finance theory and practice.</p>
+        <ul class="topics-list">
+          <li>Behavioral corporate finance</li>
+          <li>Market timing strategies</li>
+          <li>Corporate restructuring</li>
+          <li>Financial distress and bankruptcy</li>
+          <li>ESG and sustainable finance</li>
+          <li>FinTech impact on corporate finance</li>
+          <li>Private equity and venture capital</li>
+          <li>Corporate finance trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Corporate Finance Foundations</h1>
+      <p>Understand the fundamental principles and objectives of corporate financial management.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Role of Corporate Finance</h3>
+        <p>Learn the core functions of corporate finance including investment decisions, financing decisions, and dividend policy.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Manager Responsibilities</h3>
+        <p>Understand the duties and responsibilities of financial managers in maximizing firm value and managing resources.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maximizing Shareholder Value</h3>
+        <p>Explore the primary goal of financial management and how decisions should align with shareholder wealth maximization.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Agency Problems and Costs</h3>
+        <p>Identify conflicts of interest between managers and shareholders and understand agency costs and mitigation strategies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Markets Overview</h3>
+        <p>Learn about money markets, capital markets, and how corporations interact with financial markets for funding.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Corporate Governance Basics</h3>
+        <p>Understand the framework of rules and practices that govern corporate behavior and accountability to stakeholders.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Goal Setting</h3>
+        <p>Learn how to establish clear financial objectives and metrics to guide corporate financial decision-making.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stakeholder Relationships</h3>
+        <p>Explore the balance between shareholder interests and other stakeholders including employees, customers, and creditors.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Financial Statements Analysis</h1>
+      <p>Master reading and interpreting financial statements for business decision-making.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Income Statement Analysis</h3>
+        <p>Learn to analyze revenue, expenses, and profitability trends using income statement data and ratios.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Balance Sheet Components</h3>
+        <p>Understand assets, liabilities, and equity structure and how they reflect a company's financial position.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cash Flow Statement</h3>
+        <p>Analyze operating, investing, and financing cash flows to assess liquidity and cash generation capability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Statement of Equity Changes</h3>
+        <p>Track changes in shareholder equity including retained earnings, stock issuances, and dividend payments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Ratios Calculation</h3>
+        <p>Master liquidity, profitability, efficiency, and leverage ratios for comprehensive financial analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Trend Analysis Techniques</h3>
+        <p>Use horizontal and vertical analysis to identify patterns and changes in financial performance over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Industry Benchmarking</h3>
+        <p>Compare company performance against industry averages and peer companies for relative assessment.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Statement Quality</h3>
+        <p>Evaluate the reliability and quality of financial statements and identify potential red flags or manipulations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Time Value of Money</h1>
+      <p>Learn fundamental concepts of present value, future value, and discounting techniques.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Present Value Calculations</h3>
+        <p>Master the technique of discounting future cash flows to determine their current worth using discount rates.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Future Value Concepts</h3>
+        <p>Learn to calculate the future worth of current investments using compound interest and growth rates.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Annuity Valuations</h3>
+        <p>Value ordinary annuities, annuities due, and growing annuities for financial planning and investment analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Perpetuity Calculations</h3>
+        <p>Understand how to value perpetual cash flows and growing perpetuities for long-term investment evaluation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Compounding Periods</h3>
+        <p>Learn the impact of different compounding frequencies on investment returns and loan calculations.</p>
+      </div>
+      <div class="subtopic-card">
