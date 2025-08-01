@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Finance & Investing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0F766E 0%, #059669 50%, #10B981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0F766E, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 118, 110, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💰';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0F766E;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0F766E;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0F766E, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💰 MemoLearning Finance & Investing</h1>
+    <p>Master personal finance, budgeting, investing, and wealth-building strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Finance & Investing Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Financial Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Investment Strategies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Financial Tools</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Personal Finance Fundamentals</h3>
+        </div>
+        <p class="unit-description">Build a solid foundation in personal finance principles and money management basics.</p>
+        <ul class="topics-list">
+          <li>Financial literacy basics</li>
+          <li>Money mindset and psychology</li>
+          <li>Setting financial goals</li>
+          <li>Income vs expenses tracking</li>
+          <li>Net worth calculation</li>
+          <li>Cash flow management</li>
+          <li>Financial planning timeline</li>
+          <li>Common financial mistakes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Budgeting & Expense Management</h3>
+        </div>
+        <p class="unit-description">Master budgeting techniques and expense control strategies for optimal money management.</p>
+        <ul class="topics-list">
+          <li>50/30/20 budgeting rule</li>
+          <li>Zero-based budgeting</li>
+          <li>Envelope budgeting method</li>
+          <li>Expense categorization</li>
+          <li>Tracking spending habits</li>
+          <li>Budgeting apps and tools</li>
+          <li>Variable vs fixed expenses</li>
+          <li>Budget adjustments and reviews</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Emergency Fund & Savings</h3>
+        </div>
+        <p class="unit-description">Build financial security through emergency funds and strategic saving approaches.</p>
+        <ul class="topics-list">
+          <li>Emergency fund importance</li>
+          <li>3-6 month expense rule</li>
+          <li>High-yield savings accounts</li>
+          <li>Money market accounts</li>
+          <li>Certificates of deposit (CDs)</li>
+          <li>Automatic savings plans</li>
+          <li>Sinking funds strategy</li>
+          <li>Short-term vs long-term savings</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Debt Management & Credit</h3>
+        </div>
+        <p class="unit-description">Understand debt strategies, credit building, and responsible borrowing practices.</p>
+        <ul class="topics-list">
+          <li>Types of debt (good vs bad)</li>
+          <li>Debt avalanche method</li>
+          <li>Debt snowball method</li>
+          <li>Credit scores and reports</li>
+          <li>Credit utilization ratio</li>
+          <li>Credit card strategies</li>
+          <li>Student loan management</li>
+          <li>Mortgage basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Banking & Financial Services</h3>
+        </div>
+        <p class="unit-description">Navigate banking services and choose the right financial institutions and accounts.</p>
+        <ul class="topics-list">
+          <li>Types of bank accounts</li>
+          <li>Checking account features</li>
+          <li>Online vs traditional banks</li>
+          <li>Credit unions benefits</li>
+          <li>Banking fees to avoid</li>
+          <li>Direct deposit setup</li>
+          <li>Mobile banking security</li>
+          <li>Financial institution selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Investment Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn investment basics, risk management, and building long-term wealth.</p>
+        <ul class="topics-list">
+          <li>Investment vs speculation</li>
+          <li>Risk and return relationship</li>
+          <li>Time value of money</li>
+          <li>Compound interest power</li>
+          <li>Investment account types</li>
+          <li>Dollar-cost averaging</li>
+          <li>Asset allocation basics</li>
+          <li>Investment timeline planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Stocks & Equity Investing</h3>
+        </div>
+        <p class="unit-description">Master stock market investing, company analysis, and equity portfolio building.</p>
+        <ul class="topics-list">
+          <li>Stock market basics</li>
+          <li>Individual stocks vs ETFs</li>
+          <li>Fundamental analysis</li>
+          <li>P/E ratios and valuations</li>
+          <li>Dividend investing</li>
+          <li>Growth vs value stocks</li>
+          <li>Market cap categories</li>
+          <li>Stock selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Bonds & Fixed Income</h3>
+        </div>
+        <p class="unit-description">Understand bond investing, interest rates, and fixed-income portfolio strategies.</p>
+        <ul class="topics-list">
+          <li>Bond fundamentals</li>
+          <li>Government vs corporate bonds</li>
+          <li>Bond yields and prices</li>
+          <li>Interest rate risk</li>
+          <li>Credit risk assessment</li>
+          <li>Bond laddering strategy</li>
+          <li>Treasury securities</li>
+          <li>Municipal bonds (munis)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Retirement Planning</h3>
+        </div>
+        <p class="unit-description">Plan for retirement through 401(k)s, IRAs, and comprehensive retirement strategies.</p>
+        <ul class="topics-list">
+          <li>Retirement needs calculation</li>
+          <li>401(k) employer matching</li>
+          <li>Traditional vs Roth IRA</li>
+          <li>Contribution limits</li>
+          <li>Retirement account rollovers</li>
+          <li>Social Security planning</li>
+          <li>Withdrawal strategies</li>
+          <li>Retirement timeline planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Insurance & Protection</h3>
+        </div>
+        <p class="unit-description">Protect your financial future with appropriate insurance coverage and risk management.</p>
+        <ul class="topics-list">
+          <li>Insurance needs assessment</li>
+          <li>Health insurance basics</li>
+          <li>Life insurance types</li>
+          <li>Disability insurance</li>
+          <li>Auto insurance coverage</li>
+          <li>Homeowners/renters insurance</li>
+          <li>Umbrella policies</li>
+          <li>Insurance cost optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Tax Planning & Optimization</h3>
+        </div>
+        <p class="unit-description">Minimize tax burden through strategic planning and understanding tax-advantaged accounts.</p>
+        <ul class="topics-list">
+          <li>Tax-advantaged accounts</li>
+          <li>Tax deductions and credits</li>
+          <li>Tax-loss harvesting</li>
+          <li>Asset location strategies</li>
+          <li>Roth conversions</li>
+          <li>Tax-efficient investing</li>
+          <li>Record keeping systems</li>
+          <li>Professional tax help</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Strategies & Wealth Building</h3>
+        </div>
+        <p class="unit-description">Explore advanced financial strategies for wealth accumulation and financial independence.</p>
+        <ul class="topics-list">
+          <li>FIRE movement principles</li>
+          <li>Real estate investing</li>
+          <li>Side hustle development</li>
+          <li>Passive income streams</li>
+          <li>Advanced tax strategies</li>
+          <li>Estate planning basics</li>
+          <li>Wealth preservation</li>
+          <li>Financial independence metrics</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Personal Finance Fundamentals</h1>
+      <p>Build a solid foundation in personal finance principles and money management basics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Literacy Basics</h3>
+        <p>Understand fundamental financial concepts including income, expenses, assets, liabilities, and net worth calculations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Money Mindset and Psychology</h3>
+        <p>Explore your relationship with money, identify limiting beliefs, and develop healthy financial habits and behaviors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Setting Financial Goals</h3>
+        <p>Learn to create SMART financial goals for short-term needs, medium-term wants, and long-term wealth building.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Income vs Expenses Tracking</h3>
+        <p>Master the art of tracking all income sources and categorizing expenses to understand your money flow patterns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Net Worth Calculation</h3>
+        <p>Calculate and track your net worth by understanding the difference between assets and liabilities over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cash Flow Management</h3>
+        <p>Optimize your cash flow by timing income and expenses to maintain positive monthly and annual cash flow.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Planning Timeline</h3>
+        <p>Create a comprehensive financial plan with milestones for different life stages and major financial decisions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Financial Mistakes</h3>
+        <p>Identify and avoid common financial pitfalls including lifestyle inflation, emotional spending, and poor investment timing.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Budgeting & Expense Management</h1>
+      <p>Master budgeting techniques and expense control strategies for optimal money management.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">50/30/20 Budgeting Rule</h3>
+        <p>Implement the popular budgeting framework: 50% needs, 30% wants, 20% savings and debt repayment.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Zero-Based Budgeting</h3>
+        <p>Master zero-based budgeting where every dollar is assigned a specific purpose before the month begins.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Envelope Budgeting Method</h3>
+        <p>Use physical or digital envelopes to allocate specific amounts for different spending categories.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expense Categorization</h3>
+        <p>Organize expenses into fixed, variable, and discretionary categories for better budget control and analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tracking Spending Habits</h3>
+        <p>Develop systems to monitor daily spending and identify patterns that impact your financial goals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Budgeting Apps and Tools</h3>
+        <p>Explore digital tools like Mint, YNAB, and spreadsheets to automate and simplify budget management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable vs Fixed Expenses</h3>
+        <p>Distinguish between fixed costs (rent, insurance) and variable costs (groceries, entertainment) for better planning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Budget Adjustments and Reviews</h3>
+        <p>Learn to regularly review and adjust your budget based on changing circumstances and financial priorities.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Emergency Fund & Savings</h1>
+      <p>Build financial security through emergency funds and strategic saving approaches.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Emergency Fund Importance</h3>
+        <p>Understand why emergency funds are crucial for financial stability and protection against unexpected expenses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">3-6 Month Expense Rule</h3>
+        <p>Calculate your ideal emergency fund size based on monthly essential expenses and personal risk factors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">High-Yield Savings Accounts</h3>
+        <p>Maximize your savings growth with high-yield accounts that offer better interest rates than traditional savings.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Money Market Accounts</h3>
+        <p>Explore money market accounts that combine higher interest rates with limited check-writing capabilities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Certificates of Deposit (CDs)</h3>
+        <p>Use CDs for guaranteed returns on funds you won't need for specific time periods with fixed interest rates.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Automatic Savings Plans</h3>
+        <p>Set up automatic transfers to make saving effortless and consistent with your financial goals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sinking Funds Strategy</h3>
+        <p>Create dedicated savings funds for specific future expenses like vacations, car repairs, or home maintenance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Short-term vs Long-term Savings</h3>
+        <p>Differentiate between savings goals and choose appropriate accounts and strategies for different timeframes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Debt Management & Credit</h1>
+      <p>Understand debt strategies, credit building, and responsible borrowing practices.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Debt (Good vs Bad)</h3>
+        <p>Distinguish between good debt that builds wealth (mortgages, education) and bad debt that drains resources (credit cards).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Debt Avalanche Method</h3>
+        <p>Pay off debts starting with the highest interest rate first to minimize total interest paid over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Debt Snowball Method</h3>
+        <p>Build momentum by paying off smallest debts first, creating psychological wins to stay motivated.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Credit Scores and Reports</h3>
+        <p>Understand how credit scores are calculated and how to read and monitor your credit report regularly.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Credit Utilization Ratio</h3>
+        <p>Maintain optimal credit utilization below 30% of available credit limits to improve your credit score.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Credit Card Strategies</h3>
+        <p>Use credit cards responsibly for rewards and credit building while avoiding debt accumulation and high interest.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Student Loan Management</h3>
+        <p>Navigate student loan repayment options, forgiveness programs, and refinancing strategies to minimize costs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">
