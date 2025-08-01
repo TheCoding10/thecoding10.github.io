@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Investment Vehicles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #F87171 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #B91C1C, #DC2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #B91C1C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #B91C1C;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #B91C1C, #DC2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(185, 28, 28, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 MemoLearning Investment Vehicles</h1>
+    <p>Explore diverse investment options to build and diversify your portfolio</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to investing courses')">← Back to Investing Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Investment Vehicles Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~190</span>
+          <div class="stat-label">Investment Options</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Asset Classes</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Investment Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Individual Stocks</h3>
+        </div>
+        <p class="unit-description">Master equity investing through individual company stocks and ownership stakes.</p>
+        <ul class="topics-list">
+          <li>Common stock characteristics</li>
+          <li>Preferred stock features</li>
+          <li>Stock selection criteria</li>
+          <li>Growth vs value stocks</li>
+          <li>Dividend-paying stocks</li>
+          <li>Stock analysis methods</li>
+          <li>Portfolio concentration risks</li>
+          <li>Direct stock ownership benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Exchange-Traded Funds (ETFs)</h3>
+        </div>
+        <p class="unit-description">Explore ETFs as flexible, low-cost vehicles for diversified investing.</p>
+        <ul class="topics-list">
+          <li>ETF structure and mechanics</li>
+          <li>Index vs actively managed ETFs</li>
+          <li>Broad market ETFs</li>
+          <li>Sector and thematic ETFs</li>
+          <li>International ETFs</li>
+          <li>Bond and fixed income ETFs</li>
+          <li>Commodity ETFs</li>
+          <li>ETF trading strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Mutual Funds</h3>
+        </div>
+        <p class="unit-description">Understand professionally managed mutual funds and their role in portfolios.</p>
+        <ul class="topics-list">
+          <li>Mutual fund basics</li>
+          <li>Active vs passive management</li>
+          <li>Load vs no-load funds</li>
+          <li>Fund categories and styles</li>
+          <li>Expense ratios and fees</li>
+          <li>Fund manager evaluation</li>
+          <li>Tax efficiency considerations</li>
+          <li>Fund selection process</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Bonds & Fixed Income</h3>
+        </div>
+        <p class="unit-description">Learn about bonds and fixed-income securities for income and stability.</p>
+        <ul class="topics-list">
+          <li>Government bonds (Treasuries)</li>
+          <li>Corporate bonds</li>
+          <li>Municipal bonds</li>
+          <li>High-yield bonds</li>
+          <li>International bonds</li>
+          <li>Bond laddering strategies</li>
+          <li>Interest rate risk</li>
+          <li>Credit risk assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Real Estate Investment Trusts (REITs)</h3>
+        </div>
+        <p class="unit-description">Access real estate markets through publicly traded REITs and real estate funds.</p>
+        <ul class="topics-list">
+          <li>REIT structure and types</li>
+          <li>Equity vs mortgage REITs</li>
+          <li>Commercial real estate exposure</li>
+          <li>Residential REITs</li>
+          <li>International REITs</li>
+          <li>REIT valuation metrics</li>
+          <li>Dividend yields and distributions</li>
+          <li>Real estate market cycles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Index Funds</h3>
+        </div>
+        <p class="unit-description">Harness market returns through low-cost index fund investing strategies.</p>
+        <ul class="topics-list">
+          <li>Index fund philosophy</li>
+          <li>S&P 500 index funds</li>
+          <li>Total stock market funds</li>
+          <li>International index funds</li>
+          <li>Bond index funds</li>
+          <li>Factor-based index funds</li>
+          <li>Cost advantages</li>
+          <li>Tax efficiency benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Target-Date Funds</h3>
+        </div>
+        <p class="unit-description">Simplify retirement investing with age-appropriate target-date fund strategies.</p>
+        <ul class="topics-list">
+          <li>Target-date fund concept</li>
+          <li>Glide path strategies</li>
+          <li>Asset allocation evolution</li>
+          <li>Fund provider comparison</li>
+          <li>Active vs passive versions</li>
+          <li>Fee structure analysis</li>
+          <li>Suitability assessment</li>
+          <li>Alternative approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Alternative Investments</h3>
+        </div>
+        <p class="unit-description">Explore alternative asset classes for portfolio diversification and enhanced returns.</p>
+        <ul class="topics-list">
+          <li>Private equity investments</li>
+          <li>Hedge fund strategies</li>
+          <li>Commodities exposure</li>
+          <li>Precious metals investing</li>
+          <li>Art and collectibles</li>
+          <li>Peer-to-peer lending</li>
+          <li>Cryptocurrency basics</li>
+          <li>Alternative investment risks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">International Investments</h3>
+        </div>
+        <p class="unit-description">Diversify globally through international stocks, funds, and emerging markets.</p>
+        <ul class="topics-list">
+          <li>Developed market investing</li>
+          <li>Emerging market opportunities</li>
+          <li>Currency risk management</li>
+          <li>ADRs and foreign stocks</li>
+          <li>International mutual funds</li>
+          <li>Global ETF options</li>
+          <li>Regional diversification</li>
+          <li>Political and economic risks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Dividend-Focused Investments</h3>
+        </div>
+        <p class="unit-description">Build income streams through dividend stocks, funds, and income-focused strategies.</p>
+        <ul class="topics-list">
+          <li>Dividend aristocrats</li>
+          <li>High-yield dividend stocks</li>
+          <li>Dividend growth investing</li>
+          <li>Dividend-focused ETFs</li>
+          <li>Utility and REIT dividends</li>
+          <li>International dividend stocks</li>
+          <li>Dividend reinvestment plans</li>
+          <li>Tax implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Sector & Thematic Investing</h3>
+        </div>
+        <p class="unit-description">Target specific industries, themes, and trends through specialized investment vehicles.</p>
+        <ul class="topics-list">
+          <li>Technology sector funds</li>
+          <li>Healthcare investing</li>
+          <li>Financial sector exposure</li>
+          <li>Energy and utilities</li>
+          <li>Consumer discretionary/staples</li>
+          <li>ESG and sustainable investing</li>
+          <li>Thematic ETFs</li>
+          <li>Sector rotation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Options & Derivatives</h3>
+        </div>
+        <p class="unit-description">Understand options and derivatives for hedging, income generation, and speculation.</p>
+        <ul class="topics-list">
+          <li>Call and put options</li>
+          <li>Covered call strategies</li>
+          <li>Protective puts</li>
+          <li>Options spreads</li>
+          <li>Futures contracts</li>
+          <li>Leverage and margin</li>
+          <li>Risk management tools</li>
+          <li>Derivatives regulations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Robo-Advisors & Automated Investing</h3>
+        </div>
+        <p class="unit-description">Leverage technology-driven investment platforms for automated portfolio management.</p>
+        <ul class="topics-list">
+          <li>Robo-advisor platforms</li>
+          <li>Algorithm-based allocation</li>
+          <li>Automated rebalancing</li>
+          <li>Tax-loss harvesting</li>
+          <li>Goal-based investing</li>
+          <li>Fee structures</li>
+          <li>Human vs robo advisors</li>
+          <li>Platform selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Tax-Advantaged Accounts</h3>
+        </div>
+        <p class="unit-description">Maximize returns through strategic use of tax-advantaged investment accounts.</p>
+        <ul class="topics-list">
+          <li>401(k) and 403(b) plans</li>
+          <li>Traditional vs Roth IRAs</li>
+          <li>Health Savings Accounts (HSAs)</li>
+          <li>529 education savings plans</li>
+          <li>Taxable vs tax-advantaged</li>
+          <li>Asset location strategies</li>
+          <li>Contribution limits</li>
+          <li>Withdrawal rules</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Structured Products</h3>
+        </div>
+        <p class="unit-description">Evaluate structured investments, notes, and complex financial products.</p>
+        <ul class="topics-list">
+          <li>Market-linked CDs</li>
+          <li>Structured notes</li>
+          <li>Principal-protected notes</li>
+          <li>Barrier options</li>
+          <li>Reverse convertible notes</li>
+          <li>Complexity and risks</li>
+          <li>Fee transparency</li>
+          <li>Suitability considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Investment Vehicle Selection</h3>
+        </div>
+        <p class="unit-description">Develop frameworks for choosing appropriate investment vehicles for different goals.</p>
+        <ul class="topics-list">
+          <li>Goal-based selection</li>
+          <li>Risk tolerance matching</li>
+          <li>Time horizon considerations</li>
+          <li>Cost comparison analysis</li>
+          <li>Tax efficiency evaluation</li>
+          <li>Liquidity requirements</li>
+          <li>Portfolio construction</li>
+          <li>Regular review process</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Individual Stocks</h1>
+      <p>Master equity investing through individual company stocks and ownership stakes.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Stock Characteristics</h3>
+        <p>Understand voting rights, dividend potential, and ownership benefits of common stock investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Preferred Stock Features</h3>
+        <p>Learn about preferred stock's bond-like characteristics including fixed dividends and priority claims.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Selection Criteria</h3>
+        <p>Develop frameworks for evaluating individual stocks based on financial metrics and business quality.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Growth vs Value Stocks</h3>
+        <p>Compare growth stock characteristics with value stock opportunities and their different risk-return profiles.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dividend-Paying Stocks</h3>
+        <p>Evaluate dividend-paying companies for income generation and potential dividend growth over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Analysis Methods</h3>
+        <p>Apply fundamental and technical analysis techniques to research and evaluate individual stock investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Portfolio Concentration Risks</h3>
+        <p>Understand the risks of holding too few stocks and strategies for appropriate diversification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Direct Stock Ownership Benefits</h3>
+        <p>Explore advantages of direct stock ownership including voting rights, dividend control, and tax efficiency.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Exchange-Traded Funds (ETFs)</h1>
+      <p>Explore ETFs as flexible, low-cost vehicles for diversified investing.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ETF Structure and Mechanics</h3>
+        <p>Understand how ETFs are created, redeemed, and traded on exchanges with authorized participants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Index vs Actively Managed ETFs</h3>
+        <p>Compare passive index-tracking ETFs with actively managed ETFs and their different approaches.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Broad Market ETFs</h3>
+        <p>Explore total market and broad index ETFs that provide exposure to entire asset classes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sector and Thematic ETFs</h3>
+        <p>Target specific industries or investment themes through specialized sector and thematic ETFs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International ETFs</h3>
+        <p>Access global markets through international developed and emerging market ETF options.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bond and Fixed Income ETFs</h3>
+        <p>Build fixed income exposure through government, corporate, and municipal bond ETFs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Commodity ETFs</h3>
+        <p>Gain exposure to commodities like gold, oil, and agricultural products through specialized ETFs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ETF Trading Strategies</h3>
+        <p>Learn effective strategies for buying, selling, and using ETFs in different market conditions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Mutual Funds</h1>
+      <p>Understand professionally managed mutual funds and their role in portfolios.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mutual Fund Basics</h3>
+        <p>Learn how mutual funds pool investor money and provide professional management and diversification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Active vs Passive Management</h3>
+        <p>Compare actively managed funds that try to beat the market with passive index funds.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Load vs No-Load Funds</h3>
+        <p>Understand sales charges and fees associated with different types of mutual fund share classes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fund Categories and Styles</h3>
+        <p>Explore different mutual fund categories including growth, value, blend, and specialty funds.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expense Ratios and Fees</h3>
+        <p>Analyze mutual fund costs including management fees, 12b-1 fees, and other operating expenses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h
