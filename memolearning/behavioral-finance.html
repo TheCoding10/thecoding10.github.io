@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Behavioral Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #BE185D 0%, #EC4899 50%, #F472B6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #BE185D, #EC4899);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(190, 24, 93, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #BE185D;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #BE185D;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #BE185D, #EC4899);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(190, 24, 93, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 MemoLearning Behavioral Finance</h1>
+    <p>Understand how psychology and emotions drive financial decision-making and market behavior</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to psychology courses')">← Back to Psychology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Behavioral Finance Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Behavioral Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Cognitive Biases</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Market Anomalies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Behavioral Finance</h3>
+        </div>
+        <p class="unit-description">Explore the foundations of behavioral finance and how it challenges traditional financial theory.</p>
+        <ul class="topics-list">
+          <li>Traditional vs behavioral finance</li>
+          <li>Efficient market hypothesis critique</li>
+          <li>Psychological foundations</li>
+          <li>Behavioral finance evolution</li>
+          <li>Key research findings</li>
+          <li>Market anomalies overview</li>
+          <li>Practical implications</li>
+          <li>Interdisciplinary approach</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Prospect Theory</h3>
+        </div>
+        <p class="unit-description">Master Kahneman and Tversky's groundbreaking theory of decision-making under uncertainty.</p>
+        <ul class="topics-list">
+          <li>Expected utility theory limitations</li>
+          <li>Value function characteristics</li>
+          <li>Reference point dependence</li>
+          <li>Loss aversion principles</li>
+          <li>Probability weighting</li>
+          <li>Certainty effect</li>
+          <li>Reflection effect</li>
+          <li>Financial applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Cognitive Biases in Finance</h3>
+        </div>
+        <p class="unit-description">Identify and understand systematic errors in thinking that affect financial decisions.</p>
+        <ul class="topics-list">
+          <li>Overconfidence bias</li>
+          <li>Confirmation bias</li>
+          <li>Anchoring and adjustment</li>
+          <li>Availability heuristic</li>
+          <li>Representativeness bias</li>
+          <li>Hindsight bias</li>
+          <li>Framing effects</li>
+          <li>Cognitive dissonance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Emotional Biases & Decision Making</h3>
+        </div>
+        <p class="unit-description">Examine how emotions influence financial choices and investment behavior.</p>
+        <ul class="topics-list">
+          <li>Fear and greed cycles</li>
+          <li>Regret avoidance</li>
+          <li>Endowment effect</li>
+          <li>Status quo bias</li>
+          <li>Mental accounting</li>
+          <li>Self-control problems</li>
+          <li>Mood effects on decisions</li>
+          <li>Emotional regulation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Heuristics & Mental Shortcuts</h3>
+        </div>
+        <p class="unit-description">Learn how mental shortcuts lead to systematic errors in financial decision-making.</p>
+        <ul class="topics-list">
+          <li>System 1 vs System 2 thinking</li>
+          <li>Rule of thumb strategies</li>
+          <li>Fast and frugal heuristics</li>
+          <li>When heuristics help</li>
+          <li>When heuristics hurt</li>
+          <li>Bounded rationality</li>
+          <li>Satisficing behavior</li>
+          <li>Cognitive load effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Market Anomalies</h3>
+        </div>
+        <p class="unit-description">Explore market patterns that contradict efficient market theory and their behavioral explanations.</p>
+        <ul class="topics-list">
+          <li>Momentum effect</li>
+          <li>Mean reversion patterns</li>
+          <li>Size and value premiums</li>
+          <li>Calendar anomalies</li>
+          <li>Post-earnings announcement drift</li>
+          <li>Winner's curse</li>
+          <li>IPO anomalies</li>
+          <li>Merger arbitrage patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Investor Behavior Patterns</h3>
+        </div>
+        <p class="unit-description">Analyze common behavioral patterns exhibited by individual and institutional investors.</p>
+        <ul class="topics-list">
+          <li>Disposition effect</li>
+          <li>Home bias</li>
+          <li>Familiarity bias</li>
+          <li>Naive diversification</li>
+          <li>Herding behavior</li>
+          <li>Trend following</li>
+          <li>Contrarian strategies</li>
+          <li>Trading frequency patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Behavioral Portfolio Theory</h3>
+        </div>
+        <p class="unit-description">Understand alternative portfolio construction models based on behavioral insights.</p>
+        <ul class="topics-list">
+          <li>Mean-variance vs behavioral</li>
+          <li>Behavioral portfolio theory</li>
+          <li>Mental accounting in portfolios</li>
+          <li>Goal-based investing</li>
+          <li>Behavioral asset allocation</li>
+          <li>Risk perception differences</li>
+          <li>Aspiration level theory</li>
+          <li>Security selection biases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Market Bubbles & Crashes</h3>
+        </div>
+        <p class="unit-description">Examine the psychological factors behind market bubbles, crashes, and extreme volatility.</p>
+        <ul class="topics-list">
+          <li>Bubble formation psychology</li>
+          <li>Euphoria and panic cycles</li>
+          <li>Social proof in markets</li>
+          <li>Feedback loops</li>
+          <li>Media influence</li>
+          <li>Historical bubble analysis</li>
+          <li>Early warning signs</li>
+          <li>Crash recovery patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Behavioral Corporate Finance</h3>
+        </div>
+        <p class="unit-description">Apply behavioral insights to corporate financial decisions and management behavior.</p>
+        <ul class="topics-list">
+          <li>CEO overconfidence</li>
+          <li>Investment timing decisions</li>
+          <li>Capital structure choices</li>
+          <li>Merger and acquisition motives</li>
+          <li>Dividend policy behavior</li>
+          <li>Earnings management</li>
+          <li>Corporate governance issues</li>
+          <li>Stakeholder influence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Social Influences & Herding</h3>
+        </div>
+        <p class="unit-description">Understand how social factors and group dynamics influence financial decision-making.</p>
+        <ul class="topics-list">
+          <li>Social learning theory</li>
+          <li>Information cascades</li>
+          <li>Herd mentality</li>
+          <li>Peer effects</li>
+          <li>Social networks impact</li>
+          <li>Media and sentiment</li>
+          <li>Online community influence</li>
+          <li>Cultural factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Neurofinance & Brain Science</h3>
+        </div>
+        <p class="unit-description">Explore how neuroscience research illuminates the biological basis of financial behavior.</p>
+        <ul class="topics-list">
+          <li>Brain regions in decision-making</li>
+          <li>Neurotransmitters and risk</li>
+          <li>Fear and reward circuits</li>
+          <li>Neuroimaging studies</li>
+          <li>Hormonal influences</li>
+          <li>Age and brain changes</li>
+          <li>Gender differences</li>
+          <li>Clinical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Behavioral Risk Management</h3>
+        </div>
+        <p class="unit-description">Apply behavioral insights to improve risk assessment and management practices.</p>
+        <ul class="topics-list">
+          <li>Risk perception biases</li>
+          <li>Probability estimation errors</li>
+          <li>Black swan neglect</li>
+          <li>Overconfidence in forecasting</li>
+          <li>Disaster myopia</li>
+          <li>Risk communication</li>
+          <li>Behavioral risk models</li>
+          <li>De-biasing techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Nudge Theory & Choice Architecture</h3>
+        </div>
+        <p class="unit-description">Learn how to design better financial environments that guide people toward better decisions.</p>
+        <ul class="topics-list">
+          <li>Libertarian paternalism</li>
+          <li>Choice architecture principles</li>
+          <li>Default option power</li>
+          <li>Framing for better outcomes</li>
+          <li>Retirement savings nudges</li>
+          <li>Investment platform design</li>
+          <li>Financial education effectiveness</li>
+          <li>Policy applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Behavioral Trading Strategies</h3>
+        </div>
+        <p class="unit-description">Develop trading and investment strategies that exploit behavioral biases and market inefficiencies.</p>
+        <ul class="topics-list">
+          <li>Contrarian investment strategies</li>
+          <li>Momentum trading</li>
+          <li>Sentiment-based strategies</li>
+          <li>Calendar anomaly exploitation</li>
+          <li>Earnings surprise strategies</li>
+          <li>Behavioral factor models</li>
+          <li>Market timing approaches</li>
+          <li>Risk management considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Applied Behavioral Finance</h3>
+        </div>
+        <p class="unit-description">Implement behavioral finance insights in real-world financial planning and investment management.</p>
+        <ul class="topics-list">
+          <li>Behavioral coaching techniques</li>
+          <li>Client behavior management</li>
+          <li>Bias-aware portfolio construction</li>
+          <li>Financial planning applications</li>
+          <li>Technology and behavioral aids</li>
+          <li>Professional development</li>
+          <li>Future research directions</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Behavioral Finance</h1>
+      <p>Explore the foundations of behavioral finance and how it challenges traditional financial theory.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traditional vs Behavioral Finance</h3>
+        <p>Compare the assumptions and predictions of traditional finance theory with behavioral finance insights.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Efficient Market Hypothesis Critique</h3>
+        <p>Examine the limitations of market efficiency theory and evidence of persistent market anomalies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Psychological Foundations</h3>
+        <p>Learn the psychological principles from cognitive and social psychology that underpin behavioral finance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Behavioral Finance Evolution</h3>
+        <p>Trace the historical development of behavioral finance from early observations to modern theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Key Research Findings</h3>
+        <p>Review landmark studies and experiments that established behavioral finance as a legitimate field.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Anomalies Overview</h3>
+        <p>Survey the various market patterns and anomalies that cannot be explained by traditional theory.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Practical Implications</h3>
+        <p>Understand how behavioral finance insights apply to real-world investing and financial planning.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interdisciplinary Approach</h3>
+        <p>Explore how behavioral finance draws from psychology, economics, neuroscience, and sociology.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Prospect Theory</h1>
+      <p>Master Kahneman and Tversky's groundbreaking theory of decision-making under uncertainty.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expected Utility Theory Limitations</h3>
+        <p>Understand the shortcomings of traditional expected utility theory in explaining real human behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Value Function Characteristics</h3>
+        <p>Learn about the S-shaped value function that is concave for gains and convex for losses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reference Point Dependence</h3>
+        <p>Explore how outcomes are evaluated relative to a reference point rather than absolute wealth levels.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loss Aversion Principles</h3>
+        <p>Understand why losses feel roughly twice as painful as equivalent gains feel pleasurable.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Weighting</h3>
+        <p>Learn how people systematically distort probabilities when making decisions under uncertainty.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Certainty Effect</h3>
+        <p>Discover why people overweight outcomes that are considered certain compared to probable outcomes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reflection Effect</h3>
+        <p>Understand how risk preferences reverse when moving from gains to losses domain.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Applications</h3>
+        <p>Apply prospect theory to explain various financial behaviors and market phenomena.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Cognitive Biases in Finance</h1>
+      <p>Identify and understand systematic errors in thinking that affect financial decisions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Overconfidence Bias</h3>
+        <p>Learn how excessive confidence in one's abilities leads to poor investment decisions and excessive trading.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Confirmation Bias</h3>
+        <p>Understand the tendency to seek information that confirms existing beliefs while ignoring contradictory evidence.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Anchoring and Adjustment</h3>
+        <p>Explore how initial information serves as an anchor that influences subsequent judgments and decisions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Availability Heuristic</h3>
+        <p>Learn how easily recalled information is overweighted in probability assessments and decision-making.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Representativeness Bias</h3>
+        <p>Understand how stereotyping and pattern recognition can lead to systematic errors in financial judgments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hindsight
