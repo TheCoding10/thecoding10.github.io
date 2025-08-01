@@ -54,10 +54,15 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .course-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      text-decoration: none;
+      color: inherit;
     }
     .course-card h3 {
       font-size: 18px;
@@ -77,19 +82,48 @@
     <p>Master the laws of the universe—from mechanics to quantum physics—with structured, clear lessons.</p>
     <a class="back-link" href="/">← Back to Homepage</a>
   </header>
-
   <div class="container">
     <div class="course-grid">
-      <div class="course-card"><h3>Classical Mechanics</h3><p>Motion, Newton's laws, energy, and momentum.</p></div>
-      <div class="course-card"><h3>Waves & Oscillations</h3><p>Simple harmonic motion, sound, and wave behavior.</p></div>
-      <div class="course-card"><h3>Thermodynamics</h3><p>Heat, work, energy, and the laws of thermodynamics.</p></div>
-      <div class="course-card"><h3>Electricity & Magnetism</h3><p>Circuits, fields, charges, and electromagnetic theory.</p></div>
-      <div class="course-card"><h3>Optics</h3><p>Reflection, refraction, lenses, and wave optics.</p></div>
-      <div class="course-card"><h3>Modern Physics</h3><p>Relativity, photoelectric effect, and nuclear physics.</p></div>
-      <div class="course-card"><h3>Quantum Mechanics</h3><p>Wave-particle duality, uncertainty, and quantum systems.</p></div>
-      <div class="course-card"><h3>Statistical Mechanics</h3><p>Probabilities, ensembles, and thermodynamic relations.</p></div>
-      <div class="course-card"><h3>Particle Physics</h3><p>Fundamental particles and forces of nature.</p></div>
-      <div class="course-card"><h3>Astrophysics</h3><p>Stars, galaxies, cosmology, and black holes.</p></div>
+      <a href="classical-mechanics.html" class="course-card">
+        <h3>Classical Mechanics</h3>
+        <p>Motion, Newton's laws, energy, and momentum.</p>
+      </a>
+      <a href="waves-oscillations.html" class="course-card">
+        <h3>Waves & Oscillations</h3>
+        <p>Simple harmonic motion, sound, and wave behavior.</p>
+      </a>
+      <a href="thermodynamics.html" class="course-card">
+        <h3>Thermodynamics</h3>
+        <p>Heat, work, energy, and the laws of thermodynamics.</p>
+      </a>
+      <a href="electricity-magnetism.html" class="course-card">
+        <h3>Electricity & Magnetism</h3>
+        <p>Circuits, fields, charges, and electromagnetic theory.</p>
+      </a>
+      <a href="optics.html" class="course-card">
+        <h3>Optics</h3>
+        <p>Reflection, refraction, lenses, and wave optics.</p>
+      </a>
+      <a href="modern-physics.html" class="course-card">
+        <h3>Modern Physics</h3>
+        <p>Relativity, photoelectric effect, and nuclear physics.</p>
+      </a>
+      <a href="quantum-mechanics.html" class="course-card">
+        <h3>Quantum Mechanics</h3>
+        <p>Wave-particle duality, uncertainty, and quantum systems.</p>
+      </a>
+      <a href="statistical-mechanics.html" class="course-card">
+        <h3>Statistical Mechanics</h3>
+        <p>Probabilities, ensembles, and thermodynamic relations.</p>
+      </a>
+      <a href="particle-physics.html" class="course-card">
+        <h3>Particle Physics</h3>
+        <p>Fundamental particles and forces of nature.</p>
+      </a>
+      <a href="astrophysics.html" class="course-card">
+        <h3>Astrophysics</h3>
+        <p>Stars, galaxies, cosmology, and black holes.</p>
+      </a>
     </div>
   </div>
 </body>
