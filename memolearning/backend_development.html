@@ -54,10 +54,15 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .course-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      text-decoration: none;
+      color: inherit;
     }
     .course-card h3 {
       font-size: 18px;
@@ -80,23 +85,74 @@
 
   <div class="container">
     <div class="course-grid">
-      <div class="course-card"><h3>Intro to Web Servers</h3><p>Understand how back-end servers process and serve data.</p></div>
-      <div class="course-card"><h3>Node.js Basics</h3><p>JavaScript runtime for building scalable network applications.</p></div>
-      <div class="course-card"><h3>Express.js</h3><p>Fast, minimalist framework for Node.js applications.</p></div>
-      <div class="course-card"><h3>Python with Flask</h3><p>Lightweight back-end web framework for quick API building.</p></div>
-      <div class="course-card"><h3>Django</h3><p>High-level Python web framework with built-in features.</p></div>
-      <div class="course-card"><h3>Routing and Middleware</h3><p>Control requests and responses efficiently in applications.</p></div>
-      <div class="course-card"><h3>REST APIs</h3><p>Design and build clean, structured APIs.</p></div>
-      <div class="course-card"><h3>Authentication</h3><p>Learn sessions, tokens (JWT), and OAuth basics.</p></div>
-      <div class="course-card"><h3>Databases (SQL & NoSQL)</h3><p>Work with PostgreSQL, MySQL, and MongoDB.</p></div>
-      <div class="course-card"><h3>ORMs</h3><p>Use tools like Sequelize, Prisma, and Django ORM.</p></div>
-      <div class="course-card"><h3>Testing APIs</h3><p>Use tools like Postman, Insomnia, and unit tests.</p></div>
-      <div class="course-card"><h3>WebSockets & Real-time</h3><p>Enable live communication with Socket.io and Django Channels.</p></div>
-      <div class="course-card"><h3>Deployment</h3><p>Host apps on services like Render, Heroku, or Vercel.</p></div>
-      <div class="course-card"><h3>Docker & Containers</h3><p>Containerize and scale back-end services.</p></div>
-      <div class="course-card"><h3>CI/CD Pipelines</h3><p>Automate testing and deployment workflows.</p></div>
-      <div class="course-card"><h3>Security Best Practices</h3><p>Protect against injection, XSS, CSRF, and more.</p></div>
-      <div class="course-card"><h3>Scalable Architecture</h3><p>Design systems that grow with user demand.</p></div>
+      <a href="intro-to-web-servers.html" class="course-card">
+        <h3>Intro to Web Servers</h3>
+        <p>Understand how back-end servers process and serve data.</p>
+      </a>
+      <a href="nodejs-basics.html" class="course-card">
+        <h3>Node.js Basics</h3>
+        <p>JavaScript runtime for building scalable network applications.</p>
+      </a>
+      <a href="expressjs.html" class="course-card">
+        <h3>Express.js</h3>
+        <p>Fast, minimalist framework for Node.js applications.</p>
+      </a>
+      <a href="python-with-flask.html" class="course-card">
+        <h3>Python with Flask</h3>
+        <p>Lightweight back-end web framework for quick API building.</p>
+      </a>
+      <a href="django.html" class="course-card">
+        <h3>Django</h3>
+        <p>High-level Python web framework with built-in features.</p>
+      </a>
+      <a href="routing-and-middleware.html" class="course-card">
+        <h3>Routing and Middleware</h3>
+        <p>Control requests and responses efficiently in applications.</p>
+      </a>
+      <a href="rest-apis.html" class="course-card">
+        <h3>REST APIs</h3>
+        <p>Design and build clean, structured APIs.</p>
+      </a>
+      <a href="authentication-backend.html" class="course-card">
+        <h3>Authentication</h3>
+        <p>Learn sessions, tokens (JWT), and OAuth basics.</p>
+      </a>
+      <a href="databases-sql-nosql.html" class="course-card">
+        <h3>Databases (SQL & NoSQL)</h3>
+        <p>Work with PostgreSQL, MySQL, and MongoDB.</p>
+      </a>
+      <a href="orms.html" class="course-card">
+        <h3>ORMs</h3>
+        <p>Use tools like Sequelize, Prisma, and Django ORM.</p>
+      </a>
+      <a href="testing-apis.html" class="course-card">
+        <h3>Testing APIs</h3>
+        <p>Use tools like Postman, Insomnia, and unit tests.</p>
+      </a>
+      <a href="websockets-realtime.html" class="course-card">
+        <h3>WebSockets & Real-time</h3>
+        <p>Enable live communication with Socket.io and Django Channels.</p>
+      </a>
+      <a href="deployment-backend.html" class="course-card">
+        <h3>Deployment</h3>
+        <p>Host apps on services like Render, Heroku, or Vercel.</p>
+      </a>
+      <a href="docker-containers.html" class="course-card">
+        <h3>Docker & Containers</h3>
+        <p>Containerize and scale back-end services.</p>
+      </a>
+      <a href="cicd-pipelines.html" class="course-card">
+        <h3>CI/CD Pipelines</h3>
+        <p>Automate testing and deployment workflows.</p>
+      </a>
+      <a href="security-best-practices.html" class="course-card">
+        <h3>Security Best Practices</h3>
+        <p>Protect against injection, XSS, CSRF, and more.</p>
+      </a>
+      <a href="scalable-architecture.html" class="course-card">
+        <h3>Scalable Architecture</h3>
+        <p>Design systems that grow with user demand.</p>
+      </a>
     </div>
   </div>
 </body>
