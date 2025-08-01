@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Derivatives & Risk Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #92400E 0%, #D97706 50%, #F59E0B 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #92400E, #D97706);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(146, 64, 14, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #92400E;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #92400E;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #92400E, #D97706);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(146, 64, 14, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ MemoLearning Derivatives & Risk Management</h1>
+    <p>Master complex financial instruments and sophisticated risk management techniques</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to advanced finance courses')">← Back to Advanced Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Derivatives & Risk Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~250</span>
+          <div class="stat-label">Risk Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Derivative Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Risk Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Derivatives</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental concepts, types, and purposes of derivative securities.</p>
+        <ul class="topics-list">
+          <li>What are derivatives</li>
+          <li>Underlying assets</li>
+          <li>Forward vs futures contracts</li>
+          <li>Options basics</li>
+          <li>Swaps overview</li>
+          <li>Exchange-traded vs OTC</li>
+          <li>Derivative markets</li>
+          <li>Economic functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Forward Contracts & Futures</h3>
+        </div>
+        <p class="unit-description">Master forward and futures contracts for price discovery and risk management.</p>
+        <ul class="topics-list">
+          <li>Forward contract mechanics</li>
+          <li>Forward pricing models</li>
+          <li>Futures contract features</li>
+          <li>Marking to market</li>
+          <li>Margin requirements</li>
+          <li>Basis and convergence</li>
+          <li>Hedging with futures</li>
+          <li>Speculation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Options Theory & Pricing</h3>
+        </div>
+        <p class="unit-description">Learn options fundamentals, pricing models, and strategic applications.</p>
+        <ul class="topics-list">
+          <li>Call and put options</li>
+          <li>Option payoff diagrams</li>
+          <li>Intrinsic vs time value</li>
+          <li>Black-Scholes model</li>
+          <li>Binomial pricing models</li>
+          <li>Option Greeks</li>
+          <li>American vs European options</li>
+          <li>Exotic options</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Options Strategies</h3>
+        </div>
+        <p class="unit-description">Implement sophisticated options strategies for various market scenarios and objectives.</p>
+        <ul class="topics-list">
+          <li>Basic option strategies</li>
+          <li>Covered calls</li>
+          <li>Protective puts</li>
+          <li>Spreads (bull, bear, butterfly)</li>
+          <li>Straddles and strangles</li>
+          <li>Collars and combinations</li>
+          <li>Iron condors</li>
+          <li>Strategy selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Swaps & Interest Rate Derivatives</h3>
+        </div>
+        <p class="unit-description">Understand swap mechanics and applications in interest rate risk management.</p>
+        <ul class="topics-list">
+          <li>Interest rate swaps</li>
+          <li>Currency swaps</li>
+          <li>Credit default swaps</li>
+          <li>Commodity swaps</li>
+          <li>Swap valuation</li>
+          <li>Yield curve construction</li>
+          <li>Duration and convexity</li>
+          <li>Hedging applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Credit Derivatives</h3>
+        </div>
+        <p class="unit-description">Explore credit risk instruments and their role in modern finance.</p>
+        <ul class="topics-list">
+          <li>Credit default swaps (CDS)</li>
+          <li>Credit spread options</li>
+          <li>Total return swaps</li>
+          <li>Collateralized debt obligations</li>
+          <li>Credit risk modeling</li>
+          <li>Default probability</li>
+          <li>Recovery rates</li>
+          <li>Credit portfolio management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Risk Measurement & Metrics</h3>
+        </div>
+        <p class="unit-description">Learn to quantify and measure various types of financial risk.</p>
+        <ul class="topics-list">
+          <li>Value at Risk (VaR)</li>
+          <li>Expected Shortfall</li>
+          <li>Conditional VaR</li>
+          <li>Risk factor models</li>
+          <li>Stress testing</li>
+          <li>Scenario analysis</li>
+          <li>Backtesting methods</li>
+          <li>Risk decomposition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Market Risk Management</h3>
+        </div>
+        <p class="unit-description">Manage price risk in trading and investment portfolios.</p>
+        <ul class="topics-list">
+          <li>Market risk sources</li>
+          <li>Delta hedging</li>
+          <li>Gamma and higher-order risks</li>
+          <li>Volatility risk</li>
+          <li>Portfolio risk aggregation</li>
+          <li>Dynamic hedging</li>
+          <li>Risk limits and controls</li>
+          <li>Performance attribution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Credit Risk Management</h3>
+        </div>
+        <p class="unit-description">Assess and manage counterparty default risk and credit exposure.</p>
+        <ul class="topics-list">
+          <li>Credit risk components</li>
+          <li>Probability of default</li>
+          <li>Loss given default</li>
+          <li>Exposure at default</li>
+          <li>Credit rating systems</li>
+          <li>Portfolio credit models</li>
+          <li>Credit risk mitigation</li>
+          <li>Regulatory capital</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Operational Risk Management</h3>
+        </div>
+        <p class="unit-description">Identify and manage operational risks in financial institutions and trading.</p>
+        <ul class="topics-list">
+          <li>Operational risk categories</li>
+          <li>Risk assessment methods</li>
+          <li>Loss data collection</li>
+          <li>Key risk indicators</li>
+          <li>Control effectiveness</li>
+          <li>Business continuity planning</li>
+          <li>Technology risks</li>
+          <li>Regulatory requirements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Liquidity Risk Management</h3>
+        </div>
+        <p class="unit-description">Manage funding liquidity and market liquidity risks effectively.</p>
+        <ul class="topics-list">
+          <li>Funding liquidity risk</li>
+          <li>Market liquidity risk</li>
+          <li>Liquidity gap analysis</li>
+          <li>Stress testing liquidity</li>
+          <li>Contingency funding plans</li>
+          <li>Liquidity buffers</li>
+          <li>Regulatory ratios</li>
+          <li>Asset-liability management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Model Risk Management</h3>
+        </div>
+        <p class="unit-description">Understand and manage risks arising from financial model usage.</p>
+        <ul class="topics-list">
+          <li>Model risk sources</li>
+          <li>Model validation process</li>
+          <li>Model performance testing</li>
+          <li>Model governance frameworks</li>
+          <li>Model documentation</li>
+          <li>Challenger models</li>
+          <li>Model risk capital</li>
+          <li>Regulatory expectations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Enterprise Risk Management</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive risk management frameworks across organizations.</p>
+        <ul class="topics-list">
+          <li>ERM frameworks</li>
+          <li>Risk appetite and tolerance</li>
+          <li>Risk governance structures</li>
+          <li>Risk identification processes</li>
+          <li>Risk assessment methods</li>
+          <li>Risk reporting systems</li>
+          <li>Risk culture development</li>
+          <li>Board and committee oversight</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Regulatory Risk & Compliance</h3>
+        </div>
+        <p class="unit-description">Navigate regulatory requirements and compliance in derivatives and risk management.</p>
+        <ul class="topics-list">
+          <li>Basel III framework</li>
+          <li>Dodd-Frank Act</li>
+          <li>EMIR regulations</li>
+          <li>Capital adequacy</li>
+          <li>Stress testing requirements</li>
+          <li>Reporting obligations</li>
+          <li>Compliance monitoring</li>
+          <li>Regulatory change management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Counterparty Risk & CVA</h3>
+        </div>
+        <p class="unit-description">Manage counterparty credit risk and understand credit valuation adjustments.</p>
+        <ul class="topics-list">
+          <li>Counterparty risk components</li>
+          <li>Exposure measurement</li>
+          <li>Netting agreements</li>
+          <li>Collateral management</li>
+          <li>Credit valuation adjustment</li>
+          <li>Debt valuation adjustment</li>
+          <li>Funding valuation adjustment</li>
+          <li>XVA framework</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Structured Products</h3>
+        </div>
+        <p class="unit-description">Understand complex structured products and their embedded derivatives.</p>
+        <ul class="topics-list">
+          <li>Structured notes</li>
+          <li>Equity-linked products</li>
+          <li>Credit-linked notes</li>
+          <li>Barrier options</li>
+          <li>Autocallable structures</li>
+          <li>Principal protection</li>
+          <li>Risk analysis</li>
+          <li>Valuation challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Alternative Risk Transfer</h3>
+        </div>
+        <p class="unit-description">Explore innovative risk transfer mechanisms and insurance derivatives.</p>
+        <ul class="topics-list">
+          <li>Catastrophe bonds</li>
+          <li>Weather derivatives</li>
+          <li>Insurance-linked securities</li>
+          <li>Longevity bonds</li>
+          <li>Mortality derivatives</li>
+          <li>Parametric insurance</li>
+          <li>Risk securitization</li>
+          <li>Capital relief strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Advanced Risk Topics</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge developments in derivatives and risk management.</p>
+        <ul class="topics-list">
+          <li>Machine learning in risk</li>
+          <li>Climate risk management</li>
+          <li>Cryptocurrency derivatives</li>
+          <li>Systemic risk modeling</li>
+          <li>Quantum computing applications</li>
+          <li>ESG risk factors</li>
+          <li>Pandemic risk modeling</li>
+          <li>Future of risk management</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Derivatives</h1>
+      <p>Understand the fundamental concepts, types, and purposes of derivative securities.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are Derivatives</h3>
+        <p>Learn the basic definition of derivatives as financial contracts whose value depends on underlying assets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Underlying Assets</h3>
+        <p>Explore the various underlying assets including stocks, bonds, commodities, currencies, and interest rates.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward vs Futures Contracts</h3>
+        <p>Compare forward contracts (customized, OTC) with futures contracts (standardized, exchange-traded).</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Options Basics</h3>
+        <p>Understand call and put options as contracts that provide rights but not obligations to buy or sell.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Swaps Overview</h3>
+        <p>Learn about swaps as agreements to exchange cash flows or other financial instruments over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exchange-traded vs OTC</h3>
+        <p>Compare standardized exchange-traded derivatives with customized over-the-counter products.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Derivative Markets</h3>
+        <p>Explore major derivative exchanges and OTC markets where these instruments are traded.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Functions</h3>
+        <p>Understand how derivatives serve price discovery, risk management, and speculation functions in markets.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Forward Contracts & Futures</h1>
+      <p>Master forward and futures contracts for price discovery and risk management.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward Contract Mechanics</h3>
+        <p>Understand how forward contracts work, including settlement mechanisms and counterparty obligations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward Pricing Models</h3>
+        <p>Learn the mathematical models for pricing forward contracts based on spot prices and carrying costs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Futures Contract Features</h3>
+        <p>Explore standardized features of futures contracts including contract specifications and delivery terms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Marking to Market</h3>
+        <p>Understand daily settlement of futures positions and its impact on cash flows and risk management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Margin Requirements</h3>
+        <p>Learn about initial margins, maintenance margins, and variation margins in futures trading.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basis and Convergence</h3>
+        <p>Understand basis risk and how futures prices converge to spot prices at expiration.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hedging with Futures</h3>
+        <p>Apply futures contracts to hedge price risk in portfolios and business operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Speculation Strategies</h3>
+        <p>Explore how futures can be used for speculative strategies and directional bets on market movements.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Options Theory & Pricing</h1>
+      <p>Learn options fundamentals, pricing models, and strategic applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic
