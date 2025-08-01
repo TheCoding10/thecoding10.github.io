@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Banking & Financial Institutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0D9488 0%, #14B8A6 50%, #2DD4BF 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0D9488, #14B8A6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🏦';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0D9488;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0D9488;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0D9488, #14B8A6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🏦 MemoLearning Banking & Financial Institutions</h1>
+    <p>Master banking systems, financial services, and institutional operations</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Banking & Financial Institutions Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Banking Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Institution Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Financial Services</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Banking System Overview</h3>
+        </div>
+        <p class="unit-description">Understand the structure and role of banking systems in modern economies.</p>
+        <ul class="topics-list">
+          <li>History of banking systems</li>
+          <li>Functions of banks in economy</li>
+          <li>Types of banking institutions</li>
+          <li>Banking system hierarchy</li>
+          <li>Central banking role</li>
+          <li>Commercial banking basics</li>
+          <li>Banking regulation overview</li>
+          <li>Modern banking evolution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Commercial Banks</h3>
+        </div>
+        <p class="unit-description">Explore the operations, services, and business models of commercial banks.</p>
+        <ul class="topics-list">
+          <li>Commercial bank structure</li>
+          <li>Deposit services and products</li>
+          <li>Lending operations</li>
+          <li>Fee-based services</li>
+          <li>Bank revenue models</li>
+          <li>Risk management practices</li>
+          <li>Customer relationship management</li>
+          <li>Branch vs digital banking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Credit Unions</h3>
+        </div>
+        <p class="unit-description">Learn about credit union structure, benefits, and member-focused services.</p>
+        <ul class="topics-list">
+          <li>Credit union vs bank differences</li>
+          <li>Membership requirements</li>
+          <li>Cooperative ownership model</li>
+          <li>Member benefits and services</li>
+          <li>Lower fees and better rates</li>
+          <li>Community focus approach</li>
+          <li>Credit union regulations</li>
+          <li>Choosing credit unions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Investment Banks</h3>
+        </div>
+        <p class="unit-description">Understand investment banking services, capital markets, and corporate finance.</p>
+        <ul class="topics-list">
+          <li>Investment banking overview</li>
+          <li>Underwriting services</li>
+          <li>Mergers and acquisitions</li>
+          <li>Capital raising activities</li>
+          <li>Trading and market making</li>
+          <li>Research and advisory</li>
+          <li>Institutional client services</li>
+          <li>Regulatory environment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Central Banking & Federal Reserve</h3>
+        </div>
+        <p class="unit-description">Master central banking functions, monetary policy, and the Federal Reserve System.</p>
+        <ul class="topics-list">
+          <li>Federal Reserve structure</li>
+          <li>Monetary policy tools</li>
+          <li>Interest rate management</li>
+          <li>Money supply control</li>
+          <li>Banking supervision role</li>
+          <li>Financial stability mandate</li>
+          <li>Payment system oversight</li>
+          <li>Economic data and research</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Online & Digital Banking</h3>
+        </div>
+        <p class="unit-description">Explore digital banking evolution, fintech innovations, and online financial services.</p>
+        <ul class="topics-list">
+          <li>Digital banking transformation</li>
+          <li>Online-only bank models</li>
+          <li>Mobile banking applications</li>
+          <li>Fintech disruption</li>
+          <li>Digital payment systems</li>
+          <li>Cybersecurity in banking</li>
+          <li>Customer experience design</li>
+          <li>Future of digital banking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Insurance Companies</h3>
+        </div>
+        <p class="unit-description">Understand insurance industry structure, products, and risk management principles.</p>
+        <ul class="topics-list">
+          <li>Insurance company types</li>
+          <li>Life insurance products</li>
+          <li>Property and casualty insurance</li>
+          <li>Health insurance systems</li>
+          <li>Risk assessment and pricing</li>
+          <li>Claims processing</li>
+          <li>Regulatory framework</li>
+          <li>Insurance investment strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Investment Management Firms</h3>
+        </div>
+        <p class="unit-description">Learn about asset management, mutual funds, and investment advisory services.</p>
+        <ul class="topics-list">
+          <li>Asset management industry</li>
+          <li>Mutual fund companies</li>
+          <li>ETF providers</li>
+          <li>Hedge fund operations</li>
+          <li>Private equity firms</li>
+          <li>Robo-advisor platforms</li>
+          <li>Fee structures and pricing</li>
+          <li>Fiduciary responsibilities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Brokerage Services</h3>
+        </div>
+        <p class="unit-description">Explore securities brokerage, trading platforms, and investment execution services.</p>
+        <ul class="topics-list">
+          <li>Full-service brokerages</li>
+          <li>Discount brokerage model</li>
+          <li>Commission-free trading</li>
+          <li>Trading platform features</li>
+          <li>Order execution quality</li>
+          <li>Research and tools</li>
+          <li>Margin lending services</li>
+          <li>Regulatory protection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Banking Regulation & Compliance</h3>
+        </div>
+        <p class="unit-description">Understand banking regulations, compliance requirements, and consumer protections.</p>
+        <ul class="topics-list">
+          <li>Banking regulatory agencies</li>
+          <li>FDIC deposit insurance</li>
+          <li>Capital requirements</li>
+          <li>Consumer protection laws</li>
+          <li>Anti-money laundering</li>
+          <li>Privacy regulations</li>
+          <li>Stress testing requirements</li>
+          <li>Compliance monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Payment Systems</h3>
+        </div>
+        <p class="unit-description">Master payment processing, electronic transfers, and modern payment technologies.</p>
+        <ul class="topics-list">
+          <li>Payment system infrastructure</li>
+          <li>ACH transfers</li>
+          <li>Wire transfer systems</li>
+          <li>Credit card processing</li>
+          <li>Digital payment platforms</li>
+          <li>Cryptocurrency integration</li>
+          <li>International payments</li>
+          <li>Payment security measures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">International Banking</h3>
+        </div>
+        <p class="unit-description">Explore global banking operations, foreign exchange, and international finance.</p>
+        <ul class="topics-list">
+          <li>Multinational bank operations</li>
+          <li>Foreign exchange markets</li>
+          <li>International trade financing</li>
+          <li>Cross-border regulations</li>
+          <li>Currency risk management</li>
+          <li>Correspondent banking</li>
+          <li>Global payment systems</li>
+          <li>Emerging market banking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Specialized Financial Institutions</h3>
+        </div>
+        <p class="unit-description">Learn about mortgage companies, finance companies, and other specialized lenders.</p>
+        <ul class="topics-list">
+          <li>Mortgage banking companies</li>
+          <li>Consumer finance companies</li>
+          <li>Equipment financing firms</li>
+          <li>Factoring companies</li>
+          <li>Payday lending industry</li>
+          <li>Peer-to-peer lending</li>
+          <li>Alternative lending models</li>
+          <li>Regulatory considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Financial Technology (FinTech)</h3>
+        </div>
+        <p class="unit-description">Understand fintech innovations disrupting traditional banking and financial services.</p>
+        <ul class="topics-list">
+          <li>FinTech industry overview</li>
+          <li>Digital banking startups</li>
+          <li>Payment technology innovations</li>
+          <li>Lending technology platforms</li>
+          <li>InsurTech developments</li>
+          <li>Blockchain applications</li>
+          <li>AI in financial services</li>
+          <li>Regulatory technology (RegTech)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Risk Management in Banking</h3>
+        </div>
+        <p class="unit-description">Master banking risk types, assessment methods, and mitigation strategies.</p>
+        <ul class="topics-list">
+          <li>Credit risk management</li>
+          <li>Market risk assessment</li>
+          <li>Operational risk controls</li>
+          <li>Liquidity risk monitoring</li>
+          <li>Interest rate risk</li>
+          <li>Cybersecurity risks</li>
+          <li>Regulatory risk compliance</li>
+          <li>Risk governance frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Future of Banking</h3>
+        </div>
+        <p class="unit-description">Explore emerging trends and future developments in banking and financial services.</p>
+        <ul class="topics-list">
+          <li>Open banking initiatives</li>
+          <li>Central bank digital currencies</li>
+          <li>Artificial intelligence adoption</li>
+          <li>Sustainable banking practices</li>
+          <li>Embedded finance trends</li>
+          <li>Regulatory evolution</li>
+          <li>Customer experience innovation</li>
+          <li>Industry consolidation trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Banking System Overview</h1>
+      <p>Understand the structure and role of banking systems in modern economies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">History of Banking Systems</h3>
+        <p>Trace the evolution of banking from ancient money changers to modern financial institutions and digital banking.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functions of Banks in Economy</h3>
+        <p>Understand how banks facilitate economic growth through lending, payments, and financial intermediation services.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Banking Institutions</h3>
+        <p>Learn about commercial banks, investment banks, credit unions, and specialized financial institutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Banking System Hierarchy</h3>
+        <p>Explore the relationship between central banks, regional banks, community banks, and other financial entities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Central Banking Role</h3>
+        <p>Understand how central banks regulate money supply, set interest rates, and maintain financial stability.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Commercial Banking Basics</h3>
+        <p>Learn the fundamental business model of commercial banks including deposits, loans, and fee services.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Banking Regulation Overview</h3>
+        <p>Explore the regulatory framework that governs banking operations, consumer protection, and systemic risk.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modern Banking Evolution</h3>
+        <p>Examine how technology, regulation, and consumer demands are reshaping the banking industry landscape.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Commercial Banks</h1>
+      <p>Explore the operations, services, and business models of commercial banks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Commercial Bank Structure</h3>
+        <p>Understand organizational structure, governance, and operational divisions within commercial banking institutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deposit Services and Products</h3>
+        <p>Learn about checking accounts, savings accounts, CDs, and money market accounts offered to customers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lending Operations</h3>
+        <p>Explore personal loans, mortgages, business lending, and credit card services provided by commercial banks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fee-Based Services</h3>
+        <p>Understand wealth management, trust services, foreign exchange, and other revenue-generating bank services.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bank Revenue Models</h3>
+        <p>Analyze how banks generate profits through net interest margin, fees, and other income sources.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk Management Practices</h3>
+        <p>Learn how commercial banks assess, monitor, and mitigate credit, operational, and market risks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Customer Relationship Management</h3>
+        <p>Explore how banks build and maintain customer relationships through service quality and product offerings.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Branch vs Digital Banking</h3>
+        <p>Compare traditional branch banking with digital channels and understand the omnichannel approach.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Credit Unions</h1>
+      <p>Learn about credit union structure, benefits, and member-focused services.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Credit Union vs Bank Differences</h3>
+        <p>Compare credit unions' cooperative structure with traditional banks' profit-driven business models.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Membership Requirements</h3>
+        <p>Understand common bond requirements and eligibility criteria for joining different credit unions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cooperative Ownership Model</h3>
+        <p>Learn how member ownership influences decision-making, profits distribution, and service priorities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Member Benefits and Services</h3>
+        <p>Explore the full range of financial products and services offered by credit unions to their members.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lower Fees and Better Rates</h3>
+        <p>Understand how credit unions typically offer more favorable terms due to their non-profit structure.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Community Focus Approach</h3>
+        <p>Learn how credit unions prioritize local community development and member financial wellness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Credit Union Regulations</h3>
+        <p>Explore the regulatory framework governing credit
