@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Quantitative Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1F2937 0%, #374151 50%, #6B7280 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1F2937, #374151);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(31, 41, 55, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1F2937;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1F2937;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1F2937, #374151);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(31, 41, 55, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Introduction to Quantitative Finance</h1>
+    <p>Master mathematical models, statistical methods, and computational techniques in finance</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to advanced finance courses')">← Back to Advanced Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Introduction to Quantitative Finance Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~240</span>
+          <div class="stat-label">Quantitative Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Mathematical Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Statistical Methods</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Mathematical Foundations</h3>
+        </div>
+        <p class="unit-description">Build essential mathematical skills needed for quantitative finance modeling.</p>
+        <ul class="topics-list">
+          <li>Calculus fundamentals</li>
+          <li>Linear algebra basics</li>
+          <li>Differential equations</li>
+          <li>Optimization techniques</li>
+          <li>Matrix operations</li>
+          <li>Vector calculus</li>
+          <li>Fourier transforms</li>
+          <li>Numerical methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Probability & Statistics</h3>
+        </div>
+        <p class="unit-description">Master probability theory and statistical methods for financial modeling.</p>
+        <ul class="topics-list">
+          <li>Probability distributions</li>
+          <li>Random variables</li>
+          <li>Central limit theorem</li>
+          <li>Hypothesis testing</li>
+          <li>Regression analysis</li>
+          <li>Time series analysis</li>
+          <li>Bayesian statistics</li>
+          <li>Monte Carlo methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Stochastic Processes</h3>
+        </div>
+        <p class="unit-description">Understand random processes and their applications in financial modeling.</p>
+        <ul class="topics-list">
+          <li>Brownian motion</li>
+          <li>Geometric Brownian motion</li>
+          <li>Markov processes</li>
+          <li>Poisson processes</li>
+          <li>Jump-diffusion models</li>
+          <li>Martingales</li>
+          <li>Ito's lemma</li>
+          <li>Stochastic calculus</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Financial Mathematics</h3>
+        </div>
+        <p class="unit-description">Apply mathematical concepts to core financial problems and valuations.</p>
+        <ul class="topics-list">
+          <li>Time value of money</li>
+          <li>Present value calculations</li>
+          <li>Bond pricing models</li>
+          <li>Yield curve mathematics</li>
+          <li>Duration and convexity</li>
+          <li>Continuous compounding</li>
+          <li>Arbitrage theory</li>
+          <li>Risk-neutral valuation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Portfolio Theory</h3>
+        </div>
+        <p class="unit-description">Learn modern portfolio theory and quantitative portfolio optimization techniques.</p>
+        <ul class="topics-list">
+          <li>Markowitz mean-variance theory</li>
+          <li>Efficient frontier</li>
+          <li>Capital Asset Pricing Model</li>
+          <li>Multi-factor models</li>
+          <li>Portfolio optimization</li>
+          <li>Risk budgeting</li>
+          <li>Black-Litterman model</li>
+          <li>Factor investing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Options Pricing Theory</h3>
+        </div>
+        <p class="unit-description">Master the mathematical foundations of options pricing and derivatives valuation.</p>
+        <ul class="topics-list">
+          <li>Black-Scholes-Merton model</li>
+          <li>Options Greeks</li>
+          <li>Binomial trees</li>
+          <li>Monte Carlo pricing</li>
+          <li>Finite difference methods</li>
+          <li>American options</li>
+          <li>Exotic options</li>
+          <li>Volatility modeling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Risk Management Models</h3>
+        </div>
+        <p class="unit-description">Quantify and manage financial risks using mathematical and statistical models.</p>
+        <ul class="topics-list">
+          <li>Value at Risk (VaR)</li>
+          <li>Expected Shortfall</li>
+          <li>Stress testing</li>
+          <li>Scenario analysis</li>
+          <li>Credit risk models</li>
+          <li>Market risk metrics</li>
+          <li>Operational risk</li>
+          <li>Risk attribution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Interest Rate Models</h3>
+        </div>
+        <p class="unit-description">Model interest rate dynamics and price interest rate derivatives.</p>
+        <ul class="topics-list">
+          <li>Vasicek model</li>
+          <li>Cox-Ingersoll-Ross model</li>
+          <li>Hull-White model</li>
+          <li>Heath-Jarrow-Morton framework</li>
+          <li>LIBOR market models</li>
+          <li>Bond pricing</li>
+          <li>Term structure modeling</li>
+          <li>Interest rate derivatives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Credit Risk Modeling</h3>
+        </div>
+        <p class="unit-description">Quantify default risk and price credit-sensitive instruments.</p>
+        <ul class="topics-list">
+          <li>Structural models (Merton)</li>
+          <li>Reduced-form models</li>
+          <li>Credit spreads</li>
+          <li>Default probability</li>
+          <li>Credit derivatives</li>
+          <li>Recovery rates</li>
+          <li>Portfolio credit risk</li>
+          <li>CDO pricing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Algorithmic Trading</h3>
+        </div>
+        <p class="unit-description">Develop quantitative trading strategies and execution algorithms.</p>
+        <ul class="topics-list">
+          <li>Statistical arbitrage</li>
+          <li>Mean reversion strategies</li>
+          <li>Momentum strategies</li>
+          <li>Pairs trading</li>
+          <li>Market microstructure</li>
+          <li>Execution algorithms</li>
+          <li>High-frequency trading</li>
+          <li>Strategy backtesting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Econometric Methods</h3>
+        </div>
+        <p class="unit-description">Apply econometric techniques to analyze financial data and relationships.</p>
+        <ul class="topics-list">
+          <li>Linear regression</li>
+          <li>Time series econometrics</li>
+          <li>ARCH/GARCH models</li>
+          <li>Vector autoregression</li>
+          <li>Cointegration</li>
+          <li>Panel data methods</li>
+          <li>Maximum likelihood estimation</li>
+          <li>GMM estimation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Numerical Methods</h3>
+        </div>
+        <p class="unit-description">Master computational techniques for solving complex financial problems.</p>
+        <ul class="topics-list">
+          <li>Finite difference methods</li>
+          <li>Monte Carlo simulation</li>
+          <li>Binomial and trinomial trees</li>
+          <li>Fast Fourier transforms</li>
+          <li>Optimization algorithms</li>
+          <li>Root finding methods</li>
+          <li>Interpolation techniques</li>
+          <li>Parallel computing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Machine Learning in Finance</h3>
+        </div>
+        <p class="unit-description">Apply machine learning techniques to financial prediction and analysis.</p>
+        <ul class="topics-list">
+          <li>Supervised learning</li>
+          <li>Unsupervised learning</li>
+          <li>Neural networks</li>
+          <li>Support vector machines</li>
+          <li>Random forests</li>
+          <li>Deep learning</li>
+          <li>Natural language processing</li>
+          <li>Alternative data</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Programming for Finance</h3>
+        </div>
+        <p class="unit-description">Develop programming skills essential for quantitative finance applications.</p>
+        <ul class="topics-list">
+          <li>Python for finance</li>
+          <li>R statistical computing</li>
+          <li>MATLAB financial toolbox</li>
+          <li>C++ for performance</li>
+          <li>SQL for databases</li>
+          <li>Data structures</li>
+          <li>Software engineering</li>
+          <li>Version control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Fixed Income Analytics</h3>
+        </div>
+        <p class="unit-description">Analyze and model fixed income securities using quantitative methods.</p>
+        <ul class="topics-list">
+          <li>Bond mathematics</li>
+          <li>Yield curve construction</li>
+          <li>Duration measures</li>
+          <li>Convexity analysis</li>
+          <li>MBS/ABS modeling</li>
+          <li>Credit analysis</li>
+          <li>Callable bond valuation</li>
+          <li>Fixed income derivatives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Volatility Modeling</h3>
+        </div>
+        <p class="unit-description">Model and forecast volatility for risk management and derivatives pricing.</p>
+        <ul class="topics-list">
+          <li>Historical volatility</li>
+          <li>Implied volatility</li>
+          <li>GARCH models</li>
+          <li>Stochastic volatility</li>
+          <li>Volatility surface</li>
+          <li>VIX and volatility indices</li>
+          <li>Volatility forecasting</li>
+          <li>Volatility trading</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Behavioral Finance Models</h3>
+        </div>
+        <p class="unit-description">Incorporate behavioral factors into quantitative financial models.</p>
+        <ul class="topics-list">
+          <li>Prospect theory</li>
+          <li>Behavioral biases</li>
+          <li>Market anomalies</li>
+          <li>Sentiment analysis</li>
+          <li>Noise trader models</li>
+          <li>Herding behavior</li>
+          <li>Overconfidence models</li>
+          <li>Behavioral portfolio theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge topics and recent developments in quantitative finance.</p>
+        <ul class="topics-list">
+          <li>Quantum finance</li>
+          <li>Fractional calculus</li>
+          <li>Rough volatility models</li>
+          <li>Cryptocurrency modeling</li>
+          <li>ESG quantitative models</li>
+          <li>RegTech applications</li>
+          <li>Quantum computing</li>
+          <li>Future research directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Mathematical Foundations</h1>
+      <p>Build essential mathematical skills needed for quantitative finance modeling.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Calculus Fundamentals</h3>
+        <p>Master differential and integral calculus concepts essential for continuous-time financial modeling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear Algebra Basics</h3>
+        <p>Learn matrix operations, eigenvalues, and linear transformations for portfolio optimization and factor models.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Differential Equations</h3>
+        <p>Solve ordinary and partial differential equations that arise in options pricing and interest rate modeling.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Optimization Techniques</h3>
+        <p>Apply constrained and unconstrained optimization methods for portfolio selection and parameter estimation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Operations</h3>
+        <p>Perform advanced matrix calculations including decompositions and inverse operations for quantitative analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vector Calculus</h3>
+        <p>Use multivariable calculus concepts for risk management and multi-dimensional optimization problems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Transforms</h3>
+        <p>Apply frequency domain analysis techniques for options pricing and signal processing in financial data.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Numerical Methods</h3>
+        <p>Implement computational algorithms for solving mathematical problems that lack analytical solutions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Probability & Statistics</h1>
+      <p>Master probability theory and statistical methods for financial modeling.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Probability Distributions</h3>
+        <p>Understand normal, lognormal, exponential, and other distributions commonly used in finance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Random Variables</h3>
+        <p>Work with discrete and continuous random variables and their properties in financial contexts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Central Limit Theorem</h3>
+        <p>Apply the central limit theorem to understand portfolio behavior and risk aggregation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hypothesis Testing</h3>
+        <p>Perform statistical tests to validate financial models and investment strategies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regression Analysis</h3>
+        <p>Build linear and nonlinear regression models to explain asset returns and risk factors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Series Analysis</h3>
+        <p>Model and forecast financial time series data using ARIMA, GARCH, and other methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bayesian Statistics</h3>
+        <p>Apply Bayesian methods for parameter estimation and model selection in finance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Monte Carlo Methods</h3>
+        <p>Use simulation techniques to solve complex financial problems and estimate risk measures.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Stochastic Processes</h1>
+      <p>Understand random processes and their applications in financial modeling.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Brownian Motion</h3>
+        <p>Learn the properties of Brownian motion as the foundation for continuous-time financial models.</p>
+      </div>
