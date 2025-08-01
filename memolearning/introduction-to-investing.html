@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Investing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #DC2626 0%, #EF4444 50%, #F87171 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #DC2626, #EF4444);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📈';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #DC2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #DC2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #DC2626, #EF4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📈 MemoLearning Introduction to Investing</h1>
+    <p>Build wealth through smart investing strategies and market knowledge</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Introduction to Investing Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~175</span>
+          <div class="stat-label">Investment Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Asset Classes</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Investment Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Investing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basic principles of investing and why it's essential for building wealth.</p>
+        <ul class="topics-list">
+          <li>What is investing vs saving</li>
+          <li>Power of compound interest</li>
+          <li>Time value of money</li>
+          <li>Risk vs return relationship</li>
+          <li>Investment timeline planning</li>
+          <li>Investment vs speculation</li>
+          <li>Dollar-cost averaging basics</li>
+          <li>Getting started with small amounts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Investment Risk Management</h3>
+        </div>
+        <p class="unit-description">Learn to assess, manage, and balance investment risks for optimal portfolio performance.</p>
+        <ul class="topics-list">
+          <li>Types of investment risk</li>
+          <li>Risk tolerance assessment</li>
+          <li>Risk vs reward analysis</li>
+          <li>Diversification principles</li>
+          <li>Asset allocation strategies</li>
+          <li>Portfolio rebalancing</li>
+          <li>Market volatility management</li>
+          <li>Emergency fund before investing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Stock Market Basics</h3>
+        </div>
+        <p class="unit-description">Understand how stock markets work and the fundamentals of equity investing.</p>
+        <ul class="topics-list">
+          <li>How stock markets operate</li>
+          <li>Stock exchanges (NYSE, NASDAQ)</li>
+          <li>Market participants and roles</li>
+          <li>Stock prices and market cap</li>
+          <li>Bull vs bear markets</li>
+          <li>Market hours and trading</li>
+          <li>Stock splits and dividends</li>
+          <li>Reading stock quotes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Individual Stocks</h3>
+        </div>
+        <p class="unit-description">Learn how to research, analyze, and invest in individual company stocks.</p>
+        <ul class="topics-list">
+          <li>Understanding company ownership</li>
+          <li>Common vs preferred stock</li>
+          <li>Stock research fundamentals</li>
+          <li>Reading financial statements</li>
+          <li>P/E ratios and valuations</li>
+          <li>Growth vs value stocks</li>
+          <li>Dividend-paying stocks</li>
+          <li>Stock selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Bonds & Fixed Income</h3>
+        </div>
+        <p class="unit-description">Master bond investing and fixed-income securities for portfolio stability and income.</p>
+        <ul class="topics-list">
+          <li>Bond fundamentals explained</li>
+          <li>How bonds generate income</li>
+          <li>Government vs corporate bonds</li>
+          <li>Bond yields and prices</li>
+          <li>Interest rate risk</li>
+          <li>Credit ratings and risk</li>
+          <li>Municipal bonds (tax benefits)</li>
+          <li>Bond laddering strategy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Mutual Funds</h3>
+        </div>
+        <p class="unit-description">Understand mutual funds as a way to invest in diversified portfolios managed by professionals.</p>
+        <ul class="topics-list">
+          <li>What are mutual funds</li>
+          <li>Active vs passive management</li>
+          <li>Mutual fund fees and expenses</li>
+          <li>Load vs no-load funds</li>
+          <li>Fund categories and types</li>
+          <li>Net Asset Value (NAV)</li>
+          <li>Mutual fund selection criteria</li>
+          <li>Tax implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Exchange-Traded Funds (ETFs)</h3>
+        </div>
+        <p class="unit-description">Explore ETFs as low-cost, flexible investment vehicles for broad market exposure.</p>
+        <ul class="topics-list">
+          <li>ETF structure and benefits</li>
+          <li>ETFs vs mutual funds</li>
+          <li>Index ETFs explained</li>
+          <li>Sector and thematic ETFs</li>
+          <li>International ETFs</li>
+          <li>ETF expense ratios</li>
+          <li>Trading ETFs effectively</li>
+          <li>ETF portfolio building</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Index Fund Investing</h3>
+        </div>
+        <p class="unit-description">Learn the passive investing approach through low-cost index funds and market tracking.</p>
+        <ul class="topics-list">
+          <li>Index investing philosophy</li>
+          <li>Market efficiency theory</li>
+          <li>Major market indices</li>
+          <li>S&P 500 index funds</li>
+          <li>Total market index funds</li>
+          <li>International index funds</li>
+          <li>Index fund advantages</li>
+          <li>Three-fund portfolio concept</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Investment Accounts</h3>
+        </div>
+        <p class="unit-description">Choose the right investment accounts to maximize tax advantages and growth potential.</p>
+        <ul class="topics-list">
+          <li>Taxable brokerage accounts</li>
+          <li>401(k) employer plans</li>
+          <li>Traditional IRA accounts</li>
+          <li>Roth IRA benefits</li>
+          <li>HSA investment options</li>
+          <li>529 education savings</li>
+          <li>Account contribution limits</li>
+          <li>Tax implications by account</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Portfolio Construction</h3>
+        </div>
+        <p class="unit-description">Build balanced investment portfolios aligned with your goals and risk tolerance.</p>
+        <ul class="topics-list">
+          <li>Asset allocation models</li>
+          <li>Age-based allocation rules</li>
+          <li>Target-date funds</li>
+          <li>Portfolio diversification</li>
+          <li>Rebalancing strategies</li>
+          <li>Core-satellite approach</li>
+          <li>Geographic diversification</li>
+          <li>Portfolio monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Investment Platforms & Brokers</h3>
+        </div>
+        <p class="unit-description">Choose the right investment platform and understand brokerage services and fees.</p>
+        <ul class="topics-list">
+          <li>Types of brokerage accounts</li>
+          <li>Full-service vs discount brokers</li>
+          <li>Commission-free trading</li>
+          <li>Platform features comparison</li>
+          <li>Robo-advisors explained</li>
+          <li>Account minimums</li>
+          <li>Research tools and resources</li>
+          <li>Account security measures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Investment Psychology</h3>
+        </div>
+        <p class="unit-description">Master the emotional aspects of investing and avoid common behavioral mistakes.</p>
+        <ul class="topics-list">
+          <li>Behavioral finance basics</li>
+          <li>Common investor biases</li>
+          <li>Emotional decision-making</li>
+          <li>Market timing myths</li>
+          <li>Fear and greed cycles</li>
+          <li>Long-term thinking</li>
+          <li>Staying disciplined</li>
+          <li>Learning from mistakes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Tax-Efficient Investing</h3>
+        </div>
+        <p class="unit-description">Minimize tax impact on investments through strategic planning and account optimization.</p>
+        <ul class="topics-list">
+          <li>Tax-advantaged accounts</li>
+          <li>Tax-loss harvesting</li>
+          <li>Asset location strategies</li>
+          <li>Tax-efficient funds</li>
+          <li>Capital gains management</li>
+          <li>Dividend tax treatment</li>
+          <li>Roth conversion strategies</li>
+          <li>Tax planning timeline</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Advanced Investment Concepts</h3>
+        </div>
+        <p class="unit-description">Explore advanced investing strategies and alternative investment options.</p>
+        <ul class="topics-list">
+          <li>Real Estate Investment Trusts (REITs)</li>
+          <li>Commodity investing basics</li>
+          <li>International investing</li>
+          <li>Emerging markets exposure</li>
+          <li>Socially responsible investing</li>
+          <li>Factor investing concepts</li>
+          <li>Alternative investments</li>
+          <li>Investment monitoring systems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Investing Fundamentals</h1>
+      <p>Understand the basic principles of investing and why it's essential for building wealth.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Investing vs Saving</h3>
+        <p>Distinguish between saving money in low-risk accounts and investing for long-term growth and wealth building.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Power of Compound Interest</h3>
+        <p>Understand how compound interest works over time to dramatically multiply your investment returns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Value of Money</h3>
+        <p>Learn why money today is worth more than money in the future and how this principle drives investment decisions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk vs Return Relationship</h3>
+        <p>Understand the fundamental principle that higher potential returns generally come with higher investment risks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Investment Timeline Planning</h3>
+        <p>Match your investment strategy to your time horizon, with different approaches for short, medium, and long-term goals.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Investment vs Speculation</h3>
+        <p>Distinguish between prudent long-term investing and short-term speculation or gambling with money.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dollar-Cost Averaging Basics</h3>
+        <p>Learn the strategy of investing fixed amounts regularly to reduce the impact of market volatility on purchases.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Getting Started with Small Amounts</h3>
+        <p>Discover how to begin investing even with limited funds through low-minimum accounts and fractional shares.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Investment Risk Management</h1>
+      <p>Learn to assess, manage, and balance investment risks for optimal portfolio performance.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Investment Risk</h3>
+        <p>Identify various risks including market risk, inflation risk, interest rate risk, and company-specific risks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk Tolerance Assessment</h3>
+        <p>Evaluate your personal comfort level with investment volatility and potential losses to guide investment choices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk vs Reward Analysis</h3>
+        <p>Analyze potential investment returns relative to the risks involved to make informed investment decisions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Diversification Principles</h3>
+        <p>Reduce portfolio risk by spreading investments across different asset classes, sectors, and geographic regions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Asset Allocation Strategies</h3>
+        <p>Determine the optimal mix of stocks, bonds, and other assets based on your goals and risk tolerance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Portfolio Rebalancing</h3>
+        <p>Maintain your target asset allocation by periodically adjusting portfolio weights back to desired levels.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Volatility Management</h3>
+        <p>Develop strategies to stay calm and make rational decisions during periods of significant market fluctuations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Emergency Fund Before Investing</h3>
+        <p>Ensure financial stability by building an emergency fund before committing money to long-term investments.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Stock Market Basics</h1>
+      <p>Understand how stock markets work and the fundamentals of equity investing.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">How Stock Markets Operate</h3>
+        <p>Learn the basic mechanics of how stock exchanges facilitate buying and selling of company shares.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Exchanges (NYSE, NASDAQ)</h3>
+        <p>Understand the major U.S. stock exchanges and how they differ in listing requirements and trading systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Participants and Roles</h3>
+        <p>Identify the various players in stock markets including individual investors, institutions, and market makers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Prices and Market Cap</h3>
+        <p>Understand how stock prices are determined and how market capitalization reflects company value.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bull vs Bear Markets</h3>
+        <p>Distinguish between rising bull markets and declining bear markets and their impact on investment strategy.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Hours and Trading</h3>
+        <p>Learn when markets are open for trading and understand different order types for buying and selling stocks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stock Splits and Dividends</h3>
+        <p>Understand corporate actions like stock splits and dividend payments and their impact on shareholders.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reading Stock Quotes</h3>
+        <p>Interpret stock quote information including price, volume, bid/ask spreads, and daily trading ranges.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Individual Stocks</h1>
+      <p>Learn how to research, analyze, and invest in individual company stocks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Understanding Company Ownership</h3>
+        <p>Learn how buying stock makes you a partial owner of a company with rights to profits and voting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common vs
