@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Portfolio Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581C87 0%, #7C3AED 50%, #A855F7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581C87, #7C3AED);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581C87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #581C87;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581C87, #7C3AED);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Portfolio Management</h1>
+    <p>Master investment portfolio construction, optimization, and risk management strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to investment courses')">← Back to Investment Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Portfolio Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">17</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~220</span>
+          <div class="stat-label">Portfolio Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Management Strategies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Risk Models</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Portfolio Theory Foundations</h3>
+        </div>
+        <p class="unit-description">Master the fundamental principles of modern portfolio theory and investment science.</p>
+        <ul class="topics-list">
+          <li>Modern Portfolio Theory</li>
+          <li>Risk and return concepts</li>
+          <li>Efficient frontier theory</li>
+          <li>Capital allocation line</li>
+          <li>Two-fund theorem</li>
+          <li>Separation theorem</li>
+          <li>Utility theory applications</li>
+          <li>Mean-variance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Asset Allocation Strategies</h3>
+        </div>
+        <p class="unit-description">Learn strategic and tactical asset allocation approaches for optimal portfolio construction.</p>
+        <ul class="topics-list">
+          <li>Strategic asset allocation</li>
+          <li>Tactical asset allocation</li>
+          <li>Dynamic asset allocation</li>
+          <li>Age-based allocation models</li>
+          <li>Target-date strategies</li>
+          <li>Global asset allocation</li>
+          <li>Alternative asset integration</li>
+          <li>Lifecycle investing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Risk Management</h3>
+        </div>
+        <p class="unit-description">Identify, measure, and manage various types of portfolio risk effectively.</p>
+        <ul class="topics-list">
+          <li>Risk measurement techniques</li>
+          <li>Value at Risk (VaR)</li>
+          <li>Expected Shortfall</li>
+          <li>Stress testing methods</li>
+          <li>Scenario analysis</li>
+          <li>Risk budgeting</li>
+          <li>Diversification benefits</li>
+          <li>Downside risk protection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Performance Measurement</h3>
+        </div>
+        <p class="unit-description">Evaluate portfolio performance using industry-standard metrics and attribution analysis.</p>
+        <ul class="topics-list">
+          <li>Return calculation methods</li>
+          <li>Risk-adjusted performance</li>
+          <li>Sharpe ratio analysis</li>
+          <li>Information ratio</li>
+          <li>Treynor ratio</li>
+          <li>Jensen's alpha</li>
+          <li>Performance attribution</li>
+          <li>Benchmark selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Portfolio Construction</h3>
+        </div>
+        <p class="unit-description">Build diversified portfolios using systematic approaches and optimization techniques.</p>
+        <ul class="topics-list">
+          <li>Security selection process</li>
+          <li>Portfolio optimization</li>
+          <li>Black-Litterman model</li>
+          <li>Resampled efficiency</li>
+          <li>Core-satellite approach</li>
+          <li>Equal weighting strategies</li>
+          <li>Risk parity models</li>
+          <li>Factor-based construction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Rebalancing Strategies</h3>
+        </div>
+        <p class="unit-description">Maintain optimal portfolio weights through systematic rebalancing approaches.</p>
+        <ul class="topics-list">
+          <li>Calendar rebalancing</li>
+          <li>Threshold rebalancing</li>
+          <li>Volatility-based rebalancing</li>
+          <li>Transaction cost analysis</li>
+          <li>Tax-efficient rebalancing</li>
+          <li>Rebalancing frequency</li>
+          <li>Drift tolerance bands</li>
+          <li>Implementation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Active vs Passive Management</h3>
+        </div>
+        <p class="unit-description">Compare active and passive investment approaches and their role in portfolios.</p>
+        <ul class="topics-list">
+          <li>Active management benefits</li>
+          <li>Passive investing advantages</li>
+          <li>Index fund strategies</li>
+          <li>ETF implementation</li>
+          <li>Factor investing</li>
+          <li>Smart beta approaches</li>
+          <li>Cost-benefit analysis</li>
+          <li>Hybrid strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Factor Investing</h3>
+        </div>
+        <p class="unit-description">Understand and implement factor-based investment strategies for enhanced returns.</p>
+        <ul class="topics-list">
+          <li>Factor model foundations</li>
+          <li>Value factor strategies</li>
+          <li>Growth factor investing</li>
+          <li>Quality factor models</li>
+          <li>Momentum strategies</li>
+          <li>Low volatility factors</li>
+          <li>Size factor premiums</li>
+          <li>Multi-factor models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">International Diversification</h3>
+        </div>
+        <p class="unit-description">Expand portfolio opportunities through global diversification and international investing.</p>
+        <ul class="topics-list">
+          <li>Global diversification benefits</li>
+          <li>Currency risk management</li>
+          <li>Developed market allocation</li>
+          <li>Emerging market exposure</li>
+          <li>Regional diversification</li>
+          <li>International ETFs/funds</li>
+          <li>Home country bias</li>
+          <li>Political risk assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Alternative Investments</h3>
+        </div>
+        <p class="unit-description">Incorporate alternative assets to enhance diversification and return potential.</p>
+        <ul class="topics-list">
+          <li>Real estate investments</li>
+          <li>Commodity exposure</li>
+          <li>Private equity allocation</li>
+          <li>Hedge fund strategies</li>
+          <li>Infrastructure investments</li>
+          <li>Natural resources</li>
+          <li>Cryptocurrency considerations</li>
+          <li>Liquidity management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Tax-Efficient Portfolio Management</h3>
+        </div>
+        <p class="unit-description">Optimize after-tax returns through strategic tax management techniques.</p>
+        <ul class="topics-list">
+          <li>Asset location strategies</li>
+          <li>Tax-loss harvesting</li>
+          <li>Tax-efficient fund selection</li>
+          <li>Municipal bond strategies</li>
+          <li>Tax-deferred accounts</li>
+          <li>Roth conversion strategies</li>
+          <li>Charitable giving techniques</li>
+          <li>Estate planning integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Behavioral Portfolio Theory</h3>
+        </div>
+        <p class="unit-description">Apply behavioral finance insights to improve portfolio decision-making.</p>
+        <ul class="topics-list">
+          <li>Behavioral biases in investing</li>
+          <li>Loss aversion effects</li>
+          <li>Mental accounting</li>
+          <li>Overconfidence bias</li>
+          <li>Herding behavior</li>
+          <li>Anchoring effects</li>
+          <li>Behavioral portfolio theory</li>
+          <li>Bias mitigation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">ESG and Sustainable Investing</h3>
+        </div>
+        <p class="unit-description">Integrate environmental, social, and governance factors into portfolio management.</p>
+        <ul class="topics-list">
+          <li>ESG integration methods</li>
+          <li>Sustainable investing approaches</li>
+          <li>Impact investing strategies</li>
+          <li>ESG risk assessment</li>
+          <li>Climate change considerations</li>
+          <li>Social responsibility factors</li>
+          <li>Governance quality metrics</li>
+          <li>Performance implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Portfolio Analytics & Technology</h3>
+        </div>
+        <p class="unit-description">Leverage technology and analytics for enhanced portfolio management decisions.</p>
+        <ul class="topics-list">
+          <li>Portfolio management software</li>
+          <li>Risk analytics platforms</li>
+          <li>Performance attribution tools</li>
+          <li>Robo-advisor technology</li>
+          <li>Big data applications</li>
+          <li>Machine learning integration</li>
+          <li>Alternative data sources</li>
+          <li>Automated rebalancing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Institutional Portfolio Management</h3>
+        </div>
+        <p class="unit-description">Understand unique challenges and strategies for institutional portfolio management.</p>
+        <ul class="topics-list">
+          <li>Pension fund management</li>
+          <li>Endowment strategies</li>
+          <li>Insurance portfolio management</li>
+          <li>Sovereign wealth funds</li>
+          <li>Asset-liability matching</li>
+          <li>Liability-driven investing</li>
+          <li>Governance structures</li>
+          <li>Fiduciary responsibilities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Private Wealth Management</h3>
+        </div>
+        <p class="unit-description">Apply portfolio management principles to high-net-worth individual clients.</p>
+        <ul class="topics-list">
+          <li>Wealth management process</li>
+          <li>Client goal setting</li>
+          <li>Risk profiling</li>
+          <li>Multi-generational planning</li>
+          <li>Tax optimization strategies</li>
+          <li>Estate planning integration</li>
+          <li>Alternative investments</li>
+          <li>Family office structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Advanced Portfolio Strategies</h3>
+        </div>
+        <p class="unit-description">Explore sophisticated portfolio management techniques and emerging trends.</p>
+        <ul class="topics-list">
+          <li>Risk parity strategies</li>
+          <li>Momentum-based allocation</li>
+          <li>Volatility targeting</li>
+          <li>Options overlay strategies</li>
+          <li>Dynamic hedging techniques</li>
+          <li>Quantitative portfolio models</li>
+          <li>Machine learning applications</li>
+          <li>Future trends in portfolio management</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Portfolio Theory Foundations</h1>
+      <p>Master the fundamental principles of modern portfolio theory and investment science.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modern Portfolio Theory</h3>
+        <p>Understand Harry Markowitz's groundbreaking theory for optimal portfolio construction based on risk and return trade-offs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk and Return Concepts</h3>
+        <p>Learn to measure and analyze the fundamental relationship between investment risk and expected returns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Efficient Frontier Theory</h3>
+        <p>Construct efficient portfolios that maximize return for a given level of risk or minimize risk for a given return.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Capital Allocation Line</h3>
+        <p>Understand how to combine risky portfolios with risk-free assets to optimize investor utility.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Two-Fund Theorem</h3>
+        <p>Learn how all optimal portfolios can be constructed using just two funds: a risk-free asset and the market portfolio.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Separation Theorem</h3>
+        <p>Understand how investment decisions can be separated into portfolio selection and capital allocation decisions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Utility Theory Applications</h3>
+        <p>Apply utility theory to understand investor preferences and optimal portfolio choices based on risk tolerance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mean-Variance Optimization</h3>
+        <p>Master the mathematical framework for constructing portfolios that optimize the risk-return trade-off.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Asset Allocation Strategies</h1>
+      <p>Learn strategic and tactical asset allocation approaches for optimal portfolio construction.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Strategic Asset Allocation</h3>
+        <p>Develop long-term asset allocation strategies based on investor goals, risk tolerance, and time horizon.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tactical Asset Allocation</h3>
+        <p>Learn to make short-term adjustments to asset allocation based on market conditions and opportunities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dynamic Asset Allocation</h3>
+        <p>Implement systematic approaches that automatically adjust asset allocation based on market conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Age-Based Allocation Models</h3>
+        <p>Apply age-appropriate asset allocation rules and lifecycle investment strategies for different life stages.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Target-Date Strategies</h3>
+        <p>Understand how target-date funds automatically adjust asset allocation as investors approach retirement.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Global Asset Allocation</h3>
+        <p>Incorporate international assets and currencies into portfolio allocation for enhanced diversification.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Alternative Asset Integration</h3>
+        <p>Learn to include alternative investments like real estate, commodities, and private equity in asset allocation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lifecycle Investing</h3>
+        <p>Adapt investment strategies to different life stages and changing financial needs over time.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Risk Management</h1>
+      <p>Identify, measure, and manage various types of portfolio risk effectively.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk Measurement Techniques</h3>
+        <p>Master various methods for quantifying portfolio risk including standard deviation, beta, and tracking error.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Value at Risk (VaR)</h3>
+        <p>Calculate and interpret Value at Risk measures to estimate potential portfolio losses over specific time periods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expected Shortfall</h3>
+        <p>Understand conditional VaR and expected shortfall measures for tail risk assessment and management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Stress Testing Methods</h3>
