@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Financial Statements Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7E22CE 0%, #A855F7 50%, #C084FC 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7E22CE, #A855F7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(126, 34, 206, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📋';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7E22CE;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7E22CE;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7E22CE, #A855F7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(126, 34, 206, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📋 MemoLearning Financial Statements Analysis</h1>
+    <p>Master the art of analyzing and interpreting corporate financial statements</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to accounting courses')">← Back to Accounting Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Financial Statements Analysis Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Analysis Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Financial Ratios</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Valuation Methods</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Financial Statements Overview</h3>
+        </div>
+        <p class="unit-description">Understand the purpose, structure, and components of the primary financial statements.</p>
+        <ul class="topics-list">
+          <li>Purpose of financial statements</li>
+          <li>Users of financial information</li>
+          <li>GAAP vs IFRS standards</li>
+          <li>Financial reporting framework</li>
+          <li>Annual reports and 10-K filings</li>
+          <li>Quarterly reports (10-Q)</li>
+          <li>Management discussion & analysis</li>
+          <li>Auditor's report significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Income Statement Analysis</h3>
+        </div>
+        <p class="unit-description">Master the analysis of revenues, expenses, and profitability measures.</p>
+        <ul class="topics-list">
+          <li>Revenue recognition principles</li>
+          <li>Cost of goods sold analysis</li>
+          <li>Gross profit margins</li>
+          <li>Operating expense evaluation</li>
+          <li>EBITDA calculations</li>
+          <li>Non-operating items</li>
+          <li>Earnings per share metrics</li>
+          <li>Quality of earnings assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Balance Sheet Analysis</h3>
+        </div>
+        <p class="unit-description">Evaluate assets, liabilities, and equity to assess financial position and strength.</p>
+        <ul class="topics-list">
+          <li>Asset classification and quality</li>
+          <li>Current vs non-current assets</li>
+          <li>Working capital analysis</li>
+          <li>Fixed asset evaluation</li>
+          <li>Intangible assets assessment</li>
+          <li>Liability structure analysis</li>
+          <li>Debt composition evaluation</li>
+          <li>Shareholders' equity components</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Cash Flow Statement Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze cash generation, usage patterns, and liquidity through cash flow examination.</p>
+        <ul class="topics-list">
+          <li>Operating cash flow analysis</li>
+          <li>Free cash flow calculations</li>
+          <li>Investing activities evaluation</li>
+          <li>Financing activities assessment</li>
+          <li>Cash flow quality indicators</li>
+          <li>Working capital changes</li>
+          <li>Capital expenditure analysis</li>
+          <li>Cash conversion cycle</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Liquidity Ratios</h3>
+        </div>
+        <p class="unit-description">Assess a company's ability to meet short-term obligations and manage working capital.</p>
+        <ul class="topics-list">
+          <li>Current ratio analysis</li>
+          <li>Quick ratio (acid-test)</li>
+          <li>Cash ratio calculations</li>
+          <li>Working capital ratios</li>
+          <li>Days sales outstanding</li>
+          <li>Inventory turnover ratios</li>
+          <li>Days payable outstanding</li>
+          <li>Operating cycle analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Profitability Ratios</h3>
+        </div>
+        <p class="unit-description">Measure a company's ability to generate profits and returns for shareholders.</p>
+        <ul class="topics-list">
+          <li>Gross profit margin</li>
+          <li>Operating profit margin</li>
+          <li>Net profit margin</li>
+          <li>Return on assets (ROA)</li>
+          <li>Return on equity (ROE)</li>
+          <li>Return on invested capital</li>
+          <li>Asset turnover ratios</li>
+          <li>DuPont analysis framework</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Leverage & Solvency Ratios</h3>
+        </div>
+        <p class="unit-description">Evaluate debt levels, financial risk, and long-term financial stability.</p>
+        <ul class="topics-list">
+          <li>Debt-to-equity ratios</li>
+          <li>Debt-to-assets ratios</li>
+          <li>Interest coverage ratios</li>
+          <li>Debt service coverage</li>
+          <li>Financial leverage analysis</li>
+          <li>Capital structure evaluation</li>
+          <li>Credit risk assessment</li>
+          <li>Bankruptcy prediction models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Efficiency & Activity Ratios</h3>
+        </div>
+        <p class="unit-description">Analyze how effectively a company uses its assets to generate revenue.</p>
+        <ul class="topics-list">
+          <li>Asset turnover analysis</li>
+          <li>Inventory turnover efficiency</li>
+          <li>Receivables turnover</li>
+          <li>Payables turnover</li>
+          <li>Fixed asset turnover</li>
+          <li>Total asset utilization</li>
+          <li>Sales per employee</li>
+          <li>Capacity utilization metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Market Valuation Ratios</h3>
+        </div>
+        <p class="unit-description">Connect financial performance to market valuation and investor expectations.</p>
+        <ul class="topics-list">
+          <li>Price-to-earnings ratios</li>
+          <li>Price-to-book ratios</li>
+          <li>Price-to-sales ratios</li>
+          <li>Enterprise value multiples</li>
+          <li>PEG ratio analysis</li>
+          <li>Dividend yield calculations</li>
+          <li>Market-to-book ratios</li>
+          <li>Tobin's Q ratio</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Trend Analysis</h3>
+        </div>
+        <p class="unit-description">Identify patterns and trends in financial performance over multiple periods.</p>
+        <ul class="topics-list">
+          <li>Horizontal analysis techniques</li>
+          <li>Year-over-year comparisons</li>
+          <li>Compound annual growth rates</li>
+          <li>Trend line analysis</li>
+          <li>Seasonal adjustments</li>
+          <li>Multi-year trend identification</li>
+          <li>Performance trajectory analysis</li>
+          <li>Forecasting applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Comparative Analysis</h3>
+        </div>
+        <p class="unit-description">Compare company performance against peers, industry benchmarks, and market standards.</p>
+        <ul class="topics-list">
+          <li>Peer group selection</li>
+          <li>Industry benchmark analysis</li>
+          <li>Relative performance metrics</li>
+          <li>Cross-sectional analysis</li>
+          <li>Market position assessment</li>
+          <li>Competitive advantage analysis</li>
+          <li>Best-in-class comparisons</li>
+          <li>Outlier identification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Quality of Earnings</h3>
+        </div>
+        <p class="unit-description">Assess the sustainability and reliability of reported earnings and financial results.</p>
+        <ul class="topics-list">
+          <li>Earnings manipulation detection</li>
+          <li>Revenue quality assessment</li>
+          <li>Expense timing analysis</li>
+          <li>One-time items identification</li>
+          <li>Accounting policy changes</li>
+          <li>Non-GAAP adjustments</li>
+          <li>Red flags in financial statements</li>
+          <li>Forensic accounting techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Credit Analysis</h3>
+        </div>
+        <p class="unit-description">Evaluate creditworthiness and default risk for lending and investment decisions.</p>
+        <ul class="topics-list">
+          <li>Credit risk assessment</li>
+          <li>Default probability analysis</li>
+          <li>Credit rating methodologies</li>
+          <li>Covenant analysis</li>
+          <li>Recovery rate estimation</li>
+          <li>Stress testing scenarios</li>
+          <li>Industry risk factors</li>
+          <li>Credit portfolio analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Equity Valuation</h3>
+        </div>
+        <p class="unit-description">Apply financial statement analysis to equity valuation models and investment decisions.</p>
+        <ul class="topics-list">
+          <li>Discounted cash flow models</li>
+          <li>Dividend discount models</li>
+          <li>Residual income valuation</li>
+          <li>Asset-based valuation</li>
+          <li>Multiple-based valuation</li>
+          <li>Sum-of-the-parts analysis</li>
+          <li>Sensitivity analysis</li>
+          <li>Investment recommendations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Advanced Analysis Techniques</h3>
+        </div>
+        <p class="unit-description">Master sophisticated analytical methods and specialized industry considerations.</p>
+        <ul class="topics-list">
+          <li>Z-score bankruptcy prediction</li>
+          <li>Altman model applications</li>
+          <li>Monte Carlo simulations</li>
+          <li>Scenario analysis techniques</li>
+          <li>Industry-specific metrics</li>
+          <li>ESG factor integration</li>
+          <li>International standards differences</li>
+          <li>Technology impact on analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Financial Statements Overview</h1>
+      <p>Understand the purpose, structure, and components of the primary financial statements.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Purpose of Financial Statements</h3>
+        <p>Learn why companies prepare financial statements and how they communicate business performance to stakeholders.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Users of Financial Information</h3>
+        <p>Identify different stakeholders who rely on financial statements including investors, creditors, and management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">GAAP vs IFRS Standards</h3>
+        <p>Compare Generally Accepted Accounting Principles with International Financial Reporting Standards and their impact on analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Reporting Framework</h3>
+        <p>Understand the conceptual framework that guides financial statement preparation and presentation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Annual Reports and 10-K Filings</h3>
+        <p>Navigate annual reports and SEC filings to extract key financial and business information for analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quarterly Reports (10-Q)</h3>
+        <p>Analyze interim financial statements and understand their limitations and seasonal considerations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Management Discussion & Analysis</h3>
+        <p>Extract valuable insights from MD&A sections about company strategy, risks, and future outlook.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Auditor's Report Significance</h3>
+        <p>Understand different types of audit opinions and their implications for financial statement reliability.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Income Statement Analysis</h1>
+      <p>Master the analysis of revenues, expenses, and profitability measures.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Revenue Recognition Principles</h3>
+        <p>Understand when and how companies recognize revenue and identify potential manipulation red flags.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cost of Goods Sold Analysis</h3>
+        <p>Analyze COGS components, inventory methods, and their impact on profitability and cash flow.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gross Profit Margins</h3>
+        <p>Calculate and interpret gross profit margins to assess pricing power and operational efficiency.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Operating Expense Evaluation</h3>
+        <p>Break down operating expenses to identify cost structure, efficiency trends, and management effectiveness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">EBITDA Calculations</h3>
+        <p>Calculate earnings before interest, taxes, depreciation, and amortization and understand its uses and limitations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Non-operating Items</h3>
+        <p>Identify and adjust for non-recurring and non-operating items to assess core business performance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Earnings Per Share Metrics</h3>
+        <p>Calculate basic and diluted EPS and understand their significance for equity valuation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quality of Earnings Assessment</h3>
+        <p>Evaluate the sustainability and cash backing of reported earnings through quality analysis techniques.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Balance Sheet Analysis</h1>
+      <p>Evaluate assets, liabilities, and equity to assess financial position and strength.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Asset Classification and Quality</h3>
+        <p>Assess different asset categories and evaluate their quality, liquidity, and potential for value creation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Current vs Non-current Assets</h3>
+        <p>Distinguish between short-term and long-term assets and their implications for liquidity analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Working Capital Analysis</h3>
+        <p>Calculate and interpret working capital components to assess short-term financial health and efficiency.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fixed Asset Evaluation</h3>
+        <p>Analyze property, plant, and equipment for age, utilization, and capital investment requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Intangible Assets Assessment</h3>
+        <p>Evaluate goodwill, patents, and other intangibles for value and impairment risks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Liability Structure Analysis</h3>
+        <p>Examine current and long-term liabilities to assess financial obligations and payment schedules.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Debt Composition Evaluation</h3>
+        <p>Analyze debt maturity profiles, interest rates, and covenant restrictions for risk assessment.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shareholders' Equity Components</h3>
+        <p>Break down equity components including retained earnings
