@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Financial Literacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #C084FC 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7C3AED, #A855F7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💡';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7C3AED;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7C3AED;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7C3AED, #A855F7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💡 MemoLearning Financial Literacy</h1>
+    <p>Essential financial knowledge for making informed money decisions throughout life</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to personal development courses')">← Back to Personal Development</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Financial Literacy Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Financial Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Money Skills</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <div class="stat-label">Practical Tips</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Money Basics & Financial Mindset</h3>
+        </div>
+        <p class="unit-description">Develop a healthy relationship with money and understand fundamental financial concepts.</p>
+        <ul class="topics-list">
+          <li>What is money and its functions</li>
+          <li>Financial mindset development</li>
+          <li>Money psychology and emotions</li>
+          <li>Financial values and priorities</li>
+          <li>Common money myths debunked</li>
+          <li>Financial stress management</li>
+          <li>Goal-setting for financial success</li>
+          <li>Building financial confidence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Income & Earning Potential</h3>
+        </div>
+        <p class="unit-description">Understand different income sources and strategies to maximize earning potential.</p>
+        <ul class="topics-list">
+          <li>Types of income sources</li>
+          <li>Active vs passive income</li>
+          <li>Salary negotiation skills</li>
+          <li>Side hustles and gig economy</li>
+          <li>Career development planning</li>
+          <li>Skills investment for higher pay</li>
+          <li>Multiple income streams</li>
+          <li>Income tax basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Budgeting & Money Management</h3>
+        </div>
+        <p class="unit-description">Master essential budgeting skills and money management techniques for financial control.</p>
+        <ul class="topics-list">
+          <li>Creating your first budget</li>
+          <li>50/30/20 budgeting rule</li>
+          <li>Zero-based budgeting</li>
+          <li>Envelope method</li>
+          <li>Tracking expenses effectively</li>
+          <li>Budget apps and tools</li>
+          <li>Managing irregular income</li>
+          <li>Budget troubleshooting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Saving Money & Building Wealth</h3>
+        </div>
+        <p class="unit-description">Learn saving strategies and wealth-building principles for long-term financial security.</p>
+        <ul class="topics-list">
+          <li>Pay yourself first principle</li>
+          <li>Emergency fund essentials</li>
+          <li>High-yield savings accounts</li>
+          <li>Automatic savings systems</li>
+          <li>Short-term vs long-term savings</li>
+          <li>Compound interest power</li>
+          <li>Savings challenges and tricks</li>
+          <li>Avoiding lifestyle inflation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Understanding Credit & Debt</h3>
+        </div>
+        <p class="unit-description">Navigate credit systems and develop healthy debt management strategies.</p>
+        <ul class="topics-list">
+          <li>Credit scores explained</li>
+          <li>Credit reports and monitoring</li>
+          <li>Building credit from scratch</li>
+          <li>Credit card basics</li>
+          <li>Good debt vs bad debt</li>
+          <li>Debt repayment strategies</li>
+          <li>Avoiding debt traps</li>
+          <li>Credit repair basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Banking & Financial Services</h3>
+        </div>
+        <p class="unit-description">Navigate banking services and choose the right financial institutions for your needs.</p>
+        <ul class="topics-list">
+          <li>Types of bank accounts</li>
+          <li>Choosing the right bank</li>
+          <li>Online vs traditional banking</li>
+          <li>Understanding bank fees</li>
+          <li>Credit unions benefits</li>
+          <li>Mobile banking security</li>
+          <li>ATM and debit card safety</li>
+          <li>Bank account management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Investment Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn investment basics and start building long-term wealth through smart investing.</p>
+        <ul class="topics-list">
+          <li>Why investing matters</li>
+          <li>Risk and return basics</li>
+          <li>Types of investments</li>
+          <li>Investment accounts (401k, IRA)</li>
+          <li>Dollar-cost averaging</li>
+          <li>Diversification principles</li>
+          <li>Index funds vs mutual funds</li>
+          <li>Starting with small amounts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Insurance & Risk Management</h3>
+        </div>
+        <p class="unit-description">Protect your financial future with appropriate insurance coverage and risk planning.</p>
+        <ul class="topics-list">
+          <li>Why insurance is important</li>
+          <li>Health insurance basics</li>
+          <li>Auto insurance essentials</li>
+          <li>Renters/homeowners insurance</li>
+          <li>Life insurance needs</li>
+          <li>Disability insurance basics</li>
+          <li>Insurance shopping tips</li>
+          <li>Understanding deductibles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Taxes & Tax Planning</h3>
+        </div>
+        <p class="unit-description">Understand tax basics and learn strategies to minimize your tax burden legally.</p>
+        <ul class="topics-list">
+          <li>How taxes work</li>
+          <li>Tax brackets explained</li>
+          <li>Common tax deductions</li>
+          <li>Tax credits vs deductions</li>
+          <li>Filing your tax return</li>
+          <li>Tax-advantaged accounts</li>
+          <li>Quarterly tax payments</li>
+          <li>Tax record keeping</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Retirement Planning Basics</h3>
+        </div>
+        <p class="unit-description">Start planning for retirement early with fundamental retirement savings strategies.</p>
+        <ul class="topics-list">
+          <li>Why start early matters</li>
+          <li>401(k) employer matching</li>
+          <li>Traditional vs Roth IRA</li>
+          <li>Social Security basics</li>
+          <li>Retirement income needs</li>
+          <li>Retirement account rules</li>
+          <li>Target-date funds</li>
+          <li>Retirement planning timeline</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Major Financial Decisions</h3>
+        </div>
+        <p class="unit-description">Make informed decisions about major purchases and life financial milestones.</p>
+        <ul class="topics-list">
+          <li>Buying vs renting a home</li>
+          <li>Car buying strategies</li>
+          <li>Education financing</li>
+          <li>Wedding budgeting</li>
+          <li>Starting a family costs</li>
+          <li>Career change planning</li>
+          <li>Major purchase evaluation</li>
+          <li>Financial decision framework</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Consumer Protection & Rights</h3>
+        </div>
+        <p class="unit-description">Protect yourself from financial fraud and understand your rights as a consumer.</p>
+        <ul class="topics-list">
+          <li>Identifying financial scams</li>
+          <li>Identity theft protection</li>
+          <li>Consumer rights overview</li>
+          <li>Disputing charges and errors</li>
+          <li>Understanding contracts</li>
+          <li>Warranty and return policies</li>
+          <li>Filing complaints effectively</li>
+          <li>Online shopping safety</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Financial Technology & Tools</h3>
+        </div>
+        <p class="unit-description">Leverage technology and digital tools to improve your financial management.</p>
+        <ul class="topics-list">
+          <li>Budgeting apps comparison</li>
+          <li>Investment platform basics</li>
+          <li>Digital payment systems</li>
+          <li>Cryptocurrency basics</li>
+          <li>Robo-advisors explained</li>
+          <li>Financial tracking tools</li>
+          <li>Mobile banking features</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Financial Planning & Life Stages</h3>
+        </div>
+        <p class="unit-description">Adapt your financial strategy to different life stages and changing circumstances.</p>
+        <ul class="topics-list">
+          <li>Financial planning by age</li>
+          <li>Young adult money priorities</li>
+          <li>Mid-career financial goals</li>
+          <li>Pre-retirement planning</li>
+          <li>Life event financial impact</li>
+          <li>Financial goal adjustment</li>
+          <li>Estate planning basics</li>
+          <li>Financial legacy planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Building Financial Habits</h3>
+        </div>
+        <p class="unit-description">Develop sustainable financial habits and behaviors for long-term success.</p>
+        <ul class="topics-list">
+          <li>Habit formation psychology</li>
+          <li>Daily money habits</li>
+          <li>Monthly financial routines</li>
+          <li>Annual financial checkups</li>
+          <li>Accountability systems</li>
+          <li>Overcoming setbacks</li>
+          <li>Financial education continuation</li>
+          <li>Teaching others about money</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Money Basics & Financial Mindset</h1>
+      <p>Develop a healthy relationship with money and understand fundamental financial concepts.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Money and Its Functions</h3>
+        <p>Understand money as a medium of exchange, unit of account, and store of value in modern society.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Mindset Development</h3>
+        <p>Cultivate a growth mindset toward money and develop positive beliefs about wealth building and financial success.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Money Psychology and Emotions</h3>
+        <p>Explore the emotional aspects of money decisions and learn to manage financial stress and anxiety effectively.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Values and Priorities</h3>
+        <p>Identify your core financial values and align your spending and saving decisions with your life priorities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Money Myths Debunked</h3>
+        <p>Recognize and overcome limiting beliefs about money, wealth, and financial success that hold people back.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Stress Management</h3>
+        <p>Learn techniques to manage money-related stress and maintain mental health during financial challenges.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Goal-Setting for Financial Success</h3>
+        <p>Set SMART financial goals and create actionable plans to achieve short-term and long-term financial objectives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Building Financial Confidence</h3>
+        <p>Develop confidence in financial decision-making through education, practice, and gradual skill building.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Income & Earning Potential</h1>
+      <p>Understand different income sources and strategies to maximize earning potential.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Income Sources</h3>
+        <p>Learn about salary, wages, freelance income, business profits, investment returns, and rental income streams.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Active vs Passive Income</h3>
+        <p>Distinguish between income requiring active work and passive income that generates money with minimal ongoing effort.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Salary Negotiation Skills</h3>
+        <p>Master the art of negotiating salary increases, benefits, and compensation packages effectively and confidently.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Side Hustles and Gig Economy</h3>
+        <p>Explore opportunities to earn additional income through freelancing, gig work, and side business ventures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Career Development Planning</h3>
+        <p>Create strategic career plans to advance professionally and increase earning potential over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Skills Investment for Higher Pay</h3>
+        <p>Identify valuable skills to develop and invest in education or training that leads to higher-paying opportunities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiple Income Streams</h3>
+        <p>Build financial security by diversifying income sources and reducing dependence on a single employer.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Income Tax Basics</h3>
+        <p>Understand how income taxes work, tax brackets, and strategies to optimize your tax situation legally.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Budgeting & Money Management</h1>
+      <p>Master essential budgeting skills and money management techniques for financial control.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Creating Your First Budget</h3>
+        <p>Learn step-by-step how to create a personal budget that tracks income, expenses, and savings goals effectively.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">50/30/20 Budgeting Rule</h3>
+        <p>Apply the simple budgeting framework: 50% needs, 30% wants, and 20% savings and debt repayment.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Zero-Based Budgeting</h3>
+        <p>Master zero-based budgeting where every dollar is assigned a specific purpose before spending occurs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Envelope Method</h3>
+        <p>Use physical or digital envelopes to allocate cash for different spending categories and control expenses.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tracking Expenses Effectively</h3>
+        <p>Implement systems to monitor and categorize expenses to identify spending patterns and optimization opportunities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Budget Apps and Tools</h3>
+        <p>Explore digital budgeting tools like Mint, YNAB, and spreadsheets to automate and simplify money management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Managing Irregular Income</h3>
+        <p>Create budgets that work for freelancers, contractors, and others with variable monthly income streams.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Budget Troubleshooting</h3>
+        <p>
