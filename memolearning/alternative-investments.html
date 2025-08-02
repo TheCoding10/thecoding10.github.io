@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Alternative Investments</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7B2CBF 0%, #F72585 50%, #FFBE0B 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7B2CBF, #F72585);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💎';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7B2CBF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7B2CBF;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7B2CBF, #F72585);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(123, 44, 191, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💎 MemoLearning Alternative Investments</h1>
+    <p>Private equity, hedge funds, real estate, commodities, and non-traditional assets</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Alternative Investments Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Investment Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Asset Classes</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Alternative Investments Overview</h3>
+        </div>
+        <p class="unit-description">Understand the definition, characteristics, and role of alternative investments in portfolios.</p>
+        <ul class="topics-list">
+          <li>What are alternative investments</li>
+          <li>Traditional vs alternative assets</li>
+          <li>Alternative investment characteristics</li>
+          <li>Portfolio diversification benefits</li>
+          <li>Risk-return profiles</li>
+          <li>Liquidity considerations</li>
+          <li>Market evolution and growth</li>
+          <li>Institutional vs retail access</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Private Equity</h3>
+        </div>
+        <p class="unit-description">Learn about private equity strategies, structures, and value creation methods.</p>
+        <ul class="topics-list">
+          <li>Private equity overview</li>
+          <li>Buyout strategies (LBO, MBO)</li>
+          <li>Growth capital investing</li>
+          <li>Distressed investing</li>
+          <li>Fund structures and terms</li>
+          <li>Due diligence processes</li>
+          <li>Value creation strategies</li>
+          <li>Exit strategies and returns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Venture Capital</h3>
+        </div>
+        <p class="unit-description">Explore early-stage investing, startup evaluation, and venture capital ecosystems.</p>
+        <ul class="topics-list">
+          <li>Venture capital fundamentals</li>
+          <li>Startup stages and funding rounds</li>
+          <li>Investment evaluation criteria</li>
+          <li>Term sheets and valuations</li>
+          <li>Portfolio company support</li>
+          <li>Exit strategies (IPO, M&A)</li>
+          <li>Venture capital ecosystem</li>
+          <li>Geographic and sector trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Hedge Funds</h3>
+        </div>
+        <p class="unit-description">Master hedge fund strategies, structures, and performance measurement.</p>
+        <ul class="topics-list">
+          <li>Hedge fund overview and history</li>
+          <li>Long/short equity strategies</li>
+          <li>Market neutral strategies</li>
+          <li>Event-driven strategies</li>
+          <li>Global macro strategies</li>
+          <li>Relative value strategies</li>
+          <li>Fund structures and fees</li>
+          <li>Risk management and leverage</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Real Estate Investments</h3>
+        </div>
+        <p class="unit-description">Understand real estate as an asset class and various investment approaches.</p>
+        <ul class="topics-list">
+          <li>Real estate investment fundamentals</li>
+          <li>Direct property investment</li>
+          <li>Real Estate Investment Trusts (REITs)</li>
+          <li>Real estate private equity</li>
+          <li>Commercial vs residential</li>
+          <li>Valuation methods</li>
+          <li>Real estate cycles</li>
+          <li>Global real estate markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Commodities</h3>
+        </div>
+        <p class="unit-description">Learn about commodity markets, pricing, and investment strategies.</p>
+        <ul class="topics-list">
+          <li>Commodity market overview</li>
+          <li>Energy commodities</li>
+          <li>Precious metals</li>
+          <li>Agricultural commodities</li>
+          <li>Industrial metals</li>
+          <li>Commodity futures and derivatives</li>
+          <li>Storage and contango/backwardation</li>
+          <li>Inflation hedging properties</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Infrastructure Investing</h3>
+        </div>
+        <p class="unit-description">Explore infrastructure as an asset class and its investment characteristics.</p>
+        <ul class="topics-list">
+          <li>Infrastructure investment overview</li>
+          <li>Economic vs social infrastructure</li>
+          <li>Brownfield vs greenfield investments</li>
+          <li>Infrastructure debt and equity</li>
+          <li>Regulatory and political risks</li>
+          <li>ESG considerations</li>
+          <li>Infrastructure funds and strategies</li>
+          <li>Global infrastructure trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Art and Collectibles</h3>
+        </div>
+        <p class="unit-description">Understand alternative assets including art, collectibles, and passion investments.</p>
+        <ul class="topics-list">
+          <li>Art as an investment</li>
+          <li>Collectibles markets</li>
+          <li>Valuation challenges</li>
+          <li>Authenticity and provenance</li>
+          <li>Storage and insurance costs</li>
+          <li>Market trends and cycles</li>
+          <li>Art funds and fractional ownership</li>
+          <li>Emotional vs financial returns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Natural Resources and Timberland</h3>
+        </div>
+        <p class="unit-description">Learn about natural resource investments including timber, farmland, and energy assets.</p>
+        <ul class="topics-list">
+          <li>Timberland investment fundamentals</li>
+          <li>Farmland and agriculture</li>
+          <li>Water rights and investments</li>
+          <li>Oil and gas investments</li>
+          <li>Mining and mineral rights</li>
+          <li>Environmental considerations</li>
+          <li>Inflation protection characteristics</li>
+          <li>Sustainable investing trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cryptocurrency and Digital Assets</h3>
+        </div>
+        <p class="unit-description">Explore the emerging world of cryptocurrency and blockchain-based investments.</p>
+        <ul class="topics-list">
+          <li>Cryptocurrency fundamentals</li>
+          <li>Bitcoin and major cryptocurrencies</li>
+          <li>Blockchain technology</li>
+          <li>DeFi (Decentralized Finance)</li>
+          <li>NFTs and digital collectibles</li>
+          <li>Cryptocurrency exchanges</li>
+          <li>Regulatory landscape</li>
+          <li>Risk and volatility considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Alternative Investment Funds</h3>
+        </div>
+        <p class="unit-description">Understand fund structures, governance, and operational aspects of alternative investments.</p>
+        <ul class="topics-list">
+          <li>Fund structure types</li>
+          <li>Limited partnership structures</li>
+          <li>Fund governance and management</li>
+          <li>Investment committees</li>
+          <li>Fee structures (2 and 20)</li>
+          <li>Carried interest and distributions</li>
+          <li>Fund lifecycle and fundraising</li>
+          <li>Regulatory considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Due Diligence and Risk Management</h3>
+        </div>
+        <p class="unit-description">Master the evaluation and risk assessment of alternative investment opportunities.</p>
+        <ul class="topics-list">
+          <li>Due diligence frameworks</li>
+          <li>Manager selection criteria</li>
+          <li>Operational due diligence</li>
+          <li>Financial due diligence</li>
+          <li>Risk assessment methodologies</li>
+          <li>Background checks and references</li>
+          <li>Documentation review</li>
+          <li>Ongoing monitoring processes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Performance Measurement</h3>
+        </div>
+        <p class="unit-description">Learn to evaluate and benchmark alternative investment performance.</p>
+        <ul class="topics-list">
+          <li>Performance measurement challenges</li>
+          <li>IRR and multiples calculations</li>
+          <li>Benchmarking alternatives</li>
+          <li>Risk-adjusted returns</li>
+          <li>Vintage year effects</li>
+          <li>J-curve phenomenon</li>
+          <li>Performance attribution</li>
+          <li>Reporting and transparency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Portfolio Integration</h3>
+        </div>
+        <p class="unit-description">Understand how to incorporate alternative investments into diversified portfolios.</p>
+        <ul class="topics-list">
+          <li>Portfolio allocation strategies</li>
+          <li>Correlation and diversification benefits</li>
+          <li>Liquidity management</li>
+          <li>Rebalancing challenges</li>
+          <li>Capital commitment pacing</li>
+          <li>Asset allocation models</li>
+          <li>Risk budgeting</li>
+          <li>Implementation considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Emerging Trends and Future Outlook</h3>
+        </div>
+        <p class="unit-description">Explore the evolving landscape of alternative investments and future opportunities.</p>
+        <ul class="topics-list">
+          <li>Technology and AI in alternatives</li>
+          <li>ESG and impact investing</li>
+          <li>Democratization of alternatives</li>
+          <li>Regulatory evolution</li>
+          <li>Emerging asset classes</li>
+          <li>Global market expansion</li>
+          <li>Fee compression trends</li>
+          <li>Future investment opportunities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Alternative Investments Overview</h1>
+      <p>Understand the definition, characteristics, and role of alternative investments in portfolios.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are Alternative Investments</h3>
+        <p>Learn the definition and scope of alternative investments beyond traditional stocks and bonds.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traditional vs Alternative Assets</h3>
+        <p>Compare and contrast alternative investments with conventional asset classes in terms of characteristics and behavior.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Alternative Investment Characteristics</h3>
+        <p>Understand unique features including illiquidity, complexity, regulatory differences, and fee structures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Portfolio Diversification Benefits</h3>
+        <p>Explore how alternative investments can enhance portfolio diversification and reduce overall risk.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk-Return Profiles</h3>
+        <p>Analyze the risk and return characteristics across different categories of alternative investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Liquidity Considerations</h3>
+        <p>Understand the illiquidity premium and how limited liquidity affects investment decisions and portfolio management.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Evolution and Growth</h3>
+        <p>Learn about the historical development and rapid growth of alternative investment markets globally.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Institutional vs Retail Access</h3>
+        <p>Understand the differences in access, minimum investments, and investment vehicles for different investor types.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Private Equity</h1>
+      <p>Learn about private equity strategies, structures, and value creation methods.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Private Equity Overview</h3>
+        <p>Understand the private equity industry structure, key players, and investment philosophy.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Buyout Strategies (LBO, MBO)</h3>
+        <p>Learn leveraged buyout mechanics, management buyouts, and acquisition financing structures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Growth Capital Investing</h3>
+        <p>Explore minority equity investments in mature companies seeking expansion capital.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Distressed Investing</h3>
+        <p>Understand investing in financially troubled companies and turnaround situations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fund Structures and Terms</h3>
+        <p>Master limited partnership structures, fund economics, and key legal terms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Due Diligence Processes</h3>
+        <p>Learn comprehensive evaluation methods for potential private equity investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Value Creation Strategies</h3>
+        <p>Understand operational improvements, financial engineering, and strategic initiatives that drive returns.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exit Strategies and Returns</h3>
+        <p>Explore different exit routes including strategic sales, IPOs, and secondary buyouts.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Venture Capital</h1>
+      <p>Explore early-stage investing, startup evaluation, and venture capital ecosystems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Venture Capital Fundamentals</h3>
+        <p>Learn the basics of venture capital investing, industry structure, and investment process.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Startup Stages and Funding Rounds</h3>
+        <p>Understand seed, Series A/B/C funding stages and their characteristics and valuations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Investment Evaluation Criteria</h3>
+        <p>Master the key factors VCs consider when evaluating startup investment opportunities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Term Sheets and Valuations</h3>
+        <p>Learn to structure venture capital deals including valuations, liquidation preferences, and control rights.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Portfolio Company Support</h3>
+        <p>Understand how VCs add value through mentoring, strategic guidance, and network access.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exit Strategies (IPO, M&A)</h3>
+        <p>Explore different exit paths for venture capital investments and factors affecting exit timing.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Venture Capital Ecosystem</h3>
+        <p>Learn about the interconnected network of entrepreneurs, VCs, incubators, and service providers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Geographic and Sector Trends</h3>
+        <p>Understand regional VC markets and emerging technology sectors attracting venture investment.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Hedge Funds
