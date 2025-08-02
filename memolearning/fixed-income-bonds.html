@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Fixed Income & Bonds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #2E86AB 0%, #A23B72 50%, #F18F01 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #2E86AB, #A23B72);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(46, 134, 171, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💰';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #2E86AB;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2E86AB;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #2E86AB, #A23B72);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(46, 134, 171, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💰 MemoLearning Fixed Income & Bonds</h1>
+    <p>Bond valuation, yield curves, interest rate risk, and fixed income strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Fixed Income & Bonds Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~190</span>
+          <div class="stat-label">Bond Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Bond Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Risk Measures</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Fixed Income Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basic concepts, terminology, and characteristics of fixed income securities.</p>
+        <ul class="topics-list">
+          <li>What are fixed income securities</li>
+          <li>Bond vs equity characteristics</li>
+          <li>Key bond terminology</li>
+          <li>Fixed income market overview</li>
+          <li>Issuers and investors</li>
+          <li>Primary vs secondary markets</li>
+          <li>Bond market size and importance</li>
+          <li>Role in investment portfolios</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Bond Structure and Features</h3>
+        </div>
+        <p class="unit-description">Learn the essential components and features that define bond securities.</p>
+        <ul class="topics-list">
+          <li>Principal (par value) and maturity</li>
+          <li>Coupon payments and frequency</li>
+          <li>Yield to maturity concepts</li>
+          <li>Call and put provisions</li>
+          <li>Sinking fund provisions</li>
+          <li>Conversion features</li>
+          <li>Floating rate mechanisms</li>
+          <li>Indenture agreements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Types of Bonds</h3>
+        </div>
+        <p class="unit-description">Explore the various categories and classifications of fixed income instruments.</p>
+        <ul class="topics-list">
+          <li>Government bonds (Treasuries)</li>
+          <li>Municipal bonds</li>
+          <li>Corporate bonds</li>
+          <li>Agency bonds</li>
+          <li>International and emerging market bonds</li>
+          <li>Inflation-protected securities</li>
+          <li>Zero-coupon bonds</li>
+          <li>Convertible bonds</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Bond Pricing and Valuation</h3>
+        </div>
+        <p class="unit-description">Master the mathematical principles behind bond pricing and valuation methods.</p>
+        <ul class="topics-list">
+          <li>Present value concepts</li>
+          <li>Discount rate determination</li>
+          <li>Bond pricing formulas</li>
+          <li>Premium, par, and discount bonds</li>
+          <li>Accrued interest calculations</li>
+          <li>Clean vs dirty prices</li>
+          <li>Yield calculations</li>
+          <li>Price-yield relationship</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Yield Measures and Calculations</h3>
+        </div>
+        <p class="unit-description">Understand different yield metrics and their applications in bond analysis.</p>
+        <ul class="topics-list">
+          <li>Current yield</li>
+          <li>Yield to maturity (YTM)</li>
+          <li>Yield to call (YTC)</li>
+          <li>Yield to worst</li>
+          <li>Realized yield</li>
+          <li>Tax-equivalent yield</li>
+          <li>Spread measures</li>
+          <li>Yield curve analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Interest Rate Risk</h3>
+        </div>
+        <p class="unit-description">Analyze how interest rate changes affect bond prices and portfolio values.</p>
+        <ul class="topics-list">
+          <li>Interest rate risk fundamentals</li>
+          <li>Price volatility and duration</li>
+          <li>Macaulay duration</li>
+          <li>Modified duration</li>
+          <li>Effective duration</li>
+          <li>Key rate duration</li>
+          <li>Convexity concepts</li>
+          <li>Duration-based hedging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Credit Risk and Analysis</h3>
+        </div>
+        <p class="unit-description">Evaluate the creditworthiness of bond issuers and assess default risk.</p>
+        <ul class="topics-list">
+          <li>Credit risk fundamentals</li>
+          <li>Credit rating agencies</li>
+          <li>Rating scales and methodologies</li>
+          <li>Default probabilities</li>
+          <li>Recovery rates</li>
+          <li>Credit spreads</li>
+          <li>Financial ratio analysis</li>
+          <li>Credit migration risk</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Yield Curve Analysis</h3>
+        </div>
+        <p class="unit-description">Understand yield curve construction, interpretation, and trading strategies.</p>
+        <ul class="topics-list">
+          <li>Yield curve construction</li>
+          <li>Spot rates and forward rates</li>
+          <li>Yield curve shapes and theories</li>
+          <li>Term structure theories</li>
+          <li>Yield curve strategies</li>
+          <li>Curve steepening and flattening</li>
+          <li>Butterfly and barbell strategies</li>
+          <li>International yield curves</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Mortgage-Backed Securities</h3>
+        </div>
+        <p class="unit-description">Learn about securitized mortgage products and their unique characteristics.</p>
+        <ul class="topics-list">
+          <li>Mortgage basics and securitization</li>
+          <li>Pass-through securities</li>
+          <li>Collateralized Mortgage Obligations (CMOs)</li>
+          <li>Prepayment risk and modeling</li>
+          <li>Weighted average life</li>
+          <li>Extension and contraction risk</li>
+          <li>Agency vs non-agency MBS</li>
+          <li>Commercial mortgage securities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Asset-Backed Securities</h3>
+        </div>
+        <p class="unit-description">Explore securitization of various asset classes beyond mortgages.</p>
+        <ul class="topics-list">
+          <li>ABS structure and mechanics</li>
+          <li>Credit card receivables</li>
+          <li>Auto loan securities</li>
+          <li>Student loan securities</li>
+          <li>Equipment trust certificates</li>
+          <li>Credit enhancement mechanisms</li>
+          <li>Waterfall structures</li>
+          <li>ABS credit analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Municipal Bonds</h3>
+        </div>
+        <p class="unit-description">Understand the municipal bond market and tax-advantaged investing.</p>
+        <ul class="topics-list">
+          <li>Municipal bond types</li>
+          <li>General obligation vs revenue bonds</li>
+          <li>Tax advantages and implications</li>
+          <li>Credit analysis for municipals</li>
+          <li>Municipal bond insurance</li>
+          <li>Build America Bonds</li>
+          <li>Private activity bonds</li>
+          <li>Municipal market structure</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">International Fixed Income</h3>
+        </div>
+        <p class="unit-description">Explore global bond markets and currency considerations in fixed income investing.</p>
+        <ul class="topics-list">
+          <li>Global bond market overview</li>
+          <li>Currency risk in international bonds</li>
+          <li>Sovereign debt analysis</li>
+          <li>Emerging market bonds</li>
+          <li>Eurobonds and foreign bonds</li>
+          <li>Currency hedging strategies</li>
+          <li>Political and economic risks</li>
+          <li>International diversification benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Fixed Income Derivatives</h3>
+        </div>
+        <p class="unit-description">Learn about derivatives instruments used in fixed income markets.</p>
+        <ul class="topics-list">
+          <li>Interest rate futures</li>
+          <li>Bond options</li>
+          <li>Interest rate swaps</li>
+          <li>Credit default swaps</li>
+          <li>Forward rate agreements</li>
+          <li>Caps, floors, and collars</li>
+          <li>Swaptions</li>
+          <li>Derivative strategies and hedging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Portfolio Management</h3>
+        </div>
+        <p class="unit-description">Implement fixed income portfolio strategies and management techniques.</p>
+        <ul class="topics-list">
+          <li>Fixed income portfolio objectives</li>
+          <li>Passive vs active management</li>
+          <li>Indexing strategies</li>
+          <li>Duration matching</li>
+          <li>Immunization techniques</li>
+          <li>Total return strategies</li>
+          <li>Sector rotation</li>
+          <li>Performance measurement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Advanced Topics and Market Developments</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge developments and future trends in fixed income markets.</p>
+        <ul class="topics-list">
+          <li>ESG bonds and sustainability</li>
+          <li>Negative interest rates</li>
+          <li>Central bank policies and QE</li>
+          <li>FinTech and bond trading</li>
+          <li>Blockchain and digital bonds</li>
+          <li>Alternative data in credit analysis</li>
+          <li>Regulatory changes and impacts</li>
+          <li>Future of fixed income markets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Fixed Income Fundamentals</h1>
+      <p>Understand the basic concepts, terminology, and characteristics of fixed income securities.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are Fixed Income Securities</h3>
+        <p>Learn the definition and characteristics of debt securities that provide regular income payments to investors.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bond vs Equity Characteristics</h3>
+        <p>Compare and contrast the features, risks, and returns of bonds versus equity investments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Key Bond Terminology</h3>
+        <p>Master essential bond vocabulary including par value, coupon, maturity, and yield concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fixed Income Market Overview</h3>
+        <p>Understand the structure, participants, and functioning of global fixed income markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Issuers and Investors</h3>
+        <p>Identify the various types of bond issuers and the diverse investor base in fixed income markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Primary vs Secondary Markets</h3>
+        <p>Distinguish between new issue markets and trading markets for existing fixed income securities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bond Market Size and Importance</h3>
+        <p>Appreciate the scale and economic significance of global fixed income markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Role in Investment Portfolios</h3>
+        <p>Understand how fixed income securities contribute to portfolio diversification and risk management.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Bond Structure and Features</h1>
+      <p>Learn the essential components and features that define bond securities.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Principal and Maturity</h3>
+        <p>Understand the face value of bonds and how maturity dates affect investment characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Coupon Payments and Frequency</h3>
+        <p>Learn about interest payments, coupon rates, and various payment schedules for different bond types.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Yield to Maturity Concepts</h3>
+        <p>Master the calculation and interpretation of total returns from holding bonds to maturity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Call and Put Provisions</h3>
+        <p>Understand embedded options that allow issuers or investors to redeem bonds before maturity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sinking Fund Provisions</h3>
+        <p>Learn about systematic bond retirement mechanisms that reduce credit risk over time.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conversion Features</h3>
+        <p>Explore convertible bonds that can be exchanged for equity shares under specified conditions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Floating Rate Mechanisms</h3>
+        <p>Understand how variable interest rates adjust based on reference rates and spread adjustments.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Indenture Agreements</h3>
+        <p>Learn about the legal contracts that govern bond terms, covenants, and issuer obligations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Types of Bonds</h1>
+      <p>Explore the various categories and classifications of fixed income instruments.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Government Bonds (Treasuries)</h3>
+        <p>Learn about sovereign debt securities issued by national governments and their risk characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Municipal Bonds</h3>
+        <p>Understand state and local government bonds with tax advantages and diverse credit qualities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Corporate Bonds</h3>
+        <p>Explore debt securities issued by companies with varying credit ratings and industry exposures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Agency Bonds</h3>
+        <p>Learn about bonds issued by government-sponsored enterprises and federal agencies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International and Emerging Market Bonds</h3>
+        <p>Understand foreign currency bonds and developing market debt with additional risks and opportunities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inflation-Protected Securities</h3>
+        <p>Learn about TIPS and other bonds that adjust principal or interest payments for inflation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Zero-Coupon Bonds</h3>
+        <p>Understand bonds sold at discount with no periodic interest payments until maturity.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Convertible Bonds</h3>
+        <p>Explore hybrid securities that combine bond features with equity conversion options.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="
