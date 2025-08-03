@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Financial Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #C0392B 0%, #8E44AD 50%, #2980B9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #C0392B, #8E44AD);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(192, 57, 43, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔬';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #C0392B;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #C0392B;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #C0392B, #8E44AD);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(192, 57, 43, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔬 MemoLearning Financial Engineering</h1>
+    <p>Derivatives, structured products, quantitative modeling, and financial innovation</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Financial Engineering Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~210</span>
+          <div class="stat-label">Engineering Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Financial Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Derivative Types</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Financial Engineering Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the principles and applications of financial engineering in modern finance.</p>
+        <ul class="topics-list">
+          <li>Definition and scope of financial engineering</li>
+          <li>Financial innovation and evolution</li>
+          <li>Mathematical foundations</li>
+          <li>Risk and return frameworks</li>
+          <li>Time value of money applications</li>
+          <li>Cash flow engineering</li>
+          <li>Financial markets and instruments</li>
+          <li>Regulatory and ethical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Derivative Securities Foundations</h3>
+        </div>
+        <p class="unit-description">Master the fundamental concepts and mechanics of derivative instruments.</p>
+        <ul class="topics-list">
+          <li>Derivative types and classifications</li>
+          <li>Forward and futures contracts</li>
+          <li>Options contracts and terminology</li>
+          <li>Swaps and their applications</li>
+          <li>Arbitrage principles</li>
+          <li>No-arbitrage pricing</li>
+          <li>Market conventions and practices</li>
+          <li>Derivative market structure</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Options Theory and Pricing</h3>
+        </div>
+        <p class="unit-description">Learn comprehensive option pricing models and their applications.</p>
+        <ul class="topics-list">
+          <li>Black-Scholes-Merton model</li>
+          <li>Binomial and trinomial trees</li>
+          <li>American vs European options</li>
+          <li>Exotic options and structures</li>
+          <li>Volatility modeling and smile</li>
+          <li>Greeks and risk sensitivities</li>
+          <li>Monte Carlo simulation methods</li>
+          <li>Numerical methods and implementation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Fixed Income Engineering</h3>
+        </div>
+        <p class="unit-description">Engineer complex fixed income instruments and manage interest rate risk.</p>
+        <ul class="topics-list">
+          <li>Bond mathematics and analytics</li>
+          <li>Yield curve construction</li>
+          <li>Duration and convexity measures</li>
+          <li>Interest rate models</li>
+          <li>Mortgage-backed securities</li>
+          <li>Asset-backed securities</li>
+          <li>Credit derivatives</li>
+          <li>Structured notes and hybrids</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Stochastic Calculus and Models</h3>
+        </div>
+        <p class="unit-description">Apply advanced mathematical methods to model financial markets and price derivatives.</p>
+        <ul class="topics-list">
+          <li>Brownian motion and Wiener processes</li>
+          <li>Itô's lemma and stochastic integration</li>
+          <li>Geometric Brownian motion</li>
+          <li>Stochastic differential equations</li>
+          <li>Martingales and risk-neutral measures</li>
+          <li>Girsanov theorem applications</li>
+          <li>Jump-diffusion models</li>
+          <li>Lévy processes and applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Interest Rate Derivatives</h3>
+        </div>
+        <p class="unit-description">Design and price complex interest rate derivative products.</p>
+        <ul class="topics-list">
+          <li>Interest rate swaps and variations</li>
+          <li>Caps, floors, and swaptions</li>
+          <li>Interest rate futures and forwards</li>
+          <li>Callable and puttable bonds</li>
+          <li>Bermudan and exotic swaptions</li>
+          <li>Constant maturity swaps</li>
+          <li>Range accruals and barriers</li>
+          <li>Multi-currency derivatives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Credit Risk and Credit Derivatives</h3>
+        </div>
+        <p class="unit-description">Model credit risk and engineer credit-sensitive financial instruments.</p>
+        <ul class="topics-list">
+          <li>Credit risk fundamentals</li>
+          <li>Default probability modeling</li>
+          <li>Recovery rate analysis</li>
+          <li>Credit default swaps</li>
+          <li>Basket credit derivatives</li>
+          <li>Collateralized debt obligations</li>
+          <li>Credit portfolio models</li>
+          <li>Counterparty credit risk</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Structured Products</h3>
+        </div>
+        <p class="unit-description">Design innovative structured products that meet specific investor needs.</p>
+        <ul class="topics-list">
+          <li>Structured product types</li>
+          <li>Principal protected notes</li>
+          <li>Market-linked CDs</li>
+          <li>Equity-linked notes</li>
+          <li>Barrier and autocallable products</li>
+          <li>Multi-asset structures</li>
+          <li>Commodity-linked products</li>
+          <li>ESG and sustainability structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Risk Management Engineering</h3>
+        </div>
+        <p class="unit-description">Develop sophisticated risk measurement and management frameworks.</p>
+        <ul class="topics-list">
+          <li>Value at Risk (VaR) models</li>
+          <li>Expected shortfall and coherent risk measures</li>
+          <li>Stress testing and scenario analysis</li>
+          <li>Model risk and validation</li>
+          <li>Dynamic hedging strategies</li>
+          <li>Portfolio optimization techniques</li>
+          <li>Operational risk modeling</li>
+          <li>Regulatory capital frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Computational Methods</h3>
+        </div>
+        <p class="unit-description">Implement numerical and computational techniques for financial modeling.</p>
+        <ul class="topics-list">
+          <li>Monte Carlo simulation methods</li>
+          <li>Finite difference methods</li>
+          <li>Tree-based algorithms</li>
+          <li>Fast Fourier Transform techniques</li>
+          <li>Quasi-Monte Carlo methods</li>
+          <li>Machine learning applications</li>
+          <li>High-performance computing</li>
+          <li>Calibration and optimization algorithms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Exotic Derivatives</h3>
+        </div>
+        <p class="unit-description">Engineer and price complex exotic derivative structures.</p>
+        <ul class="topics-list">
+          <li>Path-dependent options</li>
+          <li>Barrier and lookback options</li>
+          <li>Asian and average rate options</li>
+          <li>Rainbow and basket options</li>
+          <li>Quantos and cross-currency products</li>
+          <li>Volatility derivatives</li>
+          <li>Weather and catastrophe derivatives</li>
+          <li>Real options applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Portfolio Engineering</h3>
+        </div>
+        <p class="unit-description">Apply engineering principles to construct optimal investment portfolios.</p>
+        <ul class="topics-list">
+          <li>Modern Portfolio Theory extensions</li>
+          <li>Factor models and attribution</li>
+          <li>Alternative risk premia strategies</li>
+          <li>Dynamic asset allocation</li>
+          <li>Multi-period optimization</li>
+          <li>Transaction cost optimization</li>
+          <li>Robust portfolio construction</li>
+          <li>ESG integration techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Financial Technology Integration</h3>
+        </div>
+        <p class="unit-description">Leverage technology and innovation in financial engineering applications.</p>
+        <ul class="topics-list">
+          <li>Blockchain and smart contracts</li>
+          <li>Decentralized finance (DeFi)</li>
+          <li>Robo-advisory algorithms</li>
+          <li>RegTech and compliance automation</li>
+          <li>Alternative data integration</li>
+          <li>Cloud computing applications</li>
+          <li>API-driven financial services</li>
+          <li>Cybersecurity in financial engineering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Regulatory and Compliance Framework</h3>
+        </div>
+        <p class="unit-description">Navigate the regulatory landscape governing financial engineering and innovation.</p>
+        <ul class="topics-list">
+          <li>Basel III and capital regulations</li>
+          <li>Dodd-Frank and systemic risk</li>
+          <li>MiFID II and market structure</li>
+          <li>EMIR and derivatives regulation</li>
+          <li>Model validation requirements</li>
+          <li>Stress testing regulations</li>
+          <li>ESG reporting standards</li>
+          <li>Cross-border regulatory coordination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Emerging Trends and Future Directions</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge developments and future opportunities in financial engineering.</p>
+        <ul class="topics-list">
+          <li>Quantum computing applications</li>
+          <li>Artificial intelligence in finance</li>
+          <li>Sustainable finance innovation</li>
+          <li>Central bank digital currencies</li>
+          <li>Climate risk modeling</li>
+          <li>Behavioral finance integration</li>
+          <li>Real-time risk management</li>
+          <li>Future career opportunities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Financial Engineering Fundamentals</h1>
+      <p>Understand the principles and applications of financial engineering in modern finance.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition and Scope</h3>
+        <p>Learn what financial engineering encompasses and its role in creating innovative financial solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Innovation and Evolution</h3>
+        <p>Explore the history and drivers of financial innovation from traditional banking to modern structured products.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mathematical Foundations</h3>
+        <p>Master the essential mathematical tools including calculus, probability theory, and statistical methods.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk and Return Frameworks</h3>
+        <p>Understand fundamental risk-return relationships and their applications in product design.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Value of Money Applications</h3>
+        <p>Apply present value, future value, and discounting concepts to complex financial structures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cash Flow Engineering</h3>
+        <p>Learn to design and modify cash flow patterns to meet specific investment objectives.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Markets and Instruments</h3>
+        <p>Survey the landscape of financial markets and the instruments available for engineering solutions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regulatory and Ethical Considerations</h3>
+        <p>Understand the regulatory framework and ethical responsibilities in financial innovation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Derivative Securities Foundations</h1>
+      <p>Master the fundamental concepts and mechanics of derivative instruments.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Derivative Types and Classifications</h3>
+        <p>Learn the comprehensive taxonomy of derivative instruments and their characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward and Futures Contracts</h3>
+        <p>Understand forward agreements, futures markets, and their pricing mechanisms.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Options Contracts and Terminology</h3>
+        <p>Master option fundamentals including calls, puts, strikes, and expiration concepts.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Swaps and Their Applications</h3>
+        <p>Explore swap agreements and their role in risk management and speculation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arbitrage Principles</h3>
+        <p>Understand arbitrage opportunities and their role in maintaining market efficiency.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">No-Arbitrage Pricing</h3>
+        <p>Apply the fundamental theorem of asset pricing to derive derivative values.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Conventions and Practices</h3>
+        <p>Learn industry standards, quoting conventions, and settlement practices.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Derivative Market Structure</h3>
+        <p>Understand how derivative markets are organized, regulated, and operated.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Options Theory and Pricing</h1>
+      <p>Learn comprehensive option pricing models and their applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Black-Scholes-Merton Model</h3>
+        <p>Master the foundational option pricing model and its assumptions, derivation, and applications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Binomial and Trinomial Trees</h3>
+        <p>Learn discrete-time approaches to option pricing and their convergence to continuous models.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">American vs European Options</h3>
+        <p>Understand the differences in exercise features and their impact on pricing and strategies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exotic Options and Structures</h3>
+        <p>Explore complex option structures including barriers, lookbacks, and path-dependent features.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Volatility Modeling and Smile</h3>
+        <p>Learn about implied volatility patterns and advanced volatility modeling techniques.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Greeks and Risk Sensitivities</h3>
+        <p>Master delta, gamma, theta, vega, and rho for risk management and hedging strategies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Monte Carlo Simulation Methods</h3>
+        <p>Apply simulation techniques for pricing complex derivatives and measuring risk.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Numerical Methods and Implementation</h3>
+        <p>Implement pricing algorithms using finite difference methods and other numerical techniques.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4
