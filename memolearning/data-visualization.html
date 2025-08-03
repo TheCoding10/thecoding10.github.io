@@ -1,0 +1,736 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Data Visualization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #06b6d4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .chart-type-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .tool-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #047857;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 MemoLearning Data Visualization</h1>
+    <p>Create compelling visualizations and charts to communicate data insights effectively</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Data Visualization Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Visualization Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Visualization Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Chart Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Visualization Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the principles of effective data visualization and how to choose appropriate chart types for different data.</p>
+        <ul class="topics-list">
+          <li>Principles of effective visualization</li>
+          <li>Visual perception and cognition</li>
+          <li>Chart selection guidelines</li>
+          <li>Color theory and accessibility</li>
+          <li>Visual hierarchy and focus</li>
+          <li>Avoiding misleading visualizations</li>
+          <li>Best practices and guidelines</li>
+          <li>Visualization ethics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Matplotlib Basics</h3>
+        </div>
+        <p class="unit-description">Master the fundamentals of Matplotlib for creating basic plots and customizing visualizations in Python.</p>
+        <ul class="topics-list">
+          <li>Matplotlib architecture and concepts</li>
+          <li>Figure and axes objects</li>
+          <li>Basic plotting with pyplot</li>
+          <li>Line plots and markers</li>
+          <li>Customizing colors and styles</li>
+          <li>Adding labels and titles</li>
+          <li>Legends and annotations</li>
+          <li>Saving and exporting plots</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Statistical Plots with Seaborn</h3>
+        </div>
+        <p class="unit-description">Create beautiful statistical visualizations using Seaborn's high-level interface and built-in themes.</p>
+        <ul class="topics-list">
+          <li>Seaborn overview and advantages</li>
+          <li>Distribution plots (histograms, KDE)</li>
+          <li>Relationship plots (scatter, regression)</li>
+          <li>Categorical plots (box, violin, bar)</li>
+          <li>Matrix plots (heatmaps, clustermap)</li>
+          <li>Multi-plot grids (FacetGrid, PairGrid)</li>
+          <li>Statistical estimation in plots</li>
+          <li>Customizing Seaborn themes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Interactive Visualizations</h3>
+        </div>
+        <p class="unit-description">Build interactive charts and dashboards using Plotly, Bokeh, and other interactive visualization libraries.</p>
+        <ul class="topics-list">
+          <li>Introduction to interactive visualization</li>
+          <li>Plotly fundamentals</li>
+          <li>Creating interactive plots</li>
+          <li>Adding widgets and controls</li>
+          <li>Bokeh for web applications</li>
+          <li>Dash for dashboards</li>
+          <li>Streamlit for rapid prototyping</li>
+          <li>Deployment considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Time Series Visualization</h3>
+        </div>
+        <p class="unit-description">Visualize temporal data patterns, trends, and seasonality using specialized time series plotting techniques.</p>
+        <ul class="topics-list">
+          <li>Time series plot fundamentals</li>
+          <li>Handling datetime data</li>
+          <li>Trend and seasonality visualization</li>
+          <li>Multiple time series plotting</li>
+          <li>Candlestick and OHLC charts</li>
+          <li>Time series decomposition plots</li>
+          <li>Interactive time navigation</li>
+          <li>Forecasting visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Geospatial Visualization</h3>
+        </div>
+        <p class="unit-description">Create maps and geographic visualizations to display spatial data patterns and relationships.</p>
+        <ul class="topics-list">
+          <li>Introduction to geospatial data</li>
+          <li>Coordinate systems and projections</li>
+          <li>Choropleth maps</li>
+          <li>Point and bubble maps</li>
+          <li>Folium for interactive maps</li>
+          <li>GeoPandas integration</li>
+          <li>Satellite and raster data</li>
+          <li>Web mapping services</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Advanced Chart Types</h3>
+        </div>
+        <p class="unit-description">Explore specialized chart types including network graphs, treemaps, parallel coordinates, and more.</p>
+        <ul class="topics-list">
+          <li>Network and graph visualizations</li>
+          <li>Treemaps and sunburst charts</li>
+          <li>Parallel coordinates plots</li>
+          <li>Sankey diagrams</li>
+          <li>Radar and spider charts</li>
+          <li>3D visualizations</li>
+          <li>Custom chart creation</li>
+          <li>Specialized domain charts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Dashboard Design</h3>
+        </div>
+        <p class="unit-description">Design effective dashboards that communicate key insights and enable data-driven decision making.</p>
+        <ul class="topics-list">
+          <li>Dashboard design principles</li>
+          <li>Layout and composition</li>
+          <li>KPI and metric visualization</li>
+          <li>Interactive filtering</li>
+          <li>Real-time data updates</li>
+          <li>User experience considerations</li>
+          <li>Mobile responsiveness</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Storytelling with Data</h3>
+        </div>
+        <p class="unit-description">Learn to craft compelling data stories and presentations that engage audiences and drive action.</p>
+        <ul class="topics-list">
+          <li>Data storytelling framework</li>
+          <li>Narrative structure and flow</li>
+          <li>Context and background setting</li>
+          <li>Highlighting key insights</li>
+          <li>Call-to-action visualization</li>
+          <li>Audience consideration</li>
+          <li>Progressive disclosure</li>
+          <li>Presentation techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Visualization Performance</h3>
+        </div>
+        <p class="unit-description">Optimize visualization performance for large datasets and ensure smooth interactive experiences.</p>
+        <ul class="topics-list">
+          <li>Performance bottlenecks</li>
+          <li>Data aggregation strategies</li>
+          <li>Sampling and filtering</li>
+          <li>Efficient rendering techniques</li>
+          <li>Memory management</li>
+          <li>Progressive loading</li>
+          <li>Caching strategies</li>
+          <li>Hardware acceleration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Visualization Testing and Quality</h3>
+        </div>
+        <p class="unit-description">Ensure visualization quality through testing, validation, and user feedback collection.</p>
+        <ul class="topics-list">
+          <li>Visual testing frameworks</li>
+          <li>Accessibility testing</li>
+          <li>Cross-browser compatibility</li>
+          <li>User testing methods</li>
+          <li>A/B testing for visualizations</li>
+          <li>Error handling and validation</li>
+          <li>Performance monitoring</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Visualization Project Portfolio</h3>
+        </div>
+        <p class="unit-description">Build a comprehensive portfolio of visualization projects demonstrating various techniques and tools.</p>
+        <ul class="topics-list">
+          <li>Project planning and scoping</li>
+          <li>Data source selection</li>
+          <li>Multi-chart dashboards</li>
+          <li>Interactive web applications</li>
+          <li>Report generation</li>
+          <li>Documentation and presentation</li>
+          <li>Portfolio optimization</li>
+          <li>Career development</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Visualization Fundamentals</h1>
+      <p>Learn the principles of effective data visualization and how to choose appropriate chart types for different data.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Principles of Effective Visualization</h3>
+        <p>Understand the core principles that make visualizations clear, accurate, and impactful for your audience.</p>
+        <span class="chart-type-badge">Clarity</span>
+        <span class="chart-type-badge">Accuracy</span>
+        <span class="chart-type-badge">Efficiency</span>
+        <div class="code-example">
+          # Key principles checklist:<br>
+          # 1. Show the data clearly<br>
+          # 2. Minimize chart junk<br>
+          # 3. Use appropriate scales<br>
+          # 4. Label everything clearly
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Visual Perception and Cognition</h3>
+        <p>Learn how humans process visual information to create more intuitive and effective data visualizations.</p>
+        <div class="code-example">
+          # Visual encoding effectiveness:<br>
+          # Position > Length > Angle > Area > Color<br>
+          # Use position for most important comparisons
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chart Selection Guidelines</h3>
+        <p>Master the decision-making process for choosing the right chart type based on your data and message.</p>
+        <span class="chart-type-badge">Comparison</span>
+        <span class="chart-type-badge">Distribution</span>
+        <span class="chart-type-badge">Relationship</span>
+        <span class="chart-type-badge">Composition</span>
+        <div class="code-example">
+          # Chart selection framework:<br>
+          if showing_trends:<br>
+          &nbsp;&nbsp;use_line_chart()<br>
+          elif comparing_categories:<br>
+          &nbsp;&nbsp;use_bar_chart()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Color Theory and Accessibility</h3>
+        <p>Apply color theory principles and ensure your visualizations are accessible to all users, including those with color vision deficiencies.</p>
+        <div class="code-example">
+          import matplotlib.pyplot as plt<br>
+          # Use colorblind-friendly palettes<br>
+          colors = ['#1f77b4', '#ff7f0e', '#2ca02c']<br>
+          plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colors)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Visual Hierarchy and Focus</h3>
+        <p>Guide viewer attention through effective use of visual hierarchy, emphasis, and focus techniques.</p>
+        <div class="code-example">
+          # Creating visual hierarchy:<br>
+          plt.plot(x, y, linewidth=3, color='red')  # Main data<br>
+          plt.plot(x, y2, linewidth=1, color='gray', alpha=0.7)  # Context
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Avoiding Misleading Visualizations</h3>
+        <p>Identify and avoid common pitfalls that can make visualizations misleading or deceptive.</p>
+        <div class="code-example">
+          # Common mistakes to avoid:<br>
+          # - Truncated y-axis<br>
+          # - Inconsistent scales<br>
+          # - Cherry-picked data<br>
+          # - Inappropriate chart types
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Best Practices and Guidelines</h3>
+        <p>Follow industry best practices and style guidelines for creating professional, publication-ready visualizations.</p>
+        <div class="code-example">
+          # Styling best practices<br>
+          plt.style.use('seaborn-v0_8-whitegrid')<br>
+          plt.figure(figsize=(10, 6))<br>
+          plt.title('Clear, Descriptive Title', fontsize=16)<br>
+          plt.xlabel('X-axis Label', fontsize=12)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Visualization Ethics</h3>
+        <p>Understand the ethical responsibilities of data visualization and how to present data honestly and transparently.</p>
+        <div class="code-example">
+          # Ethical considerations:<br>
+          # - Represent data accurately<br>
+          # - Provide context and sources<br>
+          # - Acknowledge limitations<br>
+          # - Consider potential misinterpretation
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Matplotlib Basics</h1>
+      <p>Master the fundamentals of Matplotlib for creating basic plots and customizing visualizations in Python.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matplotlib Architecture and Concepts</h3>
+        <p>Understand the structure of Matplotlib including figures, axes, and the object-oriented approach to plotting.</p>
+        <span class="tool-badge">Figure</span>
+        <span class="tool-badge">Axes</span>
+        <span class="tool-badge">Artist</span>
+        <div class="code-example">
+          import matplotlib.pyplot as plt<br>
+          # Object-oriented approach<br>
+          fig, ax = plt.subplots()<br>
+          ax.plot([1, 2, 3], [1, 4, 2])
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Figure and Axes Objects</h3>
+        <p>Learn to work with figure and axes objects for precise control over your plot layout and properties.</p>
+        <div class="code-example">
+          # Creating multiple subplots<br>
+          fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))<br>
+          ax1.plot(data1)<br>
+          ax2.scatter(x, y)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Plotting with Pyplot</h3>
+        <p>Start with simple plots using the pyplot interface for quick data exploration and basic visualizations.</p>
+        <div class="code-example">
+          import matplotlib.pyplot as plt<br>
+          # Simple line plot<br>
+          plt.plot([1, 2, 3, 4], [1, 4, 2, 3])<br>
+          plt.show()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Line Plots and Markers</h3>
+        <p>Create line plots with various styles, markers, and formatting options for time series and continuous data.</p>
+        <div class="code-example">
+          plt.plot(x, y, 'o-', linewidth=2, markersize=8)<br>
+          plt.plot(x, y2, '--', alpha=0.7)<br>
+          plt.plot(x, y3, ':', marker='s')
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Customizing Colors and Styles</h3>
+        <p>Apply custom colors, line styles, and visual themes to make your plots more appealing and professional.</p>
+        <div class="code-example">
+          # Custom colors and styles<br>
+          plt.plot(x, y, color='#2E86AB', linestyle='--')<br
