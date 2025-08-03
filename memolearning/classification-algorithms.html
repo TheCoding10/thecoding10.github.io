@@ -1,0 +1,748 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Classification Algorithms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 50%, #9d174d 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎯';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ec4899;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be185d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ml-badge {
+      display: inline-block;
+      background: #fce7f3;
+      color: #9d174d;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .performance-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+
+    .hyperparameter-box {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎯 MemoLearning Classification Algorithms</h1>
+    <p>Master machine learning algorithms for predicting categorical outcomes and class labels</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Classification Algorithms Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~70</span>
+          <div class="stat-label">ML Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Evaluation Metrics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Classification Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basics of classification problems and how they differ from regression tasks.</p>
+        <ul class="topics-list">
+          <li>What is classification</li>
+          <li>Binary vs multiclass classification</li>
+          <li>Supervised learning overview</li>
+          <li>Features and target variables</li>
+          <li>Training and test data</li>
+          <li>Decision boundaries</li>
+          <li>Classification vs regression</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Logistic Regression</h3>
+        </div>
+        <p class="unit-description">Learn logistic regression as a fundamental classification algorithm for binary and multiclass problems.</p>
+        <ul class="topics-list">
+          <li>Linear to logistic regression</li>
+          <li>Sigmoid function</li>
+          <li>Odds and log-odds</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Gradient descent optimization</li>
+          <li>Regularization (L1/L2)</li>
+          <li>Multinomial logistic regression</li>
+          <li>Coefficient interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Decision Trees</h3>
+        </div>
+        <p class="unit-description">Master decision tree algorithms for intuitive and interpretable classification models.</p>
+        <ul class="topics-list">
+          <li>Tree structure and nodes</li>
+          <li>Information gain and entropy</li>
+          <li>Gini impurity</li>
+          <li>Splitting criteria</li>
+          <li>Pruning techniques</li>
+          <li>Handling categorical features</li>
+          <li>Tree visualization</li>
+          <li>Advantages and limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Random Forest</h3>
+        </div>
+        <p class="unit-description">Learn ensemble methods with Random Forest for improved accuracy and reduced overfitting.</p>
+        <ul class="topics-list">
+          <li>Ensemble learning concepts</li>
+          <li>Bootstrap aggregating (bagging)</li>
+          <li>Random feature selection</li>
+          <li>Voting mechanisms</li>
+          <li>Out-of-bag error</li>
+          <li>Feature importance</li>
+          <li>Hyperparameter tuning</li>
+          <li>Bias-variance tradeoff</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Support Vector Machines</h3>
+        </div>
+        <p class="unit-description">Understand SVM algorithms for finding optimal decision boundaries and handling non-linear data.</p>
+        <ul class="topics-list">
+          <li>Maximum margin classifier</li>
+          <li>Support vectors</li>
+          <li>Soft margin and C parameter</li>
+          <li>Kernel trick</li>
+          <li>RBF, polynomial, linear kernels</li>
+          <li>Gamma parameter</li>
+          <li>Multiclass SVM</li>
+          <li>SVM for non-linear problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Naive Bayes</h3>
+        </div>
+        <p class="unit-description">Apply probabilistic classification using Naive Bayes algorithms for text and categorical data.</p>
+        <ul class="topics-list">
+          <li>Bayes' theorem</li>
+          <li>Naive independence assumption</li>
+          <li>Gaussian Naive Bayes</li>
+          <li>Multinomial Naive Bayes</li>
+          <li>Bernoulli Naive Bayes</li>
+          <li>Laplace smoothing</li>
+          <li>Text classification applications</li>
+          <li>Handling continuous features</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">K-Nearest Neighbors</h3>
+        </div>
+        <p class="unit-description">Learn instance-based learning with KNN for simple yet effective classification.</p>
+        <ul class="topics-list">
+          <li>Distance-based classification</li>
+          <li>Choosing optimal K</li>
+          <li>Distance metrics</li>
+          <li>Weighted voting</li>
+          <li>Curse of dimensionality</li>
+          <li>Feature scaling importance</li>
+          <li>Computational efficiency</li>
+          <li>Local vs global patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Gradient Boosting</h3>
+        </div>
+        <p class="unit-description">Master advanced ensemble methods including XGBoost, LightGBM, and CatBoost.</p>
+        <ul class="topics-list">
+          <li>Boosting vs bagging</li>
+          <li>AdaBoost algorithm</li>
+          <li>Gradient boosting machines</li>
+          <li>XGBoost implementation</li>
+          <li>LightGBM features</li>
+          <li>CatBoost for categorical data</li>
+          <li>Regularization in boosting</li>
+          <li>Early stopping</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Neural Networks</h3>
+        </div>
+        <p class="unit-description">Introduction to neural networks and deep learning for classification tasks.</p>
+        <ul class="topics-list">
+          <li>Perceptron model</li>
+          <li>Multi-layer perceptrons</li>
+          <li>Activation functions</li>
+          <li>Backpropagation</li>
+          <li>Hidden layers and neurons</li>
+          <li>Regularization techniques</li>
+          <li>Deep learning frameworks</li>
+          <li>When to use neural networks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Model Evaluation</h3>
+        </div>
+        <p class="unit-description">Learn comprehensive methods to evaluate and compare classification model performance.</p>
+        <ul class="topics-list">
+          <li>Confusion matrix</li>
+          <li>Accuracy, precision, recall</li>
+          <li>F1-score and F-beta</li>
+          <li>ROC curves and AUC</li>
+          <li>Precision-recall curves</li>
+          <li>Cross-validation</li>
+          <li>Classification reports</li>
+          <li>Multiclass evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Imbalanced Data</h3>
+        </div>
+        <p class="unit-description">Handle imbalanced datasets with specialized techniques and evaluation strategies.</p>
+        <ul class="topics-list">
+          <li>Identifying class imbalance</li>
+          <li>Sampling techniques (SMOTE, undersampling)</li>
+          <li>Cost-sensitive learning</li>
+          <li>Threshold tuning</li>
+          <li>Ensemble methods for imbalance</li>
+          <li>Evaluation metrics for imbalanced data</li>
+          <li>Business cost considerations</li>
+          <li>Real-world imbalanced problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Model Selection and Deployment</h3>
+        </div>
+        <p class="unit-description">Choose optimal algorithms, tune hyperparameters, and deploy classification models in production.</p>
+        <ul class="topics-list">
+          <li>Algorithm selection criteria</li>
+          <li>Hyperparameter optimization</li>
+          <li>Grid search and random search</li>
+          <li>Bayesian optimization</li>
+          <li>Model pipelines</li>
+          <li>Feature engineering integration</li>
+          <li>Model deployment strategies</li>
+          <li>Monitoring and maintenance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Classification Fundamentals</h1>
+      <p>Understand the basics of classification problems and how they differ from regression tasks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Classification</h3>
+        <p>Learn classification as the task of predicting discrete class labels for input instances.</p>
+        <span class="ml-badge">Supervised Learning</span>
+        <span class="ml-badge">Discrete Outcomes</span>
+        <span class="ml-badge">Pattern Recognition</span>
+        <div class="algorithm-box">
+          Classification algorithms learn to map input features to discrete output categories, enabling automated decision-making and pattern recognition.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Binary vs Multiclass Classification</h3>
+        <p>Distinguish between binary classification (two classes) and multiclass classification (multiple classes).</p>
+        <div class="code-example">
+          # Binary classification example<br>
+          # Predict: Spam or Not Spam<br>
+          y_binary = [0, 1, 1, 0, 1]  # 0=Not Spam, 1=Spam<br>
+          <br>
+          # Multiclass classification example<br>
+          # Predict: Flower species<br>
+          y_multiclass = ['setosa', 'versicolor', 'virginica']
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Supervised Learning Overview</h3>
+        <p>Understand how classification fits into the supervised learning paradigm with labeled training data.</p>
+        <div class="performance-highlight">
+          Supervised learning uses labeled examples to learn a mapping from inputs to outputs, enabling predictions on new, unseen data.
+        </div>
+        <div class="code-example">
+          from sklearn.model_selection import train_test_split<br>
+          # Split data into training and testing sets<br>
+          X_train, X_test, y_train, y_test = train_test_split(<br>
+          &nbsp;&nbsp;X, y, test_size=0.2, random_state=42)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Features and Target Variables</h3>
+        <p>Learn to identify and prepare features (inputs) and target variables (outputs) for classification.</p>
+        <div class="code-example">
+          import pandas as pd<br>
+          # Features (independent variables)<br>
+          X = df[['age', 'income', 'education_level']]<br>
+          <br>
+          # Target variable (dependent variable)<br>
+          y = df['purchased']  # 0 or 1
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Training and Test Data</h3>
+        <p>Understand the importance of separating data for training models and evaluating their performance.</p>
+        <div class="hyperparameter-box">
+          Training data: Used to learn model parameters<br>
+          Validation data: Used for hyperparameter tuning<br>
+          Test data: Used for final performance evaluation
+        </div>
+        <div class="code-example">
+          # Common split ratios<br>
+          # 70% training, 15% validation, 15% test<br>
+          # or 80% training, 20% test (with cross-validation)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Decision Boundaries</h3>
+        <p>Visualize how classification algorithms create decision boundaries to separate different classes.</p>
+        <div class="code-example">
+          import matplotlib.pyplot as plt<br>
+          import numpy as np<br>
+          # Visualize decision boundary<br>
+          def plot_decision_boundary(model, X, y):<br>
+          &nbsp;&nbsp;# Create mesh grid<br>
+          &nbsp;&nbsp;h = 0.02<br>
+          &nbsp;&nbsp;x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1<br>
+          &nbsp;&nbsp;y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classification vs Regression</h3>
+        <p>Compare classification (predicting categories) with regression (predicting continuous values).</p>
+        <div class="algorithm-box">
+          Classification: Predicts discrete classes (cat, dog, bird)<br>
+          Regression: Predicts continuous values (price, temperature, age)
+        </div>
+        <div class="code-example">
+          # Classification output<br>
+          predicted_class = model.predict(X_new)  # ['cat', 'dog']<br>
+          <br>
+          # Regression output<br>
+          predicted_value = model.predict(X_new)  # [25.7, 30.2]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real-world Applications</h3>
+        <p>Explore common real-world applications where classification algorithms solve business problems.</p>
+        <div class="performance-highlight">
+          • Email spam detection<br>
+          • Medical diagnosis<br>
+          • Image recognition<br>
+          • Fraud detection<br>
+          • Customer segmentation<br>
+          • Sentiment analysis
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Logistic Regression</h1>
+      <p>Learn logistic regression as a fundamental classification algorithm for binary and multiclass problems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linear to Logistic Regression</h3>
+        <p>Understand how logistic regression extends linear regression for classification problems.</p>
+        <div class="algorithm-box">
+          Linear regression: ŷ = β₀ + β₁x₁ + β₂x₂ + ... + βₚxₚ<br>
+          Logistic regression: P(y=1) = 1 / (1 + e^(-z)) where z = β₀ + β₁x₁ + ...
+        </div>
+        <div class="code-example">
+          from sklearn.linear_model import LogisticRegression<br>
+          # Create and train logistic regression model<br>
+          model = LogisticRegression()<br>
+          model.fit(X_train, y_train)<br>
+          <br>
+          # Get probability predictions<br>
+          probabilities = model.predict_proba(X_test)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sigmoid Function</h3>
+        <p>Learn how the sigmoid function transforms linear outputs into probabilities between 0 and 1.</p>
+        <div class="code-example">
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          <br>
+          def sigmoid(z):<br>
+          &nbsp;&nbsp;return 1 / (1 + np.exp(-z))<br>
+          <br>
