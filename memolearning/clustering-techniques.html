@@ -1,0 +1,753 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Clustering Techniques</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #14b8a6 0%, #0891b2 50%, #0e7490 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #14b8a6, #0891b2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔗';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #14b8a6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0891b2;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #14b8a6, #0891b2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .cluster-badge {
+      display: inline-block;
+      background: #ccfbf1;
+      color: #0f766e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #f0fdfa;
+      border: 1px solid #5eead4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f766e;
+    }
+
+    .evaluation-highlight {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .technique-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔗 MemoLearning Clustering Techniques</h1>
+    <p>Discover hidden patterns and group similar data points using unsupervised learning</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Clustering Techniques Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~65</span>
+          <div class="stat-label">Clustering Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Evaluation Metrics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Clustering</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of clustering as an unsupervised learning technique for pattern discovery.</p>
+        <ul class="topics-list">
+          <li>What is clustering</li>
+          <li>Unsupervised vs supervised learning</li>
+          <li>Types of clustering problems</li>
+          <li>Similarity and distance measures</li>
+          <li>Cluster characteristics</li>
+          <li>Applications of clustering</li>
+          <li>Challenges in clustering</li>
+          <li>Exploratory data analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">K-Means Clustering</h3>
+        </div>
+        <p class="unit-description">Master the most popular clustering algorithm for partitioning data into k clusters.</p>
+        <ul class="topics-list">
+          <li>K-means algorithm steps</li>
+          <li>Centroid initialization</li>
+          <li>Lloyd's algorithm</li>
+          <li>Choosing optimal k</li>
+          <li>Elbow method</li>
+          <li>Silhouette analysis</li>
+          <li>K-means++ initialization</li>
+          <li>Limitations and assumptions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Hierarchical Clustering</h3>
+        </div>
+        <p class="unit-description">Learn hierarchical clustering methods for creating tree-like cluster structures.</p>
+        <ul class="topics-list">
+          <li>Agglomerative clustering</li>
+          <li>Divisive clustering</li>
+          <li>Linkage criteria</li>
+          <li>Dendrograms</li>
+          <li>Distance metrics</li>
+          <li>Cutting the dendrogram</li>
+          <li>Ward linkage</li>
+          <li>Computational complexity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">DBSCAN and Density-Based Clustering</h3>
+        </div>
+        <p class="unit-description">Explore density-based clustering for finding arbitrarily shaped clusters and handling noise.</p>
+        <ul class="topics-list">
+          <li>Density-based clustering concepts</li>
+          <li>DBSCAN algorithm</li>
+          <li>Core points and border points</li>
+          <li>Epsilon and MinPts parameters</li>
+          <li>Handling noise and outliers</li>
+          <li>OPTICS algorithm</li>
+          <li>HDBSCAN improvements</li>
+          <li>Parameter selection strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Gaussian Mixture Models</h3>
+        </div>
+        <p class="unit-description">Understand probabilistic clustering using Gaussian Mixture Models and the EM algorithm.</p>
+        <ul class="topics-list">
+          <li>Probabilistic clustering</li>
+          <li>Gaussian distributions</li>
+          <li>Mixture models</li>
+          <li>Expectation-Maximization algorithm</li>
+          <li>Soft clustering assignments</li>
+          <li>Model selection criteria</li>
+          <li>Covariance types</li>
+          <li>Bayesian information criterion</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Mean Shift and Mode-Seeking</h3>
+        </div>
+        <p class="unit-description">Learn mean shift clustering for finding dense regions and cluster centers automatically.</p>
+        <ul class="topics-list">
+          <li>Mean shift algorithm</li>
+          <li>Kernel density estimation</li>
+          <li>Bandwidth selection</li>
+          <li>Mode-seeking behavior</li>
+          <li>Automatic cluster detection</li>
+          <li>Applications in computer vision</li>
+          <li>Computational considerations</li>
+          <li>Comparison with other methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Spectral Clustering</h3>
+        </div>
+        <p class="unit-description">Explore advanced clustering using graph theory and eigenvalue decomposition.</p>
+        <ul class="topics-list">
+          <li>Graph-based clustering</li>
+          <li>Similarity graphs</li>
+          <li>Laplacian matrices</li>
+          <li>Eigenvalue decomposition</li>
+          <li>Normalized cuts</li>
+          <li>Affinity matrices</li>
+          <li>Non-convex cluster shapes</li>
+          <li>Parameter tuning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Cluster Evaluation</h3>
+        </div>
+        <p class="unit-description">Learn methods to evaluate clustering quality and compare different clustering solutions.</p>
+        <ul class="topics-list">
+          <li>Internal validation measures</li>
+          <li>External validation measures</li>
+          <li>Silhouette coefficient</li>
+          <li>Calinski-Harabasz index</li>
+          <li>Davies-Bouldin index</li>
+          <li>Adjusted Rand index</li>
+          <li>Normalized mutual information</li>
+          <li>Visual evaluation techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">High-Dimensional Clustering</h3>
+        </div>
+        <p class="unit-description">Address challenges and techniques for clustering in high-dimensional spaces.</p>
+        <ul class="topics-list">
+          <li>Curse of dimensionality</li>
+          <li>Distance concentration</li>
+          <li>Dimensionality reduction preprocessing</li>
+          <li>Subspace clustering</li>
+          <li>Projected clustering</li>
+          <li>Feature selection for clustering</li>
+          <li>PCA and clustering</li>
+          <li>Manifold-based clustering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Time Series and Stream Clustering</h3>
+        </div>
+        <p class="unit-description">Learn specialized clustering techniques for temporal data and streaming data.</p>
+        <ul class="topics-list">
+          <li>Time series clustering</li>
+          <li>Dynamic time warping</li>
+          <li>Shape-based clustering</li>
+          <li>Stream clustering algorithms</li>
+          <li>Online clustering</li>
+          <li>Concept drift handling</li>
+          <li>Window-based approaches</li>
+          <li>Real-time applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Practical Applications</h3>
+        </div>
+        <p class="unit-description">Apply clustering techniques to real-world problems and learn best practices for implementation.</p>
+        <ul class="topics-list">
+          <li>Customer segmentation</li>
+          <li>Market research applications</li>
+          <li>Image segmentation</li>
+          <li>Gene expression analysis</li>
+          <li>Social network analysis</li>
+          <li>Anomaly detection</li>
+          <li>Data preprocessing strategies</li>
+          <li>Scalability considerations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Clustering</h1>
+      <p>Understand the fundamentals of clustering as an unsupervised learning technique for pattern discovery.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Clustering</h3>
+        <p>Learn clustering as the task of grouping similar data points together without predefined labels.</p>
+        <span class="cluster-badge">Unsupervised</span>
+        <span class="cluster-badge">Pattern Discovery</span>
+        <span class="cluster-badge">Grouping</span>
+        <div class="algorithm-box">
+          Clustering algorithms automatically discover hidden structures in data by grouping similar observations together based on their features.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Unsupervised vs Supervised Learning</h3>
+        <p>Understand the key differences between supervised learning (with labels) and unsupervised learning (without labels).</p>
+        <div class="code-example">
+          # Supervised learning (with labels)<br>
+          X = [[1, 2], [2, 3], [3, 4]]<br>
+          y = [0, 1, 0]  # Known labels<br>
+          <br>
+          # Unsupervised learning (no labels)<br>
+          X = [[1, 2], [2, 3], [3, 4]]<br>
+          # No y - algorithm finds patterns
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Clustering Problems</h3>
+        <p>Explore different types of clustering based on cluster structure and overlap.</p>
+        <div class="evaluation-highlight">
+          Hard Clustering: Each point belongs to exactly one cluster<br>
+          Soft Clustering: Points can belong to multiple clusters with probabilities<br>
+          Hierarchical: Nested cluster structures
+        </div>
+        <div class="code-example">
+          from sklearn.cluster import KMeans<br>
+          # Hard clustering example<br>
+          kmeans = KMeans(n_clusters=3)<br>
+          labels = kmeans.fit_predict(X)  # [0, 1, 2, 0, 1]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Similarity and Distance Measures</h3>
+        <p>Learn various metrics to measure similarity and distance between data points.</p>
+        <span class="cluster-badge">Euclidean</span>
+        <span class="cluster-badge">Manhattan</span>
+        <span class="cluster-badge">Cosine</span>
+        <div class="code-example">
+          from scipy.spatial.distance import pdist<br>
+          import numpy as np<br>
+          <br>
+          # Calculate distances<br>
+          data = np.array([[1, 2], [3, 4], [5, 6]])<br>
+          distances = pdist(data, metric='euclidean')
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cluster Characteristics</h3>
+        <p>Understand what makes a good cluster: compactness, separation, and connectivity.</p>
+        <div class="technique-box">
+          Compactness: Points within a cluster are close together<br>
+          Separation: Different clusters are far apart<br>
+          Connectivity: Points in a cluster are connected
+        </div>
+        <div class="code-example">
+          # Measure cluster quality<br>
+          from sklearn.metrics import silhouette_score<br>
+          score = silhouette_score(X, labels)<br>
+          print(f"Silhouette Score: {score:.3f}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications of Clustering</h3>
+        <p>Explore real-world applications where clustering provides valuable insights.</p>
+        <div class="algorithm-box">
+          • Customer segmentation for marketing<br>
+          • Gene expression analysis<br>
+          • Image segmentation<br>
+          • Document organization<br>
+          • Social network analysis<br>
+          • Anomaly detection
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Challenges in Clustering</h3>
+        <p>Learn about common challenges and limitations when applying clustering algorithms.</p>
+        <div class="evaluation-highlight">
+          • Determining the number of clusters<br>
+          • Handling different cluster shapes and sizes<br>
+          • Dealing with noise and outliers<br>
+          • Curse of dimensionality<br>
+          • Scalability to large datasets
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exploratory Data Analysis</h3>
+        <p>Use clustering as an exploratory tool to understand data structure and generate hypotheses.</p>
+        <div class="code-example">
+          import matplotlib.pyplot as plt<br>
+          import seaborn as sns<br>
+          <br>
+          # Visualize clusters<br>
+          plt.figure(figsize=(10, 6))<br>
+          sns.scatterplot(x=X[:, 0], y=X[:, 1], hue=labels)<br>
+          plt.title('Cluster Visualization')
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: K-Means Clustering</h1>
+      <p>Master the most popular clustering algorithm for partitioning data into k clusters.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">K-Means Algorithm Steps</h3>
+        <p>Learn the iterative process of K-means clustering and how it converges to a solution.</p>
+        <div class="algorithm-box">
+          1. Initialize k cluster centroids randomly<br>
+          2. Assign each point to nearest centroid<br>
+          3. Update centroids to mean of assigned points<br>
+          4. Repeat steps 2-3 until convergence
+        </div>
+        <div class="code-example">
+          from sklearn.cluster import KMeans<br>
+          import numpy as np<br>
+          <br>
+          # Basic K-means implementation<br>
+          kmeans = KMeans(n_clusters=3, random_state=42)<br>
+          labels = kmeans.fit_predict(X)<br>
+          centroids = kmeans.cluster_centers_
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Centroid Initialization</h3>
+        <p>Understand different methods for initializing cluster centroids and their impact on results.</p>
+        <div class="code-example">
+          # Different initialization methods<br>
+          # Random initialization<br>
+          kmeans_random = KMeans(n_clusters=3, init='random')<br>
+          <br>
+          # K-means++ initialization (default)<br>
+          kmeans_plus = KMeans(n_clusters=3, init='k-means++')
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lloyd's Algorithm</h3>
+        <p>Learn the mathematical foundation of the standard K-means algorithm.</p>
+        <div class="technique-box">
+          Lloyd's algorithm minimizes the within-cluster sum of squares (WCSS) by iteratively updating cluster assignments and centroids.
+        </div>
+        <div class="code-example">
+          # Monitor convergence<br>
+          kmeans = KMeans(n_clusters=3, max_iter=300, tol=1e-4)<br>
+          kmeans.fit(X)<br>
+          print(f"Converged in {kmeans.n_iter_} iterations")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Choosing Optimal K</h3>
+        <p>Learn methods to determine the optimal number of clusters for your dataset.</p>
+        <span class="cluster-badge">Elbow Method</span>
+        <span class="cluster-badge">
