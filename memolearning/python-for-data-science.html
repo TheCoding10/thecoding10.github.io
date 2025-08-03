@@ -1,0 +1,742 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Python for Data Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #4ade80 0%, #3b82f6 50%, #8b5cf6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #4ade80, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🐍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #4ade80;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #4ade80, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(74, 222, 128, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🐍 MemoLearning Python for Data Science</h1>
+    <p>Master Python programming fundamentals and essential libraries for data science</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Python for Data Science Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Python Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Essential Libraries</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Hands-on Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Python Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn Python basics including syntax, variables, operators, and data types essential for data science.</p>
+        <ul class="topics-list">
+          <li>Python installation and setup</li>
+          <li>Variables and data types</li>
+          <li>Basic operators and expressions</li>
+          <li>Comments and documentation</li>
+          <li>Input and output operations</li>
+          <li>Python syntax and indentation</li>
+          <li>Interactive Python and REPL</li>
+          <li>First data science script</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Structures</h3>
+        </div>
+        <p class="unit-description">Master Python's built-in data structures for organizing and manipulating data effectively.</p>
+        <ul class="topics-list">
+          <li>Lists: creation, indexing, slicing</li>
+          <li>List methods and operations</li>
+          <li>Tuples and immutability</li>
+          <li>Dictionaries and key-value pairs</li>
+          <li>Sets and unique collections</li>
+          <li>Nested data structures</li>
+          <li>Data structure comparison</li>
+          <li>Choosing the right structure</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Control Flow</h3>
+        </div>
+        <p class="unit-description">Learn conditional statements, loops, and control structures for program logic and data processing.</p>
+        <ul class="topics-list">
+          <li>Conditional statements (if, elif, else)</li>
+          <li>Comparison and logical operators</li>
+          <li>For loops and iteration</li>
+          <li>While loops and conditions</li>
+          <li>Loop control (break, continue)</li>
+          <li>Nested loops and conditions</li>
+          <li>List comprehensions</li>
+          <li>Data filtering and transformation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Functions and Modules</h3>
+        </div>
+        <p class="unit-description">Create reusable code with functions and organize code using modules for data science workflows.</p>
+        <ul class="topics-list">
+          <li>Function definition and calling</li>
+          <li>Parameters and arguments</li>
+          <li>Return statements and values</li>
+          <li>Local vs global scope</li>
+          <li>Lambda functions</li>
+          <li>Built-in functions for data</li>
+          <li>Importing modules and packages</li>
+          <li>Creating custom modules</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">File Handling and I/O</h3>
+        </div>
+        <p class="unit-description">Read and write data files, handle different file formats, and manage data input/output operations.</p>
+        <ul class="topics-list">
+          <li>Opening and closing files</li>
+          <li>Reading text files</li>
+          <li>Writing to files</li>
+          <li>File modes and operations</li>
+          <li>CSV file handling</li>
+          <li>JSON data processing</li>
+          <li>File paths and directories</li>
+          <li>Error handling in file operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Error Handling and Debugging</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully and debug Python code effectively for robust data science applications.</p>
+        <ul class="topics-list">
+          <li>Understanding error types</li>
+          <li>Try-except blocks</li>
+          <li>Catching specific exceptions</li>
+          <li>Finally and else clauses</li>
+          <li>Raising custom exceptions</li>
+          <li>Debugging techniques</li>
+          <li>Using print statements</li>
+          <li>IDE debugging tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Object-Oriented Programming</h3>
+        </div>
+        <p class="unit-description">Learn OOP concepts including classes, objects, and inheritance for organizing data science code.</p>
+        <ul class="topics-list">
+          <li>Classes and objects</li>
+          <li>Instance and class attributes</li>
+          <li>Methods and self parameter</li>
+          <li>Constructor method (__init__)</li>
+          <li>Inheritance and polymorphism</li>
+          <li>Encapsulation and data hiding</li>
+          <li>Special methods (dunder methods)</li>
+          <li>OOP in data science contexts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">NumPy Fundamentals</h3>
+        </div>
+        <p class="unit-description">Master NumPy arrays, mathematical operations, and numerical computing for data science.</p>
+        <ul class="topics-list">
+          <li>NumPy installation and import</li>
+          <li>Creating NumPy arrays</li>
+          <li>Array attributes and properties</li>
+          <li>Array indexing and slicing</li>
+          <li>Mathematical operations</li>
+          <li>Broadcasting and vectorization</li>
+          <li>Array reshaping and manipulation</li>
+          <li>Statistical functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Pandas for Data Manipulation</h3>
+        </div>
+        <p class="unit-description">Learn Pandas library for data manipulation, analysis, and preprocessing tasks.</p>
+        <ul class="topics-list">
+          <li>Pandas installation and import</li>
+          <li>Series and DataFrame creation</li>
+          <li>Data loading (CSV, Excel, JSON)</li>
+          <li>Data selection and filtering</li>
+          <li>Data cleaning and preprocessing</li>
+          <li>Handling missing values</li>
+          <li>Data transformation and aggregation</li>
+          <li>Merging and joining datasets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Data Visualization with Matplotlib</h3>
+        </div>
+        <p class="unit-description">Create compelling data visualizations using Matplotlib for exploratory data analysis.</p>
+        <ul class="topics-list">
+          <li>Matplotlib installation and setup</li>
+          <li>Basic plotting with pyplot</li>
+          <li>Line plots and scatter plots</li>
+          <li>Bar charts and histograms</li>
+          <li>Customizing plots (colors, labels)</li>
+          <li>Subplots and figure management</li>
+          <li>Saving and exporting plots</li>
+          <li>Interactive plotting basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Development Environment Setup</h3>
+        </div>
+        <p class="unit-description">Set up efficient Python development environments for data science projects.</p>
+        <ul class="topics-list">
+          <li>Python installation methods</li>
+          <li>Virtual environments with venv</li>
+          <li>Conda and Anaconda setup</li>
+          <li>Jupyter Notebook installation</li>
+          <li>IDE selection (VS Code, PyCharm)</li>
+          <li>Package management with pip</li>
+          <li>Environment configuration</li>
+          <li>Best practices and workflows</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Practical Data Science Project</h3>
+        </div>
+        <p class="unit-description">Apply all learned Python concepts in a comprehensive data science project from start to finish.</p>
+        <ul class="topics-list">
+          <li>Project planning and setup</li>
+          <li>Data collection and loading</li>
+          <li>Exploratory data analysis</li>
+          <li>Data cleaning and preprocessing</li>
+          <li>Statistical analysis</li>
+          <li>Data visualization</li>
+          <li>Results interpretation</li>
+          <li>Project documentation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Python Fundamentals</h1>
+      <p>Learn Python basics including syntax, variables, operators, and data types essential for data science.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Python Installation and Setup</h3>
+        <p>Learn how to install Python on different operating systems and set up your development environment for data science work.</p>
+        <div class="code-example">
+          # Check Python version<br>
+          python --version<br>
+          python3 --version
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variables and Data Types</h3>
+        <p>Understand how to create variables and work with different data types including integers, floats, strings, and booleans.</p>
+        <div class="code-example">
+          name = "Data Science"<br>
+          age = 25<br>
+          height = 5.9<br>
+          is_student = True
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Operators and Expressions</h3>
+        <p>Master arithmetic, comparison, and logical operators for performing calculations and making decisions in your code.</p>
+        <div class="code-example">
+          # Arithmetic operators<br>
+          result = 10 + 5 * 2<br>
+          # Comparison operators<br>
+          is_greater = 10 > 5
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Comments and Documentation</h3>
+        <p>Learn to write clear comments and documentation to make your code readable and maintainable for data science projects.</p>
+        <div class="code-example">
+          # This is a single-line comment<br>
+          """<br>
+          This is a multi-line comment<br>
+          for longer explanations<br>
+          """
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Input and Output Operations</h3>
+        <p>Handle user input and display output effectively for interactive data science applications and scripts.</p>
+        <div class="code-example">
+          name = input("Enter your name: ")<br>
+          print(f"Hello, {name}!")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Python Syntax and Indentation</h3>
+        <p>Understand Python's unique syntax rules, especially indentation, which is crucial for writing correct Python code.</p>
+        <div class="code-example">
+          if True:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Properly indented")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Still in the block")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interactive Python and REPL</h3>
+        <p>Learn to use Python's interactive shell (REPL) for quick testing and exploration of data science concepts.</p>
+        <div class="code-example">
+          >>> 2 + 3<br>
+          5<br>
+          >>> print("Hello World")<br>
+          Hello World
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Data Science Script</h3>
+        <p>Create your first complete Python script that demonstrates basic data science concepts and operations.</p>
+        <div class="code-example">
+          # Calculate average of numbers<br>
+          numbers = [1, 2, 3, 4, 5]<br>
+          average = sum(numbers) / len(numbers)<br>
+          print(f"Average: {average}")
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Data Structures</h1>
+      <p>Master Python's built-in data structures for organizing and manipulating data effectively.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lists: Creation, Indexing, Slicing</h3>
+        <p>Learn to create lists, access elements using indexing, and extract portions using slicing techniques.</p>
+        <div class="code-example">
+          data = [1, 2, 3, 4, 5]<br>
+          first_item = data[0]<br>
+          last_three = data[-3:]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">List Methods and Operations</h3>
+        <p>Master essential list methods for adding, removing, and modifying elements in your data collections.</p>
+        <div class="code-example">
+          numbers = [1, 2, 3]<br>
+          numbers.append(4)<br>
+          numbers.extend([5, 6])<br>
+          numbers.remove(2)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tuples and Immutability</h3>
+        <p>Understand tuples as immutable sequences and when to use them instead of lists in data science applications.</p>
+        <div class="code-example">
+          coordinates = (10.5, 20.3)<br>
+          x, y = coordinates  # Unpacking<br>
+          # coordinates[0] = 15  # Error!
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dictionaries and Key-Value Pairs</h3>
+        <p>Learn to work with dictionaries for storing and retrieving data using meaningful keys instead of numeric indices.</p>
+        <div class="code-example">
+          student = {<br>
+          &nbsp;&nbsp;"name": "Alice",<br>
+          &nbsp;&nbsp;"age": 22,<br>
+          &nbsp;&nbsp;"grades": [85, 90, 92]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sets and Unique Collections</h3>
+        <p>Use sets to work with unique collections of items and perform mathematical set operations on your data.</p>
+        <div class="code-example">
+          unique_values = {1, 2, 3, 3, 4}<br>
+          # Result: {1, 2, 3, 4}<br>
+          set1 & set2  # Intersection
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nested Data Structures</h3>
+        <p>Handle complex data by nesting lists, dictionaries, and other structures to represent real-world datasets.</p>
+        <div class="code-example">
+          dataset = [<br>
+          &nbsp;&nbsp;{"name": "Alice", "scores": [85, 90]},<br>
+          &nbsp;&nbsp;{"name": "Bob", "scores": [78, 85]}<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Structure Comparison</h3>
+        <p>Compare the characteristics, performance, and use cases of different Python data structures for data science.</p>
+        <div class="code-example">
+          # Lists: ordered, mutable<br>
+          # Tuples: ordered, immutable<br>
+          # Dicts: key-value, mutable<br>
+          # Sets: unique, mutable
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Choosing the Right Structure</h3>
+        <p>Learn decision-making criteria for selecting the most appropriate data structure for different data science tasks.</p>
+        <div class="code-example">
+          # Use list for ordered sequences<br>
+          # Use dict for labeled data<br>
+          # Use set for unique items<br>
+          # Use tuple for immutable data
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Control Flow</h1>
+      <p>Learn conditional statements, loops, and control structures for program logic and data processing.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
