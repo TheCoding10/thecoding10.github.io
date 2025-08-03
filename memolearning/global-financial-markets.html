@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Global Financial Markets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1E3A8A 0%, #059669 50%, #DC2626 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1E3A8A, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1E3A8A;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E3A8A;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1E3A8A, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌍 MemoLearning Global Financial Markets</h1>
+    <p>International finance, currency markets, cross-border capital flows, and global institutions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Global Financial Markets Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~200</span>
+          <div class="stat-label">Market Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Institutions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Global Financial System Overview</h3>
+        </div>
+        <p class="unit-description">Understand the structure and evolution of the global financial system.</p>
+        <ul class="topics-list">
+          <li>Global financial system architecture</li>
+          <li>Historical evolution and milestones</li>
+          <li>Major financial centers worldwide</li>
+          <li>Interconnectedness and systemic risk</li>
+          <li>Globalization impact on finance</li>
+          <li>Financial market integration</li>
+          <li>Cross-border capital flows</li>
+          <li>Global financial stability mechanisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">International Monetary System</h3>
+        </div>
+        <p class="unit-description">Explore the framework governing international monetary relations and exchange rates.</p>
+        <ul class="topics-list">
+          <li>Bretton Woods system and evolution</li>
+          <li>International Monetary Fund (IMF)</li>
+          <li>Special Drawing Rights (SDRs)</li>
+          <li>Exchange rate regimes</li>
+          <li>Reserve currencies and status</li>
+          <li>Balance of payments dynamics</li>
+          <li>Currency crises and interventions</li>
+          <li>Digital currencies and CBDCs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Foreign Exchange Markets</h3>
+        </div>
+        <p class="unit-description">Master the world's largest financial market and currency trading mechanisms.</p>
+        <ul class="topics-list">
+          <li>FX market structure and participants</li>
+          <li>Currency pairs and quotations</li>
+          <li>Spot and forward markets</li>
+          <li>Currency derivatives and swaps</li>
+          <li>Exchange rate determination</li>
+          <li>Purchasing power parity</li>
+          <li>Interest rate parity</li>
+          <li>FX trading strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">International Bond Markets</h3>
+        </div>
+        <p class="unit-description">Learn about global debt markets and cross-border fixed income investing.</p>
+        <ul class="topics-list">
+          <li>Global bond market overview</li>
+          <li>Sovereign debt markets</li>
+          <li>Eurobonds and foreign bonds</li>
+          <li>Emerging market debt</li>
+          <li>Currency risk in international bonds</li>
+          <li>Credit rating across countries</li>
+          <li>International bond indices</li>
+          <li>Cross-border bond trading</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Global Equity Markets</h3>
+        </div>
+        <p class="unit-description">Explore international stock markets and cross-border equity investing.</p>
+        <ul class="topics-list">
+          <li>Major global stock exchanges</li>
+          <li>Market capitalization and turnover</li>
+          <li>Cross-listing and ADRs/GDRs</li>
+          <li>International equity benchmarks</li>
+          <li>Developed vs emerging markets</li>
+          <li>Market timing and hours</li>
+          <li>Settlement and custody systems</li>
+          <li>Regulatory differences</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Emerging Markets</h3>
+        </div>
+        <p class="unit-description">Analyze the characteristics and opportunities in developing financial markets.</p>
+        <ul class="topics-list">
+          <li>Emerging market definition and classification</li>
+          <li>BRICS and major emerging economies</li>
+          <li>Market development stages</li>
+          <li>Political and economic risks</li>
+          <li>Currency volatility and controls</li>
+          <li>Market liberalization processes</li>
+          <li>Foreign investment restrictions</li>
+          <li>Emerging market indices and ETFs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">International Banking</h3>
+        </div>
+        <p class="unit-description">Understand global banking operations and cross-border financial services.</p>
+        <ul class="topics-list">
+          <li>Global banking structure</li>
+          <li>International lending markets</li>
+          <li>Syndicated loans and facilities</li>
+          <li>Trade finance and letters of credit</li>
+          <li>Correspondent banking networks</li>
+          <li>Cross-border regulatory compliance</li>
+          <li>Basel international standards</li>
+          <li>Digital banking and fintech</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Multinational Corporate Finance</h3>
+        </div>
+        <p class="unit-description">Learn how corporations manage finances across multiple countries and currencies.</p>
+        <ul class="topics-list">
+          <li>Multinational capital budgeting</li>
+          <li>Transfer pricing strategies</li>
+          <li>Currency exposure management</li>
+          <li>International cash management</li>
+          <li>Cross-border M&A</li>
+          <li>International taxation issues</li>
+          <li>Political risk assessment</li>
+          <li>Global supply chain finance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">International Investment and Portfolio Management</h3>
+        </div>
+        <p class="unit-description">Apply global diversification strategies and international portfolio theory.</p>
+        <ul class="topics-list">
+          <li>International diversification benefits</li>
+          <li>Global asset allocation models</li>
+          <li>Currency hedging strategies</li>
+          <li>Home bias and behavioral factors</li>
+          <li>International CAPM</li>
+          <li>Global performance measurement</li>
+          <li>Sovereign wealth funds</li>
+          <li>ESG investing globally</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Global Financial Institutions</h3>
+        </div>
+        <p class="unit-description">Study the major institutions that shape global financial markets.</p>
+        <ul class="topics-list">
+          <li>International Monetary Fund (IMF)</li>
+          <li>World Bank Group</li>
+          <li>Bank for International Settlements</li>
+          <li>Regional development banks</li>
+          <li>Central bank cooperation</li>
+          <li>Financial Stability Board</li>
+          <li>Global standard-setting bodies</li>
+          <li>Multilateral financial institutions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">International Financial Regulation</h3>
+        </div>
+        <p class="unit-description">Navigate the complex web of global financial regulations and standards.</p>
+        <ul class="topics-list">
+          <li>Basel III international standards</li>
+          <li>MiFID II and global impact</li>
+          <li>FATCA and tax compliance</li>
+          <li>Anti-money laundering (AML)</li>
+          <li>Cross-border regulatory cooperation</li>
+          <li>Regulatory arbitrage</li>
+          <li>Extraterritorial jurisdiction</li>
+          <li>Fintech regulation globally</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Global Financial Crises</h3>
+        </div>
+        <p class="unit-description">Analyze major financial crises and their global transmission mechanisms.</p>
+        <ul class="topics-list">
+          <li>Asian Financial Crisis 1997</li>
+          <li>Global Financial Crisis 2008</li>
+          <li>European Debt Crisis</li>
+          <li>COVID-19 market disruptions</li>
+          <li>Contagion mechanisms</li>
+          <li>Crisis prevention measures</li>
+          <li>International crisis response</li>
+          <li>Lessons learned and reforms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Commodity Markets and Resources</h3>
+        </div>
+        <p class="unit-description">Understand global commodity markets and their impact on international finance.</p>
+        <ul class="topics-list">
+          <li>Global commodity exchanges</li>
+          <li>Oil and energy markets</li>
+          <li>Agricultural commodities</li>
+          <li>Precious and industrial metals</li>
+          <li>Commodity financing structures</li>
+          <li>Resource-based economies</li>
+          <li>Commodity price volatility</li>
+          <li>Environmental and social impacts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Technology and Global Finance</h3>
+        </div>
+        <p class="unit-description">Explore how technology is transforming global financial markets and services.</p>
+        <ul class="topics-list">
+          <li>Fintech global expansion</li>
+          <li>Digital payments and remittances</li>
+          <li>Blockchain and cryptocurrencies</li>
+          <li>Robo-advisory services</li>
+          <li>High-frequency trading globally</li>
+          <li>RegTech and compliance automation</li>
+          <li>Cybersecurity in global finance</li>
+          <li>Financial inclusion through technology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Future of Global Finance</h3>
+        </div>
+        <p class="unit-description">Examine emerging trends and the future direction of global financial markets.</p>
+        <ul class="topics-list">
+          <li>Central Bank Digital Currencies</li>
+          <li>Sustainable finance and ESG</li>
+          <li>De-globalization trends</li>
+          <li>Geopolitical risks and fragmentation</li>
+          <li>Climate finance and green bonds</li>
+          <li>Artificial intelligence applications</li>
+          <li>Space economy financing</li>
+          <li>Next-generation financial infrastructure</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Global Financial System Overview</h1>
+      <p>Understand the structure and evolution of the global financial system.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Global Financial System Architecture</h3>
+        <p>Learn the fundamental structure of interconnected financial markets, institutions, and infrastructure worldwide.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Evolution and Milestones</h3>
+        <p>Trace the development of global finance from the gold standard to modern digital systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Major Financial Centers Worldwide</h3>
+        <p>Explore the roles of London, New York, Tokyo, Hong Kong, and other leading financial hubs.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interconnectedness and Systemic Risk</h3>
+        <p>Understand how global financial linkages create both opportunities and systemic vulnerabilities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Globalization Impact on Finance</h3>
+        <p>Analyze how economic globalization has transformed financial markets and capital flows.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Market Integration</h3>
+        <p>Study the process of market integration and its effects on pricing, efficiency, and risk.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cross-Border Capital Flows</h3>
+        <p>Examine patterns and drivers of international investment and capital movements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Global Financial Stability Mechanisms</h3>
+        <p>Learn about institutions and frameworks designed to maintain global financial stability.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: International Monetary System</h1>
+      <p>Explore the framework governing international monetary relations and exchange rates.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bretton Woods System and Evolution</h3>
+        <p>Understand the historical foundation of modern international monetary arrangements and their evolution.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International Monetary Fund (IMF)</h3>
+        <p>Learn about the IMF's role in global monetary cooperation, surveillance, and crisis assistance.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Special Drawing Rights (SDRs)</h3>
+        <p>Explore the IMF's international reserve asset and its role in the global monetary system.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exchange Rate Regimes</h3>
+        <p>Compare different exchange rate systems from fixed pegs to floating rates and their implications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reserve Currencies and Status</h3>
+        <p>Understand the concept of reserve currencies and the factors that determine international currency status.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Balance of Payments Dynamics</h3>
+        <p>Analyze how countries track international transactions and the implications of BOP imbalances.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Currency Crises and Interventions</h3>
+        <p>Study the causes of currency crises and policy responses including central bank interventions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Digital Currencies and CBDCs</h3>
+        <p>Examine the emerging role of central bank digital currencies in the international monetary system.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Foreign Exchange Markets</h1>
+      <p>Master the world's largest financial market and currency trading mechanisms.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">FX Market Structure and Participants</h3>
+        <p>Understand the decentralized structure of FX markets and the roles of various market participants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Currency Pairs and Quotations</h3>
+        <p>Learn currency pair conventions, bid-ask spreads, and how exchange rates are quoted globally.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Spot and Forward Markets</h3>
+        <p>Master spot currency transactions and forward contracts for future currency delivery.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Currency Derivatives and Swaps</h3>
+        <p>Explore currency options, futures, and swaps used for hedging and speculation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Exchange Rate Determination</h3>
+        <p>Analyze the fundamental and technical factors that influence currency valuations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Purchasing Power Parity</h3>
+        <p>Understand PPP theory and its application in long-term exchange rate forecasting.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interest Rate Parity</h3>
+        <p>Learn about covered and uncovered interest rate parity and their role in FX markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">FX Trading Strategies</h3>
+        <p>Explore various currency trading strategies including carry trades, momentum, and mean reversion.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button
