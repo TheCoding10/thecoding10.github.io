@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Regulation & Ethics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #4A5568 0%, #2D3748 50%, #1A202C 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #4A5568, #2D3748);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #4A5568;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4A5568;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #4A5568, #2D3748);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(74, 85, 104, 0.3);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById(`unit-${unitNumber}`);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ MemoLearning Regulation & Ethics</h1>
+    <p>Financial regulations, compliance frameworks, professional ethics, and legal requirements</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to finance courses')">← Back to Finance</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Regulation & Ethics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~180</span>
+          <div class="stat-label">Regulatory Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Key Regulations</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Ethical Frameworks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Financial Regulation Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the foundations and purpose of financial regulation in modern markets.</p>
+        <ul class="topics-list">
+          <li>Purpose and goals of financial regulation</li>
+          <li>Regulatory theories and approaches</li>
+          <li>Market failures and regulation</li>
+          <li>Regulatory capture and challenges</li>
+          <li>Cost-benefit analysis of regulation</li>
+          <li>Regulatory impact assessment</li>
+          <li>International regulatory coordination</li>
+          <li>Evolution of financial regulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Securities Regulation</h3>
+        </div>
+        <p class="unit-description">Master the regulatory framework governing securities markets and offerings.</p>
+        <ul class="topics-list">
+          <li>Securities Act of 1933</li>
+          <li>Securities Exchange Act of 1934</li>
+          <li>Investment Company Act of 1940</li>
+          <li>Investment Advisers Act of 1940</li>
+          <li>Sarbanes-Oxley Act</li>
+          <li>Dodd-Frank Act provisions</li>
+          <li>JOBS Act and crowdfunding</li>
+          <li>SEC enforcement and penalties</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Banking Regulation</h3>
+        </div>
+        <p class="unit-description">Learn the comprehensive regulatory framework for banking institutions.</p>
+        <ul class="topics-list">
+          <li>Bank Holding Company Act</li>
+          <li>Glass-Steagall Act (historical)</li>
+          <li>Gramm-Leach-Bliley Act</li>
+          <li>Basel capital requirements</li>
+          <li>Dodd-Frank banking provisions</li>
+          <li>Volcker Rule implementation</li>
+          <li>Community Reinvestment Act</li>
+          <li>Bank examination and supervision</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Fiduciary Duty and Standards</h3>
+        </div>
+        <p class="unit-description">Understand fiduciary responsibilities and professional conduct standards.</p>
+        <ul class="topics-list">
+          <li>Fiduciary duty principles</li>
+          <li>Duty of care and loyalty</li>
+          <li>Suitability vs fiduciary standards</li>
+          <li>Best interest regulations</li>
+          <li>Conflicts of interest management</li>
+          <li>Fee disclosure requirements</li>
+          <li>Client relationship management</li>
+          <li>Professional liability issues</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Anti-Money Laundering (AML)</h3>
+        </div>
+        <p class="unit-description">Learn comprehensive AML compliance requirements and procedures.</p>
+        <ul class="topics-list">
+          <li>Bank Secrecy Act requirements</li>
+          <li>USA PATRIOT Act provisions</li>
+          <li>Customer identification programs</li>
+          <li>Suspicious activity reporting</li>
+          <li>Currency transaction reporting</li>
+          <li>OFAC sanctions compliance</li>
+          <li>Enhanced due diligence</li>
+          <li>AML training and policies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Market Conduct and Trading Rules</h3>
+        </div>
+        <p class="unit-description">Master regulations governing market conduct and trading practices.</p>
+        <ul class="topics-list">
+          <li>Market manipulation prohibitions</li>
+          <li>Insider trading regulations</li>
+          <li>Best execution requirements</li>
+          <li>Trade reporting and transparency</li>
+          <li>High-frequency trading rules</li>
+          <li>Dark pool regulations</li>
+          <li>Market making obligations</li>
+          <li>Circuit breakers and halts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Professional Ethics in Finance</h3>
+        </div>
+        <p class="unit-description">Develop ethical decision-making frameworks for financial professionals.</p>
+        <ul class="topics-list">
+          <li>Ethical theories and frameworks</li>
+          <li>CFA Institute Code of Ethics</li>
+          <li>Professional conduct standards</li>
+          <li>Ethical dilemmas in finance</li>
+          <li>Whistleblowing protections</li>
+          <li>Social responsibility in finance</li>
+          <li>ESG considerations</li>
+          <li>Case studies in ethics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">International Regulatory Frameworks</h3>
+        </div>
+        <p class="unit-description">Understand global regulatory coordination and cross-border compliance.</p>
+        <ul class="topics-list">
+          <li>Basel Committee standards</li>
+          <li>IOSCO principles and standards</li>
+          <li>MiFID II European regulations</li>
+          <li>FATF anti-money laundering</li>
+          <li>OECD tax compliance (FATCA)</li>
+          <li>Cross-border enforcement</li>
+          <li>Regulatory equivalence</li>
+          <li>Global systemically important institutions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Compliance Programs and Systems</h3>
+        </div>
+        <p class="unit-description">Design and implement effective compliance programs and monitoring systems.</p>
+        <ul class="topics-list">
+          <li>Compliance program design</li>
+          <li>Risk-based compliance approach</li>
+          <li>Policies and procedures development</li>
+          <li>Compliance monitoring and testing</li>
+          <li>Training and education programs</li>
+          <li>Technology and compliance systems</li>
+          <li>Compliance reporting and metrics</li>
+          <li>Regulatory examination preparation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Consumer Protection</h3>
+        </div>
+        <p class="unit-description">Learn regulations designed to protect individual investors and consumers.</p>
+        <ul class="topics-list">
+          <li>Consumer Financial Protection Bureau</li>
+          <li>Truth in Lending Act</li>
+          <li>Fair Credit Reporting Act</li>
+          <li>Equal Credit Opportunity Act</li>
+          <li>Financial privacy regulations</li>
+          <li>Predatory lending protections</li>
+          <li>Retirement plan protections</li>
+          <li>Senior investor protections</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Risk Management Regulations</h3>
+        </div>
+        <p class="unit-description">Understand regulatory requirements for risk management and capital adequacy.</p>
+        <ul class="topics-list">
+          <li>Basel III capital requirements</li>
+          <li>Stress testing regulations</li>
+          <li>Liquidity coverage ratios</li>
+          <li>Leverage ratio requirements</li>
+          <li>Risk governance standards</li>
+          <li>Model risk management</li>
+          <li>Operational risk requirements</li>
+          <li>Recovery and resolution planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Technology and FinTech Regulation</h3>
+        </div>
+        <p class="unit-description">Explore emerging regulatory approaches to financial technology and innovation.</p>
+        <ul class="topics-list">
+          <li>Regulatory sandboxes</li>
+          <li>Cryptocurrency regulations</li>
+          <li>Digital asset custody</li>
+          <li>Robo-advisor compliance</li>
+          <li>Open banking regulations</li>
+          <li>Cybersecurity requirements</li>
+          <li>Data protection and privacy</li>
+          <li>Innovation facilitation programs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Enforcement and Sanctions</h3>
+        </div>
+        <p class="unit-description">Understand regulatory enforcement mechanisms and penalty structures.</p>
+        <ul class="topics-list">
+          <li>Enforcement authority and powers</li>
+          <li>Civil vs criminal penalties</li>
+          <li>Administrative proceedings</li>
+          <li>Consent orders and settlements</li>
+          <li>Disgorgement and restitution</li>
+          <li>Individual accountability</li>
+          <li>Self-reporting benefits</li>
+          <li>Enforcement trends and patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">ESG and Sustainable Finance Regulation</h3>
+        </div>
+        <p class="unit-description">Learn emerging regulations for environmental, social, and governance considerations.</p>
+        <ul class="topics-list">
+          <li>ESG disclosure requirements</li>
+          <li>Climate risk reporting</li>
+          <li>Sustainable finance taxonomies</li>
+          <li>Green bond standards</li>
+          <li>Fiduciary duty and ESG</li>
+          <li>Proxy voting and engagement</li>
+          <li>Impact investing regulations</li>
+          <li>Greenwashing prevention</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Future of Financial Regulation</h3>
+        </div>
+        <p class="unit-description">Explore emerging trends and the future direction of financial regulation.</p>
+        <ul class="topics-list">
+          <li>RegTech and automated compliance</li>
+          <li>Artificial intelligence regulation</li>
+          <li>Cross-border digital payments</li>
+          <li>Central bank digital currencies</li>
+          <li>Space economy regulations</li>
+          <li>Quantum computing implications</li>
+          <li>Behavioral regulation approaches</li>
+          <li>Regulatory innovation and adaptation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Financial Regulation Fundamentals</h1>
+      <p>Understand the foundations and purpose of financial regulation in modern markets.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Purpose and Goals of Financial Regulation</h3>
+        <p>Learn why financial markets require regulation and the primary objectives of regulatory frameworks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regulatory Theories and Approaches</h3>
+        <p>Explore different theoretical approaches to regulation including public interest and capture theories.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Failures and Regulation</h3>
+        <p>Understand how market failures justify regulatory intervention in financial markets.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regulatory Capture and Challenges</h3>
+        <p>Examine the challenges of regulatory capture and how it affects regulatory effectiveness.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cost-Benefit Analysis of Regulation</h3>
+        <p>Learn to evaluate the economic impacts and trade-offs of regulatory interventions.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regulatory Impact Assessment</h3>
+        <p>Master the process of assessing and measuring the effectiveness of regulatory measures.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International Regulatory Coordination</h3>
+        <p>Understand how regulators coordinate across borders to address global financial risks.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Evolution of Financial Regulation</h3>
+        <p>Trace the historical development of financial regulation from early banking laws to modern frameworks.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Securities Regulation</h1>
+      <p>Master the regulatory framework governing securities markets and offerings.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Securities Act of 1933</h3>
+        <p>Learn the foundational law governing securities offerings and registration requirements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Securities Exchange Act of 1934</h3>
+        <p>Understand the comprehensive framework for securities trading and market regulation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Investment Company Act of 1940</h3>
+        <p>Master the regulations governing mutual funds and other investment companies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Investment Advisers Act of 1940</h3>
+        <p>Learn the regulatory requirements for investment advisers and their fiduciary duties.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sarbanes-Oxley Act</h3>
+        <p>Understand the corporate governance and financial reporting reforms following Enron and WorldCom.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dodd-Frank Act Provisions</h3>
+        <p>Explore the comprehensive financial reform legislation and its securities market implications.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">JOBS Act and Crowdfunding</h3>
+        <p>Learn about capital formation reforms and new funding mechanisms for emerging companies.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SEC Enforcement and Penalties</h3>
+        <p>Understand SEC enforcement powers, penalty structures, and recent enforcement trends.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Banking Regulation</h1>
+      <p>Learn the comprehensive regulatory framework for banking institutions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bank Holding Company Act</h3>
+        <p>Understand the regulation of bank holding companies and their non-banking activities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Glass-Steagall Act (Historical)</h3>
+        <p>Learn about the historical separation of commercial and investment banking and its repeal.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gramm-Leach-Bliley Act</h3>
+        <p>Explore the financial modernization that allowed universal banking and privacy protections.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basel Capital Requirements</h3>
+        <p>Master international capital adequacy standards and risk-weighted asset calculations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dodd-Frank Banking Provisions</h3>
+        <p>Understand comprehensive banking reforms including systemically important bank designation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Volcker Rule Implementation</h3>
+        <p>Learn about proprietary trading restrictions and their impact on banking operations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Community Reinvestment Act</h3>
+        <p>Understand requirements for banks to serve the credit needs of their entire communities.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bank Examination and Supervision</h3>
+        <p>Learn about the bank examination process and supervisory rating systems like CAMELS.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview
