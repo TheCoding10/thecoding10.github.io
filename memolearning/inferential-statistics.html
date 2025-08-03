@@ -1,0 +1,754 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Inferential Statistics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔬';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #6366f1;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .stats-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .formula-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #0c4a6e;
+    }
+
+    .hypothesis-box {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .test-result {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔬 MemoLearning Inferential Statistics</h1>
+    <p>Make data-driven conclusions and predictions using statistical inference methods</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to statistics courses')">← Back to Statistics</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Inferential Statistics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Statistical Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Statistical Tests</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Real Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Inference</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of statistical inference and how to make conclusions about populations from samples.</p>
+        <ul class="topics-list">
+          <li>Statistical inference concepts</li>
+          <li>Population vs sample inference</li>
+          <li>Sampling distributions</li>
+          <li>Central limit theorem</li>
+          <li>Standard error</li>
+          <li>Estimation vs hypothesis testing</li>
+          <li>Type I and Type II errors</li>
+          <li>Statistical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Probability Distributions</h3>
+        </div>
+        <p class="unit-description">Master key probability distributions used in statistical inference and hypothesis testing.</p>
+        <ul class="topics-list">
+          <li>Normal distribution</li>
+          <li>Student's t-distribution</li>
+          <li>Chi-square distribution</li>
+          <li>F-distribution</li>
+          <li>Binomial and Poisson distributions</li>
+          <li>Distribution properties</li>
+          <li>Choosing appropriate distributions</li>
+          <li>Distribution parameters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Confidence Intervals</h3>
+        </div>
+        <p class="unit-description">Construct and interpret confidence intervals for population parameters using sample data.</p>
+        <ul class="topics-list">
+          <li>Confidence interval concepts</li>
+          <li>Confidence level interpretation</li>
+          <li>Margin of error</li>
+          <li>CI for population mean</li>
+          <li>CI for population proportion</li>
+          <li>CI for difference of means</li>
+          <li>Sample size determination</li>
+          <li>Bootstrap confidence intervals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Hypothesis Testing Framework</h3>
+        </div>
+        <p class="unit-description">Learn the systematic approach to hypothesis testing and statistical decision making.</p>
+        <ul class="topics-list">
+          <li>Null and alternative hypotheses</li>
+          <li>Test statistics</li>
+          <li>P-values and interpretation</li>
+          <li>Critical values and regions</li>
+          <li>Decision rules</li>
+          <li>One-tailed vs two-tailed tests</li>
+          <li>Power and effect size</li>
+          <li>Multiple testing corrections</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">One-Sample Tests</h3>
+        </div>
+        <p class="unit-description">Test hypotheses about single population parameters using one-sample statistical tests.</p>
+        <ul class="topics-list">
+          <li>One-sample t-test</li>
+          <li>One-sample z-test</li>
+          <li>One-sample proportion test</li>
+          <li>Wilcoxon signed-rank test</li>
+          <li>Goodness-of-fit tests</li>
+          <li>Normality testing</li>
+          <li>Assumptions and conditions</li>
+          <li>Effect size measures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Two-Sample Tests</h3>
+        </div>
+        <p class="unit-description">Compare two groups or populations using appropriate two-sample statistical tests.</p>
+        <ul class="topics-list">
+          <li>Independent t-test</li>
+          <li>Paired t-test</li>
+          <li>Two-sample proportion test</li>
+          <li>Mann-Whitney U test</li>
+          <li>Wilcoxon signed-rank test</li>
+          <li>F-test for variances</li>
+          <li>Pooled vs unpooled variance</li>
+          <li>Equal variance assumptions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Analysis of Variance (ANOVA)</h3>
+        </div>
+        <p class="unit-description">Compare multiple groups simultaneously using ANOVA and understand variance partitioning.</p>
+        <ul class="topics-list">
+          <li>One-way ANOVA</li>
+          <li>Two-way ANOVA</li>
+          <li>ANOVA assumptions</li>
+          <li>Post-hoc tests</li>
+          <li>Multiple comparisons</li>
+          <li>Effect size in ANOVA</li>
+          <li>Repeated measures ANOVA</li>
+          <li>Non-parametric alternatives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Chi-Square Tests</h3>
+        </div>
+        <p class="unit-description">Analyze categorical data relationships using chi-square tests for independence and goodness-of-fit.</p>
+        <ul class="topics-list">
+          <li>Chi-square test of independence</li>
+          <li>Chi-square goodness-of-fit</li>
+          <li>Expected vs observed frequencies</li>
+          <li>Contingency table analysis</li>
+          <li>Degrees of freedom</li>
+          <li>Effect size measures</li>
+          <li>Fisher's exact test</li>
+          <li>McNemar's test</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Correlation and Regression Inference</h3>
+        </div>
+        <p class="unit-description">Make inferences about relationships between variables using correlation and regression analysis.</p>
+        <ul class="topics-list">
+          <li>Correlation significance testing</li>
+          <li>Regression coefficient testing</li>
+          <li>Confidence intervals for slopes</li>
+          <li>Model significance (F-test)</li>
+          <li>Prediction intervals</li>
+          <li>Regression assumptions</li>
+          <li>Residual analysis</li>
+          <li>Multiple regression inference</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Non-Parametric Tests</h3>
+        </div>
+        <p class="unit-description">Apply distribution-free statistical tests when parametric assumptions are violated.</p>
+        <ul class="topics-list">
+          <li>When to use non-parametric tests</li>
+          <li>Mann-Whitney U test</li>
+          <li>Kruskal-Wallis test</li>
+          <li>Friedman test</li>
+          <li>Sign test</li>
+          <li>Runs test</li>
+          <li>Rank correlation tests</li>
+          <li>Permutation tests</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Bootstrap and Resampling</h3>
+        </div>
+        <p class="unit-description">Use modern resampling methods for statistical inference when traditional methods are inadequate.</p>
+        <ul class="topics-list">
+          <li>Bootstrap principle</li>
+          <li>Bootstrap confidence intervals</li>
+          <li>Bootstrap hypothesis testing</li>
+          <li>Jackknife method</li>
+          <li>Permutation tests</li>
+          <li>Cross-validation</li>
+          <li>Resampling applications</li>
+          <li>Advantages and limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Applied Statistical Inference</h3>
+        </div>
+        <p class="unit-description">Apply statistical inference methods to real-world problems and learn best practices for data analysis.</p>
+        <ul class="topics-list">
+          <li>Choosing appropriate tests</li>
+          <li>Sample size and power analysis</li>
+          <li>Multiple testing corrections</li>
+          <li>Effect size reporting</li>
+          <li>Practical significance</li>
+          <li>Publication bias</li>
+          <li>Reproducibility considerations</li>
+          <li>Communicating results</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Inference</h1>
+      <p>Understand the fundamentals of statistical inference and how to make conclusions about populations from samples.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Statistical Inference Concepts</h3>
+        <p>Learn the fundamental idea of using sample data to make conclusions about populations.</p>
+        <span class="stats-badge">Estimation</span>
+        <span class="stats-badge">Hypothesis Testing</span>
+        <span class="stats-badge">Prediction</span>
+        <div class="hypothesis-box">
+          Statistical inference allows us to make educated guesses about populations using limited sample information, quantifying our uncertainty in the process.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Population vs Sample Inference</h3>
+        <p>Understand how sample statistics are used to estimate population parameters and the inherent uncertainty involved.</p>
+        <div class="code-example">
+          # Population parameter (unknown)<br>
+          population_mean = μ  # Unknown<br>
+          <br>
+          # Sample statistic (known)<br>
+          sample_mean = np.mean(sample_data)<br>
+          # Use sample_mean to estimate μ
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sampling Distributions</h3>
+        <p>Learn about the distribution of sample statistics and how it forms the foundation of statistical inference.</p>
+        <div class="formula-box">
+          Sampling Distribution of x̄:<br>
+          Mean = μ<br>
+          Standard Error = σ/√n
+        </div>
+        <div class="code-example">
+          # Simulate sampling distribution<br>
+          sample_means = []<br>
+          for i in range(1000):<br>
+          &nbsp;&nbsp;sample = np.random.normal(50, 10, 30)<br>
+          &nbsp;&nbsp;sample_means.append(np.mean(sample))
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Central Limit Theorem</h3>
+        <p>Understand how the CLT enables inference even when the population distribution is unknown.</p>
+        <div class="test-result">
+          For large sample sizes (n ≥ 30), the sampling distribution of the mean approaches a normal distribution, regardless of the population distribution shape.
+        </div>
+        <div class="code-example">
+          from scipy import stats<br>
+          # CLT in action<br>
+          # Even with skewed population<br>
+          population = stats.expon.rvs(size=10000)<br>
+          sample_means = [np.mean(np.random.choice(population, 30)) for _ in range(1000)]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Standard Error</h3>
+        <p>Calculate and interpret the standard error as a measure of sampling variability.</p>
+        <div class="formula-box">
+          Standard Error of Mean: SE = σ/√n<br>
+          Standard Error of Proportion: SE = √(p(1-p)/n)
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          # Calculate standard error<br>
+          n = len(sample)<br>
+          sample_std = np.std(sample, ddof=1)<br>
+          standard_error = sample_std / np.sqrt(n)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Estimation vs Hypothesis Testing</h3>
+        <p>Distinguish between two main approaches to statistical inference: estimation and hypothesis testing.</p>
+        <div class="hypothesis-box">
+          Estimation: "What is the likely range of the population mean?"<br>
+          Hypothesis Testing: "Is the population mean equal to a specific value?"
+        </div>
+        <div class="code-example">
+          # Estimation approach<br>
+          confidence_interval = stats.t.interval(0.95, df, sample_mean, se)<br>
+          <br>
+          # Hypothesis testing approach<br>
+          t_stat, p_value = stats.ttest_1samp(sample, hypothesized_mean)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type I and Type II Errors</h3>
+        <p>Learn about the two types of errors that can occur in hypothesis testing and their implications.</p>
+        <span class="stats-badge">Type I (α)</span>
+        <span class="stats-badge">Type II (β)</span>
+        <span class="stats-badge">Power (1-β)</span>
+        <div class="test-result">
+          Type I Error: Rejecting a true null hypothesis (False Positive)<br>
+          Type II Error: Failing to reject a false null hypothesis (False Negative)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Statistical Significance</h3>
+        <p>Understand what statistical significance means and how to interpret p-values correctly.</p>
+        <div class="code-example">
+          # Interpreting p-values<br>
+          if p_value < 0.05:<br>
+          &nbsp;&nbsp;print("Statistically significant at α = 0.05")<br>
+          &nbsp;&nbsp;print("Reject null hypothesis")<br>
+          else:<br>
+          &nbsp;&nbsp;print("Not statistically significant")<br>
+          &nbsp;&nbsp;print("Fail to reject null hypothesis")
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Probability Distributions</h1>
+      <p>Master key probability distributions used in statistical inference and hypothesis testing.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Normal Distribution</h3>
+        <p>Understand the most important distribution in statistics and its role in inference.</p>
+        <div class="formula-box">
+          X ~ N(μ, σ²)<br>
+          Z = (X - μ)/σ ~ N(0, 1)
+        </div>
+        <div class="code-example">
+          from scipy import stats<br>
+          # Normal distribution operations<br>
+          normal_dist = stats.norm(loc=50, scale=10)<br>
+          # Probability calculations<br>
+          prob = normal_dist.cdf(60) - normal_dist.cdf(40)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Student's t-Distribution</h3>
+        <p>Learn when and how to use the t-distribution for inference with small samples.</p>
+        <div class="code-example">
+          # t-distribution for small samples<br>
+          n = 15<br>
+          df = n - 1  # degrees of freedom<br>
+          t_dist = stats.t(df)<br>
+          # Critical value for 95% confidence<br>
+          t_critical = t_dist.ppf(0.975)
+        </div>
+      </div>
+      <div class="subtopic-
