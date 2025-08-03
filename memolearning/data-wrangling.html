@@ -1,0 +1,738 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Data Wrangling</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔧';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #f59e0b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ef4444;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .technique-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔧 MemoLearning Data Wrangling</h1>
+    <p>Master data cleaning, transformation, and preparation techniques for analysis-ready datasets</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Data Wrangling Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Wrangling Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6+</span>
+          <div class="stat-label">Essential Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Real-world Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Data Quality Assessment</h3>
+        </div>
+        <p class="unit-description">Learn to identify and assess data quality issues including completeness, accuracy, consistency, and validity.</p>
+        <ul class="topics-list">
+          <li>Data quality dimensions</li>
+          <li>Completeness assessment</li>
+          <li>Accuracy and precision evaluation</li>
+          <li>Consistency checking</li>
+          <li>Validity and integrity rules</li>
+          <li>Data profiling techniques</li>
+          <li>Quality metrics and scoring</li>
+          <li>Automated quality checks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Handling Missing Data</h3>
+        </div>
+        <p class="unit-description">Master techniques for identifying, understanding, and dealing with missing values in datasets.</p>
+        <ul class="topics-list">
+          <li>Types of missing data (MCAR, MAR, MNAR)</li>
+          <li>Missing data patterns</li>
+          <li>Deletion strategies</li>
+          <li>Imputation methods</li>
+          <li>Forward and backward fill</li>
+          <li>Statistical imputation</li>
+          <li>Advanced imputation techniques</li>
+          <li>Evaluation of imputation quality</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Data Type Conversion and Formatting</h3>
+        </div>
+        <p class="unit-description">Convert between data types, standardize formats, and ensure data consistency across datasets.</p>
+        <ul class="topics-list">
+          <li>Data type identification</li>
+          <li>Numeric type conversions</li>
+          <li>String formatting and parsing</li>
+          <li>Date and time formatting</li>
+          <li>Boolean conversion</li>
+          <li>Categorical data encoding</li>
+          <li>Custom type conversions</li>
+          <li>Format standardization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Outlier Detection and Treatment</h3>
+        </div>
+        <p class="unit-description">Identify anomalous data points and apply appropriate strategies for handling outliers in your datasets.</p>
+        <ul class="topics-list">
+          <li>Statistical outlier detection</li>
+          <li>Interquartile range (IQR) method</li>
+          <li>Z-score and modified Z-score</li>
+          <li>Isolation Forest</li>
+          <li>Local Outlier Factor</li>
+          <li>Visual outlier identification</li>
+          <li>Outlier treatment strategies</li>
+          <li>Domain-specific considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Text Data Cleaning</h3>
+        </div>
+        <p class="unit-description">Clean and standardize text data including removing noise, normalizing text, and handling encoding issues.</p>
+        <ul class="topics-list">
+          <li>Text encoding and decoding</li>
+          <li>Removing special characters</li>
+          <li>Case normalization</li>
+          <li>Whitespace handling</li>
+          <li>Regular expressions for cleaning</li>
+          <li>Text standardization</li>
+          <li>Handling unicode issues</li>
+          <li>Text validation patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Transformation and Normalization</h3>
+        </div>
+        <p class="unit-description">Transform data to appropriate scales and distributions for analysis and modeling purposes.</p>
+        <ul class="topics-list">
+          <li>Feature scaling techniques</li>
+          <li>Min-max normalization</li>
+          <li>Standard scaling (Z-score)</li>
+          <li>Robust scaling</li>
+          <li>Log transformations</li>
+          <li>Box-Cox transformations</li>
+          <li>Power transformations</li>
+          <li>Custom transformation functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Data Integration and Merging</h3>
+        </div>
+        <p class="unit-description">Combine data from multiple sources, resolve conflicts, and create unified datasets for analysis.</p>
+        <ul class="topics-list">
+          <li>Data source identification</li>
+          <li>Schema mapping and alignment</li>
+          <li>Join operations and strategies</li>
+          <li>Handling duplicate records</li>
+          <li>Entity resolution</li>
+          <li>Conflict resolution rules</li>
+          <li>Data lineage tracking</li>
+          <li>Integration validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Feature Engineering and Creation</h3>
+        </div>
+        <p class="unit-description">Create new meaningful features from existing data to improve analysis and model performance.</p>
+        <ul class="topics-list">
+          <li>Feature extraction techniques</li>
+          <li>Mathematical transformations</li>
+          <li>Binning and discretization</li>
+          <li>Polynomial features</li>
+          <li>Interaction features</li>
+          <li>Date and time features</li>
+          <li>Text feature extraction</li>
+          <li>Domain-specific features</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Data Validation and Quality Control</h3>
+        </div>
+        <p class="unit-description">Implement validation rules and quality control processes to ensure data integrity and reliability.</p>
+        <ul class="topics-list">
+          <li>Validation rule design</li>
+          <li>Range and constraint checking</li>
+          <li>Referential integrity</li>
+          <li>Business rule validation</li>
+          <li>Data consistency checks</li>
+          <li>Automated validation pipelines</li>
+          <li>Error reporting and logging</li>
+          <li>Quality monitoring dashboards</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Data Wrangling Pipelines</h3>
+        </div>
+        <p class="unit-description">Build automated, reproducible data wrangling workflows and pipelines for efficient data processing.</p>
+        <ul class="topics-list">
+          <li>Pipeline architecture design</li>
+          <li>Workflow orchestration</li>
+          <li>Error handling and recovery</li>
+          <li>Performance optimization</li>
+          <li>Parallel processing</li>
+          <li>Pipeline monitoring</li>
+          <li>Version control for data</li>
+          <li>Documentation and maintenance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Data Quality Assessment</h1>
+      <p>Learn to identify and assess data quality issues including completeness, accuracy, consistency, and validity.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Quality Dimensions</h3>
+        <p>Understand the fundamental dimensions of data quality and how they impact analysis outcomes.</p>
+        <span class="technique-badge">Completeness</span>
+        <span class="technique-badge">Accuracy</span>
+        <span class="technique-badge">Consistency</span>
+        <span class="technique-badge">Validity</span>
+        <div class="code-example">
+          # Data quality dimensions checklist<br>
+          quality_dimensions = {<br>
+          &nbsp;&nbsp;'completeness': missing_values_check,<br>
+          &nbsp;&nbsp;'accuracy': data_validation_check,<br>
+          &nbsp;&nbsp;'consistency': format_check<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Completeness Assessment</h3>
+        <p>Evaluate the completeness of your dataset by identifying missing values and incomplete records.</p>
+        <div class="code-example">
+          # Check for missing values<br>
+          df.info()<br>
+          df.isnull().sum()<br>
+          missing_percentage = df.isnull().mean() * 100
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Accuracy and Precision Evaluation</h3>
+        <p>Assess the accuracy of data values and identify potential errors or inconsistencies in your dataset.</p>
+        <div class="code-example">
+          # Check for impossible values<br>
+          age_errors = df[df['age'] < 0]['age']<br>
+          # Validate against reference data<br>
+          invalid_codes = df[~df['code'].isin(valid_codes)]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Consistency Checking</h3>
+        <p>Ensure data consistency across columns, records, and related datasets for reliable analysis.</p>
+        <div class="code-example">
+          # Check date consistency<br>
+          inconsistent = df[df['start_date'] > df['end_date']]<br>
+          # Format consistency<br>
+          phone_format = df['phone'].str.match(r'^\d{3}-\d{3}-\d{4}$')
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Validity and Integrity Rules</h3>
+        <p>Define and apply business rules to validate data integrity and ensure compliance with domain requirements.</p>
+        <div class="code-example">
+          # Define validation rules<br>
+          def validate_email(email):<br>
+          &nbsp;&nbsp;return '@' in email and '.' in email<br>
+          <br>
+          df['valid_email'] = df['email'].apply(validate_email)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Profiling Techniques</h3>
+        <p>Use statistical and analytical techniques to understand data characteristics and identify quality issues.</p>
+        <div class="code-example">
+          # Basic profiling<br>
+          df.describe()<br>
+          df.dtypes<br>
+          # Unique value counts<br>
+          df.nunique()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Quality Metrics and Scoring</h3>
+        <p>Develop quantitative metrics to measure and track data quality over time.</p>
+        <div class="code-example">
+          # Calculate quality score<br>
+          completeness_score = 1 - df.isnull().mean()<br>
+          validity_score = df['valid_records'].mean()<br>
+          overall_score = (completeness_score + validity_score) / 2
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Automated Quality Checks</h3>
+        <p>Implement automated systems for continuous data quality monitoring and alerting.</p>
+        <div class="code-example">
+          # Automated quality pipeline<br>
+          def quality_check_pipeline(df):<br>
+          &nbsp;&nbsp;checks = []<br>
+          &nbsp;&nbsp;checks.append(check_completeness(df))<br>
+          &nbsp;&nbsp;checks.append(check_validity(df))<br>
+          &nbsp;&nbsp;return all(checks)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Handling Missing Data</h1>
+      <p>Master techniques for identifying, understanding, and dealing with missing values in datasets.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Missing Data</h3>
+        <p>Understand the different mechanisms that lead to missing data: MCAR, MAR, and MNAR.</p>
+        <span class="technique-badge">MCAR</span>
+        <span class="technique-badge">MAR</span>
+        <span class="technique-badge">MNAR</span>
+        <div class="code-example">
+          # Identify missing data patterns<br>
+          import missingno as msno<br>
+          msno.matrix(df)<br>
+          msno.heatmap(df)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Missing Data Patterns</h3>
+        <p>Analyze patterns in missing data to understand the underlying causes and choose appropriate handling strategies.</p>
+        <div class="code-example">
+          # Analyze missing patterns<br>
+          missing_pattern = df.isnull().groupby([col for col in df.columns]).size()<br>
+          # Check correlation of missingness<br>
+          msno.dendrogram(df)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deletion Strategies</h3>
+        <p>Learn when and how to remove records or features with missing values effectively.</p>
+        <div class="code-example">
+          # Listwise deletion<br>
+          df_complete = df.dropna()<br>
+          # Column-wise deletion<br>
+          df_cleaned = df.dropna(axis=1, thresh=len(df)*0.8)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Imputation Methods</h3>
+        <p>Apply various imputation techniques to fill in missing values based on data characteristics.</p>
+        <div class="code-example">
+          # Simple imputation<br>
+          df['age'].fillna(df['age'].mean(), inplace=True)<br>
+          df['category'].fillna(df['category'].mode()[0], inplace=True)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forward and Backward Fill</h3>
+        <p>Use temporal relationships in time series data to fill missing values using adjacent observations.</p>
+        <div class="code-example">
+          # Forward fill<br>
+          df['price'].fillna(method='ffill', inplace=True)<br>
+          # Backward fill<br>
+          df['price'].fillna(method='bfill', inplace=True)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Statistical Imputation</h3>
+        <p>Apply statistical methods like regression and clustering for more sophisticated missing value imputation.</p>
+        <div class="code-example">
+          from sklearn.impute import KNNImputer<br>
+          # KNN imputation<br>
+          imputer = KNNImputer(n_neighbors=5)<br>
+          df_imputed = pd.DataFrame(imputer.fit_transform(df))
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Advanced Imputation Techniques</h3>
+        <p>Explore advanced methods like multiple imputation and deep learning approaches for handling missing data.</p>
+        <div class="code-example">
+          from sklearn.experimental import enable_iterative_imputer<br>
+          from sklearn.impute import IterativeImputer<br>
+          # Multiple imputation<br>
+          imputer = IterativeImputer(random_state=42)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Evaluation of Imputation Quality</h3>
+        <p>Assess the effectiveness of imputation methods and validate the quality of filled values.</p>
+        <div class="code-example">
+          # Compare distributions<br>
+          original_mean = df_original['column'].mean()<br>
+          imputed_mean = df_imputed['column'].mean()<br>
+          # Statistical tests for validation
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Data Type Conversion and Formatting</h1>
+      <p>Convert between data types, standardize formats, and ensure data consistency across datasets.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Type Identification</h3>
+        <p>Identify current data types and determine the appropriate target types for each column in your dataset.</p>
+        <div class="code-example">
+          # Check current data
