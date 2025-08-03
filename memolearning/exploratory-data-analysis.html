@@ -1,0 +1,750 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Exploratory Data Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .eda-badge {
+      display: inline-block;
+      background: #fed7aa;
+      color: #9a3412;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .insight-box {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .technique-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔍 MemoLearning Exploratory Data Analysis</h1>
+    <p>Discover patterns, anomalies, and insights through systematic data exploration</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Exploratory Data Analysis Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">EDA Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Visualization Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Statistical Tests</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">EDA Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the principles and methodology of exploratory data analysis for effective data investigation.</p>
+        <ul class="topics-list">
+          <li>What is exploratory data analysis</li>
+          <li>EDA vs confirmatory analysis</li>
+          <li>The EDA process and workflow</li>
+          <li>Forming hypotheses and questions</li>
+          <li>Iterative exploration approach</li>
+          <li>Documentation and reproducibility</li>
+          <li>Tools and environments</li>
+          <li>Best practices and pitfalls</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Profiling and Overview</h3>
+        </div>
+        <p class="unit-description">Get familiar with your dataset through comprehensive profiling and initial data assessment.</p>
+        <ul class="topics-list">
+          <li>Dataset structure examination</li>
+          <li>Data types and formats</li>
+          <li>Missing value patterns</li>
+          <li>Data quality assessment</li>
+          <li>Summary statistics overview</li>
+          <li>Memory usage and performance</li>
+          <li>Data source documentation</li>
+          <li>Initial data sanity checks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Univariate Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze individual variables to understand their distributions, central tendencies, and variability.</p>
+        <ul class="topics-list">
+          <li>Distribution analysis</li>
+          <li>Central tendency measures</li>
+          <li>Variability and spread</li>
+          <li>Skewness and kurtosis</li>
+          <li>Outlier detection</li>
+          <li>Frequency distributions</li>
+          <li>Percentiles and quantiles</li>
+          <li>Variable transformation needs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Bivariate Analysis</h3>
+        </div>
+        <p class="unit-description">Explore relationships between pairs of variables using correlation and association measures.</p>
+        <ul class="topics-list">
+          <li>Correlation analysis</li>
+          <li>Scatter plot interpretation</li>
+          <li>Linear and non-linear relationships</li>
+          <li>Categorical variable associations</li>
+          <li>Cross-tabulation analysis</li>
+          <li>Statistical significance testing</li>
+          <li>Confounding variables</li>
+          <li>Simpson's paradox</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Multivariate Analysis</h3>
+        </div>
+        <p class="unit-description">Understand complex relationships among multiple variables and identify patterns in high-dimensional data.</p>
+        <ul class="topics-list">
+          <li>Correlation matrices</li>
+          <li>Principal component analysis</li>
+          <li>Cluster analysis</li>
+          <li>Dimensionality reduction</li>
+          <li>Feature interactions</li>
+          <li>Multicollinearity detection</li>
+          <li>Variable selection techniques</li>
+          <li>High-dimensional visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Visualization for EDA</h3>
+        </div>
+        <p class="unit-description">Create effective visualizations to uncover patterns and communicate findings during exploration.</p>
+        <ul class="topics-list">
+          <li>Choosing appropriate chart types</li>
+          <li>Distribution plots (histograms, density)</li>
+          <li>Relationship plots (scatter, correlation)</li>
+          <li>Categorical data visualization</li>
+          <li>Time series plots</li>
+          <li>Small multiples and faceting</li>
+          <li>Interactive exploration tools</li>
+          <li>Annotation and storytelling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Anomaly and Outlier Detection</h3>
+        </div>
+        <p class="unit-description">Identify unusual observations that may indicate errors, fraud, or interesting phenomena.</p>
+        <ul class="topics-list">
+          <li>Statistical outlier methods</li>
+          <li>Isolation forest technique</li>
+          <li>Local outlier factor</li>
+          <li>Clustering-based detection</li>
+          <li>Time series anomalies</li>
+          <li>Multivariate outliers</li>
+          <li>Domain-specific anomalies</li>
+          <li>Outlier treatment strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Time Series Exploration</h3>
+        </div>
+        <p class="unit-description">Analyze temporal data patterns including trends, seasonality, and cyclical behaviors.</p>
+        <ul class="topics-list">
+          <li>Time series decomposition</li>
+          <li>Trend analysis</li>
+          <li>Seasonal pattern detection</li>
+          <li>Autocorrelation analysis</li>
+          <li>Stationarity testing</li>
+          <li>Change point detection</li>
+          <li>Lag analysis</li>
+          <li>Forecasting implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Text Data Exploration</h3>
+        </div>
+        <p class="unit-description">Explore and analyze textual data through frequency analysis, sentiment, and content patterns.</p>
+        <ul class="topics-list">
+          <li>Text preprocessing for EDA</li>
+          <li>Word frequency analysis</li>
+          <li>N-gram exploration</li>
+          <li>Text length distributions</li>
+          <li>Sentiment analysis</li>
+          <li>Topic modeling overview</li>
+          <li>Word clouds and visualization</li>
+          <li>Text similarity measures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Statistical Testing in EDA</h3>
+        </div>
+        <p class="unit-description">Apply statistical tests to validate findings and quantify the significance of observed patterns.</p>
+        <ul class="topics-list">
+          <li>Hypothesis testing framework</li>
+          <li>Normality tests</li>
+          <li>Correlation significance</li>
+          <li>Chi-square tests</li>
+          <li>T-tests and ANOVA</li>
+          <li>Non-parametric tests</li>
+          <li>Multiple testing corrections</li>
+          <li>Effect size interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">EDA Reporting and Communication</h3>
+        </div>
+        <p class="unit-description">Create comprehensive EDA reports that effectively communicate insights and guide next steps.</p>
+        <ul class="topics-list">
+          <li>EDA report structure</li>
+          <li>Key findings summarization</li>
+          <li>Visual storytelling</li>
+          <li>Data quality documentation</li>
+          <li>Hypothesis generation</li>
+          <li>Recommendations for modeling</li>
+          <li>Stakeholder communication</li>
+          <li>Reproducible analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: EDA Fundamentals</h1>
+      <p>Learn the principles and methodology of exploratory data analysis for effective data investigation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Exploratory Data Analysis</h3>
+        <p>Understand EDA as an approach for analyzing datasets to summarize main characteristics with visual methods.</p>
+        <span class="eda-badge">Detective Work</span>
+        <span class="eda-badge">Pattern Discovery</span>
+        <span class="eda-badge">Hypothesis Generation</span>
+        <div class="insight-box">
+          EDA is detective work on your data - looking for clues, patterns, and unexpected findings that guide deeper analysis.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">EDA vs Confirmatory Analysis</h3>
+        <p>Distinguish between exploratory analysis (discovering patterns) and confirmatory analysis (testing hypotheses).</p>
+        <div class="code-example">
+          # EDA: What patterns exist in the data?<br>
+          df.describe()<br>
+          df.corr()<br>
+          <br>
+          # Confirmatory: Is this pattern significant?<br>
+          stats.ttest_ind(group1, group2)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">The EDA Process and Workflow</h3>
+        <p>Learn the systematic approach to conducting thorough exploratory data analysis.</p>
+        <div class="technique-highlight">
+          1. Data Overview → 2. Quality Check → 3. Univariate → 4. Bivariate → 5. Multivariate → 6. Insights
+        </div>
+        <div class="code-example">
+          # Systematic EDA workflow<br>
+          def eda_workflow(df):<br>
+          &nbsp;&nbsp;data_overview(df)<br>
+          &nbsp;&nbsp;quality_check(df)<br>
+          &nbsp;&nbsp;univariate_analysis(df)<br>
+          &nbsp;&nbsp;bivariate_analysis(df)<br>
+          &nbsp;&nbsp;generate_insights(df)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Forming Hypotheses and Questions</h3>
+        <p>Develop meaningful questions and hypotheses to guide your exploratory analysis effectively.</p>
+        <div class="insight-box">
+          Good EDA questions: "What factors influence sales?", "Are there seasonal patterns?", "What defines customer segments?"
+        </div>
+        <div class="code-example">
+          # Question-driven exploration<br>
+          # Q: What drives customer churn?<br>
+          churn_by_feature = df.groupby('feature')['churn'].mean()<br>
+          churn_by_feature.plot(kind='bar')
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Iterative Exploration Approach</h3>
+        <p>Embrace the iterative nature of EDA, where each finding leads to new questions and deeper investigation.</p>
+        <div class="code-example">
+          # Iterative discovery process<br>
+          # 1. Find pattern → 2. Ask why → 3. Investigate deeper<br>
+          # 4. Validate finding → 5. Generate new questions
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Documentation and Reproducibility</h3>
+        <p>Maintain clear documentation of your exploration process and ensure your analysis can be reproduced.</p>
+        <div class="code-example">
+          # Jupyter notebook with markdown cells<br>
+          # Clear variable naming<br>
+          # Version control with git<br>
+          # Requirements.txt for dependencies
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tools and Environments</h3>
+        <p>Choose appropriate tools and set up efficient environments for exploratory data analysis.</p>
+        <span class="eda-badge">Jupyter</span>
+        <span class="eda-badge">Pandas</span>
+        <span class="eda-badge">Seaborn</span>
+        <span class="eda-badge">Plotly</span>
+        <div class="code-example">
+          import pandas as pd<br>
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          import seaborn as sns<br>
+          %matplotlib inline
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Best Practices and Pitfalls</h3>
+        <p>Learn common EDA best practices and avoid typical pitfalls that can lead to incorrect conclusions.</p>
+        <div class="technique-highlight">
+          ✓ Start simple, then go complex<br>
+          ✓ Question everything<br>
+          ✗ Don't assume causation from correlation<br>
+          ✗ Don't ignore data quality issues
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Data Profiling and Overview</h1>
+      <p>Get familiar with your dataset through comprehensive profiling and initial data assessment.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dataset Structure Examination</h3>
+        <p>Understand the basic structure, dimensions, and organization of your dataset.</p>
+        <div class="code-example">
+          # Basic dataset information<br>
+          print(f"Shape: {df.shape}")<br>
+          print(f"Columns: {list(df.columns)}")<br>
+          df.info()<br>
+          df.head()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Types and Formats</h3>
+        <p>Examine data types to ensure they're appropriate for analysis and identify conversion needs.</p>
+        <div class="code-example">
+          # Check data types<br>
+          df.dtypes<br>
+          df.select_dtypes(include=['object'])<br>
+          df.select_dtypes(include=['number'])
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Missing Value Patterns</h3>
+        <p>Identify and visualize missing data patterns to understand completeness and potential biases.</p>
+        <div class="code-example">
+          import missingno as msno<br>
+          # Missing data overview<br>
+          df.isnull().sum()<br>
+          msno.matrix(df)<br>
+          msno.heatmap(df)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Quality Assessment</h3>
+        <p>Evaluate overall data quality including accuracy, completeness, consistency, and validity.</p>
+        <span class="eda-badge">Completeness</span>
+        <span class="eda-badge">Accuracy</span>
+        <span class="eda-badge">Consistency</span>
+        <span class="eda-badge">Validity</span>
+        <div class="code-example">
+          # Quality checks<br>
+          duplicates = df.duplicated().sum()<br>
+          unique_counts = df.nunique()<br>
+          # Check for impossible values<br>
+          negative_ages = (df['age'] < 0).sum()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Summary Statistics Overview</h3>
+        <p>Generate comprehensive summary statistics to understand central tendencies and distributions.</p>
+        <div class="code-example">
+          # Comprehensive summary<br>
+          df.describe(include='all')<br>
+          df.describe(percentiles=[.1, .25, .5, .75, .9])<br>
+          # Custom summary function<br>
+          df.agg(['count', 'mean', 'std', 'min', 'max'])
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Usage and Performance</h3>
+        <p>Assess memory usage and identify opportunities for optimization in large datasets.</p>
+        <div class="code-example">
+          # Memory usage analysis<br>
+          df.info(memory_usage='deep')<br>
+          df.memory
