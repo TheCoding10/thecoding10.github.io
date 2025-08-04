@@ -1,0 +1,753 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Machine Learning Foundations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🤖';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #f59e0b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #d97706;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ml-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #b45309;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b45309;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .math-formula {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #15803d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🤖 Machine Learning Foundations</h1>
+    <p>Master the fundamental concepts, algorithms, and techniques that power modern AI systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Machine Learning Foundations Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">ML Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Machine Learning</h3>
+        </div>
+        <p class="unit-description">Understand what machine learning is, its types, and fundamental concepts.</p>
+        <ul class="topics-list">
+          <li>What is machine learning</li>
+          <li>Types of machine learning</li>
+          <li>Supervised vs unsupervised learning</li>
+          <li>Key terminology and concepts</li>
+          <li>ML workflow and pipeline</li>
+          <li>Applications and use cases</li>
+          <li>History and evolution</li>
+          <li>Ethics in machine learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data and Feature Engineering</h3>
+        </div>
+        <p class="unit-description">Learn how to prepare, clean, and transform data for machine learning models.</p>
+        <ul class="topics-list">
+          <li>Data collection and sources</li>
+          <li>Data cleaning and preprocessing</li>
+          <li>Handling missing values</li>
+          <li>Feature engineering techniques</li>
+          <li>Feature selection methods</li>
+          <li>Data transformation and scaling</li>
+          <li>Encoding categorical variables</li>
+          <li>Data quality assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Linear Regression</h3>
+        </div>
+        <p class="unit-description">Master the foundational algorithm for predicting continuous values.</p>
+        <ul class="topics-list">
+          <li>Simple linear regression</li>
+          <li>Multiple linear regression</li>
+          <li>Least squares method</li>
+          <li>Gradient descent optimization</li>
+          <li>Cost functions and loss</li>
+          <li>Regularization techniques</li>
+          <li>Polynomial regression</li>
+          <li>Model interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Logistic Regression</h3>
+        </div>
+        <p class="unit-description">Learn classification using logistic regression and probability-based models.</p>
+        <ul class="topics-list">
+          <li>Binary classification</li>
+          <li>Sigmoid function</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Decision boundaries</li>
+          <li>Multiclass classification</li>
+          <li>Regularized logistic regression</li>
+          <li>Odds ratios and interpretation</li>
+          <li>Logistic regression assumptions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Decision Trees</h3>
+        </div>
+        <p class="unit-description">Understand tree-based models for both classification and regression tasks.</p>
+        <ul class="topics-list">
+          <li>Decision tree structure</li>
+          <li>Splitting criteria and metrics</li>
+          <li>Information gain and entropy</li>
+          <li>Gini impurity</li>
+          <li>Tree pruning techniques</li>
+          <li>Handling overfitting</li>
+          <li>Feature importance</li>
+          <li>Tree visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Ensemble Methods</h3>
+        </div>
+        <p class="unit-description">Combine multiple models to create more powerful and robust predictions.</p>
+        <ul class="topics-list">
+          <li>Ensemble learning principles</li>
+          <li>Bagging and bootstrap</li>
+          <li>Random Forest algorithm</li>
+          <li>Boosting techniques</li>
+          <li>AdaBoost algorithm</li>
+          <li>Gradient boosting</li>
+          <li>XGBoost and LightGBM</li>
+          <li>Voting classifiers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Support Vector Machines</h3>
+        </div>
+        <p class="unit-description">Learn about SVMs for classification and regression with kernel methods.</p>
+        <ul class="topics-list">
+          <li>SVM fundamentals</li>
+          <li>Maximum margin classifier</li>
+          <li>Support vectors</li>
+          <li>Kernel trick</li>
+          <li>Linear and non-linear kernels</li>
+          <li>Soft margin classification</li>
+          <li>SVM for regression</li>
+          <li>Parameter tuning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Clustering Algorithms</h3>
+        </div>
+        <p class="unit-description">Discover patterns and group similar data points using unsupervised learning.</p>
+        <ul class="topics-list">
+          <li>Unsupervised learning concepts</li>
+          <li>K-means clustering</li>
+          <li>Hierarchical clustering</li>
+          <li>DBSCAN algorithm</li>
+          <li>Gaussian mixture models</li>
+          <li>Cluster evaluation metrics</li>
+          <li>Choosing optimal clusters</li>
+          <li>Clustering applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Dimensionality Reduction</h3>
+        </div>
+        <p class="unit-description">Reduce feature dimensions while preserving important information.</p>
+        <ul class="topics-list">
+          <li>Curse of dimensionality</li>
+          <li>Principal Component Analysis</li>
+          <li>Eigenvalues and eigenvectors</li>
+          <li>Variance explained</li>
+          <li>Linear Discriminant Analysis</li>
+          <li>t-SNE visualization</li>
+          <li>UMAP algorithm</li>
+          <li>Feature selection vs extraction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Model Evaluation</h3>
+        </div>
+        <p class="unit-description">Assess model performance using various metrics and validation techniques.</p>
+        <ul class="topics-list">
+          <li>Train-validation-test splits</li>
+          <li>Cross-validation techniques</li>
+          <li>Classification metrics</li>
+          <li>Regression metrics</li>
+          <li>Confusion matrices</li>
+          <li>ROC curves and AUC</li>
+          <li>Precision-recall curves</li>
+          <li>Statistical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Bias, Variance, and Overfitting</h3>
+        </div>
+        <p class="unit-description">Understand the bias-variance tradeoff and techniques to prevent overfitting.</p>
+        <ul class="topics-list">
+          <li>Bias-variance decomposition</li>
+          <li>Underfitting vs overfitting</li>
+          <li>Learning curves</li>
+          <li>Regularization techniques</li>
+          <li>Early stopping</li>
+          <li>Dropout methods</li>
+          <li>Model complexity</li>
+          <li>Generalization strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">ML in Practice</h3>
+        </div>
+        <p class="unit-description">Apply machine learning in real-world scenarios and production environments.</p>
+        <ul class="topics-list">
+          <li>ML project lifecycle</li>
+          <li>Problem formulation</li>
+          <li>Data collection strategies</li>
+          <li>Model selection process</li>
+          <li>Hyperparameter tuning</li>
+          <li>Model deployment</li>
+          <li>Monitoring and maintenance</li>
+          <li>A/B testing for ML</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Machine Learning</h1>
+      <p>Understand what machine learning is, its types, and fundamental concepts.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Machine Learning</h3>
+        <p>Learn the fundamental definition and core concepts of machine learning as a subset of artificial intelligence.</p>
+        <span class="ml-badge">AI</span>
+        <span class="ml-badge">Algorithms</span>
+        <span class="ml-badge">Data</span>
+        <div class="algorithm-box">
+          Machine learning is the science of getting computers to learn and act like humans do, and improve their learning over time in an autonomous fashion, by feeding them data and information in the form of observations and real-world interactions.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Machine Learning</h3>
+        <p>Explore the three main categories of machine learning approaches and their applications.</p>
+        <div class="concept-highlight">
+          Supervised Learning: Learn from labeled examples<br>
+          Unsupervised Learning: Find patterns in unlabeled data<br>
+          Reinforcement Learning: Learn through interaction and rewards
+        </div>
+        <div class="code-example">
+          # Types of ML problems<br>
+          ml_types = {<br>
+          &nbsp;&nbsp;"Supervised": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Classification": "Predict categories",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Regression": "Predict continuous values"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Unsupervised": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Clustering": "Group similar data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Dimensionality Reduction": "Reduce features"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Reinforcement": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Agent-Environment": "Learn optimal actions"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Supervised vs Unsupervised Learning</h3>
+        <p>Understand the key differences between learning with and without labeled data.</p>
+        <div class="algorithm-box">
+          Supervised: Input-output pairs (X, y) → Learn mapping function f(X) = y<br>
+          Unsupervised: Only inputs (X) → Discover hidden patterns and structure
+        </div>
+        <div class="code-example">
+          # Supervised learning example<br>
+          from sklearn.linear_model import LinearRegression<br>
+          <br>
+          # We have both X (features) and y (target)<br>
+          X = [[1], [2], [3], [4]]<br>
+          y = [2, 4, 6, 8]<br>
+          <br>
+          model = LinearRegression()<br>
+          model.fit(X, y)  # Learn from labeled data<br>
+          prediction = model.predict([[5]])  # Predict new value<br>
+          <br>
+          # Unsupervised learning example<br>
+          from sklearn.cluster import KMeans<br>
+          <br>
+          # We only have X (features), no labels<br>
+          X = [[1, 2], [1, 4], [1, 0], [4, 2], [4, 4], [4, 0]]<br>
+          <br>
+          kmeans = KMeans(n_clusters=2)<br>
+          kmeans.fit(X)  # Find patterns without labels<br>
+          clusters = kmeans.predict(X)  # Assign cluster labels
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Key Terminology and Concepts</h3>
+        <p>Master the essential vocabulary and concepts used throughout machine learning.</p>
+        <span class="ml-badge">Features</span>
+        <span class="ml-badge">Labels</span>
+        <span class="ml-badge">Training</span>
+        <span class="ml-badge">Testing</span>
+        <div class="code-example">
+          # Essential ML terminology<br>
+          terminology = {<br>
+          &nbsp;&nbsp;"Dataset": "Collection of data points",<br>
+          &nbsp;&nbsp;"Features": "Input variables (X)",<br>
+          &nbsp;&nbsp;"Target/Labels": "Output variable (y)",<br>
+          &nbsp;&nbsp;"Training": "Learning from data",<br>
+          &nbsp;&nbsp;"Testing": "Evaluating performance",<br>
+          &nbsp;&nbsp;"Model": "Mathematical representation",<br>
+          &nbsp;&nbsp;"Algorithm": "Learning procedure",<br>
+          &nbsp;&nbsp;"Prediction": "Model output for new data",<br>
+          &nbsp;&nbsp;"Hyperparameters": "Algorithm settings",<br>
+          &nbsp;&nbsp;"Overfitting": "Too complex for data",<br>
+          &nbsp;&nbsp;"Underfitting": "Too simple for data"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ML Workflow and Pipeline</h3>
+        <p>Understand the typical steps involved in a machine learning project.</p>
+        <div class="concept-highlight">
+          Problem Definition → Data Collection → Data Preprocessing → Model Selection → Training → Evaluation → Deployment → Monitoring
+        </div>
+        <div class="code-example">
+          # Complete ML workflow<br>
+          import pandas as pd<br>
+          from sklearn.model_selection import train_test_split<br>
+          from sklearn.preprocessing import StandardScaler<br>
+          from sklearn.ensemble import RandomForestClassifier<br>
+          from sklearn.metrics import accuracy_score<br>
+          <br>
+          # 1. Load and explore data<br>
+          data = pd.read_csv('dataset.csv')<br>
+          print(data.info())<br>
+          <br>
+          # 2. Prepare features and target<br>
+          X = data.drop('target', axis=1)<br>
+          y = data['target']<br>
+          <br>
+          # 3. Split data<br>
+          X_train, X_test, y_train, y_test = train_test_split(<br>
+          &nbsp;&nbsp;X, y, test_size=0.2, random_state=42)<br>
+          <br>
+          # 4. Preprocess<br>
+          scaler = StandardScaler()<br>
+          X_train_scaled = scaler.fit_transform(X_train)<br>
+          X_test_scaled = scaler.transform(X_test)<br>
+          <br>
+          # 5. Train model<br>
+          model = RandomForestClassifier()<br>
+          model.fit(X_train_scaled, y_train)<br>
+          <br>
+          # 6. Evaluate<br>
+          predictions = model.predict(X_test_scaled)<br>
+          accuracy = accuracy_score(y_test, predictions)<br>
+          print(f"Accuracy: {accuracy:.3f}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications and Use Cases</h3>
+        <p>Explore the wide range of real-world applications where machine learning excels.</p>
+        <span class="ml-badge">Healthcare</span>
+        <span class="ml-badge">Finance</span>
+        <span class="ml-badge">Technology</span>
+        <span class="ml-badge">Business</span>
+        <div class="code-example">
+          # ML applications by industry<br>
+          applications = {<br>
+          &nbsp;&nbsp;"Healthcare": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Medical diagnosis and imaging",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Drug discovery and development",<br
