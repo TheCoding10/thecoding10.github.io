@@ -1,0 +1,719 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Model Evaluation Metrics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #6366f1;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .eval-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .metric-box {
+      background: #f0f4ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #4338ca;
+    }
+
+    .performance-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .formula-box {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Model Evaluation Metrics</h1>
+    <p>Master performance measurement, validation techniques, and metric selection for robust machine learning models</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Model Evaluation Metrics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~75</span>
+          <div class="stat-label">Key Metrics</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Evaluation Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Model Evaluation</h3>
+        </div>
+        <p class="unit-description">Understand the importance of model evaluation and the evaluation framework.</p>
+        <ul class="topics-list">
+          <li>Why evaluate models</li>
+          <li>Evaluation framework</li>
+          <li>Training vs testing performance</li>
+          <li>Overfitting and underfitting</li>
+          <li>Generalization concept</li>
+          <li>Bias-variance tradeoff</li>
+          <li>Model selection process</li>
+          <li>Evaluation best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Train-Validation-Test Split</h3>
+        </div>
+        <p class="unit-description">Learn proper data splitting strategies for unbiased model evaluation.</p>
+        <ul class="topics-list">
+          <li>Data splitting ratios</li>
+          <li>Training set purpose</li>
+          <li>Validation set role</li>
+          <li>Test set importance</li>
+          <li>Holdout method</li>
+          <li>Stratified splitting</li>
+          <li>Time series considerations</li>
+          <li>Common splitting mistakes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Classification Metrics</h3>
+        </div>
+        <p class="unit-description">Master essential metrics for evaluating classification model performance.</p>
+        <ul class="topics-list">
+          <li>Accuracy and its limitations</li>
+          <li>Precision and recall</li>
+          <li>F1-score and F-beta</li>
+          <li>Specificity and sensitivity</li>
+          <li>Balanced accuracy</li>
+          <li>Matthews correlation coefficient</li>
+          <li>Kappa statistic</li>
+          <li>Metric selection guidelines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Confusion Matrix</h3>
+        </div>
+        <p class="unit-description">Understand confusion matrices for detailed classification performance analysis.</p>
+        <ul class="topics-list">
+          <li>Confusion matrix structure</li>
+          <li>True/false positives/negatives</li>
+          <li>Binary classification matrix</li>
+          <li>Multiclass confusion matrix</li>
+          <li>Interpreting matrix patterns</li>
+          <li>Class-wise performance</li>
+          <li>Visualization techniques</li>
+          <li>Error analysis from matrix</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">ROC Curves and AUC</h3>
+        </div>
+        <p class="unit-description">Learn ROC analysis for threshold-independent classification evaluation.</p>
+        <ul class="topics-list">
+          <li>ROC curve construction</li>
+          <li>True positive rate</li>
+          <li>False positive rate</li>
+          <li>AUC interpretation</li>
+          <li>ROC vs random classifier</li>
+          <li>Multiclass ROC</li>
+          <li>ROC limitations</li>
+          <li>When to use ROC/AUC</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Precision-Recall Curves</h3>
+        </div>
+        <p class="unit-description">Master precision-recall analysis for imbalanced classification problems.</p>
+        <ul class="topics-list">
+          <li>Precision-recall curve</li>
+          <li>Average precision</li>
+          <li>PR AUC vs ROC AUC</li>
+          <li>Imbalanced data considerations</li>
+          <li>Baseline comparisons</li>
+          <li>Interpolation methods</li>
+          <li>Threshold selection</li>
+          <li>Business metric alignment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Regression Metrics</h3>
+        </div>
+        <p class="unit-description">Evaluate regression models using appropriate error and correlation metrics.</p>
+        <ul class="topics-list">
+          <li>Mean Absolute Error (MAE)</li>
+          <li>Mean Squared Error (MSE)</li>
+          <li>Root Mean Squared Error (RMSE)</li>
+          <li>R-squared coefficient</li>
+          <li>Adjusted R-squared</li>
+          <li>Mean Absolute Percentage Error</li>
+          <li>Huber loss</li>
+          <li>Choosing regression metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Cross-Validation</h3>
+        </div>
+        <p class="unit-description">Learn robust validation techniques for reliable performance estimation.</p>
+        <ul class="topics-list">
+          <li>K-fold cross-validation</li>
+          <li>Stratified K-fold</li>
+          <li>Leave-one-out CV</li>
+          <li>Time series CV</li>
+          <li>Repeated cross-validation</li>
+          <li>Nested cross-validation</li>
+          <li>CV for hyperparameter tuning</li>
+          <li>CV best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Statistical Significance</h3>
+        </div>
+        <p class="unit-description">Assess whether model performance differences are statistically significant.</p>
+        <ul class="topics-list">
+          <li>Hypothesis testing for models</li>
+          <li>Paired t-tests</li>
+          <li>McNemar's test</li>
+          <li>Bootstrap confidence intervals</li>
+          <li>Permutation tests</li>
+          <li>Multiple comparison corrections</li>
+          <li>Effect size measures</li>
+          <li>Practical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Learning Curves</h3>
+        </div>
+        <p class="unit-description">Diagnose model behavior and data requirements using learning curves.</p>
+        <ul class="topics-list">
+          <li>Training vs validation curves</li>
+          <li>Learning curve interpretation</li>
+          <li>Overfitting identification</li>
+          <li>Underfitting detection</li>
+          <li>Data size impact</li>
+          <li>Convergence analysis</li>
+          <li>Model complexity curves</li>
+          <li>Early stopping decisions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Model Selection and Comparison</h3>
+        </div>
+        <p class="unit-description">Compare multiple models and select the best performing algorithm.</p>
+        <ul class="topics-list">
+          <li>Model comparison frameworks</li>
+          <li>Performance ranking</li>
+          <li>Ensemble vs single models</li>
+          <li>Complexity vs performance</li>
+          <li>Domain-specific considerations</li>
+          <li>Business constraint integration</li>
+          <li>Model interpretability trade-offs</li>
+          <li>Final model selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Evaluation Topics</h3>
+        </div>
+        <p class="unit-description">Explore specialized evaluation techniques for complex scenarios.</p>
+        <ul class="topics-list">
+          <li>Imbalanced data evaluation</li>
+          <li>Multi-label classification metrics</li>
+          <li>Ranking and recommendation metrics</li>
+          <li>Survival analysis evaluation</li>
+          <li>Online learning evaluation</li>
+          <li>Fairness and bias metrics</li>
+          <li>Calibration assessment</li>
+          <li>Production monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Model Evaluation</h1>
+      <p>Understand the importance of model evaluation and the evaluation framework.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Why Evaluate Models</h3>
+        <p>Learn the fundamental reasons why proper model evaluation is critical for machine learning success.</p>
+        <span class="eval-badge">Performance</span>
+        <span class="eval-badge">Reliability</span>
+        <span class="eval-badge">Generalization</span>
+        <div class="metric-box">
+          Model evaluation helps us understand how well our models will perform on unseen data, compare different algorithms, and make informed decisions about model deployment.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Training vs Testing Performance</h3>
+        <p>Understand the critical difference between training and testing performance.</p>
+        <div class="performance-highlight">
+          Training Performance: How well the model fits the training data<br>
+          Testing Performance: How well the model generalizes to new, unseen data<br>
+          Gap Analysis: Large gaps indicate overfitting
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          from sklearn.model_selection import train_test_split<br>
+          from sklearn.linear_model import LogisticRegression<br>
+          from sklearn.tree import DecisionTreeClassifier<br>
+          from sklearn.metrics import accuracy_score<br>
+          from sklearn.datasets import make_classification<br>
+          <br>
+          def demonstrate_train_test_performance():<br>
+          &nbsp;&nbsp;"""Show difference between training and testing performance"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Generate sample data<br>
+          &nbsp;&nbsp;X, y = make_classification(n_samples=1000, n_features=20, <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n_informative=10, random_state=42)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Split the data<br>
+          &nbsp;&nbsp;X_train, X_test, y_train, y_test = train_test_split(<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;X, y, test_size=0.2, random_state=42)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== MODEL PERFORMANCE COMPARISON ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;models = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'Logistic Regression': LogisticRegression(random_state=42),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'Decision Tree (Shallow)': DecisionTreeClassifier(max_depth=3, random_state=42),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'Decision Tree (Deep)': DecisionTreeClassifier(max_depth=20, random_state=42)<br>
+          &nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for name, model in models.items():<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Train the model<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;model.fit(X_train, y_train)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Get predictions<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;train_pred = model.predict(X_train)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;test_pred = model.predict(X_test)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Calculate accuracies<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;train_acc = accuracy_score(y_train, train_pred)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;test_acc = accuracy_score(y_test, test_pred)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;gap = train_acc - test_acc<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"\\n{name}:")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  Training Accuracy: {train_acc:.3f}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  Testing Accuracy:  {test_acc:.3f}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  Gap (Overfitting): {gap:.3f}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;if gap > 0.05:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"  ⚠️  Potential overfitting detected!")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;elif gap < 0:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"  ⚠️  Unusual: test > train (check for data leakage)")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"  ✅ Good generalization")<br>
+          <br>
+          demonstrate_train_test_performance()<br>
+          <br>
+          print("\\n=== KEY INSIGHTS ===")<br>
+          print("1. Training accuracy is often higher than test accuracy")<br>
+          print("2. Large gaps indicate overfitting")<br>
+          print("3. Test accuracy is more reliable for real-world performance")<br>
+          print("4. Use validation set for model selection, test set for final evaluation")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Overfitting and Underfitting</h3>
+        <p>Learn to identify and diagnose overfitting and underfitting through evaluation metrics.</p>
+        <div class="metric-box">
+          Overfitting: Model learns training data too well, poor generalization<br>
+          Underfitting: Model is too simple to capture underlying patterns<br>
+          Sweet Spot: Balanced model that generalizes well to new data
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          from sklearn.preprocessing import PolynomialFeatures<br>
+          from sklearn.linear_model import LinearRegression<br>
+          from sklearn.pipeline import Pipeline<br>
+          from sklearn.metrics import mean_squared_error<br>
+          <br>
+          def demonstrate_fitting_behavior():<br>
+          &nbsp;&nbsp;"""Demonstrate overfitting/underfitting with polynomial regression"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Generate synthetic data<br>
+          &nbsp;&nbsp;np.random.seed(42)<br>
+          &nbsp;&nbsp;X = np.linspace(0, 1, 100).reshape(-1, 1)<br>
+          &nbsp;&nbsp;y = 1.5 * X.ravel() + 0.5 * np.sin(15 * X.ravel()) + 0.1 * np.random.randn(100)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Split data<br>
+          &nbsp;&nbsp;train_size = 70<br>
+          &nbsp;&nbsp;X_train, X_test = X[:train_size], X[train_size:]<br>
+          &nbsp;&nbsp;y_train, y_test = y[:train_size], y[train_size:]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("===
