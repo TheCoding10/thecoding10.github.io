@@ -1,0 +1,683 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Model Selection and Tuning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #047857;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .tuning-badge {
+      display: inline-block;
+      background: #d1fae5;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .optimization-box {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .strategy-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .search-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚙️ Model Selection and Tuning</h1>
+    <p>Master hyperparameter optimization, algorithm comparison, and systematic model improvement strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Model Selection and Tuning Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~65</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12+</span>
+          <div class="stat-label">Optimization Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Model Selection Framework</h3>
+        </div>
+        <p class="unit-description">Understand the systematic approach to choosing the best machine learning algorithm.</p>
+        <ul class="topics-list">
+          <li>Model selection process</li>
+          <li>Algorithm comparison strategies</li>
+          <li>Performance vs complexity</li>
+          <li>Domain considerations</li>
+          <li>Data size constraints</li>
+          <li>Interpretability requirements</li>
+          <li>Computational resources</li>
+          <li>Selection criteria framework</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Hyperparameter Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn what hyperparameters are and their impact on model performance.</p>
+        <ul class="topics-list">
+          <li>Hyperparameter definition</li>
+          <li>Parameters vs hyperparameters</li>
+          <li>Common hyperparameter types</li>
+          <li>Impact on model behavior</li>
+          <li>Hyperparameter spaces</li>
+          <li>Continuous vs discrete</li>
+          <li>Hyperparameter interactions</li>
+          <li>Default value analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Grid Search</h3>
+        </div>
+        <p class="unit-description">Master exhaustive grid search for systematic hyperparameter optimization.</p>
+        <ul class="topics-list">
+          <li>Grid search concept</li>
+          <li>Parameter grid definition</li>
+          <li>Exhaustive search process</li>
+          <li>Cross-validation integration</li>
+          <li>Grid search advantages</li>
+          <li>Computational complexity</li>
+          <li>Grid design strategies</li>
+          <li>Implementation best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Random Search</h3>
+        </div>
+        <p class="unit-description">Learn efficient random sampling for hyperparameter exploration.</p>
+        <ul class="topics-list">
+          <li>Random search methodology</li>
+          <li>Sampling distributions</li>
+          <li>Random vs grid search</li>
+          <li>Efficiency advantages</li>
+          <li>High-dimensional spaces</li>
+          <li>Search budget allocation</li>
+          <li>Convergence properties</li>
+          <li>Practical implementation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Bayesian Optimization</h3>
+        </div>
+        <p class="unit-description">Explore intelligent hyperparameter search using Bayesian methods.</p>
+        <ul class="topics-list">
+          <li>Bayesian optimization principles</li>
+          <li>Gaussian process models</li>
+          <li>Acquisition functions</li>
+          <li>Exploration vs exploitation</li>
+          <li>Sequential decision making</li>
+          <li>Surrogate model updates</li>
+          <li>Advanced acquisition strategies</li>
+          <li>Implementation frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Cross-Validation for Selection</h3>
+        </div>
+        <p class="unit-description">Apply cross-validation techniques for robust model selection and tuning.</p>
+        <ul class="topics-list">
+          <li>CV in model selection</li>
+          <li>Nested cross-validation</li>
+          <li>Stratified CV strategies</li>
+          <li>Time series CV</li>
+          <li>Leave-one-out considerations</li>
+          <li>CV fold optimization</li>
+          <li>Variance in CV scores</li>
+          <li>Statistical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Automated Machine Learning</h3>
+        </div>
+        <p class="unit-description">Understand AutoML approaches for automated model selection and tuning.</p>
+        <ul class="topics-list">
+          <li>AutoML overview</li>
+          <li>Neural architecture search</li>
+          <li>Automated feature engineering</li>
+          <li>Pipeline optimization</li>
+          <li>Meta-learning approaches</li>
+          <li>AutoML frameworks</li>
+          <li>Performance vs automation</li>
+          <li>Human-in-the-loop systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Multi-Objective Optimization</h3>
+        </div>
+        <p class="unit-description">Balance multiple objectives like accuracy, speed, and interpretability.</p>
+        <ul class="topics-list">
+          <li>Multi-objective formulation</li>
+          <li>Pareto efficiency</li>
+          <li>Trade-off analysis</li>
+          <li>Accuracy vs interpretability</li>
+          <li>Speed vs performance</li>
+          <li>Memory vs accuracy</li>
+          <li>Scalarization methods</li>
+          <li>Decision making frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Model Ensemble Selection</h3>
+        </div>
+        <p class="unit-description">Learn to select and combine multiple models for improved performance.</p>
+        <ul class="topics-list">
+          <li>Ensemble motivation</li>
+          <li>Diversity importance</li>
+          <li>Base model selection</li>
+          <li>Voting strategies</li>
+          <li>Stacking approaches</li>
+          <li>Blending techniques</li>
+          <li>Dynamic ensemble selection</li>
+          <li>Ensemble pruning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Early Stopping and Regularization</h3>
+        </div>
+        <p class="unit-description">Implement stopping criteria and regularization for optimal model complexity.</p>
+        <ul class="topics-list">
+          <li>Early stopping mechanisms</li>
+          <li>Validation-based stopping</li>
+          <li>Patience parameters</li>
+          <li>Learning curve analysis</li>
+          <li>Regularization selection</li>
+          <li>L1 vs L2 regularization</li>
+          <li>Dropout strategies</li>
+          <li>Complexity control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Production Considerations</h3>
+        </div>
+        <p class="unit-description">Consider real-world constraints in model selection and deployment.</p>
+        <ul class="topics-list">
+          <li>Latency requirements</li>
+          <li>Memory constraints</li>
+          <li>Scalability needs</li>
+          <li>Model interpretability</li>
+          <li>Maintenance costs</li>
+          <li>A/B testing frameworks</li>
+          <li>Model versioning</li>
+          <li>Monitoring and updates</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Model Selection Framework</h1>
+      <p>Understand the systematic approach to choosing the best machine learning algorithm.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Model Selection Process</h3>
+        <p>Learn the systematic steps for choosing the best machine learning algorithm for your problem.</p>
+        <span class="tuning-badge">Process</span>
+        <span class="tuning-badge">Systematic</span>
+        <span class="tuning-badge">Methodology</span>
+        <div class="optimization-box">
+          Model selection involves systematically comparing different algorithms, evaluating their performance, and choosing the best one based on multiple criteria including accuracy, interpretability, and computational efficiency.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Algorithm Comparison Strategies</h3>
+        <p>Understand how to fairly compare different machine learning algorithms.</p>
+        <div class="strategy-highlight">
+          Fair Comparison Requirements:<br>
+          • Same train/validation/test splits<br>
+          • Consistent preprocessing<br>
+          • Proper hyperparameter tuning for each algorithm<br>
+          • Statistical significance testing
+        </div>
+        <div class="code-example">
+          from sklearn.model_selection import cross_val_score, StratifiedKFold<br>
+          from sklearn.ensemble import RandomForestClassifier<br>
+          from sklearn.svm import SVC<br>
+          from sklearn.linear_model import LogisticRegression<br>
+          from sklearn.neighbors import KNeighborsClassifier<br>
+          from sklearn.datasets import make_classification<br>
+          from sklearn.preprocessing import StandardScaler<br>
+          import numpy as np<br>
+          import pandas as pd<br>
+          <br>
+          def comprehensive_model_comparison():<br>
+          &nbsp;&nbsp;"""Compare multiple algorithms systematically"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Generate sample data<br>
+          &nbsp;&nbsp;X, y = make_classification(n_samples=1000, n_features=20, <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n_informative=15, random_state=42)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Standardize features (important for some algorithms)<br>
+          &nbsp;&nbsp;scaler = StandardScaler()<br>
+          &nbsp;&nbsp;X_scaled = scaler.fit_transform(X)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Define models to compare<br>
+          &nbsp;&nbsp;models = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'Logistic Regression': LogisticRegression(random_state=42),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'Random Forest': RandomForestClassifier(random_state=42),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'SVM': SVC(random_state=42),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;'K-NN': KNeighborsClassifier(),<br>
+          &nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Cross-validation setup<br>
+          &nbsp;&nbsp;cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== ALGORITHM COMPARISON ===")<br>
+          &nbsp;&nbsp;results = {}<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for name, model in models.items():<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Use scaled data for algorithms that need it<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;if name in ['Logistic Regression', 'SVM', 'K-NN']:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X_input = X_scaled<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X_input = X<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Perform cross-validation<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;scores = cross_val_score(model, X_input, y, cv=cv, scoring='accuracy')<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;results[name] = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mean': scores.mean(),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'std': scores.std(),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'scores': scores<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"{name:20s}: {scores.mean():.3f} (+/- {scores.std()*2:.3f})")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Rank models by performance<br>
+          &nbsp;&nbsp;print("\\n=== MODEL RANKING ===")<br>
+          &nbsp;&nbsp;ranked = sorted(results.items(), key=lambda x: x[1]['mean'], reverse=True)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for i, (name, result) in enumerate(ranked, 1):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"{i}. {name}: {result['mean']:.3f}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return results<br>
+          <br>
+          comprehensive_model_comparison()<br>
+          <br>
+          print("\\n=== COMPARISON CONSIDERATIONS ===")<br>
+          print("✅ Same data splits for fair comparison")<br>
+          print("✅ Appropriate preprocessing for each algorithm")<br>
+          print("✅ Cross-validation for robust estimates")<br>
+          print("✅ Statistical significance testing needed")<br>
+          print("⚠️  Consider: speed, interpretability, memory usage")
