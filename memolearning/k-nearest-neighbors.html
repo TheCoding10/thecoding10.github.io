@@ -1,0 +1,726 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning K-Nearest Neighbors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #0e7490 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #06b6d4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0891b2;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .knn-badge {
+      display: inline-block;
+      background: #e0f7fa;
+      color: #0e7490;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .neighbors-box {
+      background: #f0fdff;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0e7490;
+    }
+
+    .distance-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .formula-box {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔍 K-Nearest Neighbors</h1>
+    <p>Master instance-based learning, distance metrics, and lazy learning algorithms for classification and regression</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">K-Nearest Neighbors Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~55</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Distance Metrics</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Instance-Based Learning</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of instance-based learning and lazy algorithms.</p>
+        <ul class="topics-list">
+          <li>Instance-based learning concept</li>
+          <li>Lazy vs eager learning</li>
+          <li>Memory-based learning</li>
+          <li>No explicit model building</li>
+          <li>Local approximation</li>
+          <li>Similarity-based prediction</li>
+          <li>Non-parametric nature</li>
+          <li>Computational characteristics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">K-NN Algorithm Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core K-NN algorithm and its simple yet powerful approach.</p>
+        <ul class="topics-list">
+          <li>K-NN algorithm steps</li>
+          <li>Nearest neighbor concept</li>
+          <li>K parameter significance</li>
+          <li>Training phase (storage)</li>
+          <li>Prediction phase (search)</li>
+          <li>Majority voting</li>
+          <li>Distance-based similarity</li>
+          <li>Algorithm simplicity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Distance Metrics</h3>
+        </div>
+        <p class="unit-description">Master various distance measures for computing similarity between instances.</p>
+        <ul class="topics-list">
+          <li>Euclidean distance</li>
+          <li>Manhattan distance</li>
+          <li>Minkowski distance</li>
+          <li>Cosine similarity</li>
+          <li>Hamming distance</li>
+          <li>Mahalanobis distance</li>
+          <li>Custom distance functions</li>
+          <li>Distance metric properties</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Choosing K Value</h3>
+        </div>
+        <p class="unit-description">Learn strategies for selecting the optimal K parameter for your dataset.</p>
+        <ul class="topics-list">
+          <li>K parameter importance</li>
+          <li>Odd vs even K values</li>
+          <li>Cross-validation for K</li>
+          <li>Bias-variance tradeoff</li>
+          <li>Small K effects</li>
+          <li>Large K effects</li>
+          <li>Rule of thumb methods</li>
+          <li>Grid search optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">K-NN for Classification</h3>
+        </div>
+        <p class="unit-description">Apply K-NN to classification problems with majority voting strategies.</p>
+        <ul class="topics-list">
+          <li>Classification with K-NN</li>
+          <li>Majority voting mechanism</li>
+          <li>Tie-breaking strategies</li>
+          <li>Weighted voting</li>
+          <li>Probability estimates</li>
+          <li>Multiclass classification</li>
+          <li>Decision boundaries</li>
+          <li>Class imbalance handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">K-NN for Regression</h3>
+        </div>
+        <p class="unit-description">Use K-NN for continuous value prediction through local averaging.</p>
+        <ul class="topics-list">
+          <li>Regression with K-NN</li>
+          <li>Local averaging</li>
+          <li>Weighted averages</li>
+          <li>Distance-based weights</li>
+          <li>Kernel functions</li>
+          <li>Local linear regression</li>
+          <li>Outlier sensitivity</li>
+          <li>Smooth predictions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Curse of Dimensionality</h3>
+        </div>
+        <p class="unit-description">Understand how high-dimensional data affects K-NN performance.</p>
+        <ul class="topics-list">
+          <li>High-dimensional challenges</li>
+          <li>Distance concentration</li>
+          <li>Nearest neighbors become equidistant</li>
+          <li>Volume and sparsity</li>
+          <li>Feature selection importance</li>
+          <li>Dimensionality reduction</li>
+          <li>Feature weighting</li>
+          <li>Mitigation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Data Preprocessing for K-NN</h3>
+        </div>
+        <p class="unit-description">Learn essential preprocessing techniques for optimal K-NN performance.</p>
+        <ul class="topics-list">
+          <li>Feature scaling necessity</li>
+          <li>Standardization vs normalization</li>
+          <li>Handling categorical features</li>
+          <li>Missing value treatment</li>
+          <li>Outlier impact</li>
+          <li>Feature engineering</li>
+          <li>Distance-based preprocessing</li>
+          <li>Data quality importance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Efficient K-NN Implementation</h3>
+        </div>
+        <p class="unit-description">Optimize K-NN algorithms for computational efficiency and scalability.</p>
+        <ul class="topics-list">
+          <li>Brute force approach</li>
+          <li>K-D trees</li>
+          <li>Ball trees</li>
+          <li>LSH (Locality Sensitive Hashing)</li>
+          <li>Approximate nearest neighbors</li>
+          <li>Memory vs speed tradeoffs</li>
+          <li>Parallel implementations</li>
+          <li>Large-scale considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Variations and Extensions</h3>
+        </div>
+        <p class="unit-description">Explore advanced K-NN variants and practical applications.</p>
+        <ul class="topics-list">
+          <li>Weighted K-NN</li>
+          <li>Adaptive K selection</li>
+          <li>Local outlier factor</li>
+          <li>Condensed nearest neighbor</li>
+          <li>Edited nearest neighbor</li>
+          <li>Fuzzy K-NN</li>
+          <li>Prototype selection</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Instance-Based Learning</h1>
+      <p>Understand the fundamentals of instance-based learning and lazy algorithms.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Instance-Based Learning Concept</h3>
+        <p>Learn how instance-based learning differs from model-based approaches by storing training examples.</p>
+        <span class="knn-badge">Memory-Based</span>
+        <span class="knn-badge">Non-Parametric</span>
+        <span class="knn-badge">Local</span>
+        <div class="neighbors-box">
+          Instance-based learning stores training instances and makes predictions based on similarity to stored examples, rather than building an explicit generalized model during training.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Lazy vs Eager Learning</h3>
+        <p>Understand the fundamental difference between lazy and eager learning approaches.</p>
+        <div class="distance-highlight">
+          Lazy Learning: Defers computation until query time (K-NN, Case-Based Reasoning)<br>
+          Eager Learning: Builds model during training (Decision Trees, SVM, Neural Networks)
+        </div>
+        <div class="code-example">
+          # Comparison of lazy vs eager learning<br>
+          <br>
+          class LazyLearner:<br>
+          &nbsp;&nbsp;def __init__(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.training_data = []<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def fit(self, X, y):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Just store the data<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.training_data = list(zip(X, y))<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Training completed: Data stored")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def predict(self, x_query):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Computation happens here!<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Find nearest neighbors and make prediction<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Computing prediction using stored data...")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return self._knn_predict(x_query)<br>
+          <br>
+          class EagerLearner:<br>
+          &nbsp;&nbsp;def __init__(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.model = None<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def fit(self, X, y):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Build model during training<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Training: Building model...")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.model = self._build_model(X, y)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Model built and ready")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def predict(self, x_query):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Quick prediction using pre-built model<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return self.model.predict(x_query)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory-Based Learning</h3>
+        <p>Explore how instance-based methods use memory to store and retrieve similar cases.</p>
+        <div class="neighbors-box">
+          Memory-based learning assumes that similar problems have similar solutions. It relies on storing examples in memory and using similarity measures to retrieve relevant cases for new problems.
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          from collections import Counter<br>
+          <br>
+          class SimpleMemoryBasedLearner:<br>
+          &nbsp;&nbsp;def __init__(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.memory = []  # Store all training examples<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def store_example(self, features, label):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"""Store a training example in memory"""<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.memory.append((features, label))<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def retrieve_similar(self, query_features, k=3):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"""Retrieve k most similar examples"""<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;distances = []<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;for stored_features, label in self.memory:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Calculate Euclidean distance<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist = np.linalg.norm(query_features - stored_features)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distances.append((dist, label))<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Sort by distance and return k nearest<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;distances.sort(key=lambda x: x[0])<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return distances[:k]<br>
+          <br>
+          # Example usage<br>
+          learner = SimpleMemoryBasedLearner()<br>
+          <br>
+          # Store some examples<br>
+          learner.store_example(np.array([1, 2]), "A")<br>
+          learner.store_example(np.array([2, 3]), "A")<br>
+          learner.store_example(np.array([8, 9]), "B")<br>
+          <br>
+          # Query for similar examples<br>
+          similar = learner.retrieve_similar(np.array([1.5, 2.5]), k=2)<br>
+          print("Similar examples:", similar)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Local Approximation</h3>
+        <p>Understand how instance-based learning creates local approximations rather than global models.</p>
+        <span class="knn-badge">Local Models</span>
+        <span class="knn-badge">Adaptive</span>
+        <span class="knn-badge">Context-Sensitive</span>
+        <div class="code-example">
+          # Local approximation concept<br>
+          import matplotlib.pyplot as plt<br>
+          import numpy as np<br>
+          <br>
+          # Generate sample data<br>
+          np.random.seed(42)<br>
+          X = np.linspace(0, 10, 50)<br>
+          y = np.sin(X) + 0.1 * np.random.randn(50)<br>
+          <br>
+          def local_approximation(x_query, X_train, y_train, k=5):<br>
+          &nbsp;&nbsp;"""Create local approximation around query point"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Find k nearest neighbors<br>
+          &nbsp;&nbsp;distances = np.abs(X_train - x_query)<br>
+          &nbsp;&nbsp;nearest_indices = np.argsort(distances)[:k]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Use only local data for prediction<br>
+          &nbsp;&nbsp;local_X = X_train[nearest_indices]<br>
+          &nbsp;&nbsp;local_y = y_train[nearest_indices]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Simple average of local neighbors<br>
+          &nbsp;&nbsp;prediction = np.mean(local_y)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return prediction, local_X, local_y<br>
+          <br>
+          # Example: Predict at x = 5.0<br>
+          pred, local_X, local_y = local_approximation(5.0, X, y, k=7)<br>
+          <br>
+          print(f"Query point: 5.0")<br>
+          print(f"Local prediction: {pred:.3f}")<br>
+          print(f"Using {len(local_X)} nearest neighbors")<br>
+          print(f"Local X values: {local_X}")<br>
+          print(f"Local y values: {local_y}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computational Characteristics</h3>
+        <p>Learn about the computational trade-offs of instance-based learning methods.</p>
+        <div class="distance-highlight">
+          Training Time: O(1) - Just store data<br>
+          Prediction Time: O(n) - Search through all stored instances<br>
+          Memory Usage: O(n) - Store all training data
+        </div>
+        <div class="code-example">
+          import time<br>
+          import numpy as np<br>
+          from sklearn.neighbors import KNeighborsClassifier<br>
+          from sklearn.tree import DecisionTreeClassifier<br>
+          <br>
+          # Compare training and prediction times<br>
+          def compare_algorithms(X, y, X_test
