@@ -1,0 +1,758 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Machine Learning Pipelines</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .pipeline-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .workflow-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .automation-highlight {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .deployment-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚙️ MemoLearning Machine Learning Pipelines</h1>
+    <p>Build automated, scalable, and reproducible machine learning workflows and systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Machine Learning Pipelines Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Pipeline Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Tools & Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Best Practices</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Pipeline Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the core concepts of ML pipelines and why they are essential for production systems.</p>
+        <ul class="topics-list">
+          <li>What are ML pipelines</li>
+          <li>Benefits of pipeline automation</li>
+          <li>Pipeline components and stages</li>
+          <li>Data flow and dependencies</li>
+          <li>Reproducibility and versioning</li>
+          <li>Pipeline vs script differences</li>
+          <li>Common pipeline patterns</li>
+          <li>Industry best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Scikit-learn Pipelines</h3>
+        </div>
+        <p class="unit-description">Master Scikit-learn's Pipeline class for creating simple yet powerful ML workflows.</p>
+        <ul class="topics-list">
+          <li>Pipeline class basics</li>
+          <li>Transformer and estimator steps</li>
+          <li>ColumnTransformer usage</li>
+          <li>Feature union techniques</li>
+          <li>Pipeline composition</li>
+          <li>Cross-validation with pipelines</li>
+          <li>Hyperparameter tuning</li>
+          <li>Custom transformer creation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Data Preprocessing Pipelines</h3>
+        </div>
+        <p class="unit-description">Build robust data preprocessing workflows that handle cleaning, transformation, and feature engineering.</p>
+        <ul class="topics-list">
+          <li>Data validation and cleaning</li>
+          <li>Missing value handling</li>
+          <li>Feature scaling and normalization</li>
+          <li>Categorical encoding</li>
+          <li>Feature selection automation</li>
+          <li>Outlier detection and treatment</li>
+          <li>Text preprocessing pipelines</li>
+          <li>Image preprocessing workflows</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Feature Engineering Automation</h3>
+        </div>
+        <p class="unit-description">Automate feature creation, selection, and transformation processes within pipeline workflows.</p>
+        <ul class="topics-list">
+          <li>Automated feature generation</li>
+          <li>Feature interaction creation</li>
+          <li>Polynomial and mathematical features</li>
+          <li>Time-based feature extraction</li>
+          <li>Domain-specific feature engineering</li>
+          <li>Feature selection pipelines</li>
+          <li>Feature store integration</li>
+          <li>Dynamic feature updates</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Model Training Pipelines</h3>
+        </div>
+        <p class="unit-description">Create automated workflows for model training, validation, and hyperparameter optimization.</p>
+        <ul class="topics-list">
+          <li>Training workflow design</li>
+          <li>Automated model selection</li>
+          <li>Hyperparameter tuning automation</li>
+          <li>Cross-validation integration</li>
+          <li>Early stopping and callbacks</li>
+          <li>Model checkpointing</li>
+          <li>Distributed training</li>
+          <li>Experiment tracking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Pipeline Orchestration</h3>
+        </div>
+        <p class="unit-description">Learn workflow orchestration tools and frameworks for managing complex ML pipelines.</p>
+        <ul class="topics-list">
+          <li>Apache Airflow</li>
+          <li>Kubeflow Pipelines</li>
+          <li>MLflow Projects</li>
+          <li>Prefect workflows</li>
+          <li>Azure ML Pipelines</li>
+          <li>AWS Step Functions</li>
+          <li>Google Cloud Composer</li>
+          <li>Pipeline scheduling and triggers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Model Deployment Pipelines</h3>
+        </div>
+        <p class="unit-description">Automate model deployment and serving through CI/CD pipelines and containerization.</p>
+        <ul class="topics-list">
+          <li>Continuous integration for ML</li>
+          <li>Continuous deployment strategies</li>
+          <li>Docker containerization</li>
+          <li>Kubernetes deployment</li>
+          <li>Model serving frameworks</li>
+          <li>API endpoint creation</li>
+          <li>Blue-green deployments</li>
+          <li>Canary releases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Real-time and Batch Pipelines</h3>
+        </div>
+        <p class="unit-description">Design pipelines for both real-time inference and batch processing scenarios.</p>
+        <ul class="topics-list">
+          <li>Streaming data pipelines</li>
+          <li>Real-time feature computation</li>
+          <li>Batch processing optimization</li>
+          <li>Lambda and Kappa architectures</li>
+          <li>Event-driven pipelines</li>
+          <li>Message queue integration</li>
+          <li>Data freshness management</li>
+          <li>Latency optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Pipeline Monitoring and Logging</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive monitoring, logging, and alerting for ML pipeline health and performance.</p>
+        <ul class="topics-list">
+          <li>Pipeline health monitoring</li>
+          <li>Data quality checks</li>
+          <li>Model performance tracking</li>
+          <li>Error handling and recovery</li>
+          <li>Logging best practices</li>
+          <li>Alerting systems</li>
+          <li>Dashboard creation</li>
+          <li>Debugging pipeline failures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Testing ML Pipelines</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive testing strategies for ML pipelines including unit, integration, and end-to-end tests.</p>
+        <ul class="topics-list">
+          <li>Unit testing for transformers</li>
+          <li>Integration testing strategies</li>
+          <li>End-to-end pipeline testing</li>
+          <li>Data validation testing</li>
+          <li>Model performance testing</li>
+          <li>Regression testing</li>
+          <li>Load and stress testing</li>
+          <li>Test automation frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Scalability and Performance</h3>
+        </div>
+        <p class="unit-description">Optimize ML pipelines for scalability, performance, and efficient resource utilization.</p>
+        <ul class="topics-list">
+          <li>Parallel processing strategies</li>
+          <li>Distributed computing integration</li>
+          <li>Memory optimization techniques</li>
+          <li>Caching and memoization</li>
+          <li>Resource allocation</li>
+          <li>Performance profiling</li>
+          <li>Bottleneck identification</li>
+          <li>Auto-scaling configurations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Production Pipeline Management</h3>
+        </div>
+        <p class="unit-description">Manage production ML pipelines with versioning, rollbacks, and operational excellence practices.</p>
+        <ul class="topics-list">
+          <li>Pipeline versioning strategies</li>
+          <li>Rollback and recovery procedures</li>
+          <li>Configuration management</li>
+          <li>Security and compliance</li>
+          <li>Cost optimization</li>
+          <li>Operational runbooks</li>
+          <li>Team collaboration workflows</li>
+          <li>Documentation and maintenance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Pipeline Fundamentals</h1>
+      <p>Understand the core concepts of ML pipelines and why they are essential for production systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are ML Pipelines</h3>
+        <p>Learn the fundamental concept of ML pipelines as automated workflows that orchestrate the entire machine learning process.</p>
+        <span class="pipeline-badge">Automation</span>
+        <span class="pipeline-badge">Orchestration</span>
+        <span class="pipeline-badge">Workflow</span>
+        <div class="workflow-box">
+          An ML pipeline is a sequence of automated steps that transform raw data into predictions, encompassing data preprocessing, feature engineering, model training, and deployment.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Benefits of Pipeline Automation</h3>
+        <p>Understand why automating ML workflows is crucial for production systems and team productivity.</p>
+        <div class="automation-highlight">
+          • Reproducibility and consistency<br>
+          • Reduced manual errors<br>
+          • Faster iteration and deployment<br>
+          • Better collaboration<br>
+          • Scalable operations
+        </div>
+        <div class="code-example">
+          # Manual approach (error-prone)<br>
+          data = load_data()<br>
+          cleaned_data = clean_data(data)<br>
+          features = engineer_features(cleaned_data)<br>
+          model = train_model(features)<br>
+          <br>
+          # Pipeline approach (automated)<br>
+          pipeline = Pipeline([<br>
+          &nbsp;&nbsp;('cleaner', DataCleaner()),<br>
+          &nbsp;&nbsp;('features', FeatureEngineer()),<br>
+          &nbsp;&nbsp;('model', ModelTrainer())<br>
+          ])<br>
+          pipeline.fit(data)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pipeline Components and Stages</h3>
+        <p>Learn the typical components that make up an ML pipeline and how they connect together.</p>
+        <div class="workflow-box">
+          Data Ingestion → Data Validation → Preprocessing → Feature Engineering → Model Training → Model Evaluation → Model Deployment → Monitoring
+        </div>
+        <div class="code-example">
+          from sklearn.pipeline import Pipeline<br>
+          from sklearn.preprocessing import StandardScaler<br>
+          from sklearn.ensemble import RandomForestClassifier<br>
+          <br>
+          # Simple pipeline example<br>
+          pipeline = Pipeline([<br>
+          &nbsp;&nbsp;('scaler', StandardScaler()),<br>
+          &nbsp;&nbsp;('classifier', RandomForestClassifier())<br>
+          ])<br>
+          <br>
+          # Fit and predict in one step<br>
+          pipeline.fit(X_train, y_train)<br>
+          predictions = pipeline.predict(X_test)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Flow and Dependencies</h3>
+        <p>Understand how data flows through pipeline stages and how to manage dependencies between steps.</p>
+        <div class="code-example">
+          # Define dependencies explicitly<br>
+          from sklearn.pipeline import Pipeline<br>
+          from sklearn.compose import ColumnTransformer<br>
+          <br>
+          # Preprocessing depends on data types<br>
+          numeric_features = ['age', 'income']<br>
+          categorical_features = ['gender', 'category']<br>
+          <br>
+          preprocessor = ColumnTransformer(<br>
+          &nbsp;&nbsp;transformers=[<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('num', StandardScaler(), numeric_features),<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('cat', OneHotEncoder(), categorical_features)<br>
+          &nbsp;&nbsp;])<br>
+          <br>
+          # Model depends on preprocessed features<br>
+          pipeline = Pipeline([<br>
+          &nbsp;&nbsp;('preprocessor', preprocessor),<br>
+          &nbsp;&nbsp;('classifier', LogisticRegression())<br>
+          ])
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reproducibility and Versioning</h3>
+        <p>Learn how pipelines enable reproducible ML workflows through versioning and environment management.</p>
+        <span class="pipeline-badge">Git</span>
+        <span class="pipeline-badge">Docker</span>
+        <span class="pipeline-badge">MLflow</span>
+        <div class="code-example">
+          import mlflow<br>
+          import mlflow.sklearn<br>
+          <br>
+          # Version your pipeline<br>
+          with mlflow.start_run():<br>
+          &nbsp;&nbsp;pipeline.fit(X_train, y_train)<br>
+          &nbsp;&nbsp;accuracy = pipeline.score(X_test, y_test)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Log parameters and metrics<br>
+          &nbsp;&nbsp;mlflow.log_param("model_type", "RandomForest")<br>
+          &nbsp;&nbsp;mlflow.log_metric("accuracy", accuracy)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Save the entire pipeline<br>
+          &nbsp;&nbsp;mlflow.sklearn.log_model(pipeline, "model")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pipeline vs Script Differences</h3>
+        <p>Compare traditional scripts with pipeline approaches and understand when to use each.</p>
+        <div class="deployment-box">
+          Scripts: Good for exploration and one-off analysis<br>
+          Pipelines: Essential for production, reusability, and collaboration
+        </div>
+        <div class="code-example">
+          # Script approach (hard to maintain)<br>
+          def train_model_script():<br>
+          &nbsp;&nbsp;data = pd.read_csv('data.csv')<br>
+          &nbsp;&nbsp;# 50 lines of preprocessing...<br>
+          &nbsp;&nbsp;model = RandomForestClassifier()<br>
+          &nbsp;&nbsp;model.fit(processed_data, labels)<br>
+          &nbsp;&nbsp;return model<br>
+          <br>
+          # Pipeline approach (maintainable)<br>
+          class MLPipeline:<br>
+          &nbsp;&nbsp;def __init__(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.pipeline = self._build_pipeline()<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def _build_pipeline(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return Pipeline([...])
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Pipeline Patterns</h3>
+        <p>Learn common patterns and architectures used in ML pipeline design.</p>
+        <div class="automation-highlight">
+          • Linear Pipeline: Sequential steps<br>
+          • Branching Pipeline: Parallel processing paths<br>
+          • Ensemble Pipeline: Multiple models combined<br>
+          • Feedback Pipeline: Iterative improvement
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Industry Best Practices</h3>
+        <p>Follow industry-proven practices for building robust and maintainable ML pipelines.</p>
+        <div class="deployment-box">
+          • Start simple, add complexity gradually<br>
+          • Make pipelines testable and debuggable<br>
+          • Version everything (code, data, models)<br>
+          • Monitor pipeline health continuously<br>
+          •
