@@ -1,0 +1,751 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Deep Learning Introduction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .dl-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #6d28d9;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .neural-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6d28d9;
+    }
+
+    .architecture-highlight {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .math-formula {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #0c4a6e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 MemoLearning Deep Learning Introduction</h1>
+    <p>Master neural networks and deep learning fundamentals for advanced AI applications</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Deep Learning Introduction Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">DL Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Architectures</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Deep Learning</h3>
+        </div>
+        <p class="unit-description">Understand what deep learning is, its history, and how it differs from traditional machine learning.</p>
+        <ul class="topics-list">
+          <li>What is deep learning</li>
+          <li>History and evolution</li>
+          <li>Deep learning vs machine learning</li>
+          <li>Key advantages and limitations</li>
+          <li>Applications and use cases</li>
+          <li>Hardware requirements</li>
+          <li>Popular frameworks overview</li>
+          <li>Industry impact and trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Neural Network Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the basic building blocks of neural networks including neurons, layers, and connections.</p>
+        <ul class="topics-list">
+          <li>Biological inspiration</li>
+          <li>Artificial neurons (perceptrons)</li>
+          <li>Weights and biases</li>
+          <li>Activation functions</li>
+          <li>Network architecture</li>
+          <li>Forward propagation</li>
+          <li>Universal approximation theorem</li>
+          <li>Network depth and width</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Backpropagation and Training</h3>
+        </div>
+        <p class="unit-description">Master the backpropagation algorithm and understand how neural networks learn from data.</p>
+        <ul class="topics-list">
+          <li>Loss functions</li>
+          <li>Gradient descent</li>
+          <li>Chain rule of calculus</li>
+          <li>Backpropagation algorithm</li>
+          <li>Gradient computation</li>
+          <li>Weight updates</li>
+          <li>Computational graphs</li>
+          <li>Automatic differentiation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Deep Learning Frameworks</h3>
+        </div>
+        <p class="unit-description">Get hands-on with popular deep learning frameworks like TensorFlow, PyTorch, and Keras.</p>
+        <ul class="topics-list">
+          <li>TensorFlow fundamentals</li>
+          <li>PyTorch basics</li>
+          <li>Keras high-level API</li>
+          <li>Framework comparison</li>
+          <li>Model building workflow</li>
+          <li>Data loading and preprocessing</li>
+          <li>Training loops</li>
+          <li>Model saving and loading</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Convolutional Neural Networks</h3>
+        </div>
+        <p class="unit-description">Learn CNNs for image processing and computer vision applications.</p>
+        <ul class="topics-list">
+          <li>Convolution operation</li>
+          <li>Filters and feature maps</li>
+          <li>Pooling layers</li>
+          <li>CNN architecture design</li>
+          <li>Parameter sharing</li>
+          <li>Translation invariance</li>
+          <li>Classic CNN architectures</li>
+          <li>Image classification tasks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Recurrent Neural Networks</h3>
+        </div>
+        <p class="unit-description">Understand RNNs for sequential data processing and time series analysis.</p>
+        <ul class="topics-list">
+          <li>Sequential data challenges</li>
+          <li>RNN architecture</li>
+          <li>Hidden state and memory</li>
+          <li>Vanishing gradient problem</li>
+          <li>LSTM networks</li>
+          <li>GRU networks</li>
+          <li>Bidirectional RNNs</li>
+          <li>Sequence-to-sequence models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Regularization and Optimization</h3>
+        </div>
+        <p class="unit-description">Learn techniques to prevent overfitting and optimize deep neural network training.</p>
+        <ul class="topics-list">
+          <li>Overfitting in deep networks</li>
+          <li>Dropout regularization</li>
+          <li>Batch normalization</li>
+          <li>Data augmentation</li>
+          <li>Early stopping</li>
+          <li>Learning rate scheduling</li>
+          <li>Advanced optimizers</li>
+          <li>Weight initialization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Transfer Learning</h3>
+        </div>
+        <p class="unit-description">Leverage pre-trained models and transfer learning for efficient deep learning solutions.</p>
+        <ul class="topics-list">
+          <li>Transfer learning concepts</li>
+          <li>Pre-trained model selection</li>
+          <li>Feature extraction approach</li>
+          <li>Fine-tuning strategies</li>
+          <li>Domain adaptation</li>
+          <li>Model zoos and repositories</li>
+          <li>Popular pre-trained models</li>
+          <li>Custom dataset adaptation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Autoencoders and Generative Models</h3>
+        </div>
+        <p class="unit-description">Explore unsupervised learning with autoencoders and introduction to generative models.</p>
+        <ul class="topics-list">
+          <li>Autoencoder architecture</li>
+          <li>Encoding and decoding</li>
+          <li>Dimensionality reduction</li>
+          <li>Denoising autoencoders</li>
+          <li>Variational autoencoders</li>
+          <li>Generative modeling</li>
+          <li>Latent space representation</li>
+          <li>Anomaly detection applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Model Evaluation and Interpretation</h3>
+        </div>
+        <p class="unit-description">Learn to evaluate deep learning models and understand their decision-making processes.</p>
+        <ul class="topics-list">
+          <li>Evaluation metrics for deep learning</li>
+          <li>Validation strategies</li>
+          <li>Model interpretability</li>
+          <li>Gradient-based explanations</li>
+          <li>Attention visualization</li>
+          <li>Feature importance</li>
+          <li>Adversarial examples</li>
+          <li>Model debugging techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Deployment and Production</h3>
+        </div>
+        <p class="unit-description">Deploy deep learning models in production environments and optimize for inference.</p>
+        <ul class="topics-list">
+          <li>Model optimization for deployment</li>
+          <li>Quantization techniques</li>
+          <li>Model compression</li>
+          <li>Edge deployment</li>
+          <li>Cloud deployment options</li>
+          <li>API development</li>
+          <li>Performance monitoring</li>
+          <li>A/B testing for models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics and Future Directions</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge developments in deep learning and emerging research areas.</p>
+        <ul class="topics-list">
+          <li>Attention mechanisms</li>
+          <li>Transformer architecture</li>
+          <li>Self-supervised learning</li>
+          <li>Meta-learning</li>
+          <li>Neural architecture search</li>
+          <li>Federated learning</li>
+          <li>Ethical AI considerations</li>
+          <li>Future research directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Deep Learning</h1>
+      <p>Understand what deep learning is, its history, and how it differs from traditional machine learning.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Deep Learning</h3>
+        <p>Learn the fundamental concept of deep learning as a subset of machine learning using multi-layered neural networks.</p>
+        <span class="dl-badge">Neural Networks</span>
+        <span class="dl-badge">Deep Architecture</span>
+        <span class="dl-badge">Representation Learning</span>
+        <div class="neural-box">
+          Deep learning uses artificial neural networks with multiple hidden layers to automatically learn hierarchical representations of data, enabling sophisticated pattern recognition and decision-making.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">History and Evolution</h3>
+        <p>Trace the evolution of deep learning from early perceptrons to modern architectures.</p>
+        <div class="architecture-highlight">
+          1940s: Perceptron → 1980s: Backpropagation → 2000s: Deep Networks → 2010s: GPU Revolution → 2020s: Transformer Era
+        </div>
+        <div class="code-example">
+          # Key milestones in deep learning<br>
+          milestones = {<br>
+          &nbsp;&nbsp;1943: "McCulloch-Pitts neuron",<br>
+          &nbsp;&nbsp;1958: "Perceptron algorithm",<br>
+          &nbsp;&nbsp;1986: "Backpropagation popularized",<br>
+          &nbsp;&nbsp;2006: "Deep belief networks",<br>
+          &nbsp;&nbsp;2012: "AlexNet breakthrough",<br>
+          &nbsp;&nbsp;2017: "Transformer architecture",<br>
+          &nbsp;&nbsp;2020: "GPT-3 language model"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deep Learning vs Machine Learning</h3>
+        <p>Understand the key differences between traditional ML and deep learning approaches.</p>
+        <div class="neural-box">
+          Traditional ML: Manual feature engineering + Simple algorithms<br>
+          Deep Learning: Automatic feature learning + Complex neural networks
+        </div>
+        <div class="code-example">
+          # Traditional ML approach<br>
+          features = extract_features(raw_data)  # Manual<br>
+          model = RandomForestClassifier()<br>
+          model.fit(features, labels)<br>
+          <br>
+          # Deep Learning approach<br>
+          model = Sequential([<br>
+          &nbsp;&nbsp;Dense(128, activation='relu'),  # Learns features<br>
+          &nbsp;&nbsp;Dense(64, activation='relu'),<br>
+          &nbsp;&nbsp;Dense(10, activation='softmax')<br>
+          ])<br>
+          model.fit(raw_data, labels)  # End-to-end learning
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Key Advantages and Limitations</h3>
+        <p>Learn the strengths and weaknesses of deep learning compared to other approaches.</p>
+        <div class="architecture-highlight">
+          Advantages: Automatic feature learning, handles complex patterns, scalable with data<br>
+          Limitations: Requires large datasets, computationally expensive, black box nature
+        </div>
+        <div class="code-example">
+          # Advantages of deep learning<br>
+          advantages = [<br>
+          &nbsp;&nbsp;"Automatic feature extraction",<br>
+          &nbsp;&nbsp;"Handles high-dimensional data",<br>
+          &nbsp;&nbsp;"Scales with data size",<br>
+          &nbsp;&nbsp;"State-of-the-art performance",<br>
+          &nbsp;&nbsp;"End-to-end learning"<br>
+          ]<br>
+          <br>
+          # Considerations<br>
+          limitations = [<br>
+          &nbsp;&nbsp;"Requires large datasets",<br>
+          &nbsp;&nbsp;"Computationally intensive",<br>
+          &nbsp;&nbsp;"Many hyperparameters",<br>
+          &nbsp;&nbsp;"Less interpretable"<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications and Use Cases</h3>
+        <p>Explore the wide range of applications where deep learning excels.</p>
+        <span class="dl-badge">Computer Vision</span>
+        <span class="dl-badge">NLP</span>
+        <span class="dl-badge">Speech</span>
+        <span class="dl-badge">Robotics</span>
+        <div class="code-example">
+          # Major application domains<br>
+          applications = {<br>
+          &nbsp;&nbsp;"Computer Vision": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Image classification",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Object detection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Medical imaging"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"Natural Language": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Machine translation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Text generation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Sentiment analysis"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"Speech": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Speech recognition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Voice synthesis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Audio processing"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hardware Requirements</h3>
+        <p>Understand the computational requirements and hardware considerations for deep learning.</p>
+        <div class="neural-box">
+          GPUs are essential for training deep networks efficiently due to their parallel processing capabilities and optimized matrix operations.
+        </div>
+        <div class="code-example">
+          import tensorflow as tf<br>
+          <br>
+          # Check GPU availability<br>
+          print("GPU Available: ", tf.config.list_physical_devices('GPU'))<br>
+          <br>
+          # Enable mixed precision for efficiency<br>
+          tf.keras.mixed_precision.set_global_policy('mixed_float16')<br>
+          <br>
+          # Monitor GPU memory usage<br>
+          gpus = tf.config.experimental.list_physical_devices('GPU')<br>
+          if gpus:<br>
+          &nbsp;&nbsp;tf.config.experimental.set_memory_growth(gpus[0], True)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Popular Frameworks Overview</h3>
+        <p>Survey the landscape of deep learning frameworks and their strengths.</p>
+        <span class="dl-badge">TensorFlow</span>
+        <span class="dl-badge">PyTorch</span>
+        <span class="dl-badge">Keras</span>
+        <span class="dl-badge">JAX</span>
+        <div class="code-example">
+          # Framework comparison<br>
+          frameworks = {<br>
+          &nbsp;&nbsp;"TensorFlow": "Production-ready, Google",<br>
+          &nbsp;&nbsp;"PyTorch": "Research-friendly, Facebook",<br>
+          &nbsp;&nbsp;"Keras": "High-level API, beginner-friendly",<br>
+          &nbsp;&nbsp;"JAX": "NumPy-compatible, Google",<br>
+          &nbsp;&nbsp;"M
