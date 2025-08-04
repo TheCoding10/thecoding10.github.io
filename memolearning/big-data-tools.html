@@ -1,0 +1,741 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Big Data Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #fb7185 0%, #e11d48 50%, #be185d 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #fb7185, #e11d48);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(251, 113, 133, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #fb7185;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e11d48;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #fb7185, #e11d48);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(251, 113, 133, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .bigdata-badge {
+      display: inline-block;
+      background: #fce7f3;
+      color: #be185d;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .architecture-box {
+      background: #fdf2f8;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be185d;
+    }
+
+    .performance-highlight {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .ecosystem-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 MemoLearning Big Data Tools</h1>
+    <p>Master tools and technologies for processing, storing, and analyzing large-scale datasets</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Big Data Tools Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">Technologies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Practical Labs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Big Data Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the concepts, challenges, and characteristics of big data and its ecosystem.</p>
+        <ul class="topics-list">
+          <li>Big data definition and 5 V's</li>
+          <li>Traditional vs big data challenges</li>
+          <li>Distributed computing concepts</li>
+          <li>Scalability and performance</li>
+          <li>CAP theorem</li>
+          <li>Data lakes vs data warehouses</li>
+          <li>Batch vs stream processing</li>
+          <li>Big data use cases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Hadoop Ecosystem</h3>
+        </div>
+        <p class="unit-description">Learn the foundational Hadoop framework and its core components for distributed storage and processing.</p>
+        <ul class="topics-list">
+          <li>Hadoop architecture overview</li>
+          <li>HDFS (Hadoop Distributed File System)</li>
+          <li>MapReduce programming model</li>
+          <li>YARN resource management</li>
+          <li>Hadoop cluster setup</li>
+          <li>Data ingestion strategies</li>
+          <li>Fault tolerance mechanisms</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Apache Spark</h3>
+        </div>
+        <p class="unit-description">Master Apache Spark for fast, distributed data processing and analytics.</p>
+        <ul class="topics-list">
+          <li>Spark architecture and components</li>
+          <li>RDDs and DataFrames</li>
+          <li>Spark SQL for structured data</li>
+          <li>MLlib for machine learning</li>
+          <li>Spark Streaming</li>
+          <li>GraphX for graph processing</li>
+          <li>Performance tuning</li>
+          <li>Deployment modes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">NoSQL Databases</h3>
+        </div>
+        <p class="unit-description">Explore various NoSQL database types for handling unstructured and semi-structured data.</p>
+        <ul class="topics-list">
+          <li>NoSQL database types</li>
+          <li>MongoDB document database</li>
+          <li>Cassandra column-family</li>
+          <li>Neo4j graph database</li>
+          <li>Redis key-value store</li>
+          <li>Database selection criteria</li>
+          <li>CRUD operations</li>
+          <li>Scaling and sharding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Apache Kafka</h3>
+        </div>
+        <p class="unit-description">Learn real-time data streaming and messaging with Apache Kafka.</p>
+        <ul class="topics-list">
+          <li>Kafka architecture</li>
+          <li>Topics, partitions, and replicas</li>
+          <li>Producers and consumers</li>
+          <li>Kafka Connect</li>
+          <li>Kafka Streams</li>
+          <li>Schema Registry</li>
+          <li>Performance optimization</li>
+          <li>Monitoring and operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Warehousing Solutions</h3>
+        </div>
+        <p class="unit-description">Understand modern data warehousing technologies for analytics and business intelligence.</p>
+        <ul class="topics-list">
+          <li>Data warehouse concepts</li>
+          <li>Amazon Redshift</li>
+          <li>Google BigQuery</li>
+          <li>Snowflake architecture</li>
+          <li>Azure Synapse Analytics</li>
+          <li>Columnar storage</li>
+          <li>ETL vs ELT</li>
+          <li>Query optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Stream Processing</h3>
+        </div>
+        <p class="unit-description">Master real-time data processing with stream processing frameworks.</p>
+        <ul class="topics-list">
+          <li>Stream processing concepts</li>
+          <li>Apache Storm</li>
+          <li>Apache Flink</li>
+          <li>Spark Streaming</li>
+          <li>Kafka Streams</li>
+          <li>Windowing operations</li>
+          <li>Event time vs processing time</li>
+          <li>Exactly-once semantics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Cloud Big Data Services</h3>
+        </div>
+        <p class="unit-description">Leverage cloud platforms for scalable big data processing and analytics.</p>
+        <ul class="topics-list">
+          <li>AWS big data services</li>
+          <li>Google Cloud Platform</li>
+          <li>Microsoft Azure</li>
+          <li>Serverless computing</li>
+          <li>Managed services benefits</li>
+          <li>Cost optimization</li>
+          <li>Multi-cloud strategies</li>
+          <li>Migration considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Data Pipeline Orchestration</h3>
+        </div>
+        <p class="unit-description">Build and manage complex data pipelines using orchestration tools.</p>
+        <ul class="topics-list">
+          <li>Apache Airflow</li>
+          <li>Workflow scheduling</li>
+          <li>DAG (Directed Acyclic Graph)</li>
+          <li>Task dependencies</li>
+          <li>Error handling and retries</li>
+          <li>Monitoring and alerting</li>
+          <li>CI/CD for data pipelines</li>
+          <li>Alternative orchestrators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Container Technologies</h3>
+        </div>
+        <p class="unit-description">Deploy and manage big data applications using containerization and orchestration.</p>
+        <ul class="topics-list">
+          <li>Docker fundamentals</li>
+          <li>Kubernetes orchestration</li>
+          <li>Container registries</li>
+          <li>Helm charts</li>
+          <li>Service mesh</li>
+          <li>Monitoring containers</li>
+          <li>Security considerations</li>
+          <li>Big data on Kubernetes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Data Governance and Security</h3>
+        </div>
+        <p class="unit-description">Implement governance, security, and compliance for big data systems.</p>
+        <ul class="topics-list">
+          <li>Data governance frameworks</li>
+          <li>Data lineage and cataloging</li>
+          <li>Access control and authentication</li>
+          <li>Encryption at rest and in transit</li>
+          <li>Compliance requirements</li>
+          <li>Privacy regulations</li>
+          <li>Audit and monitoring</li>
+          <li>Data quality management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Performance and Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize big data systems for performance, cost, and resource efficiency.</p>
+        <ul class="topics-list">
+          <li>Performance monitoring</li>
+          <li>Resource optimization</li>
+          <li>Query optimization</li>
+          <li>Caching strategies</li>
+          <li>Partitioning and bucketing</li>
+          <li>Compression techniques</li>
+          <li>Cost optimization</li>
+          <li>Capacity planning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Big Data Fundamentals</h1>
+      <p>Understand the concepts, challenges, and characteristics of big data and its ecosystem.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Big Data Definition and 5 V's</h3>
+        <p>Learn the fundamental characteristics that define big data through the 5 V's framework.</p>
+        <span class="bigdata-badge">Volume</span>
+        <span class="bigdata-badge">Velocity</span>
+        <span class="bigdata-badge">Variety</span>
+        <span class="bigdata-badge">Veracity</span>
+        <span class="bigdata-badge">Value</span>
+        <div class="architecture-box">
+          Big data is characterized by the 5 V's: Volume (scale of data), Velocity (speed of data generation), Variety (different data types), Veracity (data quality), and Value (business insights).
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traditional vs Big Data Challenges</h3>
+        <p>Understand why traditional data processing approaches fail with big data and what new challenges emerge.</p>
+        <div class="performance-highlight">
+          Traditional: Single machine processing, relational databases, batch processing<br>
+          Big Data: Distributed processing, NoSQL databases, real-time processing
+        </div>
+        <div class="code-example">
+          # Traditional approach limitations<br>
+          traditional_limits = {<br>
+          &nbsp;&nbsp;"storage": "Single machine disk capacity",<br>
+          &nbsp;&nbsp;"processing": "CPU and memory constraints",<br>
+          &nbsp;&nbsp;"scalability": "Vertical scaling only",<br>
+          &nbsp;&nbsp;"availability": "Single point of failure"<br>
+          }<br>
+          <br>
+          # Big data solutions<br>
+          bigdata_solutions = {<br>
+          &nbsp;&nbsp;"storage": "Distributed file systems (HDFS)",<br>
+          &nbsp;&nbsp;"processing": "Parallel processing (MapReduce)",<br>
+          &nbsp;&nbsp;"scalability": "Horizontal scaling",<br>
+          &nbsp;&nbsp;"availability": "Fault tolerance and replication"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Distributed Computing Concepts</h3>
+        <p>Learn the fundamental principles of distributed systems that enable big data processing.</p>
+        <div class="ecosystem-box">
+          Distributed computing involves coordinating multiple machines to work together as a single system, sharing data and computational load across the network.
+        </div>
+        <div class="code-example">
+          # Distributed computing principles<br>
+          import hashlib<br>
+          <br>
+          def hash_partition(key, num_partitions):<br>
+          &nbsp;&nbsp;"""Distribute data across partitions"""<br>
+          &nbsp;&nbsp;hash_value = hashlib.md5(key.encode()).hexdigest()<br>
+          &nbsp;&nbsp;return int(hash_value, 16) % num_partitions<br>
+          <br>
+          # Example: Distribute user data across 4 nodes<br>
+          users = ["alice", "bob", "charlie", "diana"]<br>
+          for user in users:<br>
+          &nbsp;&nbsp;partition = hash_partition(user, 4)<br>
+          &nbsp;&nbsp;print(f"User {user} → Node {partition}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Scalability and Performance</h3>
+        <p>Understand different scaling approaches and performance considerations in big data systems.</p>
+        <span class="bigdata-badge">Horizontal Scaling</span>
+        <span class="bigdata-badge">Vertical Scaling</span>
+        <span class="bigdata-badge">Linear Scalability</span>
+        <div class="code-example">
+          # Scaling comparison<br>
+          def calculate_processing_time(data_size, num_nodes=1):<br>
+          &nbsp;&nbsp;"""Simplified scaling model"""<br>
+          &nbsp;&nbsp;base_time = data_size / 1000  # Base processing time<br>
+          &nbsp;&nbsp;# Linear scaling assumption<br>
+          &nbsp;&nbsp;return base_time / num_nodes<br>
+          <br>
+          data_sizes = [1000, 10000, 100000]  # GB<br>
+          node_counts = [1, 4, 16]<br>
+          <br>
+          for size in data_sizes:<br>
+          &nbsp;&nbsp;for nodes in node_counts:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;time = calculate_processing_time(size, nodes)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"{size}GB on {nodes} nodes: {time:.1f} hours")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">CAP Theorem</h3>
+        <p>Learn the CAP theorem and its implications for distributed big data systems design.</p>
+        <div class="architecture-box">
+          CAP Theorem: A distributed system can guarantee at most two of three properties:<br>
+          Consistency, Availability, and Partition tolerance
+        </div>
+        <div class="code-example">
+          # CAP theorem trade-offs<br>
+          cap_tradeoffs = {<br>
+          &nbsp;&nbsp;"CA_systems": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Traditional RDBMS", "ACID databases"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sacrifice": "Partition tolerance"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"CP_systems": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["MongoDB", "HBase", "Redis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sacrifice": "Availability"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"AP_systems": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Cassandra", "DynamoDB", "CouchDB"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sacrifice": "Consistency"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Lakes vs Data Warehouses</h3>
+        <p>Compare and contrast data lakes and data warehouses for different big data use cases.</p>
+        <div class="performance-highlight">
+          Data Warehouse: Structured, schema-on-write, optimized for analytics<br>
+          Data Lake: Raw data, schema-on-read, flexible storage for all data types
+        </div>
+        <div class="code-example">
+          # Data storage comparison<br>
+          storage_comparison = {<br>
+          &nbsp;&nbsp;"data_warehouse": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"structure": "Highly structured (tables)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"schema": "Schema-on-write",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"processing": "ETL before storage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_case": "Business intelligence, reporting"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"data_lake": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"structure": "Raw, unstructured/semi-structured",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"schema": "Schema-on-read",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"processing": "ELT after storage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_case": "Data science, machine learning"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div
