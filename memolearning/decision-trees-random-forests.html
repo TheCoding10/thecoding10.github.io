@@ -1,0 +1,747 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Decision Trees & Random Forests</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #166534 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌳';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #16a34a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #15803d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .dt-badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .tree-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+
+    .algorithm-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .entropy-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌳 Decision Trees & Random Forests</h1>
+    <p>Master tree-based algorithms, ensemble methods, and feature importance for robust machine learning models</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Decision Trees & Random Forests Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~70</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Decision Trees</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of decision tree algorithms and their intuitive approach.</p>
+        <ul class="topics-list">
+          <li>What are decision trees</li>
+          <li>Tree structure and terminology</li>
+          <li>Nodes, branches, and leaves</li>
+          <li>Decision tree intuition</li>
+          <li>Advantages and disadvantages</li>
+          <li>Classification vs regression trees</li>
+          <li>Non-parametric nature</li>
+          <li>Interpretability benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Tree Construction Process</h3>
+        </div>
+        <p class="unit-description">Learn how decision trees are built through recursive splitting algorithms.</p>
+        <ul class="topics-list">
+          <li>Recursive binary splitting</li>
+          <li>Greedy algorithm approach</li>
+          <li>Top-down construction</li>
+          <li>Stopping criteria</li>
+          <li>Tree depth and complexity</li>
+          <li>Leaf node predictions</li>
+          <li>Handling continuous features</li>
+          <li>Missing value treatment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Splitting Criteria</h3>
+        </div>
+        <p class="unit-description">Master the mathematical foundations for optimal feature splitting.</p>
+        <ul class="topics-list">
+          <li>Information gain</li>
+          <li>Entropy and impurity</li>
+          <li>Gini impurity</li>
+          <li>Classification error</li>
+          <li>Mean squared error</li>
+          <li>Variance reduction</li>
+          <li>Gain ratio</li>
+          <li>Chi-square test</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Overfitting and Pruning</h3>
+        </div>
+        <p class="unit-description">Learn techniques to prevent overfitting and create more generalizable trees.</p>
+        <ul class="topics-list">
+          <li>Overfitting in decision trees</li>
+          <li>Pre-pruning techniques</li>
+          <li>Post-pruning methods</li>
+          <li>Cost complexity pruning</li>
+          <li>Minimum samples split</li>
+          <li>Maximum depth control</li>
+          <li>Cross-validation for pruning</li>
+          <li>Bias-variance tradeoff</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Classification Trees</h3>
+        </div>
+        <p class="unit-description">Deep dive into decision trees for classification problems.</p>
+        <ul class="topics-list">
+          <li>Classification tree algorithm</li>
+          <li>Class probability estimation</li>
+          <li>Majority voting</li>
+          <li>Multiclass classification</li>
+          <li>Handling imbalanced data</li>
+          <li>Feature importance</li>
+          <li>Decision boundaries</li>
+          <li>Tree visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Regression Trees</h3>
+        </div>
+        <p class="unit-description">Apply decision trees to continuous target variable prediction.</p>
+        <ul class="topics-list">
+          <li>Regression tree algorithm</li>
+          <li>Mean prediction in leaves</li>
+          <li>Sum of squared errors</li>
+          <li>Continuous feature splits</li>
+          <li>Piecewise constant models</li>
+          <li>Non-linear relationships</li>
+          <li>Residual analysis</li>
+          <li>Tree-based smoothing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Introduction to Ensembles</h3>
+        </div>
+        <p class="unit-description">Understand ensemble methods and why combining models improves performance.</p>
+        <ul class="topics-list">
+          <li>Ensemble learning principles</li>
+          <li>Wisdom of crowds</li>
+          <li>Combining weak learners</li>
+          <li>Diversity importance</li>
+          <li>Bagging vs boosting</li>
+          <li>Voting mechanisms</li>
+          <li>Ensemble benefits</li>
+          <li>Computational considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Bootstrap Aggregating</h3>
+        </div>
+        <p class="unit-description">Learn bagging technique as foundation for Random Forests.</p>
+        <ul class="topics-list">
+          <li>Bootstrap sampling</li>
+          <li>Sampling with replacement</li>
+          <li>Out-of-bag samples</li>
+          <li>Aggregating predictions</li>
+          <li>Variance reduction</li>
+          <li>Parallel training</li>
+          <li>Bootstrap confidence intervals</li>
+          <li>Bagged decision trees</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Random Forest Algorithm</h3>
+        </div>
+        <p class="unit-description">Master the Random Forest algorithm and its key innovations.</p>
+        <ul class="topics-list">
+          <li>Random Forest algorithm</li>
+          <li>Random feature selection</li>
+          <li>Mtry parameter</li>
+          <li>Bootstrap + feature randomness</li>
+          <li>Majority voting</li>
+          <li>Out-of-bag error</li>
+          <li>Variable importance</li>
+          <li>Hyperparameter tuning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Feature Importance</h3>
+        </div>
+        <p class="unit-description">Understand how to measure and interpret feature importance in tree models.</p>
+        <ul class="topics-list">
+          <li>Gini importance</li>
+          <li>Permutation importance</li>
+          <li>Mean decrease impurity</li>
+          <li>Mean decrease accuracy</li>
+          <li>Feature ranking</li>
+          <li>Partial dependence plots</li>
+          <li>SHAP values</li>
+          <li>Feature selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Model Evaluation</h3>
+        </div>
+        <p class="unit-description">Assess tree-based model performance using appropriate metrics and techniques.</p>
+        <ul class="topics-list">
+          <li>Out-of-bag evaluation</li>
+          <li>Cross-validation strategies</li>
+          <li>Classification metrics</li>
+          <li>Regression metrics</li>
+          <li>Confusion matrices</li>
+          <li>ROC curves for forests</li>
+          <li>Learning curves</li>
+          <li>Model comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore advanced tree-based methods and practical implementations.</p>
+        <ul class="topics-list">
+          <li>Extremely randomized trees</li>
+          <li>Gradient boosting intro</li>
+          <li>XGBoost and LightGBM</li>
+          <li>Handling categorical features</li>
+          <li>Missing value strategies</li>
+          <li>Scalability considerations</li>
+          <li>Implementation best practices</li>
+          <li>Real-world case studies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Decision Trees</h1>
+      <p>Understand the fundamentals of decision tree algorithms and their intuitive approach.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are Decision Trees</h3>
+        <p>Learn the fundamental concept of decision trees as flowchart-like tree structures for decision making.</p>
+        <span class="dt-badge">Flowchart</span>
+        <span class="dt-badge">Rules</span>
+        <span class="dt-badge">Non-parametric</span>
+        <div class="tree-box">
+          A decision tree is a flowchart-like tree structure where each internal node represents a test on an attribute, each branch represents the outcome of the test, and each leaf node represents a class label or continuous value.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Tree Structure and Terminology</h3>
+        <p>Master the essential terminology used in decision tree algorithms.</p>
+        <div class="algorithm-highlight">
+          Root Node: Top node with no incoming edges<br>
+          Internal Nodes: Nodes with outgoing edges (decision nodes)<br>
+          Leaf Nodes: Nodes with no outgoing edges (terminal nodes)<br>
+          Branches: Edges connecting nodes<br>
+          Depth: Length of longest path from root to leaf
+        </div>
+        <div class="code-example">
+          # Decision tree terminology<br>
+          tree_components = {<br>
+          &nbsp;&nbsp;"Root": "Starting point, first decision",<br>
+          &nbsp;&nbsp;"Internal Nodes": "Decision points (if-then)",<br>
+          &nbsp;&nbsp;"Branches": "Possible outcomes of decisions",<br>
+          &nbsp;&nbsp;"Leaf Nodes": "Final predictions/classifications",<br>
+          &nbsp;&nbsp;"Depth": "Number of levels in the tree",<br>
+          &nbsp;&nbsp;"Splitting": "Process of dividing a node",<br>
+          &nbsp;&nbsp;"Pruning": "Removing branches to avoid overfitting"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Decision Tree Intuition</h3>
+        <p>Understand the intuitive logic behind how decision trees make predictions.</p>
+        <div class="tree-box">
+          Decision trees mimic human decision-making by asking a series of yes/no questions. Each question splits the data into subgroups that are more homogeneous (pure) with respect to the target variable.
+        </div>
+        <div class="code-example">
+          # Example: Should I play tennis?<br>
+          # Simple decision tree logic<br>
+          <br>
+          def should_play_tennis(weather, temperature, humidity, wind):<br>
+          &nbsp;&nbsp;if weather == "sunny":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;if humidity == "high":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "No"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "Yes"<br>
+          &nbsp;&nbsp;elif weather == "overcast":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return "Yes"<br>
+          &nbsp;&nbsp;elif weather == "rainy":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;if wind == "strong":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "No"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "Yes"<br>
+          <br>
+          # This mirrors how a decision tree works!
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Advantages and Disadvantages</h3>
+        <p>Understand the strengths and limitations of decision tree algorithms.</p>
+        <span class="dt-badge">Interpretable</span>
+        <span class="dt-badge">Non-linear</span>
+        <span class="dt-badge">Overfitting</span>
+        <span class="dt-badge">Instability</span>
+        <div class="code-example">
+          # Decision trees pros and cons<br>
+          advantages = [<br>
+          &nbsp;&nbsp;"Easy to understand and interpret",<br>
+          &nbsp;&nbsp;"No assumptions about data distribution",<br>
+          &nbsp;&nbsp;"Handles both numerical and categorical data",<br>
+          &nbsp;&nbsp;"Captures non-linear relationships",<br>
+          &nbsp;&nbsp;"Automatic feature selection",<br>
+          &nbsp;&nbsp;"Handles missing values naturally"<br>
+          ]<br>
+          <br>
+          disadvantages = [<br>
+          &nbsp;&nbsp;"Prone to overfitting",<br>
+          &nbsp;&nbsp;"Unstable (small data changes = big tree changes)",<br>
+          &nbsp;&nbsp;"Biased toward features with more levels",<br>
+          &nbsp;&nbsp;"Can create overly complex trees",<br>
+          &nbsp;&nbsp;"Difficult to capture linear relationships",<br>
+          &nbsp;&nbsp;"Greedy algorithm (not globally optimal)"<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classification vs Regression Trees</h3>
+        <p>Learn the differences between classification and regression decision trees.</p>
+        <div class="algorithm-highlight">
+          Classification Trees (CART): Predict discrete class labels using measures like Gini impurity or entropy<br>
+          Regression Trees: Predict continuous values using measures like mean squared error
+        </div>
+        <div class="code-example">
+          from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor<br>
+          import numpy as np<br>
+          <br>
+          # Classification example<br>
+          X_class = np.array([[0, 0], [1, 1], [0, 1], [1, 0]])<br>
+          y_class = np.array([0, 1, 1, 0])  # Binary classes<br>
+          <br>
+          clf = DecisionTreeClassifier(criterion='gini')<br>
+          clf.fit(X_class, y_class)<br>
+          print("Classification prediction:", clf.predict([[0.5, 0.5]]))<br>
+          <br>
+          # Regression example<br>
+          X_reg = np.array([[1], [2], [3], [4], [5]])<br>
+          y_reg = np.array([2.1, 3.9, 6.1, 8.0, 10.2])  # Continuous values<br>
+          <br>
+          reg = DecisionTreeRegressor(criterion='squared_error')<br>
+          reg.fit(X_reg, y_reg)<br>
+          print("Regression prediction:", reg.predict([[3.5]]))
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interpretability Benefits</h3>
+        <p>Understand why decision trees are considered highly interpretable machine learning models.</p>
+        <div class="tree-box">
+          Decision trees provide clear, rule-based explanations for their predictions. Each path from root to leaf represents a logical rule that can be easily understood by domain experts and stakeholders.
+        </div>
+        <div class="code-example">
+          from sklearn.tree import export_text<br>
+          from sklearn.datasets import load_iris<br>
+          from sklearn.tree import DecisionTreeClassifier<br>
+          <br>
+          # Load iris dataset<br>
+          iris = load_iris()<br>
+          X, y = iris.data, iris.target<br>
+          <br>
+          # Train decision tree<br>
+          clf = DecisionTreeClassifier(max_depth=3, random_state=42)<br>
+          clf.fit(X, y)<br>
+          <br>
+          # Export tree rules as text<br>
+          tree_rules = export_text(clf, feature_names
