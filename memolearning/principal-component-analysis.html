@@ -1,0 +1,720 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Principal Component Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #155e75 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0e7490;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .pca-badge {
+      display: inline-block;
+      background: #e0f7fa;
+      color: #155e75;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .dimension-box {
+      background: #f0fdff;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #155e75;
+    }
+
+    .math-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .eigenvalue-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📐 Principal Component Analysis</h1>
+    <p>Master dimensionality reduction, eigenvalues, and variance maximization for data compression and visualization</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Principal Component Analysis Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Mathematical Topics</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Dimensionality Reduction Motivation</h3>
+        </div>
+        <p class="unit-description">Understand why we need to reduce dimensions and the challenges of high-dimensional data.</p>
+        <ul class="topics-list">
+          <li>Curse of dimensionality</li>
+          <li>Computational complexity</li>
+          <li>Storage requirements</li>
+          <li>Visualization challenges</li>
+          <li>Noise reduction benefits</li>
+          <li>Feature redundancy</li>
+          <li>Overfitting prevention</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Linear Algebra Foundations</h3>
+        </div>
+        <p class="unit-description">Build essential linear algebra knowledge required for understanding PCA.</p>
+        <ul class="topics-list">
+          <li>Vectors and vector spaces</li>
+          <li>Matrix operations</li>
+          <li>Eigenvalues and eigenvectors</li>
+          <li>Matrix decomposition</li>
+          <li>Orthogonality concepts</li>
+          <li>Covariance matrices</li>
+          <li>Linear transformations</li>
+          <li>Geometric interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Variance and Covariance</h3>
+        </div>
+        <p class="unit-description">Master variance, covariance, and their role in capturing data relationships.</p>
+        <ul class="topics-list">
+          <li>Variance definition</li>
+          <li>Covariance calculation</li>
+          <li>Covariance matrix</li>
+          <li>Correlation vs covariance</li>
+          <li>Positive vs negative covariance</li>
+          <li>Multivariate relationships</li>
+          <li>Data standardization</li>
+          <li>Geometric interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Principal Components Concept</h3>
+        </div>
+        <p class="unit-description">Understand what principal components are and how they capture data variation.</p>
+        <ul class="topics-list">
+          <li>Principal component definition</li>
+          <li>Direction of maximum variance</li>
+          <li>Orthogonal components</li>
+          <li>Linear combinations</li>
+          <li>Component ordering</li>
+          <li>Geometric intuition</li>
+          <li>Data projection</li>
+          <li>Information preservation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">PCA Algorithm Steps</h3>
+        </div>
+        <p class="unit-description">Learn the step-by-step process of computing principal components.</p>
+        <ul class="topics-list">
+          <li>Data standardization</li>
+          <li>Covariance matrix computation</li>
+          <li>Eigenvalue decomposition</li>
+          <li>Eigenvector sorting</li>
+          <li>Principal component selection</li>
+          <li>Data transformation</li>
+          <li>Dimensionality reduction</li>
+          <li>Reconstruction process</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Explained Variance</h3>
+        </div>
+        <p class="unit-description">Understand how to measure and interpret the information captured by each component.</p>
+        <ul class="topics-list">
+          <li>Variance explained ratio</li>
+          <li>Cumulative explained variance</li>
+          <li>Scree plots</li>
+          <li>Choosing number of components</li>
+          <li>Information loss quantification</li>
+          <li>Elbow method</li>
+          <li>Kaiser criterion</li>
+          <li>Practical guidelines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Data Preprocessing for PCA</h3>
+        </div>
+        <p class="unit-description">Learn essential preprocessing steps for effective PCA application.</p>
+        <ul class="topics-list">
+          <li>Feature scaling importance</li>
+          <li>Standardization vs normalization</li>
+          <li>Centering data</li>
+          <li>Handling missing values</li>
+          <li>Outlier treatment</li>
+          <li>Scale sensitivity</li>
+          <li>When to standardize</li>
+          <li>Preprocessing best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">PCA Applications</h3>
+        </div>
+        <p class="unit-description">Explore real-world applications of PCA across different domains.</p>
+        <ul class="topics-list">
+          <li>Data visualization</li>
+          <li>Image compression</li>
+          <li>Face recognition</li>
+          <li>Genomics and bioinformatics</li>
+          <li>Financial data analysis</li>
+          <li>Feature engineering</li>
+          <li>Noise reduction</li>
+          <li>Preprocessing for ML</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">PCA Limitations and Alternatives</h3>
+        </div>
+        <p class="unit-description">Understand PCA limitations and explore alternative dimensionality reduction methods.</p>
+        <ul class="topics-list">
+          <li>Linear transformation limitation</li>
+          <li>Interpretability challenges</li>
+          <li>Outlier sensitivity</li>
+          <li>Gaussian assumption</li>
+          <li>Kernel PCA</li>
+          <li>Independent Component Analysis</li>
+          <li>t-SNE comparison</li>
+          <li>Method selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Implementation and Practice</h3>
+        </div>
+        <p class="unit-description">Build PCA implementations from scratch and master practical usage.</p>
+        <ul class="topics-list">
+          <li>NumPy implementation</li>
+          <li>Scikit-learn usage</li>
+          <li>Performance optimization</li>
+          <li>Memory considerations</li>
+          <li>Incremental PCA</li>
+          <li>Sparse PCA</li>
+          <li>Visualization techniques</li>
+          <li>Case study projects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Dimensionality Reduction Motivation</h1>
+      <p>Understand why we need to reduce dimensions and the challenges of high-dimensional data.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Curse of Dimensionality</h3>
+        <p>Learn how high-dimensional data creates unique challenges for machine learning algorithms.</p>
+        <span class="pca-badge">High Dimensions</span>
+        <span class="pca-badge">Sparsity</span>
+        <span class="pca-badge">Distance Metrics</span>
+        <div class="dimension-box">
+          The curse of dimensionality refers to various phenomena that arise when analyzing data in high-dimensional spaces, where intuitions from low-dimensional space often don't apply.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computational Complexity</h3>
+        <p>Understand how computational requirements scale with the number of dimensions.</p>
+        <div class="math-highlight">
+          Storage: O(n × d) - Linear growth with dimensions<br>
+          Distance Computation: O(d) per pair<br>
+          Matrix Operations: O(d²) to O(d³) depending on algorithm
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          import time<br>
+          import matplotlib.pyplot as plt<br>
+          <br>
+          def demonstrate_computational_scaling():<br>
+          &nbsp;&nbsp;"""Show how computation time scales with dimensions"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;dimensions = [10, 50, 100, 500, 1000, 2000]<br>
+          &nbsp;&nbsp;times = []<br>
+          &nbsp;&nbsp;n_samples = 1000<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for d in dimensions:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Generate random data<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;X = np.random.randn(n_samples, d)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Time covariance matrix computation<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;start_time = time.time()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;cov_matrix = np.cov(X.T)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;end_time = time.time()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;times.append(end_time - start_time)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"Dimensions: {d:4d}, Time: {end_time - start_time:.4f}s, "<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f"Memory: {X.nbytes / 1024**2:.1f}MB")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return dimensions, times<br>
+          <br>
+          # Demonstrate scaling issues<br>
+          print("=== COMPUTATIONAL SCALING WITH DIMENSIONS ===")<br>
+          dims, computation_times = demonstrate_computational_scaling()<br>
+          <br>
+          print("\\n=== STORAGE REQUIREMENTS ===")<br>
+          for d in [100, 1000, 10000]:<br>
+          &nbsp;&nbsp;n_samples = 10000<br>
+          &nbsp;&nbsp;storage_mb = (n_samples * d * 8) / (1024**2)  # 8 bytes per float64<br>
+          &nbsp;&nbsp;print(f"{d:5d} dimensions: {storage_mb:6.1f} MB")<br>
+          <br>
+          print("\\n=== DISTANCE COMPUTATION CHALLENGES ===")<br>
+          # Demonstrate how distances become similar in high dimensions<br>
+          for d in [2, 10, 100, 1000]:<br>
+          &nbsp;&nbsp;np.random.seed(42)<br>
+          &nbsp;&nbsp;X = np.random.randn(100, d)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Compute pairwise distances<br>
+          &nbsp;&nbsp;from scipy.spatial.distance import pdist<br>
+          &nbsp;&nbsp;distances = pdist(X)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"Dimensions: {d:4d}, Distance std/mean: {distances.std()/distances.mean():.3f}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Visualization Challenges</h3>
+        <p>Explore the difficulties of visualizing and understanding high-dimensional data.</p>
+        <div class="dimension-box">
+          Humans can only visualize up to 3 dimensions effectively. Higher dimensions require projection techniques or alternative visualization methods to gain insights.
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          from sklearn.datasets import load_digits<br>
+          from sklearn.decomposition import PCA<br>
+          <br>
+          def visualization_challenge_demo():<br>
+          &nbsp;&nbsp;"""Demonstrate visualization challenges with high-D data"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Load high-dimensional data (64 dimensions)<br>
+          &nbsp;&nbsp;digits = load_digits()<br>
+          &nbsp;&nbsp;X, y = digits.data, digits.target<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"Original data shape: {X.shape}")<br>
+          &nbsp;&nbsp;print(f"We have {X.shape[1]} dimensions to visualize!")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Can't visualize 64D directly - need dimensionality reduction<br>
+          &nbsp;&nbsp;pca = PCA(n_components=2)<br>
+          &nbsp;&nbsp;X_2d = pca.fit_transform(X)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"After PCA: {X_2d.shape}")<br>
+          &nbsp;&nbsp;print(f"Variance explained: {pca.explained_variance_ratio_.sum():.1%}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Now we can visualize in 2D<br>
+          &nbsp;&nbsp;plt.figure(figsize=(10, 8))<br>
+          &nbsp;&nbsp;scatter = plt.scatter(X_2d[:, 0], X_2d[:, 1], c=y, cmap='tab10')<br>
+          &nbsp;&nbsp;plt.colorbar(scatter)<br>
+          &nbsp;&nbsp;plt.title('64D Digits Data Projected to 2D using PCA')<br>
+          &nbsp;&nbsp;plt.xlabel('First Principal Component')<br>
+          &nbsp;&nbsp;plt.ylabel('Second Principal Component')<br>
+          &nbsp;&nbsp;plt.show()<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return X_2d<br>
+          <br>
+          # Show the challenge<br>
+          print("=== HIGH-DIMENSIONAL VISUALIZATION CHALLENGE ===")<br>
+          projected_data = visualization_challenge_demo()<br>
+          <br>
+          print("\\n=== WHAT WE LOSE IN PROJECTION ===")<br>
+          print("- Can't see all relationships between features")<br>
+          print("- Some clusters might overlap in 2D projection")<br>
+          print("- Information is compressed and potentially lost")<br>
+          print("- Need to choose which dimensions to visualize")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Feature Redundancy</h3>
+        <p>Learn how correlated features create redundancy in high-dimensional datasets.</p>
+        <span class="pca-badge">Correlation</span>
+        <span class="pca-badge">Redundancy</span>
+        <span class="pca-badge">Information</span>
+        <div class="code-example">
+          import numpy as np<br>
+          import pandas as pd<br>
+          import seaborn as sns<br>
+          import matplotlib.pyplot as plt<br>
+          <br>
+          def demonstrate_feature_redundancy():<br>
+          &nbsp;&nbsp;"""Show how features can be redundant/correlated"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;np.random.seed(42)<br>
+          &nbsp;&nbsp;n_samples = 1000<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Create correlated features<br>
+          &nbsp;&nbsp;feature1 = np.random.randn(n_samples)<br>
+          &nbsp;&nbsp;feature2 = feature1 + 0.1 * np.random.randn(n_samples)  # Highly correlated<br>
+          &nbsp;&nbsp;feature3 = 2 * feature1 + 0.05 * np.random.randn(n_samples)  # Linear combination<br>
+          &nbsp;&nbsp;feature4 = np.random.randn(n_samples)  # Independent<br>
+          &nbsp;&nbsp;feature5 = -feature1 + 0.1 * np.random.randn(n_samples)  # Negatively correlated<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Create DataFrame<br>
+          &nbsp
