@@ -1,0 +1,731 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Unsupervised Learning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔮';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ul-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #6d28d9;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .pattern-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6d28d9;
+    }
+
+    .algorithm-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .discovery-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔮 Unsupervised Learning</h1>
+    <p>Discover hidden patterns, cluster data, and reduce dimensions without labeled examples</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Unsupervised Learning Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~70</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Unsupervised Learning</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of learning from unlabeled data and pattern discovery.</p>
+        <ul class="topics-list">
+          <li>What is unsupervised learning</li>
+          <li>Supervised vs unsupervised</li>
+          <li>Pattern discovery</li>
+          <li>Hidden structure exploration</li>
+          <li>Types of unsupervised tasks</li>
+          <li>Challenges and opportunities</li>
+          <li>Evaluation difficulties</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">K-Means Clustering</h3>
+        </div>
+        <p class="unit-description">Master the most popular clustering algorithm for grouping similar data points.</p>
+        <ul class="topics-list">
+          <li>K-means algorithm steps</li>
+          <li>Centroid initialization</li>
+          <li>Assignment and update phases</li>
+          <li>Convergence criteria</li>
+          <li>Choosing optimal K</li>
+          <li>Elbow method</li>
+          <li>K-means++ initialization</li>
+          <li>Limitations and assumptions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Hierarchical Clustering</h3>
+        </div>
+        <p class="unit-description">Build tree-like cluster structures with agglomerative and divisive methods.</p>
+        <ul class="topics-list">
+          <li>Agglomerative clustering</li>
+          <li>Divisive clustering</li>
+          <li>Linkage criteria</li>
+          <li>Distance metrics</li>
+          <li>Dendrograms</li>
+          <li>Cutting dendrograms</li>
+          <li>Computational complexity</li>
+          <li>Advantages over K-means</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">DBSCAN and Density-Based Clustering</h3>
+        </div>
+        <p class="unit-description">Discover clusters of arbitrary shape using density-based approaches.</p>
+        <ul class="topics-list">
+          <li>Density-based clustering concept</li>
+          <li>DBSCAN algorithm</li>
+          <li>Core points and neighborhoods</li>
+          <li>Epsilon and MinPts parameters</li>
+          <li>Noise point detection</li>
+          <li>Arbitrary cluster shapes</li>
+          <li>OPTICS algorithm</li>
+          <li>Parameter selection strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Gaussian Mixture Models</h3>
+        </div>
+        <p class="unit-description">Model data as mixture of Gaussian distributions for soft clustering.</p>
+        <ul class="topics-list">
+          <li>Mixture model concept</li>
+          <li>Gaussian distributions</li>
+          <li>Expectation-Maximization (EM)</li>
+          <li>Soft clustering assignments</li>
+          <li>Model parameters</li>
+          <li>BIC and AIC criteria</li>
+          <li>Initialization strategies</li>
+          <li>Applications and extensions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Principal Component Analysis</h3>
+        </div>
+        <p class="unit-description">Reduce dimensionality while preserving variance using linear transformations.</p>
+        <ul class="topics-list">
+          <li>Dimensionality reduction motivation</li>
+          <li>Principal components</li>
+          <li>Eigenvalues and eigenvectors</li>
+          <li>Variance explained</li>
+          <li>Scree plots</li>
+          <li>Data standardization</li>
+          <li>PCA limitations</li>
+          <li>Interpretation and visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">t-SNE and Manifold Learning</h3>
+        </div>
+        <p class="unit-description">Visualize high-dimensional data and discover non-linear structures.</p>
+        <ul class="topics-list">
+          <li>Non-linear dimensionality reduction</li>
+          <li>t-SNE algorithm</li>
+          <li>Perplexity parameter</li>
+          <li>Local vs global structure</li>
+          <li>UMAP algorithm</li>
+          <li>Manifold learning concept</li>
+          <li>Visualization best practices</li>
+          <li>Interpretation guidelines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Association Rule Mining</h3>
+        </div>
+        <p class="unit-description">Discover frequent patterns and associations in transactional data.</p>
+        <ul class="topics-list">
+          <li>Market basket analysis</li>
+          <li>Support, confidence, lift</li>
+          <li>Apriori algorithm</li>
+          <li>Frequent itemsets</li>
+          <li>Association rules</li>
+          <li>FP-Growth algorithm</li>
+          <li>Rule evaluation metrics</li>
+          <li>Applications beyond retail</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Anomaly Detection</h3>
+        </div>
+        <p class="unit-description">Identify outliers and unusual patterns in data for fraud detection and monitoring.</p>
+        <ul class="topics-list">
+          <li>Anomaly detection types</li>
+          <li>Statistical approaches</li>
+          <li>Isolation Forest</li>
+          <li>One-Class SVM</li>
+          <li>Local Outlier Factor</li>
+          <li>Novelty vs outlier detection</li>
+          <li>Evaluation challenges</li>
+          <li>Domain-specific applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Topic Modeling</h3>
+        </div>
+        <p class="unit-description">Extract themes and topics from text collections using probabilistic models.</p>
+        <ul class="topics-list">
+          <li>Topic modeling concept</li>
+          <li>Latent Dirichlet Allocation</li>
+          <li>Document-topic distributions</li>
+          <li>Topic-word distributions</li>
+          <li>Gibbs sampling</li>
+          <li>Model selection</li>
+          <li>Topic coherence</li>
+          <li>Applications and interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Clustering Evaluation</h3>
+        </div>
+        <p class="unit-description">Assess clustering quality using internal and external validation measures.</p>
+        <ul class="topics-list">
+          <li>Internal validation metrics</li>
+          <li>Silhouette analysis</li>
+          <li>Calinski-Harabasz index</li>
+          <li>Davies-Bouldin index</li>
+          <li>External validation metrics</li>
+          <li>Adjusted Rand Index</li>
+          <li>Normalized Mutual Information</li>
+          <li>Choosing evaluation strategy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge techniques and real-world unsupervised learning applications.</p>
+        <ul class="topics-list">
+          <li>Autoencoders for representation</li>
+          <li>Generative Adversarial Networks</li>
+          <li>Semi-supervised learning</li>
+          <li>Self-supervised learning</li>
+          <li>Recommendation systems</li>
+          <li>Feature learning</li>
+          <li>Representation learning</li>
+          <li>Industry case studies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Unsupervised Learning</h1>
+      <p>Understand the fundamentals of learning from unlabeled data and pattern discovery.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Unsupervised Learning</h3>
+        <p>Learn the fundamental concept of extracting patterns from data without labeled examples.</p>
+        <span class="ul-badge">No Labels</span>
+        <span class="ul-badge">Pattern Discovery</span>
+        <span class="ul-badge">Hidden Structure</span>
+        <div class="pattern-box">
+          Unsupervised learning finds hidden patterns, structures, and relationships in data without explicit target variables or labels, letting the algorithm discover what's interesting on its own.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Supervised vs Unsupervised</h3>
+        <p>Understand the key differences between supervised and unsupervised learning approaches.</p>
+        <div class="algorithm-highlight">
+          Supervised Learning: Uses labeled data (X, y) to learn mapping function<br>
+          Unsupervised Learning: Uses only input data (X) to discover patterns<br>
+          Goal: Prediction vs Discovery
+        </div>
+        <div class="code-example">
+          # Comparison of supervised vs unsupervised learning<br>
+          import numpy as np<br>
+          from sklearn.datasets import make_blobs<br>
+          from sklearn.cluster import KMeans<br>
+          from sklearn.linear_model import LogisticRegression<br>
+          <br>
+          # Generate sample data<br>
+          X, y_true = make_blobs(n_samples=300, centers=4, random_state=42)<br>
+          <br>
+          print("=== SUPERVISED LEARNING ===")<br>
+          # We have both features (X) and labels (y_true)<br>
+          supervised_model = LogisticRegression()<br>
+          supervised_model.fit(X, y_true)<br>
+          supervised_predictions = supervised_model.predict(X)<br>
+          print(f"Supervised accuracy: {(supervised_predictions == y_true).mean():.3f}")<br>
+          <br>
+          print("\\n=== UNSUPERVISED LEARNING ===")<br>
+          # We only have features (X), no labels!<br>
+          unsupervised_model = KMeans(n_clusters=4, random_state=42)<br>
+          unsupervised_predictions = unsupervised_model.fit_predict(X)<br>
+          <br>
+          # We can't directly compare to y_true in real unsupervised scenarios<br>
+          # This is just for demonstration<br>
+          print(f"Found {len(np.unique(unsupervised_predictions))} clusters")<br>
+          print(f"Cluster centers:\\n{unsupervised_model.cluster_centers_}")<br>
+          <br>
+          print("\\n=== KEY DIFFERENCES ====")<br>
+          differences = {<br>
+          &nbsp;&nbsp;"Data": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Supervised": "Features + Labels (X, y)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Unsupervised": "Features only (X)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Goal": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Supervised": "Predict labels for new data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Unsupervised": "Discover hidden patterns"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Evaluation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Supervised": "Compare predictions to true labels",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Unsupervised": "Assess pattern quality/coherence"<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          for aspect, comparison in differences.items():<br>
+          &nbsp;&nbsp;print(f"\\n{aspect}:")<br>
+          &nbsp;&nbsp;for approach, description in comparison.items():<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  {approach}: {description}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Unsupervised Tasks</h3>
+        <p>Explore the main categories of unsupervised learning problems and their applications.</p>
+        <div class="pattern-box">
+          Clustering: Group similar data points together<br>
+          Dimensionality Reduction: Reduce feature space while preserving information<br>
+          Association Rules: Find relationships between items<br>
+          Anomaly Detection: Identify unusual or outlier data points
+        </div>
+        <div class="code-example">
+          # Examples of different unsupervised learning tasks<br>
+          import numpy as np<br>
+          from sklearn.datasets import make_blobs, load_digits<br>
+          from sklearn.cluster import KMeans<br>
+          from sklearn.decomposition import PCA<br>
+          from sklearn.ensemble import IsolationForest<br>
+          <br>
+          print("=== CLUSTERING EXAMPLE ===")<br>
+          # Generate data with natural clusters<br>
+          X_clusters, _ = make_blobs(n_samples=200, centers=3, random_state=42)<br>
+          kmeans = KMeans(n_clusters=3, random_state=42)<br>
+          cluster_labels = kmeans.fit_predict(X_clusters)<br>
+          print(f"Found {len(np.unique(cluster_labels))} clusters")<br>
+          print(f"Cluster sizes: {np.bincount(cluster_labels)}")<br>
+          <br>
+          print("\\n=== DIMENSIONALITY REDUCTION EXAMPLE ===")<br>
+          # Load high-dimensional data (digits: 64 features)<br>
+          digits = load_digits()<br>
+          X_digits = digits.data<br>
+          print(f"Original dimensions: {X_digits.shape}")<br>
+          <br>
+          # Reduce to 2 dimensions<br>
+          pca = PCA(n_components=2)<br>
+          X_reduced = pca.fit_transform(X_digits)<br>
+          print(f"Reduced dimensions: {X_reduced.shape}")<br>
+          print(f"Variance explained: {pca.explained_variance_ratio_.sum():.3f}")<br>
+          <br>
+          print("\\n=== ANOMALY DETECTION EXAMPLE ===")<br>
+          # Generate normal data with some outliers<br>
+          np.random.seed(42)<br>
+          X_normal = np.random.normal(0, 1, (100, 2))<br>
+          X_outliers = np.random.uniform(-4, 4, (10, 2))<br>
+          X_mixed = np.vstack([X_normal, X_outliers])<br>
+          <br>
+          # Detect anomalies<br>
+          iso_forest = IsolationForest(contamination=0.1, random_state=42)<br>
+          anomaly_labels = iso_forest.fit_predict(X_mixed)<br>
+          <br>
+          n_anomalies = (anomaly_labels == -1).sum()<br>
+          print(f"Detected {n_anomalies} anomalies out of {len(X_mixed)} points")<br>
+          <br>
+          print("\\n=== TASK SUMMARY ===")<br>
+          task_descriptions = {<br>
+          &nbsp;&nbsp;"Clustering": "Group customers by purchasing behavior",<br>
