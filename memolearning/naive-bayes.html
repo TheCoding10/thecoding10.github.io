@@ -1,0 +1,710 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Naive Bayes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 50%, #be185d 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎲';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ec4899;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #db2777;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .nb-badge {
+      display: inline-block;
+      background: #fce7f3;
+      color: #be185d;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .probability-box {
+      background: #fdf2f8;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be185d;
+    }
+
+    .bayes-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .theorem-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎲 Naive Bayes</h1>
+    <p>Master probabilistic classification, Bayes' theorem, and feature independence assumptions for robust predictions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Naive Bayes Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5+</span>
+          <div class="stat-label">NB Variants</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Probability Fundamentals</h3>
+        </div>
+        <p class="unit-description">Build foundation in probability theory essential for understanding Naive Bayes.</p>
+        <ul class="topics-list">
+          <li>Basic probability concepts</li>
+          <li>Conditional probability</li>
+          <li>Joint probability</li>
+          <li>Marginal probability</li>
+          <li>Independence assumption</li>
+          <li>Probability distributions</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Prior and posterior probabilities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Bayes' Theorem</h3>
+        </div>
+        <p class="unit-description">Master the mathematical foundation that powers Naive Bayes classification.</p>
+        <ul class="topics-list">
+          <li>Bayes' theorem derivation</li>
+          <li>Prior probability</li>
+          <li>Likelihood function</li>
+          <li>Posterior probability</li>
+          <li>Evidence (marginal likelihood)</li>
+          <li>Bayesian inference</li>
+          <li>Bayesian vs frequentist</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Naive Independence Assumption</h3>
+        </div>
+        <p class="unit-description">Understand the "naive" assumption and its implications for classification.</p>
+        <ul class="topics-list">
+          <li>Feature independence assumption</li>
+          <li>Why "naive"?</li>
+          <li>Conditional independence</li>
+          <li>Real-world violations</li>
+          <li>Impact on performance</li>
+          <li>When assumption works</li>
+          <li>Robustness to violations</li>
+          <li>Computational benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Naive Bayes Classification</h3>
+        </div>
+        <p class="unit-description">Learn how to apply Naive Bayes for classification problems.</p>
+        <ul class="topics-list">
+          <li>Classification framework</li>
+          <li>Maximum a posteriori (MAP)</li>
+          <li>Decision rule</li>
+          <li>Class prediction</li>
+          <li>Probability estimation</li>
+          <li>Training process</li>
+          <li>Prediction process</li>
+          <li>Multiclass classification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Gaussian Naive Bayes</h3>
+        </div>
+        <p class="unit-description">Apply Naive Bayes to continuous features using Gaussian distributions.</p>
+        <ul class="topics-list">
+          <li>Continuous feature handling</li>
+          <li>Gaussian distribution assumption</li>
+          <li>Mean and variance estimation</li>
+          <li>Probability density function</li>
+          <li>Parameter estimation</li>
+          <li>Numerical stability</li>
+          <li>Feature scaling effects</li>
+          <li>Implementation details</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Multinomial Naive Bayes</h3>
+        </div>
+        <p class="unit-description">Handle discrete count data and text classification with multinomial distribution.</p>
+        <ul class="topics-list">
+          <li>Discrete count features</li>
+          <li>Multinomial distribution</li>
+          <li>Text classification applications</li>
+          <li>Word count vectors</li>
+          <li>Feature frequency</li>
+          <li>Smoothing techniques</li>
+          <li>Vocabulary handling</li>
+          <li>Document classification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Bernoulli Naive Bayes</h3>
+        </div>
+        <p class="unit-description">Work with binary features using Bernoulli distribution for classification.</p>
+        <ul class="topics-list">
+          <li>Binary feature handling</li>
+          <li>Bernoulli distribution</li>
+          <li>Presence/absence features</li>
+          <li>Text classification with binary</li>
+          <li>Feature binarization</li>
+          <li>Parameter estimation</li>
+          <li>Comparison with multinomial</li>
+          <li>Use case selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Smoothing Techniques</h3>
+        </div>
+        <p class="unit-description">Handle zero probabilities and improve generalization with smoothing methods.</p>
+        <ul class="topics-list">
+          <li>Zero probability problem</li>
+          <li>Laplace (add-one) smoothing</li>
+          <li>Add-k smoothing</li>
+          <li>Lidstone smoothing</li>
+          <li>Good-Turing smoothing</li>
+          <li>Smoothing parameter selection</li>
+          <li>Impact on performance</li>
+          <li>Implementation considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Text Classification with NB</h3>
+        </div>
+        <p class="unit-description">Master text classification applications including spam detection and sentiment analysis.</p>
+        <ul class="topics-list">
+          <li>Text preprocessing for NB</li>
+          <li>Bag-of-words representation</li>
+          <li>Feature extraction</li>
+          <li>Spam email detection</li>
+          <li>Sentiment analysis</li>
+          <li>Document categorization</li>
+          <li>N-gram features</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Implementation and Optimization</h3>
+        </div>
+        <p class="unit-description">Build efficient Naive Bayes implementations and optimize for real-world use.</p>
+        <ul class="topics-list">
+          <li>From-scratch implementation</li>
+          <li>Scikit-learn usage</li>
+          <li>Numerical stability</li>
+          <li>Log probability computations</li>
+          <li>Memory efficiency</li>
+          <li>Incremental learning</li>
+          <li>Feature selection</li>
+          <li>Model evaluation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Probability Fundamentals</h1>
+      <p>Build foundation in probability theory essential for understanding Naive Bayes.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Probability Concepts</h3>
+        <p>Learn the fundamental concepts of probability theory that underpin Naive Bayes algorithms.</p>
+        <span class="nb-badge">Sample Space</span>
+        <span class="nb-badge">Events</span>
+        <span class="nb-badge">Probability</span>
+        <div class="probability-box">
+          Probability measures the likelihood of an event occurring, ranging from 0 (impossible) to 1 (certain). It forms the mathematical foundation for making predictions under uncertainty.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Probability</h3>
+        <p>Understand how to calculate probabilities when additional information is available.</p>
+        <div class="theorem-formula">
+          P(A|B) = P(A ∩ B) / P(B)<br>
+          "Probability of A given B"
+        </div>
+        <div class="code-example">
+          # Conditional probability example<br>
+          import numpy as np<br>
+          <br>
+          # Medical diagnosis example<br>
+          # P(Disease) = 0.01 (1% of population has disease)<br>
+          # P(Test+|Disease) = 0.95 (95% sensitivity)<br>
+          # P(Test+|No Disease) = 0.05 (5% false positive rate)<br>
+          <br>
+          def conditional_probability_example():<br>
+          &nbsp;&nbsp;# Prior probabilities<br>
+          &nbsp;&nbsp;p_disease = 0.01<br>
+          &nbsp;&nbsp;p_no_disease = 0.99<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Likelihoods<br>
+          &nbsp;&nbsp;p_test_pos_given_disease = 0.95<br>
+          &nbsp;&nbsp;p_test_pos_given_no_disease = 0.05<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Total probability of positive test<br>
+          &nbsp;&nbsp;p_test_pos = (p_test_pos_given_disease * p_disease + <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_test_pos_given_no_disease * p_no_disease)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Conditional probability: P(Disease|Test+)<br>
+          &nbsp;&nbsp;p_disease_given_test_pos = (<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;p_test_pos_given_disease * p_disease) / p_test_pos<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"P(Disease|Test+) = {p_disease_given_test_pos:.4f}")<br>
+          &nbsp;&nbsp;print(f"Only {p_disease_given_test_pos*100:.1f}% chance of disease!")<br>
+          <br>
+          conditional_probability_example()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Joint Probability</h3>
+        <p>Learn how to calculate the probability of multiple events occurring together.</p>
+        <div class="bayes-highlight">
+          Joint Probability: P(A ∩ B) - Probability that both A and B occur<br>
+          For independent events: P(A ∩ B) = P(A) × P(B)<br>
+          For dependent events: P(A ∩ B) = P(A|B) × P(B)
+        </div>
+        <div class="code-example">
+          # Joint probability examples<br>
+          import numpy as np<br>
+          <br>
+          def joint_probability_examples():<br>
+          &nbsp;&nbsp;print("=== Independent Events ===")<br>
+          &nbsp;&nbsp;# Rolling two dice<br>
+          &nbsp;&nbsp;p_die1_six = 1/6<br>
+          &nbsp;&nbsp;p_die2_six = 1/6<br>
+          &nbsp;&nbsp;p_both_six = p_die1_six * p_die2_six<br>
+          &nbsp;&nbsp;print(f"P(Both dice show 6) = {p_both_six:.4f}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("\\n=== Dependent Events ===")<br>
+          &nbsp;&nbsp;# Drawing cards without replacement<br>
+          &nbsp;&nbsp;p_first_ace = 4/52<br>
+          &nbsp;&nbsp;p_second_ace_given_first = 3/51  # One ace removed<br>
+          &nbsp;&nbsp;p_both_aces = p_first_ace * p_second_ace_given_first<br>
+          &nbsp;&nbsp;print(f"P(Both cards are aces) = {p_both_aces:.4f}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("\\n=== Joint Probability Table ===")<br>
+          &nbsp;&nbsp;# Create a joint probability table<br>
+          &nbsp;&nbsp;weather = ['Sunny', 'Rainy']<br>
+          &nbsp;&nbsp;mood = ['Happy', 'Sad']<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Joint probabilities (must sum to 1)<br>
+          &nbsp;&nbsp;joint_probs = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('Sunny', 'Happy'): 0.4,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('Sunny', 'Sad'): 0.1,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('Rainy', 'Happy'): 0.2,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;('Rainy', 'Sad'): 0.3<br>
+          &nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for (w, m), prob in joint_probs.items():<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"P({w}, {m}) = {prob}")<br>
+          <br>
+          joint_probability_examples()
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Independence Assumption</h3>
+        <p>Understand when events are independent and how this simplifies probability calculations.</p>
+        <span class="nb-badge">Independence</span>
+        <span class="nb-badge">Conditional Independence</span>
+        <span class="nb-badge">Simplification</span>
+        <div class="code-example">
+          # Independence vs dependence in probability<br>
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          <br>
+          def demonstrate_independence():<br>
+          &nbsp;&nbsp;print("=== Testing Independence ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example: Weather and coin flip (independent)<br>
+          &nbsp;&nbsp;p_sunny = 0.7<br>
+          &nbsp;&nbsp;p_heads = 0.5<br>
+          &nbsp;&nbsp;p_sunny_and_heads_independent = p_sunny * p_heads<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"P(Sunny) = {p_sunny}")<br>
+          &nbsp;&nbsp;print(f"P(Heads) = {p_heads}")<br>
+          &nbsp;&nbsp;print(f"P(Sunny AND Heads) if independent = {p_sunny_and_heads_independent}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example: Height and weight (dependent)<br>
+          &nbsp;&nbsp;print("\\n=== Dependent Example ===")<br>
+          &nbsp;&nbsp;p_tall = 0.3<br>
+          &nbsp;&nbsp;p_heavy = 0.4<br>
+          &nbsp;&nbsp;p_heavy_given_tall = 0.8  # Tall people more likely heavy<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;p_tall_and_heavy_dependent = p_heavy_given_tall * p_tall<br>
+          &nbsp;&nbsp;p_tall_and_heavy_independent = p_tall * p_heavy<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"P(Tall AND Heavy) if dependent = {p_tall_and_heavy_dependent:.3f}")<br>
+          &nbsp;&nbsp;print(f"P(Tall AND Heavy) if independent = {p_tall_and_heavy_independent:.3f}")<br>
+          &nbsp;&nbsp;print(f"Difference = {abs(p_tall_and_heavy_dependent - p_tall_and_heavy_independent):.3f}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Conditional independence (key for Naive Bayes)<br>
+          &nbsp;&nbsp;print("\\n=== Conditional Independence ===")<br>
+          &nbsp;&nbsp;print("Features may be dependent on each other,")<br>
+          &nbsp;&nbsp;print("but independent GIVEN the class label")<br>
+          &nbsp;&nbsp;print("This is the 'naive' assumption in Naive
