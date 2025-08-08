@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Financial Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💰';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .financial-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .financial-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .risk-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .valuation-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .market-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💰 Financial Economics</h1>
+    <p>Master asset pricing, risk management, and financial market dynamics</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Financial Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~145</span>
+          <div class="stat-label">Finance Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Financial Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <div class="stat-label">Market Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Time Value of Money</h3>
+        </div>
+        <p class="unit-description">Master the fundamental concept that money has different values at different times.</p>
+        <ul class="topics-list">
+          <li>Present value calculations</li>
+          <li>Future value analysis</li>
+          <li>Discount rates and interest</li>
+          <li>Compounding and discounting</li>
+          <li>Annuities and perpetuities</li>
+          <li>Real vs nominal rates</li>
+          <li>Continuous compounding</li>
+          <li>Applications in valuation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Risk and Return</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental relationship between risk and expected returns in finance.</p>
+        <ul class="topics-list">
+          <li>Risk measurement</li>
+          <li>Expected return calculation</li>
+          <li>Risk-return trade-off</li>
+          <li>Standard deviation and variance</li>
+          <li>Diversification benefits</li>
+          <li>Systematic vs unsystematic risk</li>
+          <li>Risk preferences</li>
+          <li>Risk premium concepts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Portfolio Theory</h3>
+        </div>
+        <p class="unit-description">Learn Markowitz's modern portfolio theory and optimal portfolio construction.</p>
+        <ul class="topics-list">
+          <li>Portfolio optimization</li>
+          <li>Efficient frontier</li>
+          <li>Mean-variance analysis</li>
+          <li>Correlation and covariance</li>
+          <li>Two-asset portfolios</li>
+          <li>Multi-asset portfolios</li>
+          <li>Capital allocation line</li>
+          <li>Separation theorem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Capital Asset Pricing Model</h3>
+        </div>
+        <p class="unit-description">Study the CAPM and its implications for asset pricing and portfolio management.</p>
+        <ul class="topics-list">
+          <li>CAPM assumptions</li>
+          <li>Security market line</li>
+          <li>Beta coefficient</li>
+          <li>Market portfolio</li>
+          <li>Risk-free asset</li>
+          <li>CAPM applications</li>
+          <li>Empirical testing</li>
+          <li>CAPM limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Arbitrage Pricing Theory</h3>
+        </div>
+        <p class="unit-description">Explore multi-factor models and the arbitrage pricing theory framework.</p>
+        <ul class="topics-list">
+          <li>APT foundations</li>
+          <li>Factor models</li>
+          <li>Arbitrage opportunities</li>
+          <li>Factor loadings</li>
+          <li>Risk premiums</li>
+          <li>Multi-factor CAPM</li>
+          <li>Fama-French model</li>
+          <li>Factor identification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Efficient Market Hypothesis</h3>
+        </div>
+        <p class="unit-description">Analyze market efficiency and its implications for investment strategies.</p>
+        <ul class="topics-list">
+          <li>EMH forms</li>
+          <li>Weak form efficiency</li>
+          <li>Semi-strong form efficiency</li>
+          <li>Strong form efficiency</li>
+          <li>Market anomalies</li>
+          <li>Behavioral challenges</li>
+          <li>Random walk theory</li>
+          <li>Investment implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Bond Pricing and Interest Rates</h3>
+        </div>
+        <p class="unit-description">Master fixed-income securities valuation and interest rate risk management.</p>
+        <ul class="topics-list">
+          <li>Bond valuation principles</li>
+          <li>Yield to maturity</li>
+          <li>Duration and convexity</li>
+          <li>Term structure of interest rates</li>
+          <li>Spot and forward rates</li>
+          <li>Credit risk</li>
+          <li>Interest rate risk</li>
+          <li>Bond portfolio management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Options and Derivatives</h3>
+        </div>
+        <p class="unit-description">Study derivative securities, options pricing, and risk management applications.</p>
+        <ul class="topics-list">
+          <li>Options fundamentals</li>
+          <li>Put-call parity</li>
+          <li>Binomial pricing model</li>
+          <li>Black-Scholes model</li>
+          <li>Greeks and risk sensitivities</li>
+          <li>Futures and forwards</li>
+          <li>Swaps</li>
+          <li>Hedging strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Corporate Finance</h3>
+        </div>
+        <p class="unit-description">Examine corporate financial decisions including capital structure and dividend policy.</p>
+        <ul class="topics-list">
+          <li>Capital budgeting</li>
+          <li>Net present value</li>
+          <li>Capital structure theory</li>
+          <li>Modigliani-Miller theorems</li>
+          <li>Dividend policy</li>
+          <li>Cost of capital</li>
+          <li>Financial leverage</li>
+          <li>Agency problems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Behavioral Finance</h3>
+        </div>
+        <p class="unit-description">Explore how psychological factors influence financial decision-making and market outcomes.</p>
+        <ul class="topics-list">
+          <li>Cognitive biases in finance</li>
+          <li>Prospect theory</li>
+          <li>Market anomalies</li>
+          <li>Herding behavior</li>
+          <li>Overconfidence</li>
+          <li>Loss aversion</li>
+          <li>Behavioral asset pricing</li>
+          <li>Limits to arbitrage</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Financial Institutions</h3>
+        </div>
+        <p class="unit-description">Study the role and economics of banks, insurance companies, and other financial intermediaries.</p>
+        <ul class="topics-list">
+          <li>Financial intermediation</li>
+          <li>Banking economics</li>
+          <li>Insurance principles</li>
+          <li>Mutual funds</li>
+          <li>Pension funds</li>
+          <li>Financial regulation</li>
+          <li>Systemic risk</li>
+          <li>FinTech disruption</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">International Finance</h3>
+        </div>
+        <p class="unit-description">Analyze global financial markets, exchange rates, and international investment.</p>
+        <ul class="topics-list">
+          <li>Exchange rate determination</li>
+          <li>Purchasing power parity</li>
+          <li>Interest rate parity</li>
+          <li>International CAPM</li>
+          <li>Currency risk management</li>
+          <li>Global diversification</li>
+          <li>Emerging markets</li>
+          <li>Financial crises</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Time Value of Money</h1>
+      <p>Master the fundamental concept that money has different values at different times.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Present Value Calculations</h3>
+        <p>Learn to calculate the current worth of future cash flows using appropriate discount rates.</p>
+        <span class="financial-badge">Discounting</span>
+        <span class="financial-badge">Cash Flows</span>
+        <span class="financial-badge">Valuation</span>
+        <div class="financial-box">
+          Present value is the current worth of a future sum of money or stream of cash flows given a specified rate of return. It's the foundation of all financial valuation, allowing comparison of cash flows occurring at different times.
+        </div>
+        <div class="code-example">
+          # Present Value Calculation Framework<br>
+          present_value = {<br>
+          &nbsp;&nbsp;"formula": "PV = FV / (1 + r)^n",<br>
+          &nbsp;&nbsp;"components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"PV": "Present value (what we're solving for)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"FV": "Future value (cash flow to be received)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"r": "Discount rate (required rate of return)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"n": "Number of periods until payment"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"bond_valuation": "PV of coupon payments + principal",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stock_valuation": "PV of expected dividends",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capital_budgeting": "PV of project cash flows",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"loan_payments": "PV of payment stream"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"multiple_cash_flows": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "PV = Σ(CFt / (1 + r)^t)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Sum PV of each individual cash flow",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"consideration": "Each cash flow discounted separately"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Future Value Analysis</h3>
+        <p>Understand how money grows over time through the process of compounding.</p>
+        <div class="concept-highlight">
+          Future Value Concepts:<br>
+          • Simple interest: Interest earned only on principal<br>
+          • Compound interest: Interest earned on interest<br>
+          • Compounding frequency: Annual, semi-annual, quarterly, daily<br>
+          • Rule of 72: Approximate doubling time
+        </div>
+        <div class="risk-insight">
+          <strong>Compounding Power:</strong><br>
+          The frequency of compounding significantly affects future values. Daily compounding yields more than annual compounding, but the difference diminishes as frequency increases beyond daily.
+        </div>
+        <div class="code-example">
+          # Future Value Calculations<br>
+          def calculate_future_value(principal, rate, periods, compounding=1):<br>
+          &nbsp;&nbsp;"""Calculate future value with different compounding frequencies"""<br>
+          &nbsp;&nbsp;if compounding == "continuous":<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;import math<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return principal * math.exp(rate * periods)<br>
+          &nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;effective_rate = rate / compounding<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;total_periods = periods * compounding<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return principal * (1 + effective_rate) ** total_periods<br>
+          <br>
+          # Future Value Applications<br>
+          fv_applications = {<br>
+          &nbsp;&nbsp;"savings_growth": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "$1,000 at 5% for 10 years",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"calculation": "1000 * (1.05)^10 = $1,628.89"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"retirement_planning": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monthly_deposits": "Regular contributions with compounding",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "FV_annuity = PMT * [((1+r)^n - 1) / r]"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"rule_of_72": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approximation": "Years to double = 72 / interest_rate",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "At 8%, money doubles in ~9 years"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Annuities and Perpetuities</h3>
+        <p>Master valuation of regular payment streams, both finite and infinite duration.</p>
+        <div class="valuation-tool">
+          <strong>Annuity Types:</strong><br>
+          • Ordinary annuity: Payments at end of period<br>
+          • Annuity due: Payments at beginning of period<br>
+          • Growing annuity: Payments increase at constant rate<br>
+          • Perpetuity: Infinite payment stream
+        </div>
+        <div class="market-indicator">
+          <strong>Common Applications:</strong><br>
+          • Mortgage and loan payments<br>
+          • Retirement income streams<br>
+          • Bond coupon payments<br>
+          • Preferred stock dividends (perpetuities)
+        </div>
+        <div class="code-example">
+          # Annuity and Perpetuity Formulas<br>
+          annuity_formulas = {<br>
+          &nbsp;&nbsp;"ordinary_annuity_pv": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "PV = PMT * [(1 - (1+r)^-n) / r]",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": ["PMT = payment", "r = rate", "n = periods"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"annuity_due_pv": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "PV = PMT * [(1 - (1+r)^-n) / r] * (1+r)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"difference": "Multiply ordinary annuity by (1+r)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"perpetuity_pv": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "PV = PMT / r",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumption": "Constant payments forever"<br>
+          &
