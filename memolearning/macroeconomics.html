@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Macroeconomics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📈';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c3aed;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #8b5cf6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .macro-badge {
+      display: inline-block;
+      background: #f3f4f6;
+      color: #7c3aed;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .macro-box {
+      background: #f3f4f6;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .policy-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .gdp-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .inflation-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📈 Macroeconomics</h1>
+    <p>Master economic aggregates, policy tools, and the forces that drive national economies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Macroeconomics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~160</span>
+          <div class="stat-label">Macro Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Policy Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">120+</span>
+          <div class="stat-label">Real-World Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">National Income Accounting</h3>
+        </div>
+        <p class="unit-description">Learn to measure economic activity through GDP and related national income statistics.</p>
+        <ul class="topics-list">
+          <li>GDP definition and measurement</li>
+          <li>Expenditure approach</li>
+          <li>Income approach</li>
+          <li>Production approach</li>
+          <li>Real vs nominal GDP</li>
+          <li>GDP deflator</li>
+          <li>GNP and other measures</li>
+          <li>GDP limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Economic Growth</h3>
+        </div>
+        <p class="unit-description">Understand the factors that drive long-term economic growth and living standards.</p>
+        <ul class="topics-list">
+          <li>Sources of economic growth</li>
+          <li>Production function</li>
+          <li>Capital accumulation</li>
+          <li>Technological progress</li>
+          <li>Human capital</li>
+          <li>Solow growth model</li>
+          <li>Endogenous growth theory</li>
+          <li>Growth accounting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Unemployment</h3>
+        </div>
+        <p class="unit-description">Analyze different types of unemployment and their causes and consequences.</p>
+        <ul class="topics-list">
+          <li>Unemployment measurement</li>
+          <li>Types of unemployment</li>
+          <li>Natural rate of unemployment</li>
+          <li>Frictional unemployment</li>
+          <li>Structural unemployment</li>
+          <li>Cyclical unemployment</li>
+          <li>Phillips curve</li>
+          <li>Labor market policies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Inflation</h3>
+        </div>
+        <p class="unit-description">Examine price level changes, their measurement, causes, and economic effects.</p>
+        <ul class="topics-list">
+          <li>Inflation measurement</li>
+          <li>CPI and other price indices</li>
+          <li>Demand-pull inflation</li>
+          <li>Cost-push inflation</li>
+          <li>Expected vs unexpected inflation</li>
+          <li>Hyperinflation</li>
+          <li>Deflation</li>
+          <li>Inflation targeting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Aggregate Demand</h3>
+        </div>
+        <p class="unit-description">Study the total demand for goods and services in the economy and its determinants.</p>
+        <ul class="topics-list">
+          <li>AD curve derivation</li>
+          <li>Consumption function</li>
+          <li>Investment demand</li>
+          <li>Government spending</li>
+          <li>Net exports</li>
+          <li>Wealth effects</li>
+          <li>Interest rate effects</li>
+          <li>AD curve shifts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Aggregate Supply</h3>
+        </div>
+        <p class="unit-description">Understand how total production in the economy responds to price level changes.</p>
+        <ul class="topics-list">
+          <li>Short-run aggregate supply</li>
+          <li>Long-run aggregate supply</li>
+          <li>Sticky wages and prices</li>
+          <li>Supply shocks</li>
+          <li>Potential output</li>
+          <li>Output gaps</li>
+          <li>AS curve shifts</li>
+          <li>Supply-side economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">AD-AS Model</h3>
+        </div>
+        <p class="unit-description">Combine aggregate demand and supply to analyze macroeconomic equilibrium.</p>
+        <ul class="topics-list">
+          <li>Macroeconomic equilibrium</li>
+          <li>Short-run equilibrium</li>
+          <li>Long-run equilibrium</li>
+          <li>Economic fluctuations</li>
+          <li>Demand shocks</li>
+          <li>Supply shocks</li>
+          <li>Adjustment mechanisms</li>
+          <li>Policy implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Fiscal Policy</h3>
+        </div>
+        <p class="unit-description">Analyze how government spending and taxation affect economic performance.</p>
+        <ul class="topics-list">
+          <li>Fiscal policy tools</li>
+          <li>Government budget</li>
+          <li>Multiplier effects</li>
+          <li>Automatic stabilizers</li>
+          <li>Discretionary policy</li>
+          <li>Budget deficits and surpluses</li>
+          <li>National debt</li>
+          <li>Crowding out</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Money and Banking</h3>
+        </div>
+        <p class="unit-description">Understand the role of money, banks, and the financial system in the economy.</p>
+        <ul class="topics-list">
+          <li>Functions of money</li>
+          <li>Money supply measures</li>
+          <li>Banking system</li>
+          <li>Money creation</li>
+          <li>Reserve requirements</li>
+          <li>Central banking</li>
+          <li>Financial intermediation</li>
+          <li>Payment systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Monetary Policy</h3>
+        </div>
+        <p class="unit-description">Examine how central banks influence money supply and interest rates to affect the economy.</p>
+        <ul class="topics-list">
+          <li>Federal Reserve System</li>
+          <li>Monetary policy tools</li>
+          <li>Open market operations</li>
+          <li>Discount rate</li>
+          <li>Reserve requirements</li>
+          <li>Interest rate targeting</li>
+          <li>Quantitative easing</li>
+          <li>Policy transmission</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">IS-LM Model</h3>
+        </div>
+        <p class="unit-description">Study the interaction between goods and money markets in determining output and interest rates.</p>
+        <ul class="topics-list">
+          <li>IS curve derivation</li>
+          <li>LM curve derivation</li>
+          <li>General equilibrium</li>
+          <li>Fiscal policy in IS-LM</li>
+          <li>Monetary policy in IS-LM</li>
+          <li>Liquidity trap</li>
+          <li>Crowding out effects</li>
+          <li>Policy mix analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">International Macroeconomics</h3>
+        </div>
+        <p class="unit-description">Analyze how international trade and finance affect domestic economic policy and performance.</p>
+        <ul class="topics-list">
+          <li>Balance of payments</li>
+          <li>Exchange rates</li>
+          <li>Purchasing power parity</li>
+          <li>Interest rate parity</li>
+          <li>Open economy IS-LM</li>
+          <li>Mundell-Fleming model</li>
+          <li>Exchange rate regimes</li>
+          <li>International policy coordination</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: National Income Accounting</h1>
+      <p>Learn to measure economic activity through GDP and related national income statistics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">GDP Definition and Measurement</h3>
+        <p>Understand what GDP measures and why it's the primary indicator of economic activity.</p>
+        <span class="macro-badge">Economic Output</span>
+        <span class="macro-badge">Market Value</span>
+        <span class="macro-badge">Final Goods</span>
+        <div class="macro-box">
+          Gross Domestic Product (GDP) is the total market value of all final goods and services produced within a country's borders during a specific time period. It measures the size of an economy and its growth rate.
+        </div>
+        <div class="code-example">
+          # GDP Measurement Framework<br>
+          gdp_definition = {<br>
+          &nbsp;&nbsp;"full_name": "Gross Domestic Product",<br>
+          &nbsp;&nbsp;"key_components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"gross": "Before depreciation of capital",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"domestic": "Within country's borders",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"product": "Goods and services produced"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"what_counts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"final_goods": "Sold to end users",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"market_value": "At current market prices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"current_production": "Made in current period",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"legal_activities": "Recorded in official markets"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"exclusions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"intermediate_goods": "Avoid double counting",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"financial_transactions": "Just transfers, not production",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"used_goods": "Produced in previous periods",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"illegal_activities": "Underground economy"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Expenditure Approach</h3>
+        <p>Learn to calculate GDP by summing all expenditures on final goods and services.</p>
+        <div class="concept-highlight">
+          GDP Expenditure Components:<br>
+          • C = Consumption (household spending)<br>
+          • I = Investment (business and residential)<br>
+          • G = Government purchases<br>
+          • NX = Net exports (exports - imports)
+        </div>
+        <div class="policy-insight">
+          <strong>GDP = C + I + G + NX</strong><br>
+          This identity shows that total production equals total spending in the economy. Each component represents different sectors' contributions to economic activity.
+        </div>
+        <div class="code-example">
+          # Expenditure Approach Calculation<br>
+          expenditure_approach = {<br>
+          &nbsp;&nbsp;"formula": "GDP = C + I + G + NX",<br>
+          &nbsp;&nbsp;"components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"consumption": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Household spending on goods and services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"categories": ["Durables", "Non-durables", "Services"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"typical_share": "~70% of GDP"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"investment": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Spending on capital goods and inventory",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"categories": ["Business fixed", "Residential", "Inventory"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"typical_share": "~18% of GDP"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"government": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Government purchases of goods and services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"excludes": "Transfer payments (Social Security, etc.)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"typical_share": "~17% of GDP"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"net_exports": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Exports minus imports",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"can_be_negative": "When imports > exports",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"typical_share": "~-3% of GDP (US)"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Real vs Nominal GDP</h3>
+        <p>Distinguish between current dollar values and inflation-adjusted economic output.</p>
+        <div class="gdp-tool">
+          <strong>Key Distinction:</strong><br>
+          • Nominal GDP: Valued at current year prices<br>
+          • Real GDP: Valued at constant (base year) prices<br>
+          • Real GDP removes the effect of inflation<br>
+          • Used to measure actual economic growth
+        </div>
+        <div class="inflation-indicator">
+          <strong>GDP Deflator:</strong><br>
+          GDP Deflator = (Nominal GDP / Real GDP) × 100<br>
+          Measures the average price level of all goods and services in GDP
+        </div>
+        <div class="code-example">
+          # Real vs Nominal GDP Calculation<br>
+          def calculate_real_gdp(nominal_gdp, gdp_deflator):<br>
+          &nbsp;&nbsp;"""Calculate real GDP from nominal GDP and deflator"""<br>
+          &nbsp;&nbsp;return (nominal_gdp / gdp_deflator) * 100<br>
+          <br>
+          def calculate_gdp_deflator(nominal_gdp, real_gdp):<br>
+          &nbsp;&nbsp;"""Calculate GDP deflator"""<br>
+          &nbsp;&nbsp;return (nominal_gdp / real_gdp) * 100<br>
+          <br>
+          def calculate_growth_rate(current_year, previous_year):<br>
+          &nbsp;&nbsp;"""Calculate real GDP growth rate"""<br>
+          &nbsp;&nbsp;return ((current_year - previous_year) / previous_year) * 100<br>
+          <br>
+          # Example calculation<br>
+          nominal_gdp_2023 = 25000  # billions<br>
+          gdp_deflator_2023 = 110   # base year = 100<br>
