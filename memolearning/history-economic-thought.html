@@ -1,0 +1,727 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning History of Economic Thought</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📚';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581c87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .history-badge {
+      display: inline-block;
+      background: #faf5ff;
+      color: #581c87;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .history-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .thinker-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .theory-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .school-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📚 History of Economic Thought</h1>
+    <p>Trace the evolution of economic ideas from ancient times to modern theories</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">History of Economic Thought Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Economic Thinkers</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Major Schools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">2500+</span>
+          <div class="stat-label">Years of Ideas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Ancient Economic Thought</h3>
+        </div>
+        <p class="unit-description">Explore economic ideas from ancient civilizations and early philosophical traditions.</p>
+        <ul class="topics-list">
+          <li>Ancient Mesopotamian commerce</li>
+          <li>Greek economic philosophy</li>
+          <li>Aristotelian economics</li>
+          <li>Roman economic practices</li>
+          <li>Early concepts of value</li>
+          <li>Trade and money origins</li>
+          <li>Ancient labor organization</li>
+          <li>Religious economic ethics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Medieval Economic Thought</h3>
+        </div>
+        <p class="unit-description">Study economic ideas during the medieval period, including scholastic economics.</p>
+        <ul class="topics-list">
+          <li>Scholastic economics</li>
+          <li>Thomas Aquinas</li>
+          <li>Just price theory</li>
+          <li>Usury prohibition</li>
+          <li>Islamic economic thought</li>
+          <li>Guild system economics</li>
+          <li>Medieval trade</li>
+          <li>Canon law and economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Mercantilism</h3>
+        </div>
+        <p class="unit-description">Understand the mercantilist school and early modern economic nationalism.</p>
+        <ul class="topics-list">
+          <li>Mercantilist principles</li>
+          <li>Balance of trade</li>
+          <li>Bullionism</li>
+          <li>National wealth concepts</li>
+          <li>Trade protection</li>
+          <li>Colonial economics</li>
+          <li>Thomas Mun</li>
+          <li>Jean-Baptiste Colbert</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">The Physiocrats</h3>
+        </div>
+        <p class="unit-description">Learn about the first school of economic thought and the origins of laissez-faire.</p>
+        <ul class="topics-list">
+          <li>François Quesnay</li>
+          <li>Tableau Économique</li>
+          <li>Natural order</li>
+          <li>Agricultural surplus</li>
+          <li>Laissez-faire origins</li>
+          <li>Single tax proposal</li>
+          <li>Economic circulation</li>
+          <li>Anti-mercantilism</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Classical Economics</h3>
+        </div>
+        <p class="unit-description">Study the foundational works of Adam Smith, David Ricardo, and classical economists.</p>
+        <ul class="topics-list">
+          <li>Adam Smith</li>
+          <li>Wealth of Nations</li>
+          <li>Invisible hand</li>
+          <li>David Ricardo</li>
+          <li>Comparative advantage</li>
+          <li>Labor theory of value</li>
+          <li>Thomas Malthus</li>
+          <li>Say's Law</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Marxian Economics</h3>
+        </div>
+        <p class="unit-description">Examine Karl Marx's critique of capitalism and revolutionary economic theory.</p>
+        <ul class="topics-list">
+          <li>Karl Marx</li>
+          <li>Das Kapital</li>
+          <li>Historical materialism</li>
+          <li>Labor theory of value</li>
+          <li>Surplus value</li>
+          <li>Class struggle</li>
+          <li>Capitalism contradictions</li>
+          <li>Socialist transformation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Marginal Revolution</h3>
+        </div>
+        <p class="unit-description">Understand the shift to marginal utility theory and the foundations of neoclassical economics.</p>
+        <ul class="topics-list">
+          <li>William Stanley Jevons</li>
+          <li>Carl Menger</li>
+          <li>Léon Walras</li>
+          <li>Marginal utility</li>
+          <li>Subjective value theory</li>
+          <li>Mathematical economics</li>
+          <li>General equilibrium</li>
+          <li>Austrian School origins</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Neoclassical Synthesis</h3>
+        </div>
+        <p class="unit-description">Study the development of neoclassical theory through Marshall, Pareto, and others.</p>
+        <ul class="topics-list">
+          <li>Alfred Marshall</li>
+          <li>Principles of Economics</li>
+          <li>Partial equilibrium</li>
+          <li>Vilfredo Pareto</li>
+          <li>Pareto efficiency</li>
+          <li>Welfare economics</li>
+          <li>Irving Fisher</li>
+          <li>Cambridge School</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Keynesian Revolution</h3>
+        </div>
+        <p class="unit-description">Explore John Maynard Keynes' revolutionary approach to macroeconomics and policy.</p>
+        <ul class="topics-list">
+          <li>John Maynard Keynes</li>
+          <li>General Theory</li>
+          <li>Liquidity preference</li>
+          <li>Effective demand</li>
+          <li>Investment theory</li>
+          <li>Fiscal policy</li>
+          <li>Keynesian multiplier</li>
+          <li>Post-Keynesian schools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Austrian School</h3>
+        </div>
+        <p class="unit-description">Study the Austrian tradition from Menger through Mises, Hayek, and modern Austrians.</p>
+        <ul class="topics-list">
+          <li>Carl Menger</li>
+          <li>Eugen von Böhm-Bawerk</li>
+          <li>Ludwig von Mises</li>
+          <li>Friedrich Hayek</li>
+          <li>Methodological individualism</li>
+          <li>Praxeology</li>
+          <li>Business cycle theory</li>
+          <li>Modern Austrian economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Chicago School</h3>
+        </div>
+        <p class="unit-description">Examine the Chicago School's approach to free markets and monetarism.</p>
+        <ul class="topics-list">
+          <li>Frank Knight</li>
+          <li>Milton Friedman</li>
+          <li>Monetarism</li>
+          <li>Gary Becker</li>
+          <li>Price theory</li>
+          <li>Efficient markets</li>
+          <li>Public choice theory</li>
+          <li>Law and economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Contemporary Economic Thought</h3>
+        </div>
+        <p class="unit-description">Explore modern developments including behavioral economics, new institutional economics, and beyond.</p>
+        <ul class="topics-list">
+          <li>New institutional economics</li>
+          <li>Behavioral economics</li>
+          <li>Information economics</li>
+          <li>Game theory</li>
+          <li>Experimental economics</li>
+          <li>Ecological economics</li>
+          <li>Complexity economics</li>
+          <li>Future directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Ancient Economic Thought</h1>
+      <p>Explore economic ideas from ancient civilizations and early philosophical traditions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Greek Economic Philosophy</h3>
+        <p>Discover how ancient Greek philosophers laid the foundation for economic thinking.</p>
+        <span class="history-badge">Philosophy</span>
+        <span class="history-badge">Value Theory</span>
+        <span class="history-badge">Ethics</span>
+        <div class="history-box">
+          Ancient Greek philosophers like Plato and Aristotle provided the earliest systematic thinking about economic issues, including the nature of value, exchange, and the role of economics in society. Their ideas influenced economic thought for centuries.
+        </div>
+        <div class="code-example">
+          # Ancient Greek Economic Ideas<br>
+          greek_economics = {<br>
+          &nbsp;&nbsp;"plato": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"work": "The Republic (380 BC)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_ideas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"division_of_labor": "Specialization based on natural abilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ideal_state": "Three-class society: rulers, guardians, workers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"money": "Medium of exchange to facilitate trade",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"justice": "Each person doing what they're best suited for"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"contributions": ["First systematic treatment of division of labor", "Recognition of specialization benefits"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"aristotle": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"works": ["Nicomachean Ethics", "Politics"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_ideas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"value_theory": "Use value vs exchange value distinction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"money_functions": "Medium of exchange, measure of value, store of value",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"natural_exchange": "Barter for mutual benefit",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"unnatural_exchange": "Trade for profit (chrematistics)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"usury": "Money breeding money is unnatural"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"legacy": "Influenced medieval scholastic economics for over 1000 years"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"economic_concepts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"household_management": "Oikonomia - managing the household",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"wealth_creation": "Natural vs artificial wealth",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"exchange_justice": "Fair exchange based on need and reciprocity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"private_property": "Debate over common vs private ownership"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Aristotelian Economics</h3>
+        <p>Examine Aristotle's detailed economic analysis and its lasting influence.</p>
+        <div class="concept-highlight">
+          Aristotle's Key Economic Insights:<br>
+          • Distinction between use value and exchange value<br>
+          • Three functions of money (medium, measure, store)<br>
+          • Natural vs unnatural modes of acquisition<br>
+          • Critique of usury and excessive profit-seeking
+        </div>
+        <div class="thinker-insight">
+          <strong>Aristotle's Value Theory:</strong><br>
+          Aristotle distinguished between the "use value" of goods (their ability to satisfy needs) and their "exchange value" (their power to command other goods in trade), a distinction that would reappear throughout economic history.
+        </div>
+        <div class="code-example">
+          # Aristotelian Economic Framework<br>
+          aristotelian_economics = {<br>
+          &nbsp;&nbsp;"wealth_acquisition": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"natural": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Satisfy household needs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Agriculture", "Hunting", "Herding"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Limited", "Self-sufficient", "Morally good"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"unnatural": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Accumulate money for its own sake",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Retail trade", "Usury", "Speculation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Unlimited", "Exploitative", "Morally questionable"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"exchange_theory": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"reciprocal_justice": "Equal exchange based on proportional equality",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"commensurability": "How to compare different goods in exchange",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"money_solution": "Common measure makes exchange possible",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"fair_price": "Based on costs and reasonable profit"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"money_theory": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"origin": "Conventional, not natural",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"functions": ["Measure of value", "Medium of exchange", "Store of value"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Durable", "Divisible", "Portable", "Valuable"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"criticism": "Money-making as end in itself is unnatural"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ancient Trade and Commerce</h3>
+        <p>Understand early commercial practices and their economic implications.</p>
+        <div class="theory-tool">
+          <strong>Ancient Commercial Developments:</strong><br>
+          • Development of currency and banking systems<br>
+          • Long-distance trade networks (Silk Road, Mediterranean)<br>
+          • Early forms of credit and commercial law<br>
+          • Specialization and urban development
+        </div>
+        <div class="school-indicator">
+          <strong
