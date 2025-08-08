@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Econometrics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 50%, #0ea5e9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(12, 74, 110, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0c4a6e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0284c7;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(12, 74, 110, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .econometrics-badge {
+      display: inline-block;
+      background: #f0f9ff;
+      color: #0c4a6e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .econometrics-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .regression-insight {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-left: 4px solid #10b981;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .statistics-tool {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #a16207;
+    }
+
+    .estimation-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Econometrics</h1>
+    <p>Master statistical methods for analyzing economic data and testing economic theories</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Econometrics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~110</span>
+          <div class="stat-label">Statistical Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Estimation Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">70+</span>
+          <div class="stat-label">Applied Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Econometrics</h3>
+        </div>
+        <p class="unit-description">Learn the foundations of econometric analysis and its role in economic research.</p>
+        <ul class="topics-list">
+          <li>What is econometrics?</li>
+          <li>Types of data</li>
+          <li>Economic models vs econometric models</li>
+          <li>Causality vs correlation</li>
+          <li>Steps in econometric analysis</li>
+          <li>Software introduction</li>
+          <li>Data sources</li>
+          <li>Research methodology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Probability and Statistics Review</h3>
+        </div>
+        <p class="unit-description">Master essential probability and statistics concepts needed for econometric analysis.</p>
+        <ul class="topics-list">
+          <li>Probability distributions</li>
+          <li>Expected value and variance</li>
+          <li>Joint and conditional distributions</li>
+          <li>Central limit theorem</li>
+          <li>Sampling distributions</li>
+          <li>Hypothesis testing</li>
+          <li>Confidence intervals</li>
+          <li>Maximum likelihood</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Simple Linear Regression</h3>
+        </div>
+        <p class="unit-description">Understand the basics of regression analysis with one explanatory variable.</p>
+        <ul class="topics-list">
+          <li>Regression model assumptions</li>
+          <li>Ordinary least squares</li>
+          <li>Properties of OLS estimators</li>
+          <li>Gauss-Markov theorem</li>
+          <li>Goodness of fit</li>
+          <li>Hypothesis testing</li>
+          <li>Confidence intervals</li>
+          <li>Prediction intervals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Multiple Linear Regression</h3>
+        </div>
+        <p class="unit-description">Extend regression analysis to models with multiple explanatory variables.</p>
+        <ul class="topics-list">
+          <li>Multiple regression model</li>
+          <li>OLS estimation</li>
+          <li>Interpretation of coefficients</li>
+          <li>Omitted variable bias</li>
+          <li>Multicollinearity</li>
+          <li>F-tests</li>
+          <li>Dummy variables</li>
+          <li>Interaction terms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Regression Diagnostics</h3>
+        </div>
+        <p class="unit-description">Learn to test and validate regression model assumptions and identify problems.</p>
+        <ul class="topics-list">
+          <li>Residual analysis</li>
+          <li>Normality tests</li>
+          <li>Heteroskedasticity</li>
+          <li>Autocorrelation</li>
+          <li>Outliers and influence</li>
+          <li>Specification tests</li>
+          <li>Model selection criteria</li>
+          <li>Remedial measures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Violations of Classical Assumptions</h3>
+        </div>
+        <p class="unit-description">Address problems when regression assumptions are violated and learn corrective methods.</p>
+        <ul class="topics-list">
+          <li>Heteroskedasticity consequences</li>
+          <li>White's test</li>
+          <li>Weighted least squares</li>
+          <li>Robust standard errors</li>
+          <li>Autocorrelation detection</li>
+          <li>Durbin-Watson test</li>
+          <li>Generalized least squares</li>
+          <li>Newey-West estimator</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Instrumental Variables</h3>
+        </div>
+        <p class="unit-description">Learn to handle endogeneity problems using instrumental variables methods.</p>
+        <ul class="topics-list">
+          <li>Endogeneity problem</li>
+          <li>Instrumental variables concept</li>
+          <li>Two-stage least squares</li>
+          <li>Instrument validity</li>
+          <li>Overidentification tests</li>
+          <li>Weak instruments</li>
+          <li>Applications in economics</li>
+          <li>Alternative methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Panel Data Methods</h3>
+        </div>
+        <p class="unit-description">Analyze data that varies across individuals and time using panel data techniques.</p>
+        <ul class="topics-list">
+          <li>Panel data structure</li>
+          <li>Fixed effects model</li>
+          <li>Random effects model</li>
+          <li>Hausman test</li>
+          <li>First differences</li>
+          <li>Dynamic panel models</li>
+          <li>Unbalanced panels</li>
+          <li>Panel unit roots</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Limited Dependent Variables</h3>
+        </div>
+        <p class="unit-description">Study models for binary, categorical, and censored dependent variables.</p>
+        <ul class="topics-list">
+          <li>Binary choice models</li>
+          <li>Linear probability model</li>
+          <li>Logit and probit models</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Marginal effects</li>
+          <li>Multinomial models</li>
+          <li>Ordered models</li>
+          <li>Censored regression</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Time Series Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze time-dependent data and understand temporal relationships in economics.</p>
+        <ul class="topics-list">
+          <li>Time series concepts</li>
+          <li>Stationarity</li>
+          <li>Unit root tests</li>
+          <li>ARIMA models</li>
+          <li>Vector autoregressions</li>
+          <li>Cointegration</li>
+          <li>Error correction models</li>
+          <li>Forecasting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore specialized econometric methods for specific research problems.</p>
+        <ul class="topics-list">
+          <li>Simultaneous equations</li>
+          <li>Treatment effects</li>
+          <li>Regression discontinuity</li>
+          <li>Difference-in-differences</li>
+          <li>Matching methods</li>
+          <li>Quantile regression</li>
+          <li>Spatial econometrics</li>
+          <li>Machine learning methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Applied Econometrics</h3>
+        </div>
+        <p class="unit-description">Apply econometric methods to real-world economic problems and policy evaluation.</p>
+        <ul class="topics-list">
+          <li>Research design</li>
+          <li>Data collection and cleaning</li>
+          <li>Model specification</li>
+          <li>Robustness checks</li>
+          <li>Policy evaluation</li>
+          <li>Presenting results</li>
+          <li>Reproducible research</li>
+          <li>Case studies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Econometrics</h1>
+      <p>Learn the foundations of econometric analysis and its role in economic research.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Econometrics?</h3>
+        <p>Understand the definition, scope, and purpose of econometric analysis in economics.</p>
+        <span class="econometrics-badge">Statistical Analysis</span>
+        <span class="econometrics-badge">Economic Theory</span>
+        <span class="econometrics-badge">Data Driven</span>
+        <div class="econometrics-box">
+          Econometrics is the application of statistical methods to economic data in order to give empirical content to economic relationships. It combines economic theory, mathematics, and statistical inference to quantify economic phenomena and test economic theories.
+        </div>
+        <div class="code-example">
+          # Econometrics Definition Framework<br>
+          econometrics = {<br>
+          &nbsp;&nbsp;"definition": "Statistical analysis of economic data",<br>
+          &nbsp;&nbsp;"components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"economic_theory": "Provides hypotheses to test",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mathematics": "Formal model specification",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"statistics": "Tools for estimation and inference",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data": "Empirical information for analysis"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"purposes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Summarize economic relationships",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"estimation": "Quantify economic parameters",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"testing": "Validate economic theories",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"forecasting": "Predict future economic outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_analysis": "Evaluate policy effectiveness"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"methodology": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"specification": "Choose appropriate model",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"estimation": "Use data to estimate parameters",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"evaluation": "Assess model adequacy",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interpretation": "Draw economic conclusions"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Data</h3>
+        <p>Learn about different types of data used in econometric analysis and their characteristics.</p>
+        <div class="concept-highlight">
+          Main Data Types:<br>
+          • Cross-sectional: Different units at one point in time<br>
+          • Time series: One unit over multiple time periods<br>
+          • Panel data: Multiple units over multiple time periods<br>
+          • Experimental vs observational data
+        </div>
+        <div class="regression-insight">
+          <strong>Data Characteristics Matter:</strong><br>
+          • Sample size affects precision of estimates<br>
+          • Data frequency impacts analysis possibilities<br>
+          • Data quality determines reliability of conclusions<br>
+          • Missing data creates analytical challenges
+        </div>
+        <div class="code-example">
+          # Data Types Classification<br>
+          data_types = {<br>
+          &nbsp;&nbsp;"cross_sectional": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Different observations at single time point",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Household survey", "Firm data", "Country comparison"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Large sample sizes", "Variation across units"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": ["No time dimension", "Omitted variable bias"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"time_series": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Single unit observed over time",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["GDP over years", "Stock prices", "Unemployment rate"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Dynamic relationships", "Trend analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": ["Small samples", "Non-stationarity issues"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"panel_data": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Multiple units over multiple time periods",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Household panel", "Firm panel", "Country panel"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Control for unobserved heterogeneity", "Large samples"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": ["Complex structure", "Attrition problems"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"data_quality": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement_error": "Inaccurate data collection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"missing_data": "Incomplete observations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"selection_bias": "Non-random sampling",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_mining": "Over-searching for results"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Causality vs Correlation</h3>
+        <p>Understand the crucial distinction between correlation and causation in econometric analysis.</p>
+        <div class="statistics-tool">
+          <strong>Key Principle:</strong><br>
+          Correlation does not imply causation. Just because two variables move together doesn't mean one causes the other. Econometrics seeks to identify causal relationships, not just correlations.
+        </div>
+        <div class="estimation-indicator">
+          <strong>Challenges in Establishing Causality:</strong><br>
+          • Omitted variable bias: Missing important variables<br>
+          • Reverse causality: Y might cause X instead of X causing Y<br>
+          • Simultaneity: X and Y might cause each other<br>
+          • Selection bias: Non-random assignment to treatment
+        </div>
+        <div class="code-example">
+          # Causality vs Correlation Framework<br>
+          causality_analysis = {<br>
+          &nbsp;&nbsp;"correlation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Statistical association between variables",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": "Correlation coefficient (-1 to +1)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interpretation": "How variables move together",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": "Doesn't imply causation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"causation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "One variable directly affects another",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["Temporal precedence", "Covariation", "No confounders"],<br>
