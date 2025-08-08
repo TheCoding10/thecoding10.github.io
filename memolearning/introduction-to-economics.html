@@ -1,0 +1,742 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e3a8a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .economics-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .economics-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e3a8a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .market-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .policy-tool {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #a16207;
+    }
+
+    .economic-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Introduction to Economics</h1>
+    <p>Understand how markets work, policies impact society, and economic forces shape our world</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Introduction to Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Economic Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Economic Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">80+</span>
+          <div class="stat-label">Real-World Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">What is Economics?</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental nature of economics, scarcity, and how societies make choices.</p>
+        <ul class="topics-list">
+          <li>Definition of economics</li>
+          <li>Scarcity and choice</li>
+          <li>Opportunity cost</li>
+          <li>Economic thinking</li>
+          <li>Positive vs normative economics</li>
+          <li>Economic methodology</li>
+          <li>Economic systems</li>
+          <li>Role of economists</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Supply and Demand</h3>
+        </div>
+        <p class="unit-description">Master the fundamental forces that determine prices and quantities in markets.</p>
+        <ul class="topics-list">
+          <li>Law of demand</li>
+          <li>Demand curves and shifts</li>
+          <li>Law of supply</li>
+          <li>Supply curves and shifts</li>
+          <li>Market equilibrium</li>
+          <li>Price changes</li>
+          <li>Consumer and producer surplus</li>
+          <li>Market efficiency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Elasticity</h3>
+        </div>
+        <p class="unit-description">Understand how responsive demand and supply are to changes in price and other factors.</p>
+        <ul class="topics-list">
+          <li>Price elasticity of demand</li>
+          <li>Income elasticity</li>
+          <li>Cross-price elasticity</li>
+          <li>Price elasticity of supply</li>
+          <li>Elasticity and revenue</li>
+          <li>Determinants of elasticity</li>
+          <li>Applications of elasticity</li>
+          <li>Tax incidence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Consumer Theory</h3>
+        </div>
+        <p class="unit-description">Analyze how consumers make choices and maximize their satisfaction given budget constraints.</p>
+        <ul class="topics-list">
+          <li>Utility theory</li>
+          <li>Budget constraints</li>
+          <li>Indifference curves</li>
+          <li>Consumer equilibrium</li>
+          <li>Income and substitution effects</li>
+          <li>Consumer choice applications</li>
+          <li>Behavioral economics basics</li>
+          <li>Market demand derivation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Producer Theory</h3>
+        </div>
+        <p class="unit-description">Examine how firms make production decisions and minimize costs to maximize profits.</p>
+        <ul class="topics-list">
+          <li>Production functions</li>
+          <li>Short-run vs long-run</li>
+          <li>Law of diminishing returns</li>
+          <li>Cost concepts</li>
+          <li>Cost curves</li>
+          <li>Economies of scale</li>
+          <li>Profit maximization</li>
+          <li>Supply curve derivation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Market Structures</h3>
+        </div>
+        <p class="unit-description">Compare different market structures and their impact on pricing, output, and efficiency.</p>
+        <ul class="topics-list">
+          <li>Perfect competition</li>
+          <li>Monopoly</li>
+          <li>Monopolistic competition</li>
+          <li>Oligopoly</li>
+          <li>Market power</li>
+          <li>Price discrimination</li>
+          <li>Game theory basics</li>
+          <li>Antitrust policy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Market Failures</h3>
+        </div>
+        <p class="unit-description">Understand when markets fail to allocate resources efficiently and potential solutions.</p>
+        <ul class="topics-list">
+          <li>Externalities</li>
+          <li>Public goods</li>
+          <li>Common resources</li>
+          <li>Information asymmetries</li>
+          <li>Market power problems</li>
+          <li>Government intervention</li>
+          <li>Regulation vs deregulation</li>
+          <li>Cost-benefit analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Introduction to Macroeconomics</h3>
+        </div>
+        <p class="unit-description">Transition from individual markets to the overall economy and key macroeconomic indicators.</p>
+        <ul class="topics-list">
+          <li>GDP measurement</li>
+          <li>Real vs nominal GDP</li>
+          <li>Economic growth</li>
+          <li>Business cycles</li>
+          <li>Unemployment types</li>
+          <li>Inflation measurement</li>
+          <li>Price indices</li>
+          <li>Economic indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Aggregate Demand and Supply</h3>
+        </div>
+        <p class="unit-description">Apply supply and demand concepts to the entire economy and understand macroeconomic equilibrium.</p>
+        <ul class="topics-list">
+          <li>Aggregate demand curve</li>
+          <li>Consumption function</li>
+          <li>Investment demand</li>
+          <li>Government spending</li>
+          <li>Net exports</li>
+          <li>Aggregate supply curve</li>
+          <li>Macroeconomic equilibrium</li>
+          <li>Economic shocks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Fiscal Policy</h3>
+        </div>
+        <p class="unit-description">Examine how government spending and taxation affect the economy and economic stability.</p>
+        <ul class="topics-list">
+          <li>Government budget</li>
+          <li>Fiscal policy tools</li>
+          <li>Multiplier effect</li>
+          <li>Automatic stabilizers</li>
+          <li>Budget deficits and surplus</li>
+          <li>National debt</li>
+          <li>Crowding out effect</li>
+          <li>Fiscal policy limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Monetary Policy</h3>
+        </div>
+        <p class="unit-description">Learn how central banks control money supply and interest rates to influence economic activity.</p>
+        <ul class="topics-list">
+          <li>Money functions</li>
+          <li>Banking system</li>
+          <li>Money creation</li>
+          <li>Federal Reserve System</li>
+          <li>Monetary policy tools</li>
+          <li>Interest rates</li>
+          <li>Money demand</li>
+          <li>Monetary transmission</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">International Economics</h3>
+        </div>
+        <p class="unit-description">Explore trade, exchange rates, and how economies interact in the global marketplace.</p>
+        <ul class="topics-list">
+          <li>Comparative advantage</li>
+          <li>Trade benefits</li>
+          <li>Trade barriers</li>
+          <li>Exchange rates</li>
+          <li>Balance of payments</li>
+          <li>Trade policies</li>
+          <li>Globalization effects</li>
+          <li>Economic integration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: What is Economics?</h1>
+      <p>Explore the fundamental nature of economics, scarcity, and how societies make choices.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Definition of Economics</h3>
+        <p>Understand what economics studies and its scope as a social science.</p>
+        <span class="economics-badge">Social Science</span>
+        <span class="economics-badge">Resource Allocation</span>
+        <span class="economics-badge">Decision Making</span>
+        <div class="economics-box">
+          Economics is the study of how societies allocate scarce resources among unlimited wants and needs. It examines how individuals, businesses, and governments make decisions about production, distribution, and consumption of goods and services.
+        </div>
+        <div class="code-example">
+          # Economics Definition Framework<br>
+          economics_definition = {<br>
+          &nbsp;&nbsp;"core_definition": "Study of how societies allocate scarce resources",<br>
+          &nbsp;&nbsp;"key_elements": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scarcity": "Limited resources relative to unlimited wants",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"choice": "Need to choose among alternatives",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trade_offs": "Giving up one thing to get another",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"efficiency": "Making the best use of available resources"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"branches": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"microeconomics": "Individual and firm behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"macroeconomics": "Economy as a whole",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"international": "Global economic interactions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"behavioral": "Psychology in economic decisions"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"fundamental_questions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"What to produce?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"How to produce?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"For whom to produce?"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Scarcity and Choice</h3>
+        <p>Explore the fundamental economic problem that drives all economic decisions.</p>
+        <div class="concept-highlight">
+          The Scarcity Problem:<br>
+          • Unlimited human wants and needs<br>
+          • Limited resources (land, labor, capital)<br>
+          • Forces individuals and societies to make choices<br>
+          • Creates the need for economic systems
+        </div>
+        <div class="market-insight">
+          <strong>Types of Resources (Factors of Production):</strong><br>
+          • Land: Natural resources including raw materials<br>
+          • Labor: Human effort and skills<br>
+          • Capital: Tools, machinery, and infrastructure<br>
+          • Entrepreneurship: Innovation and risk-taking
+        </div>
+        <div class="code-example">
+          # Scarcity and Choice Model<br>
+          scarcity_model = {<br>
+          &nbsp;&nbsp;"resources": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"land": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Natural resources", "Agricultural land", "Mineral deposits"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Fixed supply", "Renewable/Non-renewable"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"labor": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Physical work", "Mental work", "Skills and education"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Variable quality", "Can be improved"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capital": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Machinery", "Buildings", "Technology"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Human-made", "Depreciates over time"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"entrepreneurship": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Innovation", "Risk-taking", "Business organization"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Combines other resources", "Seeks profit"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"choice_implications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trade_offs": "Cannot have everything we want",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prioritization": "Must rank wants by importance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"resource_allocation": "Decide how to use limited resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"efficiency_need": "Make best use of what we have"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Opportunity Cost</h3>
+        <p>Learn about the true cost of any choice - what you give up to get something else.</p>
+        <div class="policy-tool">
+          <strong>Opportunity Cost Principle:</strong><br>
+          The opportunity cost of any choice is the value of the next best alternative that must be given up. This applies to individuals, businesses, and governments in all economic decisions.
+        </div>
+        <div class="economic-indicator">
+          <strong>Examples of Opportunity Cost:</strong><br>
+          • Student: Time studying vs. working for money<br>
+          • Business: Investing in new equipment vs. hiring workers<br>
+          • Government: Spending on defense vs. education<br>
+          • Society: Current consumption vs. future investment
+        </div>
+        <div class="code-example">
+          # Opportunity Cost Calculator<br>
+          def calculate_opportunity_cost(choice_a, choice_b, selected):<br>
+          &nbsp;&nbsp;"""Calculate opportunity cost of a decision"""<br>
+          &nbsp;&nbsp;if selected == 'A':<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;opportunity_cost = choice_b['value']<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;benefit_gained = choice_a['value']<br>
+          &nbsp;&nbsp;else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;opportunity_cost = choice_a['value']<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;benefit_gained = choice_b['value']<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"opportunity_cost": opportunity_cost,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"benefit_gained": benefit_gained,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"net_benefit": benefit_gained - opportunity_cost<br>
+          &nbsp;&nbsp;}<br>
+          <br>
+          # Example: Student's time allocation<br>
+          study_option = {"value
