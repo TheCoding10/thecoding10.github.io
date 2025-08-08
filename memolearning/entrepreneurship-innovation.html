@@ -1,0 +1,746 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Entrepreneurship & Innovation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #b91c1c 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #ea580c, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #ea580c, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .startup-badge {
+      display: inline-block;
+      background: #fed7d7;
+      color: #b91c1c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .startup-story {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .innovation-framework {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .business-model {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Entrepreneurship & Innovation</h1>
+    <p>Master the art of creating and scaling innovative ventures from idea to successful business</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Entrepreneurship & Innovation Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">Startup Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Frameworks & Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Case Studies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Entrepreneurial Mindset</h3>
+        </div>
+        <p class="unit-description">Develop the thinking patterns and attitudes that drive successful entrepreneurs.</p>
+        <ul class="topics-list">
+          <li>Entrepreneurial characteristics</li>
+          <li>Risk tolerance and management</li>
+          <li>Growth mindset development</li>
+          <li>Opportunity vs obstacle thinking</li>
+          <li>Resilience and perseverance</li>
+          <li>Creative problem-solving</li>
+          <li>Passion and purpose alignment</li>
+          <li>Failure as learning opportunity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Opportunity Recognition</h3>
+        </div>
+        <p class="unit-description">Learn to identify and evaluate promising business opportunities in the market.</p>
+        <ul class="topics-list">
+          <li>Market research fundamentals</li>
+          <li>Problem identification techniques</li>
+          <li>Trend analysis and forecasting</li>
+          <li>Customer pain point discovery</li>
+          <li>Competitive landscape analysis</li>
+          <li>Technology trend monitoring</li>
+          <li>Opportunity evaluation criteria</li>
+          <li>Market sizing and validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Innovation Process</h3>
+        </div>
+        <p class="unit-description">Master systematic approaches to generating and developing innovative solutions.</p>
+        <ul class="topics-list">
+          <li>Innovation types and categories</li>
+          <li>Creative ideation techniques</li>
+          <li>Design thinking methodology</li>
+          <li>Prototyping and testing</li>
+          <li>Innovation management systems</li>
+          <li>Open innovation models</li>
+          <li>Technology transfer</li>
+          <li>Innovation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Business Model Design</h3>
+        </div>
+        <p class="unit-description">Create sustainable business models that capture and deliver value effectively.</p>
+        <ul class="topics-list">
+          <li>Business Model Canvas</li>
+          <li>Value proposition design</li>
+          <li>Revenue model selection</li>
+          <li>Customer segments definition</li>
+          <li>Distribution channels</li>
+          <li>Cost structure optimization</li>
+          <li>Partnership strategies</li>
+          <li>Business model testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Market Validation</h3>
+        </div>
+        <p class="unit-description">Validate your business ideas and assumptions before full-scale launch.</p>
+        <ul class="topics-list">
+          <li>Lean startup methodology</li>
+          <li>Minimum viable product (MVP)</li>
+          <li>Customer development process</li>
+          <li>Hypothesis testing</li>
+          <li>Market validation techniques</li>
+          <li>Pivot vs persevere decisions</li>
+          <li>Customer feedback loops</li>
+          <li>Product-market fit assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Startup Financing</h3>
+        </div>
+        <p class="unit-description">Understand funding options and financial strategies for new ventures.</p>
+        <ul class="topics-list">
+          <li>Bootstrapping strategies</li>
+          <li>Angel investors and VCs</li>
+          <li>Crowdfunding platforms</li>
+          <li>Government grants and loans</li>
+          <li>Equity vs debt financing</li>
+          <li>Valuation methods</li>
+          <li>Investment pitch preparation</li>
+          <li>Financial planning and projections</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Business Plan Development</h3>
+        </div>
+        <p class="unit-description">Create comprehensive business plans that guide strategy and attract investors.</p>
+        <ul class="topics-list">
+          <li>Business plan components</li>
+          <li>Executive summary writing</li>
+          <li>Market analysis section</li>
+          <li>Competitive analysis</li>
+          <li>Marketing and sales strategy</li>
+          <li>Operations plan</li>
+          <li>Financial projections</li>
+          <li>Risk assessment and mitigation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Team Building & Leadership</h3>
+        </div>
+        <p class="unit-description">Build and lead high-performing teams for startup success.</p>
+        <ul class="topics-list">
+          <li>Co-founder selection</li>
+          <li>Team composition strategy</li>
+          <li>Hiring and recruitment</li>
+          <li>Equity distribution</li>
+          <li>Company culture development</li>
+          <li>Leadership styles for startups</li>
+          <li>Conflict resolution</li>
+          <li>Performance management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Marketing & Customer Acquisition</h3>
+        </div>
+        <p class="unit-description">Develop effective marketing strategies to acquire and retain customers.</p>
+        <ul class="topics-list">
+          <li>Digital marketing fundamentals</li>
+          <li>Content marketing strategy</li>
+          <li>Social media marketing</li>
+          <li>Search engine optimization</li>
+          <li>Customer acquisition channels</li>
+          <li>Growth hacking techniques</li>
+          <li>Brand building for startups</li>
+          <li>Customer retention strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Scaling & Growth Strategies</h3>
+        </div>
+        <p class="unit-description">Learn strategies for scaling your venture and managing rapid growth.</p>
+        <ul class="topics-list">
+          <li>Growth strategy frameworks</li>
+          <li>Scaling operations</li>
+          <li>International expansion</li>
+          <li>Technology scaling</li>
+          <li>Team scaling challenges</li>
+          <li>Process optimization</li>
+          <li>Strategic partnerships</li>
+          <li>Exit strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Legal & Regulatory Issues</h3>
+        </div>
+        <p class="unit-description">Navigate legal requirements and protect your intellectual property.</p>
+        <ul class="topics-list">
+          <li>Business entity selection</li>
+          <li>Intellectual property protection</li>
+          <li>Contract fundamentals</li>
+          <li>Employment law basics</li>
+          <li>Regulatory compliance</li>
+          <li>Privacy and data protection</li>
+          <li>International legal considerations</li>
+          <li>Legal risk management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Social Entrepreneurship</h3>
+        </div>
+        <p class="unit-description">Create ventures that generate both profit and positive social impact.</p>
+        <ul class="topics-list">
+          <li>Social enterprise models</li>
+          <li>Impact measurement</li>
+          <li>Sustainable business practices</li>
+          <li>B-Corporation certification</li>
+          <li>Social impact investing</li>
+          <li>Community engagement</li>
+          <li>Triple bottom line</li>
+          <li>Global development entrepreneurship</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Entrepreneurial Mindset</h1>
+      <p>Develop the thinking patterns and attitudes that drive successful entrepreneurs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Entrepreneurial Characteristics</h3>
+        <p>Learn the key traits and characteristics that successful entrepreneurs typically possess.</p>
+        <span class="startup-badge">Mindset</span>
+        <span class="startup-badge">Traits</span>
+        <span class="startup-badge">Success Factors</span>
+        <div class="algorithm-box">
+          Successful entrepreneurs typically exhibit traits like risk tolerance, innovation, persistence, adaptability, leadership, and strong work ethic. However, these can be developed through practice and experience.
+        </div>
+        <div class="code-example">
+          # Entrepreneurial traits assessment<br>
+          entrepreneur_traits = {<br>
+          &nbsp;&nbsp;"core_characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"risk_tolerance": "Comfortable with uncertainty",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"innovation": "Creates new solutions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"persistence": "Doesn't give up easily",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"adaptability": "Adjusts to changing conditions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"leadership": "Inspires and guides others",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"vision": "Sees future opportunities"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"behavioral_patterns": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"opportunity_seeking": "Always looking for chances",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"resource_mobilization": "Gathers needed resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"network_building": "Develops strong connections",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"learning_orientation": "Continuously improves",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"action_oriented": "Executes quickly"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"development_areas": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Financial literacy",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Communication skills",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Technical expertise",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Market knowledge",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Strategic thinking"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Self-assessment checklist<br>
+          def assess_entrepreneur_readiness():<br>
+          &nbsp;&nbsp;questions = [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Do I enjoy taking calculated risks?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Can I handle failure and bounce back?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Do I see problems as opportunities?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Am I comfortable with ambiguity?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Do I have strong self-motivation?"<br>
+          &nbsp;&nbsp;]<br>
+          &nbsp;&nbsp;return questions
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Risk Tolerance and Management</h3>
+        <p>Understand how to assess, take, and manage risks effectively in entrepreneurial ventures.</p>
+        <div class="concept-highlight">
+          Risk Management Framework:<br>
+          • Risk Identification: What could go wrong?<br>
+          • Risk Assessment: How likely and impactful?<br>
+          • Risk Mitigation: How to reduce exposure?<br>
+          • Risk Monitoring: Ongoing risk tracking
+        </div>
+        <div class="innovation-framework">
+          Types of Entrepreneurial Risk:<br>
+          • Financial Risk: Money and investment loss<br>
+          • Market Risk: Customer acceptance uncertainty<br>
+          • Technology Risk: Technical feasibility challenges<br>
+          • Operational Risk: Execution and delivery issues<br>
+          • Regulatory Risk: Legal and compliance changes
+        </div>
+        <div class="code-example">
+          # Risk assessment matrix<br>
+          risk_categories = {<br>
+          &nbsp;&nbsp;"financial_risks": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cash_flow": {"probability": "High", "impact": "High"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"funding": {"probability": "Medium", "impact": "High"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cost_overruns": {"probability": "Medium", "impact": "Medium"}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"market_risks": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"competition": {"probability": "High", "impact": "Medium"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"demand_shift": {"probability": "Medium", "impact": "High"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pricing_pressure": {"probability": "Medium", "impact": "Medium"}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"operational_risks": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_person": {"probability": "Low", "impact": "High"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"supply_chain": {"probability": "Medium", "impact": "Medium"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quality_issues": {"probability": "Low", "impact": "High"}<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Risk mitigation strategies<br>
+          mitigation_strategies = {<br>
+          &nbsp;&nbsp;"diversification": "Multiple revenue streams",<br>
+          &nbsp;&nbsp;"insurance": "Transfer certain risks",<br>
+          &nbsp;&nbsp;"planning": "Scenario and contingency plans",<br>
+          &nbsp;&nbsp;"testing": "Validate before full commitment",<br>
+          &nbsp;&nbsp;"partnerships": "Share risks with others"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Growth Mindset Development</h3>
+        <p>Cultivate a growth mindset that embraces challenges and sees failures as learning opportunities.</p>
+        <div class="startup-story">
+          <strong>Growth Mindset Example:</strong> When Airbnb's founders were rejected by investors and struggled to gain traction, they didn't see it as failure but as valuable feedback. They continuously iterated their business model until they found product-market fit.
+        </div>
+        <div class="algorithm-box">
+          Growth mindset believes abilities can be developed through dedication and hard work. This creates resilience, love of learning, and the persistence essential for entrepreneurial success.
+        </div>
+        <div class="code-example">
+          # Growth vs Fixed mindset comparison<br>
+          mindset_comparison = {<br>
+          &nbsp;&nbsp;"challenges": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"growth": "Embraces challenges as opportunities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"fixed": "Avoids challenges to protect ego"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"obstacles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"growth": "Persists in face of setbacks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"fixed": "Gives up when encountering obstacles"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"effort": {<br>
