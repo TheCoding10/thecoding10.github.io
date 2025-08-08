@@ -1,0 +1,739 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Machine Learning & AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🤖';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c2d12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ai-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .ml-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .practical-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .performance-indicator {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🤖 Introduction to Machine Learning & AI</h1>
+    <p>Discover the fundamentals of artificial intelligence and machine learning algorithms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">ML & AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">AI/ML Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Practical Projects</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to AI and ML</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals, history, and applications of artificial intelligence and machine learning.</p>
+        <ul class="topics-list">
+          <li>What is AI and ML?</li>
+          <li>History and evolution</li>
+          <li>Types of AI systems</li>
+          <li>ML paradigms</li>
+          <li>Applications and use cases</li>
+          <li>Ethics and bias</li>
+          <li>Current limitations</li>
+          <li>Future directions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Preprocessing</h3>
+        </div>
+        <p class="unit-description">Learn essential techniques for cleaning, transforming, and preparing data for machine learning.</p>
+        <ul class="topics-list">
+          <li>Data collection and sources</li>
+          <li>Data cleaning techniques</li>
+          <li>Handling missing values</li>
+          <li>Outlier detection</li>
+          <li>Feature scaling</li>
+          <li>Encoding categorical data</li>
+          <li>Feature engineering</li>
+          <li>Data validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Supervised Learning</h3>
+        </div>
+        <p class="unit-description">Master algorithms that learn from labeled data to make predictions on new examples.</p>
+        <ul class="topics-list">
+          <li>Linear regression</li>
+          <li>Logistic regression</li>
+          <li>Decision trees</li>
+          <li>Random forests</li>
+          <li>Support vector machines</li>
+          <li>k-Nearest neighbors</li>
+          <li>Naive Bayes</li>
+          <li>Ensemble methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Unsupervised Learning</h3>
+        </div>
+        <p class="unit-description">Explore algorithms that find patterns and structure in data without labeled examples.</p>
+        <ul class="topics-list">
+          <li>K-means clustering</li>
+          <li>Hierarchical clustering</li>
+          <li>DBSCAN</li>
+          <li>Principal Component Analysis</li>
+          <li>t-SNE</li>
+          <li>Association rules</li>
+          <li>Anomaly detection</li>
+          <li>Dimensionality reduction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Model Evaluation and Validation</h3>
+        </div>
+        <p class="unit-description">Learn how to assess model performance and avoid overfitting through proper validation techniques.</p>
+        <ul class="topics-list">
+          <li>Train/validation/test splits</li>
+          <li>Cross-validation</li>
+          <li>Performance metrics</li>
+          <li>Confusion matrices</li>
+          <li>ROC curves and AUC</li>
+          <li>Overfitting and underfitting</li>
+          <li>Regularization techniques</li>
+          <li>Model selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Neural Networks Basics</h3>
+        </div>
+        <p class="unit-description">Introduction to artificial neural networks and the foundations of deep learning.</p>
+        <ul class="topics-list">
+          <li>Perceptron model</li>
+          <li>Multi-layer perceptrons</li>
+          <li>Activation functions</li>
+          <li>Backpropagation</li>
+          <li>Gradient descent</li>
+          <li>Loss functions</li>
+          <li>Network architectures</li>
+          <li>Training strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Deep Learning Fundamentals</h3>
+        </div>
+        <p class="unit-description">Explore advanced neural network architectures and deep learning techniques.</p>
+        <ul class="topics-list">
+          <li>Convolutional Neural Networks</li>
+          <li>Recurrent Neural Networks</li>
+          <li>LSTM and GRU</li>
+          <li>Autoencoders</li>
+          <li>Transfer learning</li>
+          <li>Regularization in deep learning</li>
+          <li>Optimization algorithms</li>
+          <li>Popular frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Reinforcement Learning</h3>
+        </div>
+        <p class="unit-description">Learn how agents can learn optimal behavior through interaction with environments.</p>
+        <ul class="topics-list">
+          <li>Markov Decision Processes</li>
+          <li>Q-learning</li>
+          <li>Policy gradients</li>
+          <li>Value functions</li>
+          <li>Exploration vs exploitation</li>
+          <li>Deep Q-Networks</li>
+          <li>Actor-Critic methods</li>
+          <li>Multi-agent systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Natural Language Processing</h3>
+        </div>
+        <p class="unit-description">Discover techniques for processing and understanding human language with AI.</p>
+        <ul class="topics-list">
+          <li>Text preprocessing</li>
+          <li>Bag of words</li>
+          <li>TF-IDF</li>
+          <li>Word embeddings</li>
+          <li>Named entity recognition</li>
+          <li>Sentiment analysis</li>
+          <li>Language models</li>
+          <li>Transformer architectures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Computer Vision</h3>
+        </div>
+        <p class="unit-description">Learn how machines can interpret and understand visual information from images and videos.</p>
+        <ul class="topics-list">
+          <li>Image processing basics</li>
+          <li>Feature extraction</li>
+          <li>Object detection</li>
+          <li>Image classification</li>
+          <li>Convolutional layers</li>
+          <li>Image segmentation</li>
+          <li>Face recognition</li>
+          <li>Video analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">ML Engineering and Deployment</h3>
+        </div>
+        <p class="unit-description">Learn practical skills for deploying machine learning models in production systems.</p>
+        <ul class="topics-list">
+          <li>Model deployment strategies</li>
+          <li>API development</li>
+          <li>Model monitoring</li>
+          <li>A/B testing</li>
+          <li>Scalability considerations</li>
+          <li>MLOps practices</li>
+          <li>Version control for ML</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Ethics and Future of AI</h3>
+        </div>
+        <p class="unit-description">Explore the ethical implications of AI and emerging trends in artificial intelligence.</p>
+        <ul class="topics-list">
+          <li>AI bias and fairness</li>
+          <li>Interpretability and explainability</li>
+          <li>Privacy and security</li>
+          <li>Responsible AI development</li>
+          <li>Societal impact</li>
+          <li>Emerging technologies</li>
+          <li>AGI considerations</li>
+          <li>Career paths in AI</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to AI and ML</h1>
+      <p>Understand the fundamentals, history, and applications of artificial intelligence and machine learning.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is AI and ML?</h3>
+        <p>Learn the fundamental definitions and distinctions between artificial intelligence and machine learning.</p>
+        <span class="ai-badge">AI Definition</span>
+        <span class="ai-badge">ML Concepts</span>
+        <span class="ai-badge">Intelligence</span>
+        <div class="algorithm-box">
+          Artificial Intelligence (AI) is the simulation of human intelligence in machines. Machine Learning (ML) is a subset of AI that enables systems to learn and improve from experience without being explicitly programmed.
+        </div>
+        <div class="code-example">
+          # AI vs ML Definitions<br>
+          ai_ml_concepts = {<br>
+          &nbsp;&nbsp;"artificial_intelligence": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Simulation of human intelligence in machines",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"goal": "Create systems that can perform tasks requiring human-like intelligence",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"includes": ["Reasoning", "Learning", "Perception", "Language understanding"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Narrow AI", "General AI", "Superintelligence"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"machine_learning": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Subset of AI that learns from data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Statistical methods to improve performance on tasks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_idea": "Learn patterns from data without explicit programming",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Supervised", "Unsupervised", "Reinforcement"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"relationship": "ML ⊂ AI ⊂ Computer Science"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">History and Evolution</h3>
+        <p>Explore the key milestones and breakthroughs in the development of AI and machine learning.</p>
+        <div class="concept-highlight">
+          Key Historical Milestones:<br>
+          • 1950: Alan Turing proposes the Turing Test<br>
+          • 1956: Dartmouth Conference coins "Artificial Intelligence"<br>
+          • 1980s: Expert systems gain popularity<br>
+          • 1990s: Statistical learning methods emerge<br>
+          • 2010s: Deep learning revolution begins
+        </div>
+        <div class="ml-insight">
+          <strong>AI Winters and Springs:</strong><br>
+          AI has experienced periods of high expectations followed by disappointment and reduced funding ("AI winters"), typically caused by overpromising and technical limitations of the time.
+        </div>
+        <div class="code-example">
+          # AI Evolution Timeline<br>
+          ai_timeline = {<br>
+          &nbsp;&nbsp;"1950s": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_figures": ["Alan Turing", "John McCarthy", "Marvin Minsky"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"achievements": ["Turing Test", "Logic Theorist", "Dartmouth Conference"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Symbolic AI and logic-based reasoning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"1980s": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"breakthrough": "Expert systems boom",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["MYCIN", "DENDRAL", "XCON"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitation": "Knowledge acquisition bottleneck"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"2010s": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"revolution": "Deep learning breakthrough",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"catalysts": ["Big data", "GPU computing", "Improved algorithms"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"achievements": ["ImageNet victory", "AlphaGo", "GPT models"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of AI Systems</h3>
+        <p>Understand different categories of AI systems based on capabilities and approach.</p>
+        <div class="practical-tool">
+          <strong>AI Classification by Capability:</strong><br>
+          • Narrow AI (ANI): Designed for specific tasks (current state)<br>
+          • General AI (AGI): Human-level intelligence across all domains<br>
+          • Superintelligence: Exceeds human intelligence in all areas
+        </div>
+        <div class="performance-indicator">
+          <strong>AI Classification by Approach:</strong><br>
+          • Symbolic AI: Logic and knowledge representation<br>
+          • Connectionist AI: Neural networks and learning<br>
+          • Evolutionary AI: Genetic algorithms and evolution<br>
+          • Hybrid AI: Combines multiple approaches
+        </div>
+        <div class="code-example">
+          # AI System Types<br>
+          ai_types = {<br>
+          &nbsp;&nbsp;"by_capability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"narrow_ai": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Specialized for specific tasks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Chess engines", "Image recognition", "Voice assistants"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"current_state": "Dominant form of AI today"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"general_ai": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Human-level general intelligence",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capabilities": ["Transfer learning", "Common sense reasoning", "Creativity"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"timeline": "Predictions range from 2030s to never"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_learning": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"reactive": "Responds to current situation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limited_memory": "Uses past data for decisions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"theory_of_mind": "Understands others' mental states",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"self_aware": "Has consciousness and self-awareness"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail
