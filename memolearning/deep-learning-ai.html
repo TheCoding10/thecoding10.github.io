@@ -1,0 +1,716 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Deep Learning & AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .dl-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .neural-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .architecture-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .training-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .optimization-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 Deep Learning & AI</h1>
+    <p>Master advanced neural networks, deep learning architectures, and cutting-edge AI techniques</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Deep Learning & AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~110</span>
+          <div class="stat-label">Deep Learning Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Neural Architectures</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Research Papers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Deep Neural Networks</h3>
+        </div>
+        <p class="unit-description">Master the fundamentals of deep architectures, training, and optimization techniques.</p>
+        <ul class="topics-list">
+          <li>Multi-layer perceptrons</li>
+          <li>Backpropagation in depth</li>
+          <li>Activation functions</li>
+          <li>Weight initialization</li>
+          <li>Batch normalization</li>
+          <li>Dropout and regularization</li>
+          <li>Gradient flow analysis</li>
+          <li>Universal approximation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Convolutional Neural Networks</h3>
+        </div>
+        <p class="unit-description">Learn CNN architectures for computer vision and image processing applications.</p>
+        <ul class="topics-list">
+          <li>Convolution operations</li>
+          <li>Pooling layers</li>
+          <li>CNN architectures</li>
+          <li>Feature maps visualization</li>
+          <li>Transfer learning</li>
+          <li>Object detection</li>
+          <li>Image segmentation</li>
+          <li>Advanced CNN variants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Recurrent Neural Networks</h3>
+        </div>
+        <p class="unit-description">Explore RNNs, LSTMs, and GRUs for sequential data and time series analysis.</p>
+        <ul class="topics-list">
+          <li>Vanilla RNNs</li>
+          <li>Vanishing gradient problem</li>
+          <li>LSTM architecture</li>
+          <li>GRU networks</li>
+          <li>Bidirectional RNNs</li>
+          <li>Sequence-to-sequence models</li>
+          <li>Attention mechanisms</li>
+          <li>Advanced RNN variants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Transformer Architectures</h3>
+        </div>
+        <p class="unit-description">Master the revolutionary transformer architecture and attention-based models.</p>
+        <ul class="topics-list">
+          <li>Self-attention mechanism</li>
+          <li>Multi-head attention</li>
+          <li>Positional encoding</li>
+          <li>Transformer blocks</li>
+          <li>BERT and variants</li>
+          <li>GPT family</li>
+          <li>Vision transformers</li>
+          <li>Efficient transformers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Generative Models</h3>
+        </div>
+        <p class="unit-description">Study advanced generative techniques including GANs, VAEs, and diffusion models.</p>
+        <ul class="topics-list">
+          <li>Generative Adversarial Networks</li>
+          <li>Variational Autoencoders</li>
+          <li>Autoregressive models</li>
+          <li>Flow-based models</li>
+          <li>Diffusion models</li>
+          <li>Style transfer</li>
+          <li>Conditional generation</li>
+          <li>Evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Optimization and Training</h3>
+        </div>
+        <p class="unit-description">Advanced optimization techniques and training strategies for deep neural networks.</p>
+        <ul class="topics-list">
+          <li>Advanced optimizers</li>
+          <li>Learning rate scheduling</li>
+          <li>Gradient clipping</li>
+          <li>Mixed precision training</li>
+          <li>Distributed training</li>
+          <li>Model parallelism</li>
+          <li>Hyperparameter tuning</li>
+          <li>Training diagnostics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Reinforcement Learning Deep Methods</h3>
+        </div>
+        <p class="unit-description">Combine deep learning with reinforcement learning for complex decision-making tasks.</p>
+        <ul class="topics-list">
+          <li>Deep Q-Networks (DQN)</li>
+          <li>Policy gradient methods</li>
+          <li>Actor-Critic algorithms</li>
+          <li>Proximal Policy Optimization</li>
+          <li>Multi-agent RL</li>
+          <li>Model-based RL</li>
+          <li>Hierarchical RL</li>
+          <li>Meta-learning in RL</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Natural Language Processing</h3>
+        </div>
+        <p class="unit-description">Advanced NLP techniques using deep learning for language understanding and generation.</p>
+        <ul class="topics-list">
+          <li>Word embeddings</li>
+          <li>Contextual embeddings</li>
+          <li>Language modeling</li>
+          <li>Machine translation</li>
+          <li>Question answering</li>
+          <li>Text summarization</li>
+          <li>Dialogue systems</li>
+          <li>Multilingual models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Computer Vision Advanced</h3>
+        </div>
+        <p class="unit-description">State-of-the-art computer vision techniques and applications using deep learning.</p>
+        <ul class="topics-list">
+          <li>Advanced object detection</li>
+          <li>Instance segmentation</li>
+          <li>3D vision</li>
+          <li>Video analysis</li>
+          <li>Neural rendering</li>
+          <li>Self-supervised learning</li>
+          <li>Vision-language models</li>
+          <li>Medical imaging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Meta-Learning and Few-Shot Learning</h3>
+        </div>
+        <p class="unit-description">Learn how to build models that can quickly adapt to new tasks with minimal data.</p>
+        <ul class="topics-list">
+          <li>Learning to learn</li>
+          <li>Model-Agnostic Meta-Learning</li>
+          <li>Prototypical networks</li>
+          <li>Matching networks</li>
+          <li>Memory-augmented networks</li>
+          <li>Gradient-based meta-learning</li>
+          <li>Few-shot classification</li>
+          <li>Zero-shot learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Neural Architecture Search</h3>
+        </div>
+        <p class="unit-description">Automated methods for discovering optimal neural network architectures.</p>
+        <ul class="topics-list">
+          <li>Architecture search spaces</li>
+          <li>Evolutionary methods</li>
+          <li>Reinforcement learning based</li>
+          <li>Differentiable architecture search</li>
+          <li>Efficient NAS methods</li>
+          <li>Transfer NAS</li>
+          <li>Hardware-aware NAS</li>
+          <li>AutoML pipelines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Frontiers and Research</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge research directions and emerging trends in deep learning.</p>
+        <ul class="topics-list">
+          <li>Neural scaling laws</li>
+          <li>Foundation models</li>
+          <li>Multimodal learning</li>
+          <li>Causal representation learning</li>
+          <li>Neurosymbolic AI</li>
+          <li>Quantum machine learning</li>
+          <li>Responsible AI</li>
+          <li>Future directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Deep Neural Networks</h1>
+      <p>Master the fundamentals of deep architectures, training, and optimization techniques.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multi-layer Perceptrons</h3>
+        <p>Understand the building blocks of deep neural networks and their mathematical foundations.</p>
+        <span class="dl-badge">Neural Architecture</span>
+        <span class="dl-badge">Forward Pass</span>
+        <span class="dl-badge">Universal Approximation</span>
+        <div class="neural-box">
+          A multi-layer perceptron (MLP) consists of multiple layers of neurons, where each layer is fully connected to the next. The universal approximation theorem states that an MLP with at least one hidden layer can approximate any continuous function.
+        </div>
+        <div class="code-example">
+          # MLP Architecture<br>
+          mlp_architecture = {<br>
+          &nbsp;&nbsp;"structure": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"input_layer": "Receives input features",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"hidden_layers": "One or more layers with nonlinear activations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"output_layer": "Produces final predictions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"connections": "Fully connected between adjacent layers"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"mathematical_form": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"layer_output": "h^(l) = f(W^(l) @ h^(l-1) + b^(l))",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"where": "f is activation function, W is weight matrix, b is bias",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"final_output": "y = W^(L) @ h^(L-1) + b^(L)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_properties": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"expressiveness": "Can represent complex nonlinear functions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"depth_vs_width": "Deeper networks often more efficient than wider",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"parameter_count": "Grows quadratically with layer width"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Backpropagation in Depth</h3>
+        <p>Master the mathematical details and computational aspects of the backpropagation algorithm.</p>
+        <div class="concept-highlight">
+          Backpropagation Chain Rule:<br>
+          • Compute gradients layer by layer from output to input<br>
+          • ∂L/∂W^(l) = ∂L/∂h^(l) ⊗ h^(l-1)<br>
+          • ∂L/∂h^(l-1) = (W^(l))^T @ ∂L/∂h^(l)<br>
+          • Activation derivative: ∂L/∂z^(l) = ∂L/∂h^(l) ⊙ f'(z^(l))
+        </div>
+        <div class="architecture-insight">
+          <strong>Computational Efficiency:</strong><br>
+          Backpropagation reuses forward pass computations and applies the chain rule systematically. The gradient computation has the same complexity as the forward pass, making training feasible for deep networks.
+        </div>
+        <div class="code-example">
+          # Backpropagation Algorithm<br>
+          backprop_steps = {<br>
+          &nbsp;&nbsp;"forward_pass": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Compute activations and cache intermediate values",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"equations": ["z^(l) = W^(l) @ a^(l-1) + b^(l)", "a^(l) = f(z^(l))"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"storage": "Keep z^(l) and a^(l) for gradient computation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"backward_pass": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"output_gradient": "∂L/∂a^(L) from loss function",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"layer_gradients": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"pre_activation": "δ^(l) = ∂L/∂z^(l) = ∂L/∂a^(l) ⊙ f'(z^(l))",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"weights": "∂L/∂W^(l) = δ^(l) ⊗ a^(l-1)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"bias": "∂L/∂b^(l) = δ^(l)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"previous_layer": "∂L/∂a^(l-1) = (W^(l))^T @ δ^(l)"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"complexity": "O(number of parameters) per training example"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Activation Functions</h3>
+        <p>Explore different activation functions and their impact on network training and performance.</p>
+        <div class="training-tool">
+          <strong>Key Activation Functions:</strong><br>
+          • ReLU: f(x) = max(0, x) - most popular, solves vanishing gradients<br>
+          • Sigmoid: f(x) = 1/(1+e^(-x)) - saturates, vanishing gradients<br>
+          • Tanh: f(x) = tanh(x) - zero-centered, still saturates<br>
+          • Leaky ReLU: f(x) = max(αx, x) - prevents dying neurons
+        </div>
+        <div class="optimization-indicator">
+          <strong>Dying ReLU Problem:</strong><br>
+          Neurons can get stuck in negative region where gradient is always zero, preventing further learning. Solutions include Leaky ReLU, ELU, or proper initialization.
+        </div>
+        <div class="code-example">
+          # Activation Functions Analysis<br>
+          activation_functions = {<br>
+          &nbsp;&nbsp;"relu": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "f(x) = max(0, x)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"derivative": "f'(x) = 1 if x > 0 else 0",<br>
+          &nbsp;&nbsp
