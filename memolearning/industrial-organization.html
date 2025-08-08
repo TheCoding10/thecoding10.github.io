@@ -1,0 +1,742 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Industrial Organization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #831843 0%, #be185d 50%, #ec4899 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #831843, #be185d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(131, 24, 67, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🏭';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #831843;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be185d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #831843, #be185d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(131, 24, 67, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .io-badge {
+      display: inline-block;
+      background: #fdf2f8;
+      color: #831843;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .io-box {
+      background: #fdf2f8;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #831843;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .market-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .competition-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .strategy-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🏭 Industrial Organization</h1>
+    <p>Analyze market structure, firm behavior, and competition in modern industries</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Industrial Organization Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Industry Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Strategic Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">90+</span>
+          <div class="stat-label">Real-World Cases</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Industrial Organization</h3>
+        </div>
+        <p class="unit-description">Understand the scope and methods of industrial organization economics.</p>
+        <ul class="topics-list">
+          <li>Structure-conduct-performance paradigm</li>
+          <li>Market structure measures</li>
+          <li>Industry classification</li>
+          <li>Firm boundaries</li>
+          <li>Competitive dynamics</li>
+          <li>Empirical methods</li>
+          <li>Policy applications</li>
+          <li>Modern IO approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Market Structure and Concentration</h3>
+        </div>
+        <p class="unit-description">Analyze measures of market concentration and their impact on competition.</p>
+        <ul class="topics-list">
+          <li>Concentration ratios</li>
+          <li>Herfindahl-Hirschman Index</li>
+          <li>Market definition</li>
+          <li>Geographic markets</li>
+          <li>Product markets</li>
+          <li>Concentration trends</li>
+          <li>Entry barriers</li>
+          <li>Market contestability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Monopoly Theory and Practice</h3>
+        </div>
+        <p class="unit-description">Study monopoly pricing, welfare effects, and regulation strategies.</p>
+        <ul class="topics-list">
+          <li>Monopoly pricing</li>
+          <li>Price discrimination</li>
+          <li>Welfare analysis</li>
+          <li>Natural monopoly</li>
+          <li>Monopoly regulation</li>
+          <li>Rate of return regulation</li>
+          <li>Price cap regulation</li>
+          <li>Regulatory capture</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Oligopoly Models</h3>
+        </div>
+        <p class="unit-description">Examine strategic interaction between firms in oligopolistic markets.</p>
+        <ul class="topics-list">
+          <li>Cournot competition</li>
+          <li>Bertrand competition</li>
+          <li>Stackelberg model</li>
+          <li>Differentiated products</li>
+          <li>Capacity constraints</li>
+          <li>Dynamic competition</li>
+          <li>Multi-market contact</li>
+          <li>Empirical oligopoly</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Product Differentiation</h3>
+        </div>
+        <p class="unit-description">Analyze how firms compete through product variety and positioning.</p>
+        <ul class="topics-list">
+          <li>Horizontal differentiation</li>
+          <li>Vertical differentiation</li>
+          <li>Hotelling model</li>
+          <li>Salop model</li>
+          <li>Quality competition</li>
+          <li>Brand competition</li>
+          <li>Advertising effects</li>
+          <li>Innovation and differentiation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Entry and Exit</h3>
+        </div>
+        <p class="unit-description">Study barriers to entry, exit decisions, and their impact on market dynamics.</p>
+        <ul class="topics-list">
+          <li>Entry barriers</li>
+          <li>Sunk costs</li>
+          <li>Strategic entry deterrence</li>
+          <li>Limit pricing</li>
+          <li>Capacity investment</li>
+          <li>Exit decisions</li>
+          <li>Market turnover</li>
+          <li>Industry dynamics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Vertical Integration and Relationships</h3>
+        </div>
+        <p class="unit-description">Examine firm boundaries and vertical relationships in supply chains.</p>
+        <ul class="topics-list">
+          <li>Make or buy decisions</li>
+          <li>Transaction cost economics</li>
+          <li>Vertical foreclosure</li>
+          <li>Double marginalization</li>
+          <li>Contract theory</li>
+          <li>Supply chain management</li>
+          <li>Franchising</li>
+          <li>Platform economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Innovation and R&D</h3>
+        </div>
+        <p class="unit-description">Analyze the economics of innovation, research and development, and technological change.</p>
+        <ul class="topics-list">
+          <li>Innovation incentives</li>
+          <li>Patent races</li>
+          <li>R&D competition</li>
+          <li>Licensing strategies</li>
+          <li>Technology adoption</li>
+          <li>Network effects</li>
+          <li>Standards competition</li>
+          <li>Creative destruction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Advertising and Information</h3>
+        </div>
+        <p class="unit-description">Study the role of advertising, information, and search in market competition.</p>
+        <ul class="topics-list">
+          <li>Advertising as information</li>
+          <li>Persuasive advertising</li>
+          <li>Search models</li>
+          <li>Consumer search costs</li>
+          <li>Price dispersion</li>
+          <li>Quality uncertainty</li>
+          <li>Reputation effects</li>
+          <li>Online markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Mergers and Acquisitions</h3>
+        </div>
+        <p class="unit-description">Examine merger motives, effects, and antitrust policy toward consolidation.</p>
+        <ul class="topics-list">
+          <li>Merger motives</li>
+          <li>Horizontal mergers</li>
+          <li>Vertical mergers</li>
+          <li>Conglomerate mergers</li>
+          <li>Merger simulation</li>
+          <li>Antitrust analysis</li>
+          <li>Merger remedies</li>
+          <li>Post-merger performance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Antitrust and Competition Policy</h3>
+        </div>
+        <p class="unit-description">Study competition law, enforcement mechanisms, and policy debates.</p>
+        <ul class="topics-list">
+          <li>Antitrust law</li>
+          <li>Monopolization cases</li>
+          <li>Price fixing</li>
+          <li>Predatory pricing</li>
+          <li>Tying and bundling</li>
+          <li>Market power measurement</li>
+          <li>International competition</li>
+          <li>Digital markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Digital Economics and Platforms</h3>
+        </div>
+        <p class="unit-description">Explore the economics of digital markets, platforms, and network industries.</p>
+        <ul class="topics-list">
+          <li>Platform economics</li>
+          <li>Two-sided markets</li>
+          <li>Network externalities</li>
+          <li>Digital monopolies</li>
+          <li>Data as an asset</li>
+          <li>Algorithmic pricing</li>
+          <li>Sharing economy</li>
+          <li>Regulatory challenges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Industrial Organization</h1>
+      <p>Understand the scope and methods of industrial organization economics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structure-Conduct-Performance Paradigm</h3>
+        <p>Learn the traditional framework for analyzing industry behavior and outcomes.</p>
+        <span class="io-badge">Market Structure</span>
+        <span class="io-badge">Firm Conduct</span>
+        <span class="io-badge">Performance</span>
+        <div class="io-box">
+          The Structure-Conduct-Performance (SCP) paradigm suggests that market structure determines firm conduct, which in turn determines market performance. This framework has been the foundation of industrial organization analysis for decades.
+        </div>
+        <div class="code-example">
+          # Structure-Conduct-Performance Framework<br>
+          scp_paradigm = {<br>
+          &nbsp;&nbsp;"market_structure": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Basic characteristics that determine competitive environment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"elements": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"concentration": "Number and size distribution of firms",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"product_differentiation": "Degree of product substitutability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"entry_barriers": "Obstacles to new firm entry",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cost_structure": "Technology and economies of scale",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"vertical_integration": "Extent of supply chain control"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": ["Concentration ratios", "HHI", "Entry costs"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"firm_conduct": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Strategic behavior and policies adopted by firms",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"elements": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"pricing_behavior": "Price-setting strategies and coordination",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"product_strategy": "Innovation, quality, advertising",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capacity_decisions": "Investment in production capacity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"strategic_behavior": "Entry deterrence, predation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cooperation": "Collusion, joint ventures"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"factors": "Influenced by market structure and expectations"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"market_performance": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "End results of structure and conduct",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dimensions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"allocative_efficiency": "Price equals marginal cost",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"productive_efficiency": "Minimum cost production",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"dynamic_efficiency": "Innovation and progress",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"equity": "Fair distribution of benefits",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"profitability": "Return on investment"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"evaluation": "Comparison to competitive benchmark"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Structure Measures</h3>
+        <p>Understand key metrics used to characterize market structure and concentration.</p>
+        <div class="concept-highlight">
+          Key Structure Measures:<br>
+          • Concentration ratios (CR4, CR8): Market share of top firms<br>
+          • Herfindahl-Hirschman Index: Sum of squared market shares<br>
+          • Number of competitors and their relative sizes<br>
+          • Entry barriers and market contestability
+        </div>
+        <div class="market-insight">
+          <strong>Concentration Guidelines:</strong><br>
+          • HHI < 1,500: Unconcentrated market<br>
+          • HHI 1,500-2,500: Moderately concentrated<br>
+          • HHI > 2,500: Highly concentrated<br>
+          Used by antitrust authorities for merger review
+        </div>
+        <div class="code-example">
+          # Market Concentration Measures<br>
+          def calculate_hhi(market_shares):<br>
+          &nbsp;&nbsp;"""Calculate Herfindahl-Hirschman Index"""<br>
+          &nbsp;&nbsp;return sum(share**2 for share in market_shares)<br>
+          <br>
+          def calculate_cr4(market_shares):<br>
+          &nbsp;&nbsp;"""Calculate 4-firm concentration ratio"""<br>
+          &nbsp;&nbsp;sorted_shares = sorted(market_shares, reverse=True)<br>
+          &nbsp;&nbsp;return sum(sorted_shares[:4])<br>
+          <br>
+          # Example calculation<br>
+          market_shares = [30, 25, 20, 15, 5, 3, 2]  # percentages<br>
+          <br>
+          concentration_measures = {<br>
+          &nbsp;&nbsp;"hhi": calculate_hhi(market_shares),<br>
+          &nbsp;&nbsp;"cr4": calculate_cr4(market_shares),<br>
+          &nbsp;&nbsp;"number_of_firms": len(market_shares),<br>
+          &nbsp;&nbsp;"market_leader_share": max(market_shares),<br>
+          &nbsp;&nbsp;"interpretation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"hhi_level": "Moderately concentrated" if 1500 <= calculate_hhi(market_shares) <= 2500 else "Other",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"competitive_concern": "Medium" if calculate_cr4(market_shares) > 60 else "Low"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Modern IO Approaches</h3>
+        <p>Explore contemporary methods in industrial organization beyond traditional SCP.</p>
+        <div class="competition-tool">
+          <strong>New Empirical IO:</strong><br>
+          • Structural econometric models<br>
+          • Game-theoretic foundations<br>
+          • Demand estimation techniques<br>
+          • Supply-side modeling and cost recovery
+        </div>
+        <div class="strategy-indicator">
+          <strong>Alternative Approaches:</strong><br>
+          • Transaction cost economics (Williamson)<br>
+          • Resource-based view of the firm<br>
+          • Evolutionary approaches<br>
+          • Behavioral industrial organization
+        </div>
+        <div class="code-example">
+          # Modern IO Research Methods<br>
+          modern_io_methods = {<br>
+          &nbsp;&nbsp;"structural_models": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Explicitly model economic theory",<br>
