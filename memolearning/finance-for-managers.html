@@ -1,0 +1,741 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Finance for Managers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #b45309, #d97706);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(180, 83, 9, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #b45309;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #d97706;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #b45309, #d97706);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(180, 83, 9, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .finance-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #b45309;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b45309;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .financial-formula {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      text-align: center;
+      color: #15803d;
+      font-weight: bold;
+    }
+
+    .case-study {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #ef4444;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .decision-framework {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Finance for Managers</h1>
+    <p>Master financial concepts, analysis, and decision-making tools for effective management</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Finance for Managers Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Financial Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Financial Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">45+</span>
+          <div class="stat-label">Real-World Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Finance Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand basic financial concepts and the role of finance in business management.</p>
+        <ul class="topics-list">
+          <li>What is finance</li>
+          <li>Financial management objectives</li>
+          <li>Stakeholder theory in finance</li>
+          <li>Time value of money</li>
+          <li>Risk and return relationship</li>
+          <li>Financial markets overview</li>
+          <li>Corporate finance vs personal finance</li>
+          <li>Ethics in financial management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Financial Statement Analysis</h3>
+        </div>
+        <p class="unit-description">Learn to read, interpret, and analyze financial statements for decision-making.</p>
+        <ul class="topics-list">
+          <li>Income statement analysis</li>
+          <li>Balance sheet analysis</li>
+          <li>Cash flow statement analysis</li>
+          <li>Statement interconnections</li>
+          <li>Common-size analysis</li>
+          <li>Trend analysis</li>
+          <li>Industry benchmarking</li>
+          <li>Red flags and limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Financial Ratios & Metrics</h3>
+        </div>
+        <p class="unit-description">Master key financial ratios for evaluating company performance and health.</p>
+        <ul class="topics-list">
+          <li>Liquidity ratios</li>
+          <li>Activity/efficiency ratios</li>
+          <li>Leverage/debt ratios</li>
+          <li>Profitability ratios</li>
+          <li>Market value ratios</li>
+          <li>DuPont analysis</li>
+          <li>Ratio interpretation</li>
+          <li>Industry comparisons</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Time Value of Money</h3>
+        </div>
+        <p class="unit-description">Understand present and future value concepts for financial decision-making.</p>
+        <ul class="topics-list">
+          <li>Present value concepts</li>
+          <li>Future value calculations</li>
+          <li>Annuity valuations</li>
+          <li>Perpetuity calculations</li>
+          <li>Compound vs simple interest</li>
+          <li>Effective annual rates</li>
+          <li>Application to investments</li>
+          <li>Loan and mortgage calculations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Capital Budgeting</h3>
+        </div>
+        <p class="unit-description">Learn techniques for evaluating and selecting long-term investment projects.</p>
+        <ul class="topics-list">
+          <li>Capital budgeting process</li>
+          <li>Net present value (NPV)</li>
+          <li>Internal rate of return (IRR)</li>
+          <li>Payback period</li>
+          <li>Profitability index</li>
+          <li>Modified IRR</li>
+          <li>Risk analysis in capital budgeting</li>
+          <li>Real options valuation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Cost of Capital</h3>
+        </div>
+        <p class="unit-description">Calculate and understand the cost of different sources of financing.</p>
+        <ul class="topics-list">
+          <li>Weighted average cost of capital</li>
+          <li>Cost of debt</li>
+          <li>Cost of equity</li>
+          <li>Cost of preferred stock</li>
+          <li>Capital structure impacts</li>
+          <li>Risk adjustments</li>
+          <li>Divisional cost of capital</li>
+          <li>International considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Working Capital Management</h3>
+        </div>
+        <p class="unit-description">Manage short-term assets and liabilities for optimal cash flow.</p>
+        <ul class="topics-list">
+          <li>Working capital concepts</li>
+          <li>Cash management</li>
+          <li>Inventory management</li>
+          <li>Accounts receivable management</li>
+          <li>Accounts payable management</li>
+          <li>Short-term financing</li>
+          <li>Cash conversion cycle</li>
+          <li>Seasonal financing needs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Capital Structure & Financing</h3>
+        </div>
+        <p class="unit-description">Understand optimal mix of debt and equity financing for companies.</p>
+        <ul class="topics-list">
+          <li>Capital structure theory</li>
+          <li>Debt vs equity financing</li>
+          <li>Financial leverage effects</li>
+          <li>Optimal capital structure</li>
+          <li>Financing hierarchy</li>
+          <li>Credit ratings and costs</li>
+          <li>Dividend policy</li>
+          <li>Share repurchases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Risk Management</h3>
+        </div>
+        <p class="unit-description">Identify, measure, and manage various types of financial risks.</p>
+        <ul class="topics-list">
+          <li>Types of financial risk</li>
+          <li>Risk measurement techniques</li>
+          <li>Credit risk management</li>
+          <li>Market risk management</li>
+          <li>Operational risk</li>
+          <li>Hedging strategies</li>
+          <li>Insurance and derivatives</li>
+          <li>Enterprise risk management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Budgeting & Forecasting</h3>
+        </div>
+        <p class="unit-description">Create and manage budgets and financial forecasts for planning and control.</p>
+        <ul class="topics-list">
+          <li>Budgeting process</li>
+          <li>Operating budgets</li>
+          <li>Capital budgets</li>
+          <li>Cash flow forecasting</li>
+          <li>Variance analysis</li>
+          <li>Flexible budgeting</li>
+          <li>Rolling forecasts</li>
+          <li>Budget performance evaluation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Valuation Techniques</h3>
+        </div>
+        <p class="unit-description">Learn methods for valuing businesses, projects, and financial securities.</p>
+        <ul class="topics-list">
+          <li>Discounted cash flow valuation</li>
+          <li>Relative valuation methods</li>
+          <li>Asset-based valuation</li>
+          <li>Business valuation multiples</li>
+          <li>Growth company valuation</li>
+          <li>Merger and acquisition valuation</li>
+          <li>Options valuation basics</li>
+          <li>Valuation challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Financial Decision Making</h3>
+        </div>
+        <p class="unit-description">Integrate financial concepts for strategic business decisions and value creation.</p>
+        <ul class="topics-list">
+          <li>Strategic financial planning</li>
+          <li>Value-based management</li>
+          <li>Financial strategy integration</li>
+          <li>Performance measurement systems</li>
+          <li>Corporate governance</li>
+          <li>Stakeholder value creation</li>
+          <li>Global financial management</li>
+          <li>Sustainable finance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Finance Fundamentals</h1>
+      <p>Understand basic financial concepts and the role of finance in business management.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Finance</h3>
+        <p>Learn the fundamental definition and scope of finance in business and personal contexts.</p>
+        <span class="finance-badge">Capital Allocation</span>
+        <span class="finance-badge">Value Creation</span>
+        <span class="finance-badge">Risk Management</span>
+        <div class="algorithm-box">
+          Finance is the science and art of managing money, investments, and financial instruments to maximize value while managing risk. It encompasses raising capital, allocating resources, and making decisions that affect the financial health of individuals, businesses, and institutions.
+        </div>
+        <div class="code-example">
+          # Finance definition and scope<br>
+          finance_definition = {<br>
+          &nbsp;&nbsp;"core_purpose": "Optimize resource allocation and value creation",<br>
+          &nbsp;&nbsp;"key_functions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Raising capital from investors",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Allocating resources to projects",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Managing financial risks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Maximizing shareholder value",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Planning and controlling finances"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"main_areas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"corporate_finance": "Business financial decisions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"investments": "Security analysis and portfolio management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"financial_markets": "Market operations and institutions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"personal_finance": "Individual financial planning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"decision_types": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Investment decisions (where to allocate capital)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Financing decisions (how to raise capital)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Dividend decisions (how to return value)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Risk management decisions (how to protect value)"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Finance vs related fields<br>
+          field_comparison = {<br>
+          &nbsp;&nbsp;"finance": "Focus on value creation and capital markets",<br>
+          &nbsp;&nbsp;"accounting": "Focus on recording and reporting transactions",<br>
+          &nbsp;&nbsp;"economics": "Focus on resource allocation in society"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Financial Management Objectives</h3>
+        <p>Understand the primary goals of financial management in organizations.</p>
+        <div class="concept-highlight">
+          Primary Objective: Maximize shareholder wealth (firm value)<br>
+          Secondary Objectives: Maintain liquidity, manage risk, ensure compliance<br>
+          Stakeholder Considerations: Balance interests of shareholders, creditors, employees, and society
+        </div>
+        <div class="decision-framework">
+          <strong>Goal Hierarchy in Financial Management:</strong><br>
+          1. Profit Maximization → Shareholder Wealth Maximization<br>
+          2. Short-term vs Long-term value creation<br>
+          3. Risk-adjusted returns vs absolute returns<br>
+          4. Stakeholder value vs shareholder primacy
+        </div>
+        <div class="code-example">
+          # Financial management objectives<br>
+          financial_objectives = {<br>
+          &nbsp;&nbsp;"primary_goal": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"objective": "Maximize shareholder wealth",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": "Stock price and dividends",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"time_horizon": "Long-term sustainable value",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"considerations": ["Risk-adjusted returns", "Market efficiency"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"operational_objectives": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"profitability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["ROE", "ROA", "ROI"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"target": "Exceed cost of capital"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"liquidity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Current ratio", "Cash ratio"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"target": "Meet short-term obligations"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Debt-to-equity", "Interest coverage"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"target": "Maintain optimal capital structure"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"stakeholder_considerations": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"shareholders": "Returns and capital appreciation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"creditors": "Timely payment and creditworthiness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"employees": "Job security and fair compensation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"society": "Responsible business practices"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Time Value of Money</h3>
+        <p>Master the fundamental concept that money available today is worth more than the same amount in the future.</p>
+        <div class="algorithm-box">
+          The time value of money is based on the principle that money can earn returns over time. A dollar today is worth more than a dollar tomorrow due to its earning potential, inflation, and risk factors.
+        </div>
+        <div class="financial-formula">
+          Future Value = Present Value × (1 + interest rate)^number of periods<br>
+          FV = PV × (1 + r)^n
+        </div>
+        <div class="case-study">
+          <strong>Example:</strong> If you invest $1,000 today at 8% annual interest, it will be worth $1,080 after one year. Conversely, $1,080 received one year from now has a present value of $1,000 at 8% discount rate.
+        </div>
+        <div class="code-example">
+          # Time value of money calculations<br>
+          import math<br>
+          <br>
+          def future_value(present_value, rate, periods):<br>
+          &nbsp;&nbsp;"""Calculate future value given PV, rate, and time"""<br>
+          &nbsp;&nbsp;return present_value * (1 + rate) ** periods<br>
+          <br>
