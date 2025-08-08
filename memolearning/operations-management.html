@@ -1,0 +1,738 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Operations Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1565c0 0%, #1976d2 50%, #1e88e5 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1565c0, #1976d2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(21, 101, 192, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1565c0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1565c0, #1976d2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(21, 101, 192, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ops-badge {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #f3f8ff;
+      border: 1px solid #bbdefb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1565c0;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .process-flow {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .efficiency-metric {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .quality-standard {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚙️ Operations Management</h1>
+    <p>Master the design, operation, and improvement of production and service delivery systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Operations Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Operations Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Tools & Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Industry Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Operations Strategy</h3>
+        </div>
+        <p class="unit-description">Understand how operations strategy aligns with business strategy to create competitive advantage.</p>
+        <ul class="topics-list">
+          <li>Operations strategy fundamentals</li>
+          <li>Competitive priorities</li>
+          <li>Order qualifiers vs winners</li>
+          <li>Strategic fit</li>
+          <li>Trade-offs in operations</li>
+          <li>Operations strategy development</li>
+          <li>Performance measurement</li>
+          <li>Benchmarking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Process Design & Analysis</h3>
+        </div>
+        <p class="unit-description">Learn to design, analyze, and improve business processes for efficiency and effectiveness.</p>
+        <ul class="topics-list">
+          <li>Process design principles</li>
+          <li>Process mapping and flowcharts</li>
+          <li>Process types and characteristics</li>
+          <li>Bottleneck analysis</li>
+          <li>Cycle time and throughput</li>
+          <li>Process improvement methodologies</li>
+          <li>Automation considerations</li>
+          <li>Service process design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Capacity Planning</h3>
+        </div>
+        <p class="unit-description">Master capacity planning techniques to match supply with demand effectively.</p>
+        <ul class="topics-list">
+          <li>Capacity concepts and measures</li>
+          <li>Capacity planning strategies</li>
+          <li>Demand forecasting</li>
+          <li>Capacity expansion decisions</li>
+          <li>Economies and diseconomies of scale</li>
+          <li>Learning curves</li>
+          <li>Capacity utilization</li>
+          <li>Service capacity challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Location & Layout Planning</h3>
+        </div>
+        <p class="unit-description">Optimize facility location and layout decisions for operational efficiency.</p>
+        <ul class="topics-list">
+          <li>Location selection factors</li>
+          <li>Location analysis methods</li>
+          <li>Facility layout types</li>
+          <li>Layout design principles</li>
+          <li>Material handling systems</li>
+          <li>Workflow optimization</li>
+          <li>Space planning</li>
+          <li>International location considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Quality Management</h3>
+        </div>
+        <p class="unit-description">Implement quality management systems and continuous improvement processes.</p>
+        <ul class="topics-list">
+          <li>Quality concepts and dimensions</li>
+          <li>Total Quality Management (TQM)</li>
+          <li>Statistical quality control</li>
+          <li>Six Sigma methodology</li>
+          <li>Quality management systems</li>
+          <li>Cost of quality</li>
+          <li>Quality tools and techniques</li>
+          <li>Service quality management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Supply Chain Management</h3>
+        </div>
+        <p class="unit-description">Manage end-to-end supply chains for optimal cost, quality, and service performance.</p>
+        <ul class="topics-list">
+          <li>Supply chain fundamentals</li>
+          <li>Supplier selection and management</li>
+          <li>Supply chain integration</li>
+          <li>Bullwhip effect</li>
+          <li>Supply chain risk management</li>
+          <li>Global supply chains</li>
+          <li>Sustainable supply chains</li>
+          <li>Supply chain technology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Inventory Management</h3>
+        </div>
+        <p class="unit-description">Optimize inventory levels and manage stock to balance costs and service levels.</p>
+        <ul class="topics-list">
+          <li>Inventory functions and costs</li>
+          <li>ABC analysis</li>
+          <li>Economic Order Quantity (EOQ)</li>
+          <li>Reorder point systems</li>
+          <li>Safety stock calculations</li>
+          <li>Just-in-Time (JIT) inventory</li>
+          <li>Inventory turnover metrics</li>
+          <li>Service inventory challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Production Planning & Scheduling</h3>
+        </div>
+        <p class="unit-description">Plan and schedule production activities to meet demand efficiently.</p>
+        <ul class="topics-list">
+          <li>Aggregate planning</li>
+          <li>Master production scheduling</li>
+          <li>Material Requirements Planning (MRP)</li>
+          <li>Capacity Requirements Planning</li>
+          <li>Job shop scheduling</li>
+          <li>Project scheduling</li>
+          <li>Scheduling algorithms</li>
+          <li>Service scheduling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Lean Operations</h3>
+        </div>
+        <p class="unit-description">Implement lean principles to eliminate waste and improve operational efficiency.</p>
+        <ul class="topics-list">
+          <li>Lean thinking principles</li>
+          <li>Seven wastes identification</li>
+          <li>Value stream mapping</li>
+          <li>5S methodology</li>
+          <li>Kanban systems</li>
+          <li>Continuous improvement (Kaizen)</li>
+          <li>Lean tools and techniques</li>
+          <li>Lean in service operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Service Operations</h3>
+        </div>
+        <p class="unit-description">Understand unique challenges and strategies for managing service operations.</p>
+        <ul class="topics-list">
+          <li>Service characteristics</li>
+          <li>Service design principles</li>
+          <li>Service delivery systems</li>
+          <li>Customer participation</li>
+          <li>Service capacity management</li>
+          <li>Queue management</li>
+          <li>Service recovery</li>
+          <li>Technology in services</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Operations Technology</h3>
+        </div>
+        <p class="unit-description">Leverage technology to enhance operational performance and innovation.</p>
+        <ul class="topics-list">
+          <li>Technology strategy</li>
+          <li>Automation and robotics</li>
+          <li>Industry 4.0 concepts</li>
+          <li>Enterprise resource planning</li>
+          <li>Internet of Things (IoT)</li>
+          <li>Artificial intelligence in operations</li>
+          <li>Technology adoption</li>
+          <li>Digital transformation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Sustainability & Innovation</h3>
+        </div>
+        <p class="unit-description">Integrate sustainability and innovation into operations for long-term success.</p>
+        <ul class="topics-list">
+          <li>Sustainable operations</li>
+          <li>Circular economy principles</li>
+          <li>Green operations practices</li>
+          <li>Innovation in operations</li>
+          <li>Product lifecycle management</li>
+          <li>Reverse logistics</li>
+          <li>Social responsibility</li>
+          <li>Future trends in operations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Operations Strategy</h1>
+      <p>Understand how operations strategy aligns with business strategy to create competitive advantage.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Operations Strategy Fundamentals</h3>
+        <p>Learn the basic concepts and importance of operations strategy in business success.</p>
+        <span class="ops-badge">Strategy Alignment</span>
+        <span class="ops-badge">Competitive Advantage</span>
+        <span class="ops-badge">Value Creation</span>
+        <div class="algorithm-box">
+          Operations strategy is the pattern of decisions that shape the long-term capabilities of operations and their contribution to overall business strategy. It defines how operations will support the company's competitive positioning and value proposition.
+        </div>
+        <div class="code-example">
+          # Operations strategy framework<br>
+          operations_strategy = {<br>
+          &nbsp;&nbsp;"definition": "Long-term plan for operations capabilities",<br>
+          &nbsp;&nbsp;"key_decisions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Capacity: How much to produce",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Facilities: Where to locate operations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Technology: What processes to use",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Workforce: What skills to develop",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Quality: What standards to achieve",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Supply Chain: How to organize suppliers"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"strategic_alignment": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_strategy": "Overall competitive approach",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"operations_strategy": "How operations supports business goals",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"functional_strategies": "Marketing, finance, HR alignment"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"success_factors": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Clear strategic direction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Consistent decision-making",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Capability development",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Performance measurement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Continuous improvement"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Strategic importance of operations<br>
+          importance = {<br>
+          &nbsp;&nbsp;"cost_leadership": "Efficient operations reduce costs",<br>
+          &nbsp;&nbsp;"differentiation": "Operations create unique value",<br>
+          &nbsp;&nbsp;"flexibility": "Operations enable market responsiveness",<br>
+          &nbsp;&nbsp;"innovation": "Operations support new product development"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Competitive Priorities</h3>
+        <p>Understand the key competitive dimensions that operations can excel in to support business strategy.</p>
+        <div class="concept-highlight">
+          Four Main Competitive Priorities:<br>
+          • Cost: Competing on low prices through operational efficiency<br>
+          • Quality: Competing on superior performance and reliability<br>
+          • Time: Competing on speed of delivery and responsiveness<br>
+          • Flexibility: Competing on customization and variety
+        </div>
+        <div class="efficiency-metric">
+          <strong>Trade-off Reality:</strong> While companies strive to excel in all areas, resources are limited. Operations strategy involves making deliberate choices about which competitive priorities to emphasize while maintaining acceptable performance in others.
+        </div>
+        <div class="code-example">
+          # Competitive priorities framework<br>
+          competitive_priorities = {<br>
+          &nbsp;&nbsp;"cost": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Low-cost production and delivery",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Unit cost", "Productivity", "Efficiency"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capabilities": ["Process efficiency", "Scale economies", "Learning effects"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Walmart", "Southwest Airlines", "McDonald's"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"quality": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Superior performance and reliability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dimensions": ["Performance", "Features", "Reliability", "Conformance"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Defect rates", "Customer satisfaction", "Awards"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Toyota", "Mercedes-Benz", "Ritz-Carlton"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"time": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Speed and responsiveness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dimensions": ["Delivery speed", "Development speed", "Response time"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Lead time", "On-time delivery", "Time-to-market"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Amazon", "Zara", "FedEx"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"flexibility": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Customization and variety",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Product mix", "Volume", "Delivery", "New product"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"metrics": ["Product variety", "Customization level", "Changeover time"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Dell", "BMW", "Custom manufacturers"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Order Qualifiers vs Winners</h3>
+        <p>Distinguish between basic requirements and factors that actually win customers.</p>
+        <div class="algorithm-box">
+          Order qualifiers are the minimum standards required to be considered by customers, while order winners are the factors that actually persuade customers to choose your product or service over competitors.
+        </div>
+        <div class="process-flow">
+          <strong>Evolution Over Time:</strong> Order winners often become order qualifiers as competitors catch up. What once differentiated a company (like quality in automobiles) may become the expected minimum standard, requiring new sources of competitive advantage.
+        </div>
+        <div class="code-example">
+          # Order qualifiers vs winners analysis<br>
+          market_analysis = {<br>
+          &nbsp;&nbsp;"order_qualifiers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Minimum requirements to compete",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Basic expectations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Industry standards",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Must be met to be considered",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Failure eliminates from consideration"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"automotive": "Basic safety standards",
