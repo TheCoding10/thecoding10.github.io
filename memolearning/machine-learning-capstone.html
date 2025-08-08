@@ -1,0 +1,706 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Machine Learning Capstone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎯';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .capstone-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #991b1b;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .project-milestone {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .deliverable-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎯 Machine Learning Capstone</h1>
+    <p>Real-world end-to-end ML project with data prep, modeling, and deployment</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to ML courses')">← Back to ML Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">ML Capstone Project Structure</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label">Project Phases</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Deliverables</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Weeks Duration</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1</span>
+          <div class="stat-label">Complete ML System</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Project Planning & Problem Definition</h3>
+        </div>
+        <p class="unit-description">Define your capstone project scope, objectives, and success criteria.</p>
+        <ul class="topics-list">
+          <li>Problem identification and formulation</li>
+          <li>Business case development</li>
+          <li>Success metrics definition</li>
+          <li>Project timeline and milestones</li>
+          <li>Resource requirement planning</li>
+          <li>Risk assessment and mitigation</li>
+          <li>Stakeholder identification</li>
+          <li>Project proposal creation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Acquisition & Exploration</h3>
+        </div>
+        <p class="unit-description">Gather, explore, and understand your dataset thoroughly.</p>
+        <ul class="topics-list">
+          <li>Data source identification</li>
+          <li>Data collection strategies</li>
+          <li>Exploratory data analysis (EDA)</li>
+          <li>Data quality assessment</li>
+          <li>Statistical summaries</li>
+          <li>Visualization and insights</li>
+          <li>Data documentation</li>
+          <li>Initial findings report</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Data Preprocessing & Feature Engineering</h3>
+        </div>
+        <p class="unit-description">Clean, transform, and engineer features for optimal model performance.</p>
+        <ul class="topics-list">
+          <li>Data cleaning and validation</li>
+          <li>Missing value handling</li>
+          <li>Outlier detection and treatment</li>
+          <li>Feature creation and selection</li>
+          <li>Data transformation techniques</li>
+          <li>Encoding categorical variables</li>
+          <li>Feature scaling and normalization</li>
+          <li>Pipeline development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Model Development & Selection</h3>
+        </div>
+        <p class="unit-description">Experiment with multiple algorithms and select the best performing model.</p>
+        <ul class="topics-list">
+          <li>Baseline model establishment</li>
+          <li>Algorithm experimentation</li>
+          <li>Model comparison framework</li>
+          <li>Cross-validation strategies</li>
+          <li>Hyperparameter optimization</li>
+          <li>Ensemble methods exploration</li>
+          <li>Model selection criteria</li>
+          <li>Performance benchmarking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Model Evaluation & Validation</h3>
+        </div>
+        <p class="unit-description">Rigorously evaluate your model using appropriate metrics and validation techniques.</p>
+        <ul class="topics-list">
+          <li>Evaluation metric selection</li>
+          <li>Hold-out testing strategy</li>
+          <li>Error analysis and interpretation</li>
+          <li>Bias and fairness assessment</li>
+          <li>Robustness testing</li>
+          <li>Statistical significance testing</li>
+          <li>Model limitations documentation</li>
+          <li>Validation report creation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Model Deployment & Infrastructure</h3>
+        </div>
+        <p class="unit-description">Deploy your model to production with proper infrastructure and monitoring.</p>
+        <ul class="topics-list">
+          <li>Deployment strategy planning</li>
+          <li>API development and testing</li>
+          <li>Cloud platform selection</li>
+          <li>Containerization with Docker</li>
+          <li>CI/CD pipeline setup</li>
+          <li>Monitoring and logging</li>
+          <li>Performance optimization</li>
+          <li>Security considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Documentation & Communication</h3>
+        </div>
+        <p class="unit-description">Create comprehensive documentation and communicate findings effectively.</p>
+        <ul class="topics-list">
+          <li>Technical documentation</li>
+          <li>User guide creation</li>
+          <li>API documentation</li>
+          <li>Executive summary</li>
+          <li>Presentation development</li>
+          <li>Visualization design</li>
+          <li>Stakeholder communication</li>
+          <li>Knowledge transfer planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Project Presentation & Portfolio</h3>
+        </div>
+        <p class="unit-description">Present your complete project and build a compelling portfolio piece.</p>
+        <ul class="topics-list">
+          <li>Final presentation preparation</li>
+          <li>Demo development</li>
+          <li>Portfolio integration</li>
+          <li>GitHub repository organization</li>
+          <li>Code review and cleanup</li>
+          <li>Reflection and lessons learned</li>
+          <li>Future improvements roadmap</li>
+          <li>Professional showcase</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Phase 1: Project Planning & Problem Definition</h1>
+      <p>Define your capstone project scope, objectives, and success criteria.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Problem Identification and Formulation</h3>
+        <p>Learn how to identify and clearly formulate a machine learning problem worth solving.</p>
+        <span class="capstone-badge">Planning</span>
+        <span class="capstone-badge">Problem Definition</span>
+        <span class="capstone-badge">Scope</span>
+        <div class="algorithm-box">
+          A well-defined problem is half solved. Your capstone should address a real-world challenge with clear inputs, desired outputs, and measurable success criteria. Consider business impact, technical feasibility, and data availability.
+        </div>
+        <div class="project-milestone">
+          <strong>Milestone 1.1:</strong> Submit a 2-page problem statement including problem description, proposed solution approach, and expected outcomes.
+        </div>
+        <div class="code-example">
+          # Problem formulation framework<br>
+          problem_definition = {<br>
+          &nbsp;&nbsp;"domain": "E-commerce recommendation system",<br>
+          &nbsp;&nbsp;"problem_type": "Supervised learning - recommendation",<br>
+          &nbsp;&nbsp;"input_data": "User behavior, product features, ratings",<br>
+          &nbsp;&nbsp;"target_output": "Product recommendations ranked by relevance",<br>
+          &nbsp;&nbsp;"business_impact": "Increase user engagement by 15%",<br>
+          &nbsp;&nbsp;"success_metrics": ["Click-through rate", "Conversion rate", "User satisfaction"],<br>
+          &nbsp;&nbsp;"constraints": ["Real-time inference < 100ms", "Cold start problem"],<br>
+          &nbsp;&nbsp;"data_availability": "6 months of user interaction logs"<br>
+          }<br>
+          <br>
+          # Questions to validate your problem:<br>
+          validation_checklist = [<br>
+          &nbsp;&nbsp;"Is this problem valuable to solve?",<br>
+          &nbsp;&nbsp;"Can machine learning provide a better solution?",<br>
+          &nbsp;&nbsp;"Is sufficient data available or obtainable?",<br>
+          &nbsp;&nbsp;"Are success criteria measurable?",<br>
+          &nbsp;&nbsp;"Is the scope manageable for a capstone project?"<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Business Case Development</h3>
+        <p>Create a compelling business justification for your machine learning project.</p>
+        <div class="concept-highlight">
+          Business Case Components:<br>
+          • Current state analysis and pain points<br>
+          • Proposed solution and benefits<br>
+          • Cost-benefit analysis<br>
+          • Risk assessment and mitigation<br>
+          • Implementation timeline and resources
+        </div>
+        <div class="deliverable-box">
+          <strong>Deliverable:</strong> Business case document (3-4 pages) with executive summary, problem analysis, proposed solution, ROI projections, and implementation plan.
+        </div>
+        <div class="code-example">
+          # Business case template<br>
+          business_case = {<br>
+          &nbsp;&nbsp;"executive_summary": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Manual fraud detection misses 20% of cases",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solution": "ML-powered real-time fraud detection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"expected_roi": "300% in first year"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"current_state": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"annual_fraud_losses": "$2M",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"detection_accuracy": "80%",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"manual_review_cost": "$500K annually"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"proposed_solution": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ml_model_accuracy": "95% target",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"automation_level": "90% of cases",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"response_time": "< 100ms"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"financial_impact": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prevented_losses": "$1.6M annually",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cost_savings": "$400K in manual review",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation_cost": "$300K"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Success Metrics Definition</h3>
+        <p>Define clear, measurable criteria for evaluating your project's success.</p>
+        <div class="algorithm-box">
+          Success metrics should be SMART: Specific, Measurable, Achievable, Relevant, and Time-bound. Include both technical metrics (accuracy, precision, recall) and business metrics (ROI, user engagement, cost savings).
+        </div>
+        <div class="code-example">
+          # Comprehensive success metrics framework<br>
+          success_metrics = {<br>
+          &nbsp;&nbsp;"technical_metrics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"model_performance": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"accuracy": {"target": 0.92, "baseline": 0.85},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"precision": {"target": 0.90, "baseline": 0.80},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"recall": {"target": 0.88, "baseline": 0.75},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"f1_score": {"target": 0.89, "baseline": 0.77}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"system_performance": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"inference_time": {"target": "< 50ms", "baseline": "500ms"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"throughput": {"target": "1000 req/sec", "baseline": "100 req/sec"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"uptime": {"target": "99.9%", "baseline": "95%"}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"business_metrics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"user_engagement": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"click_through_rate": {"target": "15%", "baseline": "8%"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"session_duration": {"target": "+25%", "baseline": "current"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"user_retention": {"target": "80%", "baseline": "65%"}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"financial_impact": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cost_reduction": {"target": "40%", "measurement": "vs manual process"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"revenue_increase": {"target": "12%", "timeframe": "6 months"},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"roi": {"target": "200%", "timeframe": "12 months"}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Evaluation schedule<br>
+          evaluation_timeline = {<br>
+          &nbsp;&nbsp;"week_4": "Initial model baseline metrics",<br>
+          &nbsp;&nbsp;"week_8": "Optimized model performance",<br>
+          &nbsp;&nbsp;"week_10": "System integration testing",<br>
+          &nbsp;&nbsp;"week_12": "Final business impact assessment"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Project Timeline and Milestones</h3>
+        <p>Create a detailed project timeline with clear milestones and deliverables.</p>
+        <span class="capstone-badge">Timeline</span>
+        <span class="capstone-badge">Milestones</span>
+        <span class="capstone-badge">Deliverables</span>
+        <div class="project-milestone">
+          <strong>Week 1-2:</strong> Project planning and setup<br>
+          <strong>Week 3-4:</strong> Data acquisition and exploration<br>
+          <strong>Week 5-6:</strong> Data preprocessing and feature engineering<br>
+          <strong>Week 7-8:</strong> Model development and experimentation<br>
+          <strong>Week 9-10:</strong> Model optimization and validation<br>
+          <strong>Week 11:</strong> Deployment and testing<br>
+          <strong>Week 12:</strong> Documentation and presentation
+        </div>
+        <div class="code-example">
+          import pandas as pd<br>
+          from datetime import datetime, timedelta<br>
+          <br>
+          # Project timeline with dependencies<br>
+          milestones = [<br>
+          &nbsp;&nbsp;{<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"phase": "Planning",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"duration_weeks": 2,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deliverables": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Problem statement document",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Business case presentation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Project plan and timeline",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Success metrics definition"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"success_criteria": "Stakeholder approval of project scope"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;{<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"phase": "Data Acquisition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"duration_weeks": 2,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deliverables": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Complete dataset with documentation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Exploratory data analysis report",<br>
+          &nbsp;&nbsp;&
