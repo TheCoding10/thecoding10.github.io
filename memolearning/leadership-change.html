@@ -1,0 +1,733 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Leadership & Change Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #f97316 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c2d12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .leadership-badge {
+      display: inline-block;
+      background: #fff7ed;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .leadership-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .change-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .transformation-tool {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .leadership-metric {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Leadership & Change Management</h1>
+    <p>Transform organizations and inspire teams through effective leadership and change strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Leadership & Change Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~130</span>
+          <div class="stat-label">Leadership Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">45+</span>
+          <div class="stat-label">Change Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">90+</span>
+          <div class="stat-label">Practical Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Foundations of Leadership</h3>
+        </div>
+        <p class="unit-description">Explore fundamental leadership concepts, theories, and the evolution of leadership thought.</p>
+        <ul class="topics-list">
+          <li>Leadership vs management</li>
+          <li>Leadership definitions</li>
+          <li>Historical perspectives</li>
+          <li>Leadership myths and realities</li>
+          <li>Core leadership principles</li>
+          <li>Leadership competencies</li>
+          <li>Ethical leadership</li>
+          <li>Leadership development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Leadership Theories & Styles</h3>
+        </div>
+        <p class="unit-description">Study major leadership theories and understand different leadership styles and approaches.</p>
+        <ul class="topics-list">
+          <li>Trait theories</li>
+          <li>Behavioral theories</li>
+          <li>Contingency theories</li>
+          <li>Transformational leadership</li>
+          <li>Authentic leadership</li>
+          <li>Servant leadership</li>
+          <li>Situational leadership</li>
+          <li>Adaptive leadership</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Emotional Intelligence & Self-Awareness</h3>
+        </div>
+        <p class="unit-description">Develop emotional intelligence and self-awareness as foundational leadership capabilities.</p>
+        <ul class="topics-list">
+          <li>Emotional intelligence model</li>
+          <li>Self-awareness development</li>
+          <li>Self-regulation techniques</li>
+          <li>Empathy and social awareness</li>
+          <li>Relationship management</li>
+          <li>Emotional contagion</li>
+          <li>Stress management</li>
+          <li>Mindful leadership</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Communication & Influence</h3>
+        </div>
+        <p class="unit-description">Master communication skills and influence strategies essential for effective leadership.</p>
+        <ul class="topics-list">
+          <li>Leadership communication</li>
+          <li>Active listening</li>
+          <li>Persuasion techniques</li>
+          <li>Influence strategies</li>
+          <li>Difficult conversations</li>
+          <li>Public speaking</li>
+          <li>Digital communication</li>
+          <li>Cross-cultural communication</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Team Leadership & Dynamics</h3>
+        </div>
+        <p class="unit-description">Learn to build and lead high-performing teams in diverse organizational contexts.</p>
+        <ul class="topics-list">
+          <li>Team development stages</li>
+          <li>Team dynamics</li>
+          <li>Virtual team leadership</li>
+          <li>Conflict resolution</li>
+          <li>Delegation strategies</li>
+          <li>Team motivation</li>
+          <li>Collaboration tools</li>
+          <li>Performance management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Strategic Leadership</h3>
+        </div>
+        <p class="unit-description">Develop strategic thinking and leadership skills for organizational direction and vision.</p>
+        <ul class="topics-list">
+          <li>Strategic thinking</li>
+          <li>Vision development</li>
+          <li>Strategic planning</li>
+          <li>Innovation leadership</li>
+          <li>Decision-making frameworks</li>
+          <li>Risk management</li>
+          <li>Stakeholder management</li>
+          <li>Organizational alignment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Introduction to Change Management</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of organizational change and change management principles.</p>
+        <ul class="topics-list">
+          <li>Types of organizational change</li>
+          <li>Change drivers</li>
+          <li>Change resistance</li>
+          <li>Change readiness assessment</li>
+          <li>Change stakeholders</li>
+          <li>Change communication</li>
+          <li>Change leadership roles</li>
+          <li>Change culture</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Change Models & Frameworks</h3>
+        </div>
+        <p class="unit-description">Apply proven change management models and frameworks for successful transformations.</p>
+        <ul class="topics-list">
+          <li>Kotter's 8-step process</li>
+          <li>ADKAR model</li>
+          <li>Lewin's change model</li>
+          <li>McKinsey 7S framework</li>
+          <li>Bridges transition model</li>
+          <li>Agile change methods</li>
+          <li>Systems thinking</li>
+          <li>Change measurement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Leading Change Initiatives</h3>
+        </div>
+        <p class="unit-description">Learn to design, implement, and sustain successful organizational change initiatives.</p>
+        <ul class="topics-list">
+          <li>Change strategy development</li>
+          <li>Change planning</li>
+          <li>Coalition building</li>
+          <li>Change communication plans</li>
+          <li>Training and development</li>
+          <li>Resistance management</li>
+          <li>Quick wins strategy</li>
+          <li>Change sustainability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Digital Transformation Leadership</h3>
+        </div>
+        <p class="unit-description">Navigate the complexities of digital transformation and technology-driven change.</p>
+        <ul class="topics-list">
+          <li>Digital transformation strategy</li>
+          <li>Technology adoption</li>
+          <li>Digital culture change</li>
+          <li>Data-driven decision making</li>
+          <li>Innovation management</li>
+          <li>Digital skills development</li>
+          <li>Cybersecurity awareness</li>
+          <li>Future workforce planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Organizational Culture & Transformation</h3>
+        </div>
+        <p class="unit-description">Shape and transform organizational culture to support strategic objectives.</p>
+        <ul class="topics-list">
+          <li>Culture assessment</li>
+          <li>Culture change strategies</li>
+          <li>Values and behaviors</li>
+          <li>Culture integration</li>
+          <li>Leadership modeling</li>
+          <li>Employee engagement</li>
+          <li>Culture measurement</li>
+          <li>Sustaining culture change</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Crisis Leadership & Resilience</h3>
+        </div>
+        <p class="unit-description">Develop skills for leading through crises and building organizational resilience.</p>
+        <ul class="topics-list">
+          <li>Crisis leadership principles</li>
+          <li>Crisis communication</li>
+          <li>Decision-making under pressure</li>
+          <li>Business continuity planning</li>
+          <li>Resilience building</li>
+          <li>Recovery strategies</li>
+          <li>Learning from crisis</li>
+          <li>Future-proofing organizations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Foundations of Leadership</h1>
+      <p>Explore fundamental leadership concepts, theories, and the evolution of leadership thought.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Leadership vs Management</h3>
+        <p>Understand the critical distinctions between leadership and management roles and functions.</p>
+        <span class="leadership-badge">Vision Setting</span>
+        <span class="leadership-badge">People Focus</span>
+        <span class="leadership-badge">Change Agent</span>
+        <div class="leadership-box">
+          Leadership is about setting direction, aligning people, and motivating and inspiring them to achieve a vision. Management is about planning, organizing, controlling, and problem-solving to maintain stability and efficiency in current operations.
+        </div>
+        <div class="code-example">
+          # Leadership vs Management Framework<br>
+          leadership_vs_management = {<br>
+          &nbsp;&nbsp;"leadership": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary_focus": "Doing the right things",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_activities": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"setting_direction": "Creating vision and strategy",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"aligning_people": "Communicating vision and building coalitions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"motivating": "Inspiring and energizing teams",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"change_focus": "Producing useful change"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"orientation": "Long-term, future-focused",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Transformational, inspirational",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"relationship": "Followers and stakeholders",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mindset": "Innovation and adaptation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"management": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary_focus": "Doing things right",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_activities": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"planning": "Setting detailed steps and timetables",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"organizing": "Creating structure and staffing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"controlling": "Monitoring results vs plans",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"problem_solving": "Maintaining predictability and order"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"orientation": "Short-term, present-focused",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Transactional, systematic",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"relationship": "Subordinates and systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mindset": "Efficiency and control"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"integration": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"both_needed": "Successful organizations need both",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complementary": "Leadership and management complement each other",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"balance": "Different situations require different emphases",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"development": "Leaders must develop both skill sets"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Leadership Definitions</h3>
+        <p>Explore various definitions of leadership and understand its multifaceted nature.</p>
+        <div class="concept-highlight">
+          Core Leadership Elements:<br>
+          • Influence: Ability to affect others' behavior and attitudes<br>
+          • Vision: Creating and communicating compelling future direction<br>
+          • Relationships: Building trust and connection with others<br>
+          • Results: Achieving meaningful outcomes through others
+        </div>
+        <div class="change-insight">
+          <strong>Leadership Perspectives:</strong><br>
+          • Process View: Leadership as an interactive process<br>
+          • Trait View: Leadership as personal characteristics<br>
+          • Behavior View: Leadership as observable actions<br>
+          • Transformational View: Leadership as inspiring change
+        </div>
+        <div class="code-example">
+          # Leadership Definition Framework<br>
+          leadership_definitions = {<br>
+          &nbsp;&nbsp;"classic_definitions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"northouse": "Process whereby an individual influences others to achieve a common goal",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"kouzes_posner": "Mobilizing others to want to struggle for shared aspirations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"kotter": "Setting direction, aligning people, motivating and inspiring",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"maxwell": "Influence - nothing more, nothing less"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"influence": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Capacity to affect others' actions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"types": ["Positional", "Personal", "Expert", "Referent"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Non-coercive", "Purposeful", "Relational"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"nature": "Interactive and dynamic",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"elements": ["Leader", "Followers", "Context", "Purpose"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"flow": "Bidirectional between leader and followers"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"common_purpose": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"shared_goals": "Mutual objectives and aspirations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"collective_effort": "Working together toward outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"value_creation": "Achieving meaningful results"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"modern_perspectives": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"adaptive_leadership": "Mobilizing adaptive work",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authentic_leadership": "Being genuine and true to oneself",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"servant_leadership": "Serving others first",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"digital_leadership": "Leading in digital age contexts"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Perspectives</h3>
+        <p>Trace the evolution of leadership thought from ancient times to contemporary approaches.</p>
+        <div class="transformation-tool">
+          <strong>Leadership Evolution Eras
