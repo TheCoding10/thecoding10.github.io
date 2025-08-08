@@ -1,0 +1,738 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Game Theory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #8b5cf6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '♟️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581c87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .game-badge {
+      display: inline-block;
+      background: #f5f3ff;
+      color: #581c87;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .game-box {
+      background: #f5f3ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .strategy-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .equilibrium-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .payoff-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>♟️ Game Theory</h1>
+    <p>Master strategic thinking and analyze interactive decision-making situations</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Game Theory Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~115</span>
+          <div class="stat-label">Strategic Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Game Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">75+</span>
+          <div class="stat-label">Strategic Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Game Theory</h3>
+        </div>
+        <p class="unit-description">Understand the foundations of strategic thinking and game-theoretic modeling.</p>
+        <ul class="topics-list">
+          <li>What is game theory?</li>
+          <li>Strategic interactions</li>
+          <li>Players, strategies, payoffs</li>
+          <li>Types of games</li>
+          <li>Solution concepts</li>
+          <li>Rationality assumptions</li>
+          <li>Game representation</li>
+          <li>Applications overview</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Strategic Form Games</h3>
+        </div>
+        <p class="unit-description">Master the analysis of simultaneous-move games using normal form representation.</p>
+        <ul class="topics-list">
+          <li>Normal form representation</li>
+          <li>Payoff matrices</li>
+          <li>Dominant strategies</li>
+          <li>Iterated dominance</li>
+          <li>Best response analysis</li>
+          <li>Mixed strategies</li>
+          <li>Randomization</li>
+          <li>Classic games</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Nash Equilibrium</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental solution concept of non-cooperative game theory.</p>
+        <ul class="topics-list">
+          <li>Nash equilibrium definition</li>
+          <li>Pure strategy equilibria</li>
+          <li>Mixed strategy equilibria</li>
+          <li>Existence and uniqueness</li>
+          <li>Computing equilibria</li>
+          <li>Multiple equilibria</li>
+          <li>Stability properties</li>
+          <li>Interpretation issues</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Extensive Form Games</h3>
+        </div>
+        <p class="unit-description">Analyze sequential games with perfect and imperfect information.</p>
+        <ul class="topics-list">
+          <li>Game trees</li>
+          <li>Sequential moves</li>
+          <li>Perfect information</li>
+          <li>Backward induction</li>
+          <li>Subgame perfect equilibrium</li>
+          <li>Imperfect information</li>
+          <li>Information sets</li>
+          <li>Behavioral strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Repeated Games</h3>
+        </div>
+        <p class="unit-description">Study how repeated interactions change strategic behavior and enable cooperation.</p>
+        <ul class="topics-list">
+          <li>Finite repetition</li>
+          <li>Infinite repetition</li>
+          <li>Folk theorems</li>
+          <li>Trigger strategies</li>
+          <li>Cooperation sustainability</li>
+          <li>Reputation effects</li>
+          <li>Imperfect monitoring</li>
+          <li>Random termination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Incomplete Information</h3>
+        </div>
+        <p class="unit-description">Analyze games where players have private information about types or preferences.</p>
+        <ul class="topics-list">
+          <li>Bayesian games</li>
+          <li>Types and beliefs</li>
+          <li>Bayesian Nash equilibrium</li>
+          <li>Perfect Bayesian equilibrium</li>
+          <li>Signaling games</li>
+          <li>Pooling and separating</li>
+          <li>Cheap talk</li>
+          <li>Mechanism design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cooperative Game Theory</h3>
+        </div>
+        <p class="unit-description">Study coalition formation, bargaining, and fair allocation of joint gains.</p>
+        <ul class="topics-list">
+          <li>Coalition formation</li>
+          <li>Core solutions</li>
+          <li>Shapley value</li>
+          <li>Bargaining theory</li>
+          <li>Nash bargaining solution</li>
+          <li>Stable sets</li>
+          <li>Nucleolus</li>
+          <li>Fair division</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Auction Theory</h3>
+        </div>
+        <p class="unit-description">Analyze different auction formats and strategic bidding behavior.</p>
+        <ul class="topics-list">
+          <li>Auction formats</li>
+          <li>English auctions</li>
+          <li>Dutch auctions</li>
+          <li>Sealed-bid auctions</li>
+          <li>Common vs private values</li>
+          <li>Winner's curse</li>
+          <li>Revenue equivalence</li>
+          <li>Optimal auction design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Evolutionary Game Theory</h3>
+        </div>
+        <p class="unit-description">Study how strategies evolve in populations over time through natural selection.</p>
+        <ul class="topics-list">
+          <li>Population games</li>
+          <li>Evolutionary stable strategies</li>
+          <li>Replicator dynamics</li>
+          <li>Fitness landscapes</li>
+          <li>Cultural evolution</li>
+          <li>Learning in games</li>
+          <li>Group selection</li>
+          <li>Social norms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Behavioral Game Theory</h3>
+        </div>
+        <p class="unit-description">Examine how psychological factors influence strategic decision-making.</p>
+        <ul class="topics-list">
+          <li>Bounded rationality</li>
+          <li>Learning models</li>
+          <li>Social preferences</li>
+          <li>Fairness concerns</li>
+          <li>Reciprocity</li>
+          <li>Experimental evidence</li>
+          <li>Cognitive limitations</li>
+          <li>Cultural differences</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Matching Theory</h3>
+        </div>
+        <p class="unit-description">Study two-sided matching markets and stable allocation mechanisms.</p>
+        <ul class="topics-list">
+          <li>Marriage markets</li>
+          <li>Stability concepts</li>
+          <li>Deferred acceptance</li>
+          <li>Gale-Shapley algorithm</li>
+          <li>College admissions</li>
+          <li>Kidney exchange</li>
+          <li>School choice</li>
+          <li>Market design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Applications in Economics</h3>
+        </div>
+        <p class="unit-description">Apply game theory concepts to real-world economic and business problems.</p>
+        <ul class="topics-list">
+          <li>Industrial organization</li>
+          <li>Oligopoly competition</li>
+          <li>Political economy</li>
+          <li>International trade</li>
+          <li>Environmental economics</li>
+          <li>Financial markets</li>
+          <li>Contract theory</li>
+          <li>Policy analysis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Game Theory</h1>
+      <p>Understand the foundations of strategic thinking and game-theoretic modeling.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Game Theory?</h3>
+        <p>Explore the definition, scope, and purpose of game theory as a tool for analyzing strategic interactions.</p>
+        <span class="game-badge">Strategic Thinking</span>
+        <span class="game-badge">Decision Making</span>
+        <span class="game-badge">Interactions</span>
+        <div class="game-box">
+          Game theory is the mathematical study of strategic decision-making among rational agents. It provides a framework for understanding situations where the outcome for each participant depends not only on their own decisions but also on the decisions of others.
+        </div>
+        <div class="code-example">
+          # Game Theory Definition Framework<br>
+          game_theory = {<br>
+          &nbsp;&nbsp;"definition": "Mathematical study of strategic interactions",<br>
+          &nbsp;&nbsp;"key_elements": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"players": "Decision makers in the game",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategies": "Available choices for each player",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"payoffs": "Outcomes resulting from strategy combinations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"information": "What players know about the game"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interdependence": "Each player's payoff depends on others' choices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"rationality": "Players seek to maximize their own payoffs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategic_thinking": "Players consider others' likely actions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"equilibrium": "Stable outcomes where no player wants to change"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"economics": ["Market competition", "Auctions", "Bargaining"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"politics": ["Voting", "International relations", "Coalition formation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business": ["Pricing", "Product development", "Strategic alliances"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"biology": ["Evolution", "Animal behavior", "Resource competition"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Strategic Interactions</h3>
+        <p>Understand what makes a situation strategic and how it differs from individual decision-making.</p>
+        <div class="concept-highlight">
+          Strategic Situation Characteristics:<br>
+          • Multiple decision-makers (players)<br>
+          • Interdependent payoffs<br>
+          • Each player aware of the interaction<br>
+          • Players choose strategies simultaneously or sequentially
+        </div>
+        <div class="strategy-insight">
+          <strong>Strategic vs Individual Decisions:</strong><br>
+          In individual decisions, outcomes depend only on your choice and external factors. In strategic situations, outcomes depend critically on what others choose to do.
+        </div>
+        <div class="code-example">
+          # Strategic Interaction Examples<br>
+          strategic_situations = {<br>
+          &nbsp;&nbsp;"market_competition": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"players": ["Firms in same industry"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategies": ["Pricing", "Product quality", "Advertising"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interdependence": "Firm A's profit depends on Firm B's pricing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "If competitor lowers price, should I match or differentiate?"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"auction": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"players": ["Bidders"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategies": ["Bid amount"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interdependence": "Winning depends on others' bids",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "How much to bid knowing others are bidding too?"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"arms_race": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"players": ["Countries"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategies": ["Military spending level"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interdependence": "Security depends on relative military power",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "More spending increases security but wastes resources"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"coordination": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"players": ["Team members", "Drivers", "Technology adopters"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strategies": ["Which standard/method to use"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interdependence": "Benefit from choosing same as others",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Which side of road to drive on"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Players, Strategies, and Payoffs</h3>
+        <p>Learn the basic building blocks that define any game-theoretic model.</p>
+        <div class="equilibrium-tool">
+          <strong>Game Components:</strong><br>
+          • Players: The decision-makers (can be individuals, firms, countries)<br>
+          • Strategy set: All possible actions available to each player<br>
+          • Payoff function: Maps strategy combinations to outcomes for each player<br>
+          • Information structure: What each player knows when making decisions
+        </div>
+        <div class="payoff-indicator">
+          <strong>Payoff Interpretation:</strong><br>
+          Payoffs represent players' preferences over outcomes. They can be monetary (profits, costs) or represent utility, happiness, or any measure of success the player cares about.
+        </div>
+        <div class="code-example">
+          # Game Structure Definition<br>
+          game_structure = {<br>
+          &nbsp;&nbsp;"players": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Set of decision-makers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"notation": "N = {1, 2, ..., n}",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Firms", "Countries", "Individuals", "Political parties"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumptions": ["Rational", "Self-interested", "Strategic"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"strategies": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Available actions for each player",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"notation": "Si = strategy set for player i",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Pure strategies", "Mixed strategies"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"price_competition": ["High price", "Low price"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"auction": ["Bid $0 to $100"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
