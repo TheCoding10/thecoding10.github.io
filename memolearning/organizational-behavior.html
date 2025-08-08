@@ -1,0 +1,740 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Organizational Behavior</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(153, 27, 27, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '👥';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #991b1b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(153, 27, 27, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .behavior-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #991b1b;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .theory-box {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .research-finding {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .workplace-example {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>👥 Organizational Behavior</h1>
+    <p>Master human behavior in organizations to improve performance, teamwork, and leadership</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Organizational Behavior Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Behavioral Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Theories & Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Workplace Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to OB</h3>
+        </div>
+        <p class="unit-description">Understand what organizational behavior is and its importance in modern workplaces.</p>
+        <ul class="topics-list">
+          <li>What is organizational behavior</li>
+          <li>Historical development of OB</li>
+          <li>Levels of analysis in OB</li>
+          <li>OB research methods</li>
+          <li>Challenges and opportunities</li>
+          <li>Diversity and inclusion</li>
+          <li>Global and cultural considerations</li>
+          <li>Ethical issues in OB</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Individual Behavior & Personality</h3>
+        </div>
+        <p class="unit-description">Explore individual differences and how personality affects workplace behavior.</p>
+        <ul class="topics-list">
+          <li>Personality theories and frameworks</li>
+          <li>Big Five personality model</li>
+          <li>MBTI and other assessments</li>
+          <li>Individual differences</li>
+          <li>Personality and job performance</li>
+          <li>Emotional intelligence</li>
+          <li>Self-awareness and self-management</li>
+          <li>Person-job and person-organization fit</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Perception & Attribution</h3>
+        </div>
+        <p class="unit-description">Learn how people perceive and interpret workplace situations and behaviors.</p>
+        <ul class="topics-list">
+          <li>Perception process</li>
+          <li>Selective perception</li>
+          <li>Perceptual errors and biases</li>
+          <li>Attribution theory</li>
+          <li>Fundamental attribution error</li>
+          <li>Self-serving bias</li>
+          <li>Impression management</li>
+          <li>Workplace stereotyping</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Motivation Theories</h3>
+        </div>
+        <p class="unit-description">Understand what motivates people and how to apply motivation theories at work.</p>
+        <ul class="topics-list">
+          <li>Motivation fundamentals</li>
+          <li>Maslow's hierarchy of needs</li>
+          <li>ERG theory</li>
+          <li>Two-factor theory</li>
+          <li>McClelland's needs theory</li>
+          <li>Goal-setting theory</li>
+          <li>Expectancy theory</li>
+          <li>Equity theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Job Satisfaction & Engagement</h3>
+        </div>
+        <p class="unit-description">Explore factors that contribute to job satisfaction and employee engagement.</p>
+        <ul class="topics-list">
+          <li>Job satisfaction concepts</li>
+          <li>Attitude-behavior relationship</li>
+          <li>Job characteristics model</li>
+          <li>Employee engagement</li>
+          <li>Organizational commitment</li>
+          <li>Job design and redesign</li>
+          <li>Work-life balance</li>
+          <li>Measuring satisfaction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Learning & Development</h3>
+        </div>
+        <p class="unit-description">Understand how people learn and develop skills in organizational settings.</p>
+        <ul class="topics-list">
+          <li>Learning theories</li>
+          <li>Classical and operant conditioning</li>
+          <li>Social learning theory</li>
+          <li>Reinforcement schedules</li>
+          <li>Behavior modification</li>
+          <li>Training and development</li>
+          <li>Knowledge management</li>
+          <li>Organizational learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Group Dynamics</h3>
+        </div>
+        <p class="unit-description">Learn how groups form, develop, and function within organizations.</p>
+        <ul class="topics-list">
+          <li>Group formation and development</li>
+          <li>Group structure and roles</li>
+          <li>Group norms and conformity</li>
+          <li>Group decision-making</li>
+          <li>Groupthink phenomenon</li>
+          <li>Social loafing</li>
+          <li>Intergroup relations</li>
+          <li>Virtual groups and teams</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Teams & Teamwork</h3>
+        </div>
+        <p class="unit-description">Understand team effectiveness and how to build high-performing teams.</p>
+        <ul class="topics-list">
+          <li>Types of teams</li>
+          <li>Team effectiveness model</li>
+          <li>Team composition</li>
+          <li>Team processes</li>
+          <li>Team leadership</li>
+          <li>Conflict in teams</li>
+          <li>Team building activities</li>
+          <li>Cross-functional teams</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Communication</h3>
+        </div>
+        <p class="unit-description">Master effective communication skills and understand communication processes.</p>
+        <ul class="topics-list">
+          <li>Communication process model</li>
+          <li>Verbal and nonverbal communication</li>
+          <li>Listening skills</li>
+          <li>Communication networks</li>
+          <li>Barriers to communication</li>
+          <li>Cross-cultural communication</li>
+          <li>Digital communication</li>
+          <li>Organizational communication</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Leadership</h3>
+        </div>
+        <p class="unit-description">Explore leadership theories and develop effective leadership skills.</p>
+        <ul class="topics-list">
+          <li>Leadership vs management</li>
+          <li>Trait theories of leadership</li>
+          <li>Behavioral theories</li>
+          <li>Contingency theories</li>
+          <li>Transformational leadership</li>
+          <li>Charismatic leadership</li>
+          <li>Authentic leadership</li>
+          <li>Leadership development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Power & Politics</h3>
+        </div>
+        <p class="unit-description">Understand organizational power dynamics and political behavior.</p>
+        <ul class="topics-list">
+          <li>Sources of power</li>
+          <li>Power tactics</li>
+          <li>Influence strategies</li>
+          <li>Political behavior</li>
+          <li>Organizational politics</li>
+          <li>Ethics and power</li>
+          <li>Empowerment</li>
+          <li>Managing up and across</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Organizational Culture & Change</h3>
+        </div>
+        <p class="unit-description">Learn about organizational culture and how to manage organizational change.</p>
+        <ul class="topics-list">
+          <li>Organizational culture defined</li>
+          <li>Culture dimensions and types</li>
+          <li>Culture and performance</li>
+          <li>Culture change strategies</li>
+          <li>Change management process</li>
+          <li>Resistance to change</li>
+          <li>Leading change initiatives</li>
+          <li>Organizational development</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to OB</h1>
+      <p>Understand what organizational behavior is and its importance in modern workplaces.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Organizational Behavior</h3>
+        <p>Learn the fundamental definition and scope of organizational behavior as a field of study.</p>
+        <span class="behavior-badge">Human Behavior</span>
+        <span class="behavior-badge">Workplace Performance</span>
+        <span class="behavior-badge">Scientific Study</span>
+        <div class="algorithm-box">
+          Organizational Behavior (OB) is the systematic study of how people behave in organizations and how that behavior affects organizational performance. It combines psychology, sociology, anthropology, and management to understand workplace dynamics.
+        </div>
+        <div class="code-example">
+          # Organizational Behavior definition framework<br>
+          ob_definition = {<br>
+          &nbsp;&nbsp;"core_focus": "Human behavior in organizational settings",<br>
+          &nbsp;&nbsp;"key_objectives": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Explain workplace behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Predict future behavior patterns",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Control and influence behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Improve organizational effectiveness"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"contributing_disciplines": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"psychology": "Individual behavior and mental processes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sociology": "Group behavior and social systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"anthropology": "Cultural influences and values",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"political_science": "Power and conflict dynamics",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"economics": "Rational decision-making"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Employee motivation and engagement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Team effectiveness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Leadership development",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Organizational change",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Conflict resolution"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Why OB matters in business<br>
+          business_impact = {<br>
+          &nbsp;&nbsp;"performance": "Better understanding improves productivity",<br>
+          &nbsp;&nbsp;"retention": "Reduces turnover and recruitment costs",<br>
+          &nbsp;&nbsp;"innovation": "Enhances creativity and problem-solving",<br>
+          &nbsp;&nbsp;"satisfaction": "Improves employee and customer satisfaction"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Levels of Analysis in OB</h3>
+        <p>Understand the three main levels at which organizational behavior is studied and analyzed.</p>
+        <div class="concept-highlight">
+          Three Levels of OB Analysis:<br>
+          • Individual Level: Personal characteristics, attitudes, personality<br>
+          • Group Level: Team dynamics, communication, leadership<br>
+          • Organizational Level: Culture, structure, change processes
+        </div>
+        <div class="research-finding">
+          <strong>Research Insight:</strong> Studies show that individual factors account for about 25% of workplace performance, group factors 35%, and organizational factors 40%. This highlights the importance of all three levels.
+        </div>
+        <div class="code-example">
+          # Levels of analysis in OB<br>
+          ob_levels = {<br>
+          &nbsp;&nbsp;"individual_level": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Individual employee behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_topics": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Personality and individual differences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Motivation and job satisfaction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Perception and decision-making",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Learning and development",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Stress and well-being"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outcome_variables": ["Job performance", "Absenteeism", "Turnover"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"group_level": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Team and group dynamics",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_topics": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Group formation and development",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Team effectiveness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Communication patterns",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Leadership styles",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Conflict and negotiation"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outcome_variables": ["Team productivity", "Cohesion", "Innovation"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"organizational_level": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Organization-wide systems and processes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_topics": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Organizational culture",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Structure and design",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Change management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategy implementation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Human resource practices"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outcome_variables": ["Overall performance", "Adaptability", "Survival"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Challenges and Opportunities</h3>
+        <p>Explore current challenges and opportunities facing organizations and OB practitioners.</p>
+        <div class="algorithm-box">
+          Modern organizations face unprecedented challenges including remote work, generational differences, technological disruption, and changing employee expectations. OB provides frameworks to navigate these challenges effectively.
+        </div>
+        <div class="workplace-example">
+          <strong>Contemporary Challenge:</strong> The shift to remote and hybrid work has fundamentally changed how we think about team dynamics, communication, and organizational culture. OB principles help organizations adapt to these new realities.
+        </div>
+        <div class="code-example">
+          # Current OB challenges and opportunities<br>
+          contemporary_issues = {<br>
+          &nbsp;&nbsp;"workforce_challenges": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"demographic_shifts": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Multi-generational workforce",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
