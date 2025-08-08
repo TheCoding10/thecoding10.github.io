@@ -1,0 +1,741 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Global Business</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #065f46, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 95, 70, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #065f46;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #065f46, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 95, 70, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .global-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .cultural-box {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .trade-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .market-opportunity {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .global-metric {
+      background: #fef7ff;
+      border: 1px solid #f3e8ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌍 Global Business</h1>
+    <p>Navigate the complexities of international business and global markets</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Global Business Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Global Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">60+</span>
+          <div class="stat-label">Country Markets</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <div class="stat-label">Business Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Global Business</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of international business and globalization trends.</p>
+        <ul class="topics-list">
+          <li>Globalization definition and drivers</li>
+          <li>International business theories</li>
+          <li>Global value chains</li>
+          <li>Benefits and challenges</li>
+          <li>Historical perspectives</li>
+          <li>Anti-globalization movements</li>
+          <li>Future of globalization</li>
+          <li>Digital transformation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Global Economic Environment</h3>
+        </div>
+        <p class="unit-description">Analyze global economic systems, development levels, and integration mechanisms.</p>
+        <ul class="topics-list">
+          <li>Economic systems comparison</li>
+          <li>Development levels</li>
+          <li>Economic indicators</li>
+          <li>Regional integration</li>
+          <li>Trade blocs</li>
+          <li>Economic unions</li>
+          <li>Emerging markets</li>
+          <li>Global financial system</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Political & Legal Environment</h3>
+        </div>
+        <p class="unit-description">Navigate political systems, legal frameworks, and regulatory environments globally.</p>
+        <ul class="topics-list">
+          <li>Political systems</li>
+          <li>Political risk assessment</li>
+          <li>Legal systems</li>
+          <li>International law</li>
+          <li>Contract enforcement</li>
+          <li>Intellectual property</li>
+          <li>Regulatory compliance</li>
+          <li>Government relations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Cultural Environment & Communication</h3>
+        </div>
+        <p class="unit-description">Master cross-cultural understanding and international communication strategies.</p>
+        <ul class="topics-list">
+          <li>Cultural dimensions</li>
+          <li>Hofstede's framework</li>
+          <li>Cross-cultural communication</li>
+          <li>Business etiquette</li>
+          <li>Language considerations</li>
+          <li>Cultural adaptation</li>
+          <li>Negotiation styles</li>
+          <li>Virtual team management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">International Trade Theory</h3>
+        </div>
+        <p class="unit-description">Understand theoretical foundations and patterns of international trade.</p>
+        <ul class="topics-list">
+          <li>Comparative advantage</li>
+          <li>Factor endowments</li>
+          <li>Product life cycle theory</li>
+          <li>New trade theory</li>
+          <li>Porter's diamond model</li>
+          <li>Trade patterns</li>
+          <li>Intra-industry trade</li>
+          <li>Services trade</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Trade Policy & Institutions</h3>
+        </div>
+        <p class="unit-description">Examine international trade policies, agreements, and institutional frameworks.</p>
+        <ul class="topics-list">
+          <li>Trade policy instruments</li>
+          <li>WTO and multilateral system</li>
+          <li>Regional trade agreements</li>
+          <li>Trade disputes</li>
+          <li>Standards and regulations</li>
+          <li>Trade facilitation</li>
+          <li>Digital trade</li>
+          <li>Trade and development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Foreign Direct Investment</h3>
+        </div>
+        <p class="unit-description">Analyze FDI patterns, theories, and multinational enterprise strategies.</p>
+        <ul class="topics-list">
+          <li>FDI theories</li>
+          <li>Investment patterns</li>
+          <li>Location decisions</li>
+          <li>Entry modes</li>
+          <li>Investment incentives</li>
+          <li>Performance requirements</li>
+          <li>Investment protection</li>
+          <li>Sovereign wealth funds</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">International Finance & Exchange Rates</h3>
+        </div>
+        <p class="unit-description">Understand global financial markets, exchange rate systems, and currency risk management.</p>
+        <ul class="topics-list">
+          <li>Exchange rate systems</li>
+          <li>Currency markets</li>
+          <li>Exchange rate determination</li>
+          <li>Currency risk management</li>
+          <li>International capital markets</li>
+          <li>Balance of payments</li>
+          <li>Financial crises</li>
+          <li>Cryptocurrency and fintech</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Global Marketing & Strategy</h3>
+        </div>
+        <p class="unit-description">Develop effective marketing strategies for international markets.</p>
+        <ul class="topics-list">
+          <li>Global marketing strategy</li>
+          <li>Market entry strategies</li>
+          <li>Product adaptation</li>
+          <li>Pricing strategies</li>
+          <li>Distribution channels</li>
+          <li>Promotion and advertising</li>
+          <li>Brand management</li>
+          <li>Digital marketing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Global Operations & Supply Chain</h3>
+        </div>
+        <p class="unit-description">Manage international operations and optimize global supply chains.</p>
+        <ul class="topics-list">
+          <li>Global operations strategy</li>
+          <li>Supply chain design</li>
+          <li>Sourcing decisions</li>
+          <li>Logistics management</li>
+          <li>Quality management</li>
+          <li>Technology integration</li>
+          <li>Sustainability</li>
+          <li>Risk management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Global Human Resources</h3>
+        </div>
+        <p class="unit-description">Manage human resources across cultures and international boundaries.</p>
+        <ul class="topics-list">
+          <li>International HRM</li>
+          <li>Staffing strategies</li>
+          <li>Expatriate management</li>
+          <li>Cross-cultural training</li>
+          <li>Global compensation</li>
+          <li>Performance management</li>
+          <li>Labor relations</li>
+          <li>Diversity and inclusion</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Emerging Markets & Future Trends</h3>
+        </div>
+        <p class="unit-description">Explore opportunities and challenges in emerging markets and future business trends.</p>
+        <ul class="topics-list">
+          <li>Emerging market characteristics</li>
+          <li>BRICS economies</li>
+          <li>Market entry strategies</li>
+          <li>Innovation ecosystems</li>
+          <li>Digital transformation</li>
+          <li>Sustainability trends</li>
+          <li>Geopolitical changes</li>
+          <li>Future of globalization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Global Business</h1>
+      <p>Understand the fundamentals of international business and globalization trends.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Globalization Definition and Drivers</h3>
+        <p>Explore the comprehensive definition of globalization and the key forces driving global integration.</p>
+        <span class="global-badge">Economic Integration</span>
+        <span class="global-badge">Technology</span>
+        <span class="global-badge">Cultural Exchange</span>
+        <div class="cultural-box">
+          Globalization is the process of increased interconnectedness and interdependence among countries through the exchange of goods, services, information, and ideas across national borders, facilitated by advances in technology, transportation, and communication.
+        </div>
+        <div class="code-example">
+          # Globalization Framework<br>
+          globalization = {<br>
+          &nbsp;&nbsp;"definition": "Increasing interconnectedness worldwide",<br>
+          &nbsp;&nbsp;"dimensions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"economic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"trade": "Cross-border exchange of goods/services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"investment": "Foreign direct investment flows",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"finance": "Integrated capital markets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"production": "Global value chains"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"political": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"governance": "International institutions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cooperation": "Multilateral agreements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sovereignty": "Shared decision-making"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cultural": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"information": "Global media and internet",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"values": "Spread of ideas and norms",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifestyle": "Consumer culture convergence"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technological": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"communication": "Digital connectivity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"transportation": "Reduced travel costs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"innovation": "Technology transfer"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_drivers": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Technological advancement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Trade liberalization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Investment flows",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Cultural exchange",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Political cooperation"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">International Business Theories</h3>
+        <p>Understand fundamental theories that explain why and how businesses operate internationally.</p>
+        <div class="concept-highlight">
+          Key International Business Theories:<br>
+          • Product Life Cycle Theory: International expansion stages<br>
+          • Eclectic Paradigm: Ownership, Location, Internalization<br>
+          • Uppsala Model: Gradual internationalization process<br>
+          • Born Global Theory: Rapid international expansion
+        </div>
+        <div class="trade-insight">
+          <strong>Theory Applications:</strong><br>
+          • Strategic Planning: Guide expansion decisions<br>
+          • Market Entry: Choose appropriate entry modes<br>
+          • Resource Allocation: Optimize international investments<br>
+          • Risk Assessment: Understand expansion challenges
+        </div>
+        <div class="code-example">
+          # International Business Theories<br>
+          ib_theories = {<br>
+          &nbsp;&nbsp;"product_life_cycle": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"developer": "Raymond Vernon",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"core_idea": "Products follow lifecycle internationally",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stages": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"introduction": "Domestic production and export",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"growth": "Foreign production begins",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"maturity": "Standardization and cost focus",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"decline": "Production shifts to low-cost countries"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": ["Market timing", "Location decisions"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"eclectic_paradigm": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"developer": "John Dunning",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ownership": "Firm-specific advantages",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"location": "Country-specific advantages",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"internalization": "Transaction cost efficiency"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"decision_framework": "All three must be present for FDI",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": ["FDI decisions", "Entry mode choice"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"uppsala_model": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"developers": "Johanson and Vahlne",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process": "Gradual international commitment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stages": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"No regular export activities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Export via agents",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales subsidiaries",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Production/manufacturing"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"psychic_distance": "Cultural similarity factor"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"born_global": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristic": "Rapid internationalization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeline": "Within 3 years of founding",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"enablers": ["Technology", "Niche markets", "Network access"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"industries": ["Software", "Biotechnology", "Creative services"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Global Value Chains</h3>
+        <p>Understand how modern businesses organize production across multiple countries for efficiency and competitive advantage.</p>
+        <div class="market-opportunity">
+          <strong>Global Value Chain Benefits:</strong
