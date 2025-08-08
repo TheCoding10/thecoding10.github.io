@@ -1,0 +1,723 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Convolutional Neural Networks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e11d48 0%, #be185d 50%, #9f1239 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #e11d48, #be185d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🖼️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #e11d48;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be185d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #e11d48, #be185d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(225, 29, 72, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .cnn-badge {
+      display: inline-block;
+      background: #fce7f3;
+      color: #9f1239;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .convolution-box {
+      background: #fdf2f8;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9f1239;
+    }
+
+    .vision-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .filter-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🖼️ Convolutional Neural Networks</h1>
+    <p>Master CNNs for computer vision, image processing, and deep learning applications with spatial data</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Convolutional Neural Networks Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">CNN Architectures</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Computer Vision</h3>
+        </div>
+        <p class="unit-description">Understand the challenges of computer vision and why CNNs are essential.</p>
+        <ul class="topics-list">
+          <li>Computer vision tasks</li>
+          <li>Image representation</li>
+          <li>Pixel values and channels</li>
+          <li>Image classification challenges</li>
+          <li>Traditional vs deep learning</li>
+          <li>CNN motivation</li>
+          <li>Spatial hierarchy</li>
+          <li>Translation invariance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Convolution Operation</h3>
+        </div>
+        <p class="unit-description">Master the fundamental convolution operation and its mathematical properties.</p>
+        <ul class="topics-list">
+          <li>Convolution mathematics</li>
+          <li>Kernel/filter concept</li>
+          <li>Stride and padding</li>
+          <li>Feature detection</li>
+          <li>Edge detection examples</li>
+          <li>Output size calculation</li>
+          <li>Multiple filters</li>
+          <li>Convolution vs correlation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Convolutional Layers</h3>
+        </div>
+        <p class="unit-description">Build convolutional layers and understand feature map generation.</p>
+        <ul class="topics-list">
+          <li>Conv2D layer structure</li>
+          <li>Feature maps</li>
+          <li>Parameter sharing</li>
+          <li>Local connectivity</li>
+          <li>Depth and channels</li>
+          <li>Receptive fields</li>
+          <li>Layer parameters</li>
+          <li>Computational efficiency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Pooling Layers</h3>
+        </div>
+        <p class="unit-description">Learn pooling operations for dimensionality reduction and translation invariance.</p>
+        <ul class="topics-list">
+          <li>Pooling motivation</li>
+          <li>Max pooling</li>
+          <li>Average pooling</li>
+          <li>Global pooling</li>
+          <li>Spatial downsampling</li>
+          <li>Translation invariance</li>
+          <li>Pooling vs convolution</li>
+          <li>Modern alternatives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">CNN Architecture Design</h3>
+        </div>
+        <p class="unit-description">Design complete CNN architectures for image classification tasks.</p>
+        <ul class="topics-list">
+          <li>Layer stacking principles</li>
+          <li>Feature hierarchy</li>
+          <li>Spatial resolution reduction</li>
+          <li>Channel depth increase</li>
+          <li>Fully connected layers</li>
+          <li>Output layer design</li>
+          <li>Architecture patterns</li>
+          <li>Design considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Classic CNN Architectures</h3>
+        </div>
+        <p class="unit-description">Study landmark CNN architectures that shaped computer vision.</p>
+        <ul class="topics-list">
+          <li>LeNet-5 architecture</li>
+          <li>AlexNet breakthrough</li>
+          <li>VGGNet design</li>
+          <li>GoogLeNet/Inception</li>
+          <li>ResNet innovations</li>
+          <li>DenseNet connections</li>
+          <li>MobileNet efficiency</li>
+          <li>EfficientNet scaling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Transfer Learning</h3>
+        </div>
+        <p class="unit-description">Leverage pre-trained models for efficient learning on new tasks.</p>
+        <ul class="topics-list">
+          <li>Transfer learning concept</li>
+          <li>Feature extraction</li>
+          <li>Fine-tuning strategies</li>
+          <li>Layer freezing</li>
+          <li>Pre-trained models</li>
+          <li>Domain adaptation</li>
+          <li>Data requirements</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Data Augmentation</h3>
+        </div>
+        <p class="unit-description">Improve model generalization through data augmentation techniques.</p>
+        <ul class="topics-list">
+          <li>Augmentation importance</li>
+          <li>Geometric transformations</li>
+          <li>Color space changes</li>
+          <li>Noise injection</li>
+          <li>Cutout and mixup</li>
+          <li>Auto augmentation</li>
+          <li>Implementation strategies</li>
+          <li>Augmentation policies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Object Detection</h3>
+        </div>
+        <p class="unit-description">Extend CNNs to locate and classify objects within images.</p>
+        <ul class="topics-list">
+          <li>Object detection tasks</li>
+          <li>Bounding box regression</li>
+          <li>R-CNN family</li>
+          <li>YOLO architecture</li>
+          <li>SSD networks</li>
+          <li>Anchor boxes</li>
+          <li>Non-max suppression</li>
+          <li>Evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Semantic Segmentation</h3>
+        </div>
+        <p class="unit-description">Perform pixel-level classification for detailed scene understanding.</p>
+        <ul class="topics-list">
+          <li>Segmentation vs classification</li>
+          <li>Fully Convolutional Networks</li>
+          <li>U-Net architecture</li>
+          <li>Skip connections</li>
+          <li>Dilated convolutions</li>
+          <li>DeepLab models</li>
+          <li>Loss functions</li>
+          <li>Evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Advanced CNN Techniques</h3>
+        </div>
+        <p class="unit-description">Explore advanced techniques for improving CNN performance.</p>
+        <ul class="topics-list">
+          <li>Batch normalization</li>
+          <li>Dropout in CNNs</li>
+          <li>Activation functions</li>
+          <li>Skip connections</li>
+          <li>Attention mechanisms</li>
+          <li>Depthwise convolutions</li>
+          <li>Group convolutions</li>
+          <li>Neural architecture search</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">CNN Implementation</h3>
+        </div>
+        <p class="unit-description">Build and deploy CNN models using modern frameworks and tools.</p>
+        <ul class="topics-list">
+          <li>TensorFlow/Keras implementation</li>
+          <li>PyTorch CNNs</li>
+          <li>Model optimization</li>
+          <li>GPU acceleration</li>
+          <li>Model deployment</li>
+          <li>Edge deployment</li>
+          <li>Performance tuning</li>
+          <li>Real-world projects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Computer Vision</h1>
+      <p>Understand the challenges of computer vision and why CNNs are essential.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Computer Vision Tasks</h3>
+        <p>Explore the various tasks that computer vision systems can perform.</p>
+        <span class="cnn-badge">Classification</span>
+        <span class="cnn-badge">Detection</span>
+        <span class="cnn-badge">Segmentation</span>
+        <div class="convolution-box">
+          Computer vision encompasses tasks like image classification, object detection, semantic segmentation, face recognition, medical imaging, and autonomous driving - all requiring understanding of visual patterns.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Image Representation</h3>
+        <p>Learn how images are represented as numerical data for computer processing.</p>
+        <div class="vision-highlight">
+          Digital Images: 2D/3D arrays of pixel values<br>
+          Grayscale: Single channel with intensity values 0-255<br>
+          Color (RGB): Three channels (Red, Green, Blue)<br>
+          Shape: (Height, Width, Channels) for most frameworks
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          from PIL import Image<br>
+          <br>
+          def demonstrate_image_representation():<br>
+          &nbsp;&nbsp;"""Show how images are represented as arrays"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== IMAGE REPRESENTATION DEMO ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Create a simple 8x8 grayscale image<br>
+          &nbsp;&nbsp;simple_image = np.array([<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 0, 0, 0, 0, 0, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 255, 255, 0, 0, 255, 255, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 255, 255, 0, 0, 255, 255, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 0, 0, 0, 0, 0, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 0, 255, 255, 0, 0, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 255, 0, 0, 255, 0, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 0, 255, 255, 0, 0, 0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0, 0, 0, 0, 0, 0, 0, 0]<br>
+          &nbsp;&nbsp;], dtype=np.uint8)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"Image shape: {simple_image.shape}")<br>
+          &nbsp;&nbsp;print(f"Data type: {simple_image.dtype}")<br>
+          &nbsp;&nbsp;print(f"Min pixel value: {simple_image.min()}")<br>
+          &nbsp;&nbsp;print(f"Max pixel value: {simple_image.max()}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Create a color (RGB) version<br>
+          &nbsp;&nbsp;color_image = np.zeros((8, 8, 3), dtype=np.uint8)<br>
+          &nbsp;&nbsp;color_image[:,:,0] = simple_image  # Red channel<br>
+          &nbsp;&nbsp;color_image[:,:,1] = simple_image // 2  # Green channel<br>
+          &nbsp;&nbsp;color_image[:,:,2] = simple_image // 4  # Blue channel<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"\\nColor image shape: {color_image.shape}")<br>
+          &nbsp;&nbsp;print(f"Number of channels: {color_image.shape[2]}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Show pixel values for a small region<br>
+          &nbsp;&nbsp;print("\\n=== PIXEL VALUES (top-left 4x4) ===")<br>
+          &nbsp;&nbsp;print("Grayscale:")<br>
+          &nbsp;&nbsp;print(simple_image[:4, :4])<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("\\nRGB (Red channel):")<br>
+          &nbsp;&nbsp;print(color_image[:4, :4, 0])<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return simple_image, color_image<br>
+          <br>
+          # Run demonstration<br>
+          gray_img, color_img = demonstrate_image_representation()<br>
+          <br>
+          print("\\n=== KEY CONCEPTS ===")<br>
+          concepts = {<br>
+          &nbsp;&nbsp;"Pixels": "Basic unit of digital images (picture elements)",<br>
+          &nbsp;&nbsp;"Channels": "Color components (1 for grayscale, 3 for RGB)",<br>
+          &nbsp;&nbsp;"Resolution": "Image dimensions (width x height)",<br>
+          &nbsp;&nbsp;"Bit Depth": "Number of bits per pixel (8-bit = 256 levels)",<br>
+          &nbsp;&nbsp;"Arrays": "Images stored as multi-dimensional arrays",<br>
+          &nbsp;&nbsp;"Normalization": "Often scale pixels to [0,1] range for neural networks"<br>
+          }<br>
+          <br>
+          for concept, description in concepts.items():<br>
+          &nbsp;&nbsp;print(f"{concept}: {description}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Image Classification Challenges</h3>
+        <p>Understand the fundamental challenges that make computer vision difficult.</p>
+        <div class="convolution-box">
+          Viewpoint Variation: Objects look different from different angles<br>
+          Scale Variation: Objects appear at different sizes<br>
+          Illumination: Lighting conditions affect appearance<br>
+          Occlusion: Objects may be partially hidden<br>
+          Intra-class Variation: Objects in same class look different
+        </div>
+        <div class="code-example">
+          # Computer vision challenges demonstration<br>
+          <br>
+          def demonstrate_cv_challenges():<br>
+          &nbsp;&nbsp;"""Illustrate challenges in computer vision"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== COMPUTER VISION CHALLENGES ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;challenges = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Viewpoint Variation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Problem": "Same object looks different from different angles",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Example": "A car from front vs side vs back view",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"CNN Solution": "Translation and rotation invariance through pooling"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Scale Variation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Problem": "Objects appear at different sizes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Example": "Cat close-up vs cat far away",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"CNN Solution": "Multi-scale feature detection with different filter sizes"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Illumination Changes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Problem":
