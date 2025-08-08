@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Health Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #5eead4 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 118, 110, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🏥';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f766e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #14b8a6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .health-badge {
+      display: inline-block;
+      background: #f0fdfa;
+      color: #0f766e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .health-box {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f766e;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .demand-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .policy-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .cost-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🏥 Health Economics</h1>
+    <p>Analyze healthcare markets, policy decisions, and the economics of health and medical care</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Health Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~130</span>
+          <div class="stat-label">Health Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Healthcare Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">85+</span>
+          <div class="stat-label">Policy Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Health Economics</h3>
+        </div>
+        <p class="unit-description">Understand the unique characteristics of healthcare markets and economic analysis.</p>
+        <ul class="topics-list">
+          <li>Health vs healthcare</li>
+          <li>Economic approach to health</li>
+          <li>Scarcity in healthcare</li>
+          <li>Healthcare market failures</li>
+          <li>Role of government</li>
+          <li>Health system objectives</li>
+          <li>Efficiency and equity</li>
+          <li>Economic evaluation methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Demand for Health and Healthcare</h3>
+        </div>
+        <p class="unit-description">Analyze how individuals make decisions about health investments and medical care consumption.</p>
+        <ul class="topics-list">
+          <li>Health as human capital</li>
+          <li>Grossman health model</li>
+          <li>Health production function</li>
+          <li>Demand for medical care</li>
+          <li>Price elasticity</li>
+          <li>Income effects</li>
+          <li>Time costs</li>
+          <li>Lifestyle choices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Health Insurance Economics</h3>
+        </div>
+        <p class="unit-description">Study insurance markets, risk pooling, and the impact of insurance on healthcare demand.</p>
+        <ul class="topics-list">
+          <li>Insurance theory</li>
+          <li>Risk aversion</li>
+          <li>Adverse selection</li>
+          <li>Moral hazard</li>
+          <li>Insurance market design</li>
+          <li>Employer-sponsored insurance</li>
+          <li>Government insurance programs</li>
+          <li>Insurance regulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Healthcare Provider Behavior</h3>
+        </div>
+        <p class="unit-description">Examine how physicians, hospitals, and other providers make economic decisions.</p>
+        <ul class="topics-list">
+          <li>Physician agency</li>
+          <li>Supplier-induced demand</li>
+          <li>Hospital economics</li>
+          <li>Not-for-profit behavior</li>
+          <li>Quality competition</li>
+          <li>Provider payment systems</li>
+          <li>Medical technology adoption</li>
+          <li>Healthcare labor markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Healthcare Markets and Competition</h3>
+        </div>
+        <p class="unit-description">Analyze market structure, competition, and regulation in healthcare industries.</p>
+        <ul class="topics-list">
+          <li>Market structure analysis</li>
+          <li>Hospital competition</li>
+          <li>Physician markets</li>
+          <li>Pharmaceutical markets</li>
+          <li>Medical device industry</li>
+          <li>Antitrust in healthcare</li>
+          <li>Market concentration</li>
+          <li>Entry barriers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Healthcare Financing Systems</h3>
+        </div>
+        <p class="unit-description">Compare different approaches to financing healthcare across countries and systems.</p>
+        <ul class="topics-list">
+          <li>Healthcare financing models</li>
+          <li>Tax-based systems</li>
+          <li>Social insurance systems</li>
+          <li>Private insurance systems</li>
+          <li>Mixed systems</li>
+          <li>Healthcare expenditure</li>
+          <li>Cost containment</li>
+          <li>International comparisons</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Health Technology Assessment</h3>
+        </div>
+        <p class="unit-description">Learn methods for evaluating the economic value of medical technologies and treatments.</p>
+        <ul class="topics-list">
+          <li>Economic evaluation principles</li>
+          <li>Cost-effectiveness analysis</li>
+          <li>Cost-utility analysis</li>
+          <li>Cost-benefit analysis</li>
+          <li>Quality-adjusted life years</li>
+          <li>Incremental cost-effectiveness ratios</li>
+          <li>Technology adoption</li>
+          <li>Evidence-based medicine</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Pharmaceutical Economics</h3>
+        </div>
+        <p class="unit-description">Examine the economics of drug development, pricing, and regulation.</p>
+        <ul class="topics-list">
+          <li>Drug development process</li>
+          <li>R&D costs and risks</li>
+          <li>Patent protection</li>
+          <li>Pharmaceutical pricing</li>
+          <li>Generic competition</li>
+          <li>Drug regulation</li>
+          <li>Pharmacoeconomics</li>
+          <li>Access and affordability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Mental Health Economics</h3>
+        </div>
+        <p class="unit-description">Study the unique economic aspects of mental health services and policy.</p>
+        <ul class="topics-list">
+          <li>Mental health demand</li>
+          <li>Stigma and discrimination</li>
+          <li>Insurance coverage parity</li>
+          <li>Mental health providers</li>
+          <li>Community mental health</li>
+          <li>Substance abuse economics</li>
+          <li>Cost of mental illness</li>
+          <li>Prevention programs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Public Health Economics</h3>
+        </div>
+        <p class="unit-description">Analyze the economics of population health, prevention, and public health interventions.</p>
+        <ul class="topics-list">
+          <li>Population health approach</li>
+          <li>Prevention vs treatment</li>
+          <li>Health promotion programs</li>
+          <li>Vaccination economics</li>
+          <li>Environmental health</li>
+          <li>Health inequalities</li>
+          <li>Social determinants</li>
+          <li>Global health economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Healthcare Quality and Outcomes</h3>
+        </div>
+        <p class="unit-description">Examine the measurement and economics of healthcare quality and patient outcomes.</p>
+        <ul class="topics-list">
+          <li>Quality measurement</li>
+          <li>Quality indicators</li>
+          <li>Pay-for-performance</li>
+          <li>Quality improvement</li>
+          <li>Patient safety economics</li>
+          <li>Health outcomes research</li>
+          <li>Value-based care</li>
+          <li>Quality reporting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Healthcare Reform and Policy</h3>
+        </div>
+        <p class="unit-description">Evaluate healthcare reform proposals and analyze health policy from an economic perspective.</p>
+        <ul class="topics-list">
+          <li>Healthcare reform models</li>
+          <li>Universal coverage</li>
+          <li>Healthcare access</li>
+          <li>Cost control strategies</li>
+          <li>Policy evaluation methods</li>
+          <li>Healthcare governance</li>
+          <li>Health system performance</li>
+          <li>Future challenges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Health Economics</h1>
+      <p>Understand the unique characteristics of healthcare markets and economic analysis.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Health vs Healthcare</h3>
+        <p>Distinguish between health as an outcome and healthcare as a service, and their economic implications.</p>
+        <span class="health-badge">Health Status</span>
+        <span class="health-badge">Medical Services</span>
+        <span class="health-badge">Well-being</span>
+        <div class="health-box">
+          Health refers to an individual's overall physical, mental, and social well-being, while healthcare refers to the services provided to maintain or improve health. This distinction is crucial for understanding how economic factors affect both health outcomes and healthcare delivery.
+        </div>
+        <div class="code-example">
+          # Health vs Healthcare Framework<br>
+          health_healthcare = {<br>
+          &nbsp;&nbsp;"health": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "State of physical, mental, and social well-being",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Outcome", "Stock variable", "Multidimensional"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"determinants": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"medical_care": "10-20% of health outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lifestyle": "40-50% (diet, exercise, smoking)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"genetics": "20-30% of health variation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"social_environment": "15-20% (education, income)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"physical_environment": "5-10% (air, water quality)"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": ["Life expectancy", "Mortality rates", "Quality of life"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"healthcare": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Services to maintain, restore, or improve health",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Input", "Flow variable", "Service-based"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"preventive": "Vaccines, screenings, health promotion",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"curative": "Treatment of illness and injury",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"rehabilitative": "Restoration of function",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"palliative": "End-of-life care and comfort"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": ["Healthcare spending", "Utilization rates", "Access measures"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"economic_implications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"health_as_investment": "Human capital approach",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"healthcare_as_consumption": "Utility-maximizing behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"production_relationship": "Healthcare is one input to health production"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Healthcare Market Failures</h3>
+        <p>Identify the unique characteristics of healthcare markets that lead to market failures.</p>
+        <div class="concept-highlight">
+          Key Healthcare Market Failures:<br>
+          • Information asymmetries between providers and patients<br>
+          • Uncertainty about need for and effectiveness of care<br>
+          • Externalities in health (communicable diseases)<br>
+          • Insurance market problems (adverse selection, moral hazard)
+        </div>
+        <div class="demand-insight">
+          <strong>Why Healthcare Markets Differ:</strong><br>
+          Healthcare markets violate many assumptions of perfect competition, including perfect information, rational consumers, and normal goods characteristics, leading to government intervention.
+        </div>
+        <div class="code-example">
+          # Healthcare Market Failure Analysis<br>
+          market_failures = {<br>
+          &nbsp;&nbsp;"information_asymmetry": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Patients lack medical knowledge",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"consequences": ["Supplier-induced demand", "Quality uncertainty"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solutions": ["Professional licensing", "Quality reporting", "Guidelines"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"uncertainty": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Need uncertainty", "Treatment effectiveness", "Cost uncertainty"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"impact": "Demand for insurance and risk-sharing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"market_response": "Insurance markets develop"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"externalities": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"positive": ["Vaccination", "Research spillovers", "Herd immunity"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"negative": ["Antibiotic resistance", "Disease transmission"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_responses": ["Subsidies", "Mandates", "Regulations"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"public_good_characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Disease surveillance", "Health research", "Emergency preparedness"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Under-provision by private markets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solution": "Government provision or funding"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"equity_concerns": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"access_issues": "Ability to pay affects access to care",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"health_disparities": "Income and health are correlated",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_justification": "Healthcare as a right or merit good"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Evaluation Methods</h3>
+        <p>Learn the main approaches to evaluating the economic value of healthcare interventions.</p>
+        <div class="policy-tool">
+          <strong>Types of Economic Evaluation:</strong><br>
+          • Cost-minimization: Compare costs when outcomes are equivalent<br>
+          • Cost-effectiveness: Compare costs per unit of health outcome<br>
+          • Cost-utility: Compare costs per quality-adjusted life year (QALY)<br>
+          • Cost-benefit: Compare costs and benefits in monetary terms
+        </div>
+        <div class="cost-indicator">
+          <strong>Evaluation Challenges:</strong><br>
+          • Measuring health outcomes and quality of life<br>
+          • Valuing life and health improvements<br>
+          • Handling uncertainty and time preferences<br>
+          • Incorporating equity considerations
+        </div>
+        <div class="code-example">
+          # Economic Evaluation Framework<br>
+          evaluation_methods = {
