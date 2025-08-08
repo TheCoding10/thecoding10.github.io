@@ -1,0 +1,743 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Business Law & Ethics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #374151, #4b5563);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(55, 65, 81, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #374151;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #374151, #4b5563);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(55, 65, 81, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .law-badge {
+      display: inline-block;
+      background: #f3f4f6;
+      color: #374151;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .legal-case {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .ethics-principle {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .legal-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #ef4444;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ Business Law & Ethics</h1>
+    <p>Master essential legal concepts and ethical frameworks for responsible business practice</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Business Law & Ethics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">Legal Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Ethical Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Case Studies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Legal System Foundations</h3>
+        </div>
+        <p class="unit-description">Understand the structure and sources of law that govern business activities.</p>
+        <ul class="topics-list">
+          <li>Sources of law</li>
+          <li>Court system structure</li>
+          <li>Common law vs civil law</li>
+          <li>Federal vs state jurisdiction</li>
+          <li>Administrative law</li>
+          <li>Legal precedent and case law</li>
+          <li>International law basics</li>
+          <li>Legal research methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Business Ethics Foundations</h3>
+        </div>
+        <p class="unit-description">Explore ethical theories and frameworks for business decision-making.</p>
+        <ul class="topics-list">
+          <li>Ethical theories overview</li>
+          <li>Utilitarianism in business</li>
+          <li>Deontological ethics</li>
+          <li>Virtue ethics</li>
+          <li>Stakeholder theory</li>
+          <li>Corporate social responsibility</li>
+          <li>Ethical decision-making models</li>
+          <li>Cultural relativism vs universalism</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Contract Law</h3>
+        </div>
+        <p class="unit-description">Learn the essential elements and principles of business contracts.</p>
+        <ul class="topics-list">
+          <li>Contract formation elements</li>
+          <li>Offer and acceptance</li>
+          <li>Consideration</li>
+          <li>Capacity and legality</li>
+          <li>Contract interpretation</li>
+          <li>Breach of contract</li>
+          <li>Remedies and damages</li>
+          <li>Electronic contracts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Business Organizations</h3>
+        </div>
+        <p class="unit-description">Understand different business entity types and their legal implications.</p>
+        <ul class="topics-list">
+          <li>Sole proprietorships</li>
+          <li>Partnerships</li>
+          <li>Limited liability companies</li>
+          <li>Corporations</li>
+          <li>Corporate governance</li>
+          <li>Fiduciary duties</li>
+          <li>Piercing the corporate veil</li>
+          <li>Business formation process</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Employment Law</h3>
+        </div>
+        <p class="unit-description">Navigate employment relationships and workplace legal requirements.</p>
+        <ul class="topics-list">
+          <li>Employment at-will doctrine</li>
+          <li>Anti-discrimination laws</li>
+          <li>Wage and hour laws</li>
+          <li>Workplace safety (OSHA)</li>
+          <li>Family and medical leave</li>
+          <li>Workers' compensation</li>
+          <li>Wrongful termination</li>
+          <li>Labor unions and collective bargaining</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Intellectual Property</h3>
+        </div>
+        <p class="unit-description">Protect and manage intellectual property assets in business.</p>
+        <ul class="topics-list">
+          <li>Copyright law</li>
+          <li>Trademark protection</li>
+          <li>Patent basics</li>
+          <li>Trade secrets</li>
+          <li>Fair use doctrine</li>
+          <li>IP licensing</li>
+          <li>Digital rights management</li>
+          <li>International IP protection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Consumer Protection</h3>
+        </div>
+        <p class="unit-description">Understand laws protecting consumers and business compliance requirements.</p>
+        <ul class="topics-list">
+          <li>Consumer protection acts</li>
+          <li>Product liability</li>
+          <li>Warranty law</li>
+          <li>Deceptive trade practices</li>
+          <li>Credit and lending laws</li>
+          <li>Privacy and data protection</li>
+          <li>Advertising regulations</li>
+          <li>E-commerce compliance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Antitrust & Competition</h3>
+        </div>
+        <p class="unit-description">Learn competition laws and regulations affecting business practices.</p>
+        <ul class="topics-list">
+          <li>Sherman Act</li>
+          <li>Clayton Act</li>
+          <li>FTC Act</li>
+          <li>Monopolization</li>
+          <li>Price fixing</li>
+          <li>Mergers and acquisitions</li>
+          <li>Exclusive dealing arrangements</li>
+          <li>International competition law</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Environmental Law</h3>
+        </div>
+        <p class="unit-description">Navigate environmental regulations and sustainability requirements.</p>
+        <ul class="topics-list">
+          <li>Environmental Protection Agency</li>
+          <li>Clean Air Act</li>
+          <li>Clean Water Act</li>
+          <li>Waste management laws</li>
+          <li>Environmental impact assessments</li>
+          <li>Superfund liability</li>
+          <li>Green business practices</li>
+          <li>Climate change regulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Securities Law</h3>
+        </div>
+        <p class="unit-description">Understand regulations governing securities and financial markets.</p>
+        <ul class="topics-list">
+          <li>Securities Act of 1933</li>
+          <li>Securities Exchange Act of 1934</li>
+          <li>SEC registration requirements</li>
+          <li>Disclosure obligations</li>
+          <li>Insider trading</li>
+          <li>Proxy regulations</li>
+          <li>Private placements</li>
+          <li>Sarbanes-Oxley Act</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">International Business Law</h3>
+        </div>
+        <p class="unit-description">Navigate legal issues in global business operations.</p>
+        <ul class="topics-list">
+          <li>International trade law</li>
+          <li>World Trade Organization</li>
+          <li>Foreign Corrupt Practices Act</li>
+          <li>Export controls</li>
+          <li>International contracts</li>
+          <li>Dispute resolution</li>
+          <li>Cultural legal differences</li>
+          <li>Transfer pricing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Ethics in Practice</h3>
+        </div>
+        <p class="unit-description">Apply ethical frameworks to real-world business scenarios and dilemmas.</p>
+        <ul class="topics-list">
+          <li>Ethical leadership</li>
+          <li>Corporate culture and ethics</li>
+          <li>Whistleblowing</li>
+          <li>Conflicts of interest</li>
+          <li>Ethical marketing practices</li>
+          <li>Financial ethics</li>
+          <li>Technology and ethics</li>
+          <li>Crisis management ethics</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Legal System Foundations</h1>
+      <p>Understand the structure and sources of law that govern business activities.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sources of Law</h3>
+        <p>Learn the various sources from which laws originate and their hierarchy in the legal system.</p>
+        <span class="law-badge">Constitutional Law</span>
+        <span class="law-badge">Statutory Law</span>
+        <span class="law-badge">Case Law</span>
+        <div class="algorithm-box">
+          Laws governing business come from multiple sources arranged in a hierarchy: Constitutional law (highest), statutory law (federal and state), administrative regulations, and case law (judicial decisions). Understanding this hierarchy is crucial for legal compliance.
+        </div>
+        <div class="code-example">
+          # Legal hierarchy and sources<br>
+          legal_hierarchy = {<br>
+          &nbsp;&nbsp;"constitutional_law": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"level": 1,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Supreme law of the land",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["US Constitution", "State constitutions"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_impact": "Fundamental rights and powers"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"statutory_law": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"level": 2,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Laws enacted by legislatures",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Federal statutes", "State laws", "Local ordinances"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_impact": "Specific business regulations"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"administrative_law": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"level": 3,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Rules created by government agencies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["SEC regulations", "EPA rules", "OSHA standards"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_impact": "Day-to-day operational compliance"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"case_law": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"level": 4,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Law developed through court decisions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Precedents", "Common law principles"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_impact": "Interpretation and application of laws"<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Primary vs secondary sources<br>
+          source_types = {<br>
+          &nbsp;&nbsp;"primary": "Actual law (statutes, cases, regulations)",<br>
+          &nbsp;&nbsp;"secondary": "Commentary and analysis (legal treatises, articles)"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Court System Structure</h3>
+        <p>Understand how federal and state court systems are organized and their jurisdictions.</p>
+        <div class="concept-highlight">
+          Dual Court System:<br>
+          • Federal Courts: Handle federal law, interstate commerce, constitutional issues<br>
+          • State Courts: Handle state law, local matters, most business disputes<br>
+          • Hierarchy: Trial courts → Appellate courts → Supreme courts
+        </div>
+        <div class="legal-case">
+          <strong>Jurisdiction Example:</strong> A contract dispute between companies in different states may be heard in federal court under diversity jurisdiction, while a local business licensing issue would be handled in state court.
+        </div>
+        <div class="code-example">
+          # Court system structure<br>
+          court_system = {<br>
+          &nbsp;&nbsp;"federal_courts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"supreme_court": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Highest court, final appeals",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"jurisdiction": "Constitutional issues, federal law",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"business_relevance": "Landmark business law decisions"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"courts_of_appeals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Intermediate appellate courts",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"circuits": 13,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"function": "Review trial court decisions"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"district_courts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Federal trial courts",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"number": 94,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"jurisdiction": ["Federal crimes", "Civil rights", "Interstate commerce"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"state_courts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"supreme_court": "Highest state court",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"appellate_courts": "Intermediate appeals",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trial_courts": "General jurisdiction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"specialty_courts": ["Family", "Probate", "Small claims"]<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Factors determining jurisdiction<br>
+          jurisdiction_factors = [<br>
+          &nbsp;&nbsp;"Subject matter (federal vs state law)",<br>
+          &nbsp;&nbsp;"Geographic location",<br>
+          &nbsp;&nbsp;"Amount in controversy",<br>
+          &nbsp;&nbsp;"Diversity of citizenship"<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Law vs Civil Law</h3>
+        <p>Understand the differences between common law and civil law systems and their business implications.</p>
+        <div class="algorithm-box">
+          Common law systems (like the US and UK) rely heavily on judicial precedent and case law, while civil law systems (like most of Europe) rely primarily on written codes and statutes. This affects how business law develops and is interpreted.
+        </div>
+        <div class="legal-warning">
+          <strong>International Business Alert:</strong> When doing business internationally, understanding whether a country uses common law or civil law is crucial for contract drafting, dispute resolution, and legal strategy.
+        </div>
+        <div class="code-example">
+          # Legal system comparison<br>
+          legal_systems = {<br>
+          &nbsp;&nbsp;"common_law": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"origin": "English legal tradition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary_source": "Judicial decisions and precedent",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Judge-made law",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Adversarial system",<br>
+          &nbsp;&nbsp;&
