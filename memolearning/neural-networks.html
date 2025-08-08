@@ -1,0 +1,729 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Neural Networks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .nn-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #6d28d9;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .neural-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6d28d9;
+    }
+
+    .network-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .activation-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 Neural Networks</h1>
+    <p>Master artificial neural networks, backpropagation, and deep learning fundamentals for intelligent systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Neural Networks Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Architectures</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Neural Networks</h3>
+        </div>
+        <p class="unit-description">Understand the biological inspiration and fundamental concepts of artificial neural networks.</p>
+        <ul class="topics-list">
+          <li>Biological neural networks</li>
+          <li>Artificial neuron model</li>
+          <li>Neural network history</li>
+          <li>Key advantages</li>
+          <li>Common applications</li>
+          <li>Neural network types</li>
+          <li>Learning paradigms</li>
+          <li>Modern deep learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Perceptron and Linear Models</h3>
+        </div>
+        <p class="unit-description">Learn the foundation of neural networks with the perceptron and linear classification.</p>
+        <ul class="topics-list">
+          <li>Perceptron algorithm</li>
+          <li>Linear separability</li>
+          <li>Weight updates</li>
+          <li>Perceptron limitations</li>
+          <li>Multi-layer necessity</li>
+          <li>XOR problem</li>
+          <li>Linear vs non-linear</li>
+          <li>Historical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Activation Functions</h3>
+        </div>
+        <p class="unit-description">Master the critical role of activation functions in neural network learning.</p>
+        <ul class="topics-list">
+          <li>Purpose of activation functions</li>
+          <li>Sigmoid function</li>
+          <li>Hyperbolic tangent (tanh)</li>
+          <li>ReLU and variants</li>
+          <li>Softmax for classification</li>
+          <li>Activation function properties</li>
+          <li>Vanishing gradient problem</li>
+          <li>Choosing activation functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Multi-Layer Perceptrons</h3>
+        </div>
+        <p class="unit-description">Build feedforward neural networks with multiple layers for complex pattern recognition.</p>
+        <ul class="topics-list">
+          <li>Multi-layer architecture</li>
+          <li>Hidden layers</li>
+          <li>Universal approximation</li>
+          <li>Network topology</li>
+          <li>Feedforward computation</li>
+          <li>Layer interactions</li>
+          <li>Depth vs width</li>
+          <li>Network design principles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Forward Propagation</h3>
+        </div>
+        <p class="unit-description">Understand how information flows through neural networks during prediction.</p>
+        <ul class="topics-list">
+          <li>Input to output flow</li>
+          <li>Layer-by-layer computation</li>
+          <li>Matrix operations</li>
+          <li>Weighted sums</li>
+          <li>Activation application</li>
+          <li>Output generation</li>
+          <li>Computational efficiency</li>
+          <li>Vectorized implementation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Loss Functions</h3>
+        </div>
+        <p class="unit-description">Learn how to measure and optimize neural network performance using loss functions.</p>
+        <ul class="topics-list">
+          <li>Purpose of loss functions</li>
+          <li>Mean squared error</li>
+          <li>Cross-entropy loss</li>
+          <li>Binary vs categorical</li>
+          <li>Sparse categorical</li>
+          <li>Custom loss functions</li>
+          <li>Loss function properties</li>
+          <li>Choosing appropriate loss</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Backpropagation</h3>
+        </div>
+        <p class="unit-description">Master the fundamental algorithm that enables neural network learning.</p>
+        <ul class="topics-list">
+          <li>Gradient descent basics</li>
+          <li>Chain rule of calculus</li>
+          <li>Error backpropagation</li>
+          <li>Gradient computation</li>
+          <li>Weight updates</li>
+          <li>Learning rate</li>
+          <li>Computational graphs</li>
+          <li>Automatic differentiation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Training Neural Networks</h3>
+        </div>
+        <p class="unit-description">Learn practical techniques for effectively training neural networks.</p>
+        <ul class="topics-list">
+          <li>Training process</li>
+          <li>Batch vs online learning</li>
+          <li>Mini-batch gradient descent</li>
+          <li>Epochs and iterations</li>
+          <li>Learning rate scheduling</li>
+          <li>Weight initialization</li>
+          <li>Convergence monitoring</li>
+          <li>Training best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Regularization Techniques</h3>
+        </div>
+        <p class="unit-description">Prevent overfitting and improve generalization with regularization methods.</p>
+        <ul class="topics-list">
+          <li>Overfitting in neural networks</li>
+          <li>L1 and L2 regularization</li>
+          <li>Dropout technique</li>
+          <li>Early stopping</li>
+          <li>Batch normalization</li>
+          <li>Data augmentation</li>
+          <li>Weight decay</li>
+          <li>Regularization strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Optimization Algorithms</h3>
+        </div>
+        <p class="unit-description">Explore advanced optimization techniques for efficient neural network training.</p>
+        <ul class="topics-list">
+          <li>Gradient descent variants</li>
+          <li>Momentum optimization</li>
+          <li>AdaGrad algorithm</li>
+          <li>RMSprop optimization</li>
+          <li>Adam optimizer</li>
+          <li>Learning rate adaptation</li>
+          <li>Second-order methods</li>
+          <li>Optimizer selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Neural Network Architectures</h3>
+        </div>
+        <p class="unit-description">Explore different neural network architectures for various problem types.</p>
+        <ul class="topics-list">
+          <li>Feedforward networks</li>
+          <li>Convolutional networks</li>
+          <li>Recurrent networks</li>
+          <li>Autoencoder networks</li>
+          <li>Residual networks</li>
+          <li>Attention mechanisms</li>
+          <li>Transformer architecture</li>
+          <li>Architecture design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Implementation and Practice</h3>
+        </div>
+        <p class="unit-description">Build neural networks from scratch and with popular frameworks.</p>
+        <ul class="topics-list">
+          <li>NumPy implementation</li>
+          <li>TensorFlow basics</li>
+          <li>PyTorch fundamentals</li>
+          <li>Keras high-level API</li>
+          <li>Model building workflow</li>
+          <li>Debugging neural networks</li>
+          <li>Performance optimization</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Neural Networks</h1>
+      <p>Understand the biological inspiration and fundamental concepts of artificial neural networks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Biological Neural Networks</h3>
+        <p>Learn how biological neurons inspired the development of artificial neural networks.</p>
+        <span class="nn-badge">Biology</span>
+        <span class="nn-badge">Inspiration</span>
+        <span class="nn-badge">Neurons</span>
+        <div class="neural-box">
+          Biological neurons receive signals through dendrites, process them in the cell body, and transmit outputs through axons. This inspired the artificial neuron model with inputs, processing, and outputs.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Artificial Neuron Model</h3>
+        <p>Understand the mathematical model that simulates biological neuron behavior.</p>
+        <div class="activation-formula">
+          y = f(∑(wᵢxᵢ) + b)<br>
+          where f is activation function, w are weights, x are inputs, b is bias
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          <br>
+          class ArtificialNeuron:<br>
+          &nbsp;&nbsp;def __init__(self, num_inputs):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"""Initialize neuron with random weights and bias"""<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.weights = np.random.randn(num_inputs) * 0.01<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.bias = 0.0<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def sigmoid(self, x):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"""Sigmoid activation function"""<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return 1 / (1 + np.exp(-np.clip(x, -500, 500)))<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;def forward(self, inputs):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"""Forward pass: compute output"""<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Weighted sum of inputs<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;weighted_sum = np.dot(inputs, self.weights) + self.bias<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Apply activation function<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;output = self.sigmoid(weighted_sum)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return output<br>
+          <br>
+          # Demonstrate artificial neuron<br>
+          def demonstrate_neuron():<br>
+          &nbsp;&nbsp;"""Show how an artificial neuron works"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== ARTIFICIAL NEURON DEMONSTRATION ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Create neuron with 3 inputs<br>
+          &nbsp;&nbsp;neuron = ArtificialNeuron(num_inputs=3)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Show initial weights and bias<br>
+          &nbsp;&nbsp;print(f"Initial weights: {neuron.weights}")<br>
+          &nbsp;&nbsp;print(f"Initial bias: {neuron.bias}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Test inputs<br>
+          &nbsp;&nbsp;test_inputs = [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[1.0, 0.5, -1.0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[0.0, 1.0, 1.0],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;[-1.0, 0.0, 0.5]<br>
+          &nbsp;&nbsp;]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("\\n=== NEURON RESPONSES ===")<br>
+          &nbsp;&nbsp;for i, inputs in enumerate(test_inputs):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;output = neuron.forward(np.array(inputs))<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;weighted_sum = np.dot(inputs, neuron.weights) + neuron.bias<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"\\nInput {i+1}: {inputs}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  Weighted sum: {weighted_sum:.3f}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  Output (after sigmoid): {output:.3f}")<br>
+          <br>
+          demonstrate_neuron()<br>
+          <br>
+          print("\\n=== NEURON COMPONENTS ===")<br>
+          components = {<br>
+          &nbsp;&nbsp;"Inputs (x)": "Data features fed to the neuron",<br>
+          &nbsp;&nbsp;"Weights (w)": "Learned parameters controlling input importance",<br>
+          &nbsp;&nbsp;"Bias (b)": "Learned offset parameter",<br>
+          &nbsp;&nbsp;"Weighted Sum": "Linear combination: w₁x₁ + w₂x₂ + ... + b",<br>
+          &nbsp;&nbsp;"Activation": "Non-linear function applied to weighted sum",<br>
+          &nbsp;&nbsp;"Output (y)": "Final neuron response"<br>
+          }<br>
+          <br>
+          for component, description in components.items():<br>
+          &nbsp;&nbsp;print(f"{component}: {description}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Neural Network History</h3>
+        <p>Explore the key milestones in neural network development from the 1940s to today.</p>
+        <div class="network-highlight">
+          1943: McCulloch-Pitts neuron model<br>
+          1957: Perceptron algorithm<br>
+          1969: Perceptron limitations identified<br>
+          1986: Backpropagation algorithm<br>
+          2006: Deep learning renaissance<br>
+          2012: AlexNet breakthrough
+        </div>
+        <div class="code-example">
+          # Neural network history timeline<br>
+          <br>
+          nn_history = {<br>
+          &nbsp;&nbsp;1943: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Event": "McCulloch-Pitts Neuron",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Description": "First mathematical model of artificial neuron",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Impact": "Foundation of neural computation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;1957: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Event": "Perceptron Algorithm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Description": "Frank Rosenblatt's learning algorithm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Impact": "First trainable neural network"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;1969: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Event": "Perceptrons Book",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Description": "Minsky & Papert show perceptron limitations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Impact": "First AI winter begins"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;1986: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Event": "Backpropagation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Description": "Rumelhart, Hinton & Williams formalize backprop",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Impact
