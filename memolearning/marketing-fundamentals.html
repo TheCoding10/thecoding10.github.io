@@ -1,0 +1,752 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Marketing Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📈';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c3aed;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6d28d9;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .marketing-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #5b21b6;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #5b21b6;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .campaign-example {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .marketing-framework {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .customer-insight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📈 Marketing Fundamentals</h1>
+    <p>Master core marketing principles, customer behavior, and strategic marketing approaches</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Marketing Fundamentals Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">Marketing Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Strategies & Tactics</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Real Campaign Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Marketing Concept & Orientation</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental marketing concept and different business orientations.</p>
+        <ul class="topics-list">
+          <li>What is marketing</li>
+          <li>Marketing vs selling</li>
+          <li>Production orientation</li>
+          <li>Sales orientation</li>
+          <li>Marketing orientation</li>
+          <li>Societal marketing concept</li>
+          <li>Customer value creation</li>
+          <li>Marketing's role in business</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Consumer Behavior</h3>
+        </div>
+        <p class="unit-description">Learn how consumers make purchasing decisions and what influences their behavior.</p>
+        <ul class="topics-list">
+          <li>Consumer decision-making process</li>
+          <li>Psychological factors</li>
+          <li>Social and cultural influences</li>
+          <li>Personal factors</li>
+          <li>Motivation and perception</li>
+          <li>Learning and memory</li>
+          <li>Attitudes and beliefs</li>
+          <li>B2B vs B2C behavior</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Market Research & Analysis</h3>
+        </div>
+        <p class="unit-description">Master techniques for gathering and analyzing market intelligence.</p>
+        <ul class="topics-list">
+          <li>Research methodology</li>
+          <li>Primary vs secondary research</li>
+          <li>Qualitative research methods</li>
+          <li>Quantitative research techniques</li>
+          <li>Survey design and sampling</li>
+          <li>Data collection and analysis</li>
+          <li>Market sizing and forecasting</li>
+          <li>Competitive intelligence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Market Segmentation & Targeting</h3>
+        </div>
+        <p class="unit-description">Learn to identify and target specific customer segments effectively.</p>
+        <ul class="topics-list">
+          <li>Segmentation bases</li>
+          <li>Demographic segmentation</li>
+          <li>Psychographic segmentation</li>
+          <li>Behavioral segmentation</li>
+          <li>Geographic segmentation</li>
+          <li>Target market selection</li>
+          <li>Positioning strategies</li>
+          <li>Persona development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Product Strategy & Development</h3>
+        </div>
+        <p class="unit-description">Understand product concepts, development, and lifecycle management.</p>
+        <ul class="topics-list">
+          <li>Product concept and classification</li>
+          <li>Product lifecycle stages</li>
+          <li>New product development</li>
+          <li>Product line and mix decisions</li>
+          <li>Branding fundamentals</li>
+          <li>Packaging and labeling</li>
+          <li>Product differentiation</li>
+          <li>Service marketing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Pricing Strategies</h3>
+        </div>
+        <p class="unit-description">Master pricing decisions and strategies for different market conditions.</p>
+        <ul class="topics-list">
+          <li>Pricing objectives</li>
+          <li>Cost-based pricing</li>
+          <li>Value-based pricing</li>
+          <li>Competition-based pricing</li>
+          <li>Penetration vs skimming</li>
+          <li>Dynamic pricing</li>
+          <li>Psychological pricing</li>
+          <li>Price discrimination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Distribution Channels</h3>
+        </div>
+        <p class="unit-description">Learn about distribution strategies and channel management.</p>
+        <ul class="topics-list">
+          <li>Distribution channel functions</li>
+          <li>Direct vs indirect channels</li>
+          <li>Channel intermediaries</li>
+          <li>Multichannel strategies</li>
+          <li>E-commerce and digital channels</li>
+          <li>Supply chain management</li>
+          <li>Channel conflict resolution</li>
+          <li>Global distribution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Integrated Marketing Communications</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive communication strategies across multiple channels.</p>
+        <ul class="topics-list">
+          <li>Communication process model</li>
+          <li>Advertising fundamentals</li>
+          <li>Public relations and publicity</li>
+          <li>Sales promotion</li>
+          <li>Personal selling</li>
+          <li>Direct marketing</li>
+          <li>Content marketing</li>
+          <li>Campaign integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Digital Marketing</h3>
+        </div>
+        <p class="unit-description">Explore digital marketing channels and online customer engagement.</p>
+        <ul class="topics-list">
+          <li>Digital marketing landscape</li>
+          <li>Search engine marketing</li>
+          <li>Social media marketing</li>
+          <li>Email marketing</li>
+          <li>Content marketing strategy</li>
+          <li>Influencer marketing</li>
+          <li>Mobile marketing</li>
+          <li>Marketing automation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Brand Management</h3>
+        </div>
+        <p class="unit-description">Build and manage strong brands that create customer loyalty.</p>
+        <ul class="topics-list">
+          <li>Brand equity concepts</li>
+          <li>Brand positioning</li>
+          <li>Brand identity development</li>
+          <li>Brand architecture</li>
+          <li>Brand extension strategies</li>
+          <li>Brand portfolio management</li>
+          <li>Brand measurement</li>
+          <li>Global branding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Marketing Analytics & Metrics</h3>
+        </div>
+        <p class="unit-description">Learn to measure and analyze marketing performance and ROI.</p>
+        <ul class="topics-list">
+          <li>Marketing metrics framework</li>
+          <li>Customer acquisition cost</li>
+          <li>Customer lifetime value</li>
+          <li>Return on marketing investment</li>
+          <li>Attribution modeling</li>
+          <li>A/B testing</li>
+          <li>Dashboard development</li>
+          <li>Predictive analytics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Marketing Strategy & Planning</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive marketing strategies and implementation plans.</p>
+        <ul class="topics-list">
+          <li>Marketing strategy development</li>
+          <li>Situation analysis (SWOT)</li>
+          <li>Marketing objectives setting</li>
+          <li>Strategic alternatives</li>
+          <li>Marketing mix optimization</li>
+          <li>Implementation planning</li>
+          <li>Budget allocation</li>
+          <li>Performance monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Marketing Concept & Orientation</h1>
+      <p>Understand the fundamental marketing concept and different business orientations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Marketing</h3>
+        <p>Learn the comprehensive definition of marketing and its role in creating customer value.</p>
+        <span class="marketing-badge">Value Creation</span>
+        <span class="marketing-badge">Customer Focus</span>
+        <span class="marketing-badge">Exchange</span>
+        <div class="algorithm-box">
+          Marketing is the process of creating, communicating, delivering, and exchanging offerings that have value for customers, clients, partners, and society at large. It's about understanding and satisfying customer needs profitably.
+        </div>
+        <div class="code-example">
+          # Marketing definition framework<br>
+          marketing_definition = {<br>
+          &nbsp;&nbsp;"core_concept": "Creating customer value",<br>
+          &nbsp;&nbsp;"key_activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Identify customer needs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Develop valuable offerings",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Communicate value proposition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Deliver products/services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Build customer relationships"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"stakeholders": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Customers and consumers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Business partners",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Society and communities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Shareholders and investors"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"value_types": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"functional": "Product performance and features",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"emotional": "Feelings and experiences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"social": "Status and belonging",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"epistemic": "Curiosity and novelty"<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Marketing vs other business functions<br>
+          function_comparison = {<br>
+          &nbsp;&nbsp;"marketing": "Customer needs and wants",<br>
+          &nbsp;&nbsp;"operations": "Efficient production",<br>
+          &nbsp;&nbsp;"finance": "Profitability and cash flow",<br>
+          &nbsp;&nbsp;"hr": "Employee development",<br>
+          &nbsp;&nbsp;"strategy": "Competitive advantage"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Marketing vs Selling</h3>
+        <p>Understand the fundamental differences between marketing and selling approaches.</p>
+        <div class="concept-highlight">
+          Selling Concept: Inside-out perspective, focuses on existing products, short-term sales goals<br>
+          Marketing Concept: Outside-in perspective, focuses on customer needs, long-term relationships<br>
+          Key Difference: Selling starts with products, Marketing starts with customers
+        </div>
+        <div class="customer-insight">
+          <strong>Customer Insight:</strong> "People don't want to buy a quarter-inch drill. They want a quarter-inch hole." - Theodore Levitt. This illustrates the marketing concept of focusing on customer needs rather than product features.
+        </div>
+        <div class="code-example">
+          # Selling vs Marketing comparison<br>
+          business_approaches = {<br>
+          &nbsp;&nbsp;"selling_concept": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"starting_point": "Factory/existing products",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Product features and benefits",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"means": "Selling and promotion",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ends": "Profit through sales volume",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"perspective": "Inside-out",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeframe": "Short-term"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"marketing_concept": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"starting_point": "Target market/customer needs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Customer needs and wants",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"means": "Integrated marketing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ends": "Profit through customer satisfaction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"perspective": "Outside-in",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeframe": "Long-term"<br>
+          &nbsp;&nbsp;}<br>
+          }<br>
+          <br>
+          # Examples in practice<br>
+          examples = {<br>
+          &nbsp;&nbsp;"selling_approach": "Push product features, aggressive sales tactics",<br>
+          &nbsp;&nbsp;"marketing_approach": "Research customer problems, develop solutions"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Production Orientation</h3>
+        <p>Learn about the production concept and when it's still relevant today.</p>
+        <div class="algorithm-box">
+          Production orientation assumes customers prefer products that are widely available and affordable. Companies focus on improving production and distribution efficiency. Still relevant for commodity products and developing markets.
+        </div>
+        <div class="campaign-example">
+          <strong>Historical Example:</strong> Henry Ford's Model T - "Any customer can have a car painted any color as long as it's black." Ford focused on production efficiency and cost reduction rather than customer preferences.
+        </div>
+        <div class="code-example">
+          # Production orientation characteristics<br>
+          production_orientation = {<br>
+          &nbsp;&nbsp;"core_belief": "Customers want affordable, available products",<br>
+          &nbsp;&nbsp;"key_assumptions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Demand exceeds supply",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Customers prioritize price and availability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Product quality is assumed"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"business_focus": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary": "Production efficiency",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"secondary": "Distribution effectiveness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"goal": "High volume, low cost"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"when_appropriate": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"High demand, limited supply",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Commodity products",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Cost-sensitive markets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Developing economies"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"modern_examples": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Basic food staples",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Utilities companies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Generic pharmaceuticals"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Risks of production orientation<br>
+          risks = [<br>
+          &nbsp;&nbsp;"Marketing myopia",<br>
+          &nbsp;&nbsp;"Ignoring customer preferences",<br>
