@@ -1,0 +1,755 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Python for AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🐍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .python-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .python-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .ml-insight {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-left: 4px solid #10b981;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .ai-tool {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #a16207;
+    }
+
+    .data-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🐍 Python for AI</h1>
+    <p>Master Python programming for artificial intelligence, machine learning, and data science</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Python for AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Python Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">AI Libraries</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">120+</span>
+          <div class="stat-label">Practical Projects</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Python Fundamentals for AI</h3>
+        </div>
+        <p class="unit-description">Master Python basics with a focus on AI and data science applications.</p>
+        <ul class="topics-list">
+          <li>Python syntax and variables</li>
+          <li>Data types and structures</li>
+          <li>Control flow and loops</li>
+          <li>Functions and modules</li>
+          <li>Object-oriented programming</li>
+          <li>Error handling</li>
+          <li>File I/O operations</li>
+          <li>Python best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">NumPy for Numerical Computing</h3>
+        </div>
+        <p class="unit-description">Learn NumPy for efficient numerical operations and array manipulation.</p>
+        <ul class="topics-list">
+          <li>NumPy arrays and indexing</li>
+          <li>Array operations</li>
+          <li>Broadcasting</li>
+          <li>Linear algebra operations</li>
+          <li>Random number generation</li>
+          <li>Array reshaping and joining</li>
+          <li>Mathematical functions</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Pandas for Data Manipulation</h3>
+        </div>
+        <p class="unit-description">Master Pandas for data cleaning, transformation, and analysis.</p>
+        <ul class="topics-list">
+          <li>DataFrames and Series</li>
+          <li>Data loading and saving</li>
+          <li>Data cleaning techniques</li>
+          <li>Data transformation</li>
+          <li>Grouping and aggregation</li>
+          <li>Merging and joining</li>
+          <li>Time series analysis</li>
+          <li>Data visualization basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Matplotlib and Seaborn Visualization</h3>
+        </div>
+        <p class="unit-description">Create compelling visualizations for data exploration and presentation.</p>
+        <ul class="topics-list">
+          <li>Matplotlib fundamentals</li>
+          <li>Plot types and customization</li>
+          <li>Subplots and layouts</li>
+          <li>Seaborn statistical plots</li>
+          <li>Data distribution visualization</li>
+          <li>Correlation and heatmaps</li>
+          <li>Interactive visualizations</li>
+          <li>Plot styling and themes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Scikit-learn Machine Learning</h3>
+        </div>
+        <p class="unit-description">Build machine learning models using Scikit-learn's comprehensive toolkit.</p>
+        <ul class="topics-list">
+          <li>ML workflow and pipelines</li>
+          <li>Supervised learning algorithms</li>
+          <li>Unsupervised learning</li>
+          <li>Model evaluation metrics</li>
+          <li>Cross-validation</li>
+          <li>Hyperparameter tuning</li>
+          <li>Feature selection</li>
+          <li>Model deployment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">TensorFlow and Keras Deep Learning</h3>
+        </div>
+        <p class="unit-description">Develop deep learning models with TensorFlow and Keras frameworks.</p>
+        <ul class="topics-list">
+          <li>Neural network fundamentals</li>
+          <li>Keras model building</li>
+          <li>Convolutional neural networks</li>
+          <li>Recurrent neural networks</li>
+          <li>Transfer learning</li>
+          <li>Model optimization</li>
+          <li>Custom layers and losses</li>
+          <li>Model deployment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">PyTorch for Deep Learning</h3>
+        </div>
+        <p class="unit-description">Master PyTorch for research-oriented deep learning and dynamic computation.</p>
+        <ul class="topics-list">
+          <li>PyTorch tensors and autograd</li>
+          <li>Building neural networks</li>
+          <li>Training loops and optimization</li>
+          <li>Data loading and preprocessing</li>
+          <li>Computer vision with torchvision</li>
+          <li>Natural language processing</li>
+          <li>Custom datasets and transforms</li>
+          <li>Model checkpointing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Natural Language Processing</h3>
+        </div>
+        <p class="unit-description">Process and analyze text data using Python NLP libraries and techniques.</p>
+        <ul class="topics-list">
+          <li>Text preprocessing</li>
+          <li>NLTK and spaCy libraries</li>
+          <li>Tokenization and normalization</li>
+          <li>Part-of-speech tagging</li>
+          <li>Named entity recognition</li>
+          <li>Sentiment analysis</li>
+          <li>Text classification</li>
+          <li>Transformer models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Computer Vision with OpenCV</h3>
+        </div>
+        <p class="unit-description">Implement computer vision solutions using OpenCV and deep learning.</p>
+        <ul class="topics-list">
+          <li>Image processing basics</li>
+          <li>OpenCV fundamentals</li>
+          <li>Image filtering and enhancement</li>
+          <li>Feature detection</li>
+          <li>Object detection</li>
+          <li>Image classification</li>
+          <li>Video processing</li>
+          <li>Face recognition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Data Science Project Workflow</h3>
+        </div>
+        <p class="unit-description">Learn end-to-end data science project management and best practices.</p>
+        <ul class="topics-list">
+          <li>Project structure and organization</li>
+          <li>Version control with Git</li>
+          <li>Virtual environments</li>
+          <li>Jupyter notebooks</li>
+          <li>Data pipeline automation</li>
+          <li>Model versioning</li>
+          <li>Documentation practices</li>
+          <li>Reproducible research</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">MLOps and Model Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy and maintain machine learning models in production environments.</p>
+        <ul class="topics-list">
+          <li>Model serialization</li>
+          <li>Flask and FastAPI</li>
+          <li>Containerization with Docker</li>
+          <li>Cloud deployment</li>
+          <li>Model monitoring</li>
+          <li>A/B testing</li>
+          <li>CI/CD pipelines</li>
+          <li>Scaling considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced AI Libraries and Tools</h3>
+        </div>
+        <p class="unit-description">Explore specialized libraries for advanced AI applications and research.</p>
+        <ul class="topics-list">
+          <li>Hugging Face Transformers</li>
+          <li>Apache Spark with PySpark</li>
+          <li>Ray for distributed computing</li>
+          <li>Weights & Biases MLOps</li>
+          <li>Streamlit for web apps</li>
+          <li>Plotly for interactive viz</li>
+          <li>Dask for parallel computing</li>
+          <li>JAX for research</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Python Fundamentals for AI</h1>
+      <p>Master Python basics with a focus on AI and data science applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Python Syntax and Variables</h3>
+        <p>Learn Python's clean syntax and variable assignment with AI-focused examples.</p>
+        <span class="python-badge">Variables</span>
+        <span class="python-badge">Data Types</span>
+        <span class="python-badge">Operations</span>
+        <div class="python-box">
+          Python's syntax is designed to be readable and concise, making it ideal for AI development. Understanding variables, data types, and basic operations forms the foundation for more complex AI programming tasks.
+        </div>
+        <div class="code-example">
+          # Python Basics for AI<br>
+          # Variables and data types commonly used in AI<br>
+          learning_rate = 0.001  # Float for model parameters<br>
+          num_epochs = 100       # Integer for training iterations<br>
+          model_name = "neural_net"  # String for identification<br>
+          is_training = True     # Boolean for control flow<br>
+          <br>
+          # Lists for storing data (common in AI)<br>
+          features = [1.2, 3.4, 2.1, 4.5]  # Input features<br>
+          labels = [0, 1, 1, 0]             # Target labels<br>
+          layer_sizes = [784, 128, 64, 10]  # Neural network architecture<br>
+          <br>
+          # Dictionaries for configuration (very common in AI)<br>
+          model_config = {<br>
+          &nbsp;&nbsp;"architecture": "CNN",<br>
+          &nbsp;&nbsp;"layers": 5,<br>
+          &nbsp;&nbsp;"activation": "relu",<br>
+          &nbsp;&nbsp;"optimizer": "adam"<br>
+          }<br>
+          <br>
+          # String operations for data processing<br>
+          dataset_path = "/data/images/"<br>
+          file_extension = ".jpg"<br>
+          full_path = dataset_path + "image001" + file_extension<br>
+          print(f"Loading model: {model_name} with {num_epochs} epochs")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Control Flow and Loops</h3>
+        <p>Master conditional statements and loops for AI algorithm implementation.</p>
+        <div class="concept-highlight">
+          Essential Control Structures for AI:<br>
+          • if/elif/else: Decision making in algorithms<br>
+          • for loops: Iterating through datasets and epochs<br>
+          • while loops: Training until convergence<br>
+          • List comprehensions: Efficient data processing
+        </div>
+        <div class="ml-insight">
+          <strong>AI-Specific Use Cases:</strong><br>
+          • Training loops for machine learning models<br>
+          • Data preprocessing and validation<br>
+          • Hyperparameter tuning iterations<br>
+          • Model evaluation and testing
+        </div>
+        <div class="code-example">
+          # Control flow examples for AI applications<br>
+          <br>
+          # Training loop example<br>
+          for epoch in range(num_epochs):<br>
+          &nbsp;&nbsp;total_loss = 0<br>
+          &nbsp;&nbsp;for batch_idx, (data, target) in enumerate(train_loader):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Forward pass<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;output = model(data)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;loss = criterion(output, target)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;total_loss += loss.item()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Backward pass<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;optimizer.zero_grad()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;loss.backward()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;optimizer.step()<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Early stopping condition<br>
+          &nbsp;&nbsp;avg_loss = total_loss / len(train_loader)<br>
+          &nbsp;&nbsp;if avg_loss < 0.01:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"Converged at epoch {epoch}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;break<br>
+          <br>
+          # Data preprocessing with conditionals<br>
+          processed_data = []<br>
+          for sample in raw_data:<br>
+          &nbsp;&nbsp;if sample['quality'] > 0.8:  # Quality threshold<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Normalize the data<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;normalized = (sample['value'] - mean) / std<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;processed_data.append(normalized)<br>
+          &nbsp;&nbsp;elif sample['quality'] > 0.5:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;# Apply noise reduction<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;denoised = apply_filter(sample['value'])<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;processed_data.append(denoised)<br>
+          &nbsp;&nbsp;# Skip low quality samples<br>
+          <br>
+          # List comprehension for feature extraction<br>
+          features = [extract_features(img) for img in image_dataset<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if img.size > (224, 224)]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functions and Modules</h3>
+        <p>Create reusable code with functions and organize AI projects with modules.</p>
+        <div class="ai-tool">
+          <strong>Function Design for AI:</strong><br>
+          • Pure functions for data transformations<br>
+          • Higher-order functions for model composition<br>
+          • Generator functions for memory-efficient data loading<br>
+          • Decorator functions for monitoring and logging
+        </div>
+        <div class="data-indicator">
+          <strong>Module Organization:</strong><br>
+          • Separate data preprocessing modules<br>
+          • Model architecture definitions<br>
+          • Training and evaluation utilities<br>
+          • Visualization and plotting functions
+        </div>
+        <div class="code-example">
+          # AI-focused function examples<br>
+          <br>
+          # Data preprocessing function<br>
+          def preprocess_image(image_path, target_size=(224, 224)):<br>
+          &nbsp;&nbsp;"""<br>
+          &nbsp;&nbsp;Load and preprocess an image for model input<br>
+          &nbsp;&nbsp;"""<br>
+          &nbsp;&nbsp;import cv2<br>
+          &nbsp;&nbsp;import numpy as np<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Load image<br>
+          &nbsp;&nbsp;image = cv2.imread(image_path)<br>
+          &nbsp;&nbsp;image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)<br
