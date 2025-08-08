@@ -1,0 +1,749 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Natural Language Processing with ML</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📝';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #047857;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .nlp-badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .math-formula {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #15803d;
+    }
+
+    .text-example {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-style: italic;
+      color: #713f12;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📝 Natural Language Processing with ML</h1>
+    <p>Master text processing, language understanding, and NLP applications using machine learning</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to AI/ML courses')">← Back to AI/ML</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">NLP with ML Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">NLP Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to NLP</h3>
+        </div>
+        <p class="unit-description">Understand natural language processing fundamentals and the challenges of working with text data.</p>
+        <ul class="topics-list">
+          <li>What is Natural Language Processing</li>
+          <li>NLP vs Computational Linguistics</li>
+          <li>Challenges in NLP</li>
+          <li>Applications and use cases</li>
+          <li>NLP pipeline overview</li>
+          <li>Text as data</li>
+          <li>Historical evolution of NLP</li>
+          <li>Current state and trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Text Preprocessing & Tokenization</h3>
+        </div>
+        <p class="unit-description">Learn essential techniques for cleaning and preparing text data for machine learning.</p>
+        <ul class="topics-list">
+          <li>Text cleaning and normalization</li>
+          <li>Tokenization techniques</li>
+          <li>Sentence segmentation</li>
+          <li>Handling special characters</li>
+          <li>Case normalization</li>
+          <li>Unicode and encoding issues</li>
+          <li>Regular expressions for text</li>
+          <li>Language-specific preprocessing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Morphology & Part-of-Speech Tagging</h3>
+        </div>
+        <p class="unit-description">Explore word structure, morphological analysis, and grammatical tagging.</p>
+        <ul class="topics-list">
+          <li>Morphological analysis</li>
+          <li>Stemming algorithms</li>
+          <li>Lemmatization techniques</li>
+          <li>Part-of-speech tagging</li>
+          <li>POS tag sets</li>
+          <li>Rule-based vs statistical tagging</li>
+          <li>Hidden Markov Models for POS</li>
+          <li>Evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">N-grams & Language Models</h3>
+        </div>
+        <p class="unit-description">Master statistical language modeling using n-gram approaches and probability.</p>
+        <ul class="topics-list">
+          <li>N-gram models</li>
+          <li>Unigram, bigram, trigram</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Smoothing techniques</li>
+          <li>Laplace and Good-Turing smoothing</li>
+          <li>Backoff and interpolation</li>
+          <li>Perplexity evaluation</li>
+          <li>Language model applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Text Representation & Vectorization</h3>
+        </div>
+        <p class="unit-description">Learn how to convert text into numerical representations for machine learning algorithms.</p>
+        <ul class="topics-list">
+          <li>Bag of Words (BoW)</li>
+          <li>Term Frequency (TF)</li>
+          <li>TF-IDF weighting</li>
+          <li>Document-term matrices</li>
+          <li>Sparse representations</li>
+          <li>N-gram features</li>
+          <li>Character-level features</li>
+          <li>Feature selection for text</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Word Embeddings</h3>
+        </div>
+        <p class="unit-description">Understand dense vector representations of words and their semantic properties.</p>
+        <ul class="topics-list">
+          <li>Distributed representations</li>
+          <li>Word2Vec architecture</li>
+          <li>CBOW vs Skip-gram</li>
+          <li>GloVe embeddings</li>
+          <li>FastText extensions</li>
+          <li>Embedding evaluation</li>
+          <li>Semantic similarity</li>
+          <li>Analogy tasks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Text Classification</h3>
+        </div>
+        <p class="unit-description">Apply machine learning algorithms to classify documents and text snippets.</p>
+        <ul class="topics-list">
+          <li>Text classification pipeline</li>
+          <li>Feature engineering for text</li>
+          <li>Naive Bayes for text</li>
+          <li>SVM for text classification</li>
+          <li>Logistic regression</li>
+          <li>Multi-class classification</li>
+          <li>Evaluation metrics</li>
+          <li>Handling imbalanced data</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Sentiment Analysis</h3>
+        </div>
+        <p class="unit-description">Learn to detect and analyze emotions, opinions, and sentiments in text.</p>
+        <ul class="topics-list">
+          <li>Sentiment analysis overview</li>
+          <li>Polarity classification</li>
+          <li>Emotion detection</li>
+          <li>Lexicon-based approaches</li>
+          <li>Machine learning approaches</li>
+          <li>Aspect-based sentiment</li>
+          <li>Handling negation</li>
+          <li>Domain adaptation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Named Entity Recognition</h3>
+        </div>
+        <p class="unit-description">Identify and classify named entities like persons, organizations, and locations in text.</p>
+        <ul class="topics-list">
+          <li>NER task definition</li>
+          <li>Entity types and schemas</li>
+          <li>BIO tagging scheme</li>
+          <li>Rule-based approaches</li>
+          <li>Machine learning for NER</li>
+          <li>CRF for sequence labeling</li>
+          <li>Feature engineering</li>
+          <li>Evaluation and metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Information Extraction</h3>
+        </div>
+        <p class="unit-description">Extract structured information and relationships from unstructured text.</p>
+        <ul class="topics-list">
+          <li>Information extraction overview</li>
+          <li>Relation extraction</li>
+          <li>Template filling</li>
+          <li>Pattern-based extraction</li>
+          <li>Machine learning approaches</li>
+          <li>Distant supervision</li>
+          <li>Knowledge base construction</li>
+          <li>Evaluation methodologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Topic Modeling</h3>
+        </div>
+        <p class="unit-description">Discover hidden thematic structures in large collections of documents.</p>
+        <ul class="topics-list">
+          <li>Topic modeling concepts</li>
+          <li>Latent Dirichlet Allocation</li>
+          <li>Probabilistic topic models</li>
+          <li>LDA parameter estimation</li>
+          <li>Model selection and tuning</li>
+          <li>Topic coherence measures</li>
+          <li>Alternative topic models</li>
+          <li>Applications and visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">NLP Applications & Systems</h3>
+        </div>
+        <p class="unit-description">Build real-world NLP applications and understand deployment considerations.</p>
+        <ul class="topics-list">
+          <li>Chatbots and dialogue systems</li>
+          <li>Question answering systems</li>
+          <li>Text summarization</li>
+          <li>Machine translation basics</li>
+          <li>Search and information retrieval</li>
+          <li>NLP system architecture</li>
+          <li>Performance optimization</li>
+          <li>Deployment and monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to NLP</h1>
+      <p>Understand natural language processing fundamentals and the challenges of working with text data.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Natural Language Processing</h3>
+        <p>Learn the fundamental definition and scope of NLP as a field bridging computer science and linguistics.</p>
+        <span class="nlp-badge">AI</span>
+        <span class="nlp-badge">Linguistics</span>
+        <span class="nlp-badge">Text Analysis</span>
+        <div class="algorithm-box">
+          Natural Language Processing (NLP) is a field of artificial intelligence that focuses on the interaction between computers and human language. It involves developing algorithms and models to understand, interpret, and generate human language in a valuable way.
+        </div>
+        <div class="code-example">
+          # NLP involves multiple aspects<br>
+          nlp_components = {<br>
+          &nbsp;&nbsp;"Understanding": "Comprehend meaning from text",<br>
+          &nbsp;&nbsp;"Generation": "Produce human-like text",<br>
+          &nbsp;&nbsp;"Translation": "Convert between languages",<br>
+          &nbsp;&nbsp;"Extraction": "Pull out specific information",<br>
+          &nbsp;&nbsp;"Classification": "Categorize text content",<br>
+          &nbsp;&nbsp;"Summarization": "Condense long texts"<br>
+          }<br>
+          <br>
+          # Example NLP task<br>
+          text = "I love this movie! It's fantastic."<br>
+          # NLP can determine: sentiment=positive, emotion=joy
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">NLP vs Computational Linguistics</h3>
+        <p>Understand the relationship and differences between NLP and computational linguistics.</p>
+        <div class="concept-highlight">
+          Computational Linguistics: Theory-focused, studies language as a computational system<br>
+          NLP: Application-focused, builds practical systems for language tasks<br>
+          Overlap: Both use computational methods for language processing
+        </div>
+        <div class="text-example">
+          Computational Linguistics might ask: "How can we model the syntax of English using formal grammars?"<br><br>
+          NLP might ask: "How can we build a system that accurately translates English to Spanish for business documents?"
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Challenges in NLP</h3>
+        <p>Explore the unique difficulties that make natural language processing complex and challenging.</p>
+        <div class="algorithm-box">
+          Key NLP challenges: Ambiguity (multiple meanings), Context dependency, Variability in expression, Implicit knowledge requirements, Cultural and domain-specific language, and Real-world knowledge integration.
+        </div>
+        <div class="code-example">
+          # Examples of NLP challenges<br>
+          <br>
+          # 1. Ambiguity<br>
+          sentence1 = "I saw a man with a telescope"<br>
+          # Who has the telescope? The observer or the man?<br>
+          <br>
+          # 2. Context dependency<br>
+          sentence2 = "The bank is closed"<br>
+          # Financial institution or river bank?<br>
+          <br>
+          # 3. Sarcasm and irony<br>
+          sentence3 = "Great! Another meeting..."<br>
+          # Positive words, negative sentiment<br>
+          <br>
+          # 4. Cultural references<br>
+          sentence4 = "It's raining cats and dogs"<br>
+          # Idiom meaning heavy rain, not literal animals
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Applications and Use Cases</h3>
+        <p>Discover the wide range of real-world applications where NLP creates value.</p>
+        <span class="nlp-badge">Search</span>
+        <span class="nlp-badge">Translation</span>
+        <span class="nlp-badge">Chatbots</span>
+        <span class="nlp-badge">Analytics</span>
+        <div class="code-example">
+          # Major NLP applications<br>
+          applications = {<br>
+          &nbsp;&nbsp;"Search Engines": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"query_understanding": "What user wants",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"document_ranking": "Relevance scoring",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"snippet_generation": "Result summaries"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Virtual Assistants": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"speech_recognition": "Voice to text",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"intent_detection": "What user wants",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"response_generation": "Natural replies"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"Business Intelligence": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sentiment_analysis": "Customer opinions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trend_detection": "Topic monitoring",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"document_analysis": "Contract review"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">NLP Pipeline Overview</h3>
+        <p>Understand the typical stages involved in processing natural language data.</p>
+        <div class="concept-highlight">
+          Text Input → Preprocessing → Tokenization → Linguistic Analysis → Feature Extraction → Machine Learning → Application Output
+        </div>
+        <div class="code-example">
+          import nltk<br>
+          from sklearn.feature_extraction.text import TfidfVectorizer<br>
+          from sklearn.naive_bayes import MultinomialNB<br>
+          <br>
+          # Complete NLP pipeline example<br>
+          def nlp_pipeline(text):<br>
+          &nbsp;&nbsp;# 1. Preprocessing<br>
+          &nbsp;&nbsp;text = text.lower().strip()<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# 2. Tokenization<br>
+          &nbsp;&nbsp;tokens = nltk.word_tokenize(text)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# 3. Remove stopwords<br>
+          &nbsp;&nbsp;stop_words = set(nltk.corpus.stopwords.words('english'))<br>
+          &nbsp;&nbsp;filtered_tokens = [w for w in tokens if w not in stop_words]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# 4. Rejoin for vectorization<br>
+          &nbsp;&nbsp;processed_text = ' '.join(filtered_tokens)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return processed_text<br>
+          <br>
+          # Example usage<br>
+          raw_text = "The movie was absolutely fantastic!"<br>
+          processed = nlp_pipeline(raw_text)<br>
+          print(processed)  # "movie absolutely fantastic"
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Text as Data</h3>
+        <p>Learn how to think about text from a data science perspective and its unique properties.</p>
