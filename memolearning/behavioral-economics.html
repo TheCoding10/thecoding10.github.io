@@ -1,0 +1,740 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Behavioral Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #8b5cf6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #4c1d95, #6d28d9);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(76, 29, 149, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #4c1d95;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6d28d9;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #4c1d95, #6d28d9);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(76, 29, 149, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .behavioral-badge {
+      display: inline-block;
+      background: #f5f3ff;
+      color: #4c1d95;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .behavioral-box {
+      background: #f5f3ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #4c1d95;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .bias-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .decision-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .heuristic-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 Behavioral Economics</h1>
+    <p>Discover how psychology influences economic decisions and challenge traditional rationality assumptions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Behavioral Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Behavioral Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Cognitive Biases</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">80+</span>
+          <div class="stat-label">Real-World Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Behavioral Economics</h3>
+        </div>
+        <p class="unit-description">Understand the foundations of behavioral economics and its departure from traditional economic theory.</p>
+        <ul class="topics-list">
+          <li>Traditional vs behavioral economics</li>
+          <li>Bounded rationality</li>
+          <li>Systematic biases</li>
+          <li>Historical development</li>
+          <li>Key contributors</li>
+          <li>Methodological approaches</li>
+          <li>Experimental economics</li>
+          <li>Policy implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Prospect Theory</h3>
+        </div>
+        <p class="unit-description">Master Kahneman and Tversky's groundbreaking theory of decision-making under risk.</p>
+        <ul class="topics-list">
+          <li>Value function</li>
+          <li>Reference dependence</li>
+          <li>Loss aversion</li>
+          <li>Probability weighting</li>
+          <li>Certainty effect</li>
+          <li>Reflection effect</li>
+          <li>Framing effects</li>
+          <li>Applications to finance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Heuristics and Biases</h3>
+        </div>
+        <p class="unit-description">Explore mental shortcuts and systematic errors in human judgment and decision-making.</p>
+        <ul class="topics-list">
+          <li>Availability heuristic</li>
+          <li>Representativeness heuristic</li>
+          <li>Anchoring and adjustment</li>
+          <li>Confirmation bias</li>
+          <li>Overconfidence bias</li>
+          <li>Hindsight bias</li>
+          <li>Base rate neglect</li>
+          <li>Conjunction fallacy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Time Preferences and Self-Control</h3>
+        </div>
+        <p class="unit-description">Analyze how people make intertemporal choices and struggle with self-control problems.</p>
+        <ul class="topics-list">
+          <li>Hyperbolic discounting</li>
+          <li>Present bias</li>
+          <li>Time inconsistency</li>
+          <li>Procrastination</li>
+          <li>Commitment devices</li>
+          <li>Mental accounting</li>
+          <li>Saving behavior</li>
+          <li>Addiction models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Social Preferences</h3>
+        </div>
+        <p class="unit-description">Examine how social considerations affect individual economic decisions.</p>
+        <ul class="topics-list">
+          <li>Altruism and fairness</li>
+          <li>Reciprocity</li>
+          <li>Trust and cooperation</li>
+          <li>Inequity aversion</li>
+          <li>Social norms</li>
+          <li>Peer effects</li>
+          <li>Public goods provision</li>
+          <li>Charitable giving</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Choice Architecture</h3>
+        </div>
+        <p class="unit-description">Understand how decision environments influence choices and the design of nudges.</p>
+        <ul class="topics-list">
+          <li>Choice architecture principles</li>
+          <li>Default options</li>
+          <li>Framing effects</li>
+          <li>Social proof</li>
+          <li>Salience</li>
+          <li>Nudge theory</li>
+          <li>Libertarian paternalism</li>
+          <li>Policy applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Behavioral Finance</h3>
+        </div>
+        <p class="unit-description">Apply behavioral insights to understand financial markets and investor behavior.</p>
+        <ul class="topics-list">
+          <li>Market anomalies</li>
+          <li>Investor psychology</li>
+          <li>Herding behavior</li>
+          <li>Momentum and contrarian effects</li>
+          <li>Bubbles and crashes</li>
+          <li>Portfolio theory extensions</li>
+          <li>Retirement planning</li>
+          <li>Financial advice</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Consumer Behavior</h3>
+        </div>
+        <p class="unit-description">Analyze how psychological factors influence consumer choices and market outcomes.</p>
+        <ul class="topics-list">
+          <li>Consumer psychology</li>
+          <li>Brand loyalty</li>
+          <li>Price perception</li>
+          <li>Quality inference</li>
+          <li>Product differentiation</li>
+          <li>Advertising effects</li>
+          <li>Shopping behavior</li>
+          <li>Online commerce</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Labor Market Behavior</h3>
+        </div>
+        <p class="unit-description">Explore how behavioral factors affect employment, wages, and workplace dynamics.</p>
+        <ul class="topics-list">
+          <li>Job search behavior</li>
+          <li>Wage bargaining</li>
+          <li>Workplace motivation</li>
+          <li>Performance incentives</li>
+          <li>Discrimination</li>
+          <li>Career choices</li>
+          <li>Work-life balance</li>
+          <li>Organizational behavior</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Health Economics Applications</h3>
+        </div>
+        <p class="unit-description">Apply behavioral insights to health decisions, medical care, and public health policy.</p>
+        <ul class="topics-list">
+          <li>Health decision-making</li>
+          <li>Risk perception</li>
+          <li>Medical compliance</li>
+          <li>Lifestyle choices</li>
+          <li>Insurance decisions</li>
+          <li>Preventive care</li>
+          <li>Health information processing</li>
+          <li>Public health interventions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Experimental Methods</h3>
+        </div>
+        <p class="unit-description">Learn to design and conduct behavioral economics experiments and field studies.</p>
+        <ul class="topics-list">
+          <li>Laboratory experiments</li>
+          <li>Field experiments</li>
+          <li>Natural experiments</li>
+          <li>Randomized controlled trials</li>
+          <li>Survey methods</li>
+          <li>Behavioral measurement</li>
+          <li>Statistical analysis</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Policy Applications</h3>
+        </div>
+        <p class="unit-description">Examine how behavioral insights can improve public policy design and implementation.</p>
+        <ul class="topics-list">
+          <li>Behavioral public policy</li>
+          <li>Nudging for good</li>
+          <li>Tax policy design</li>
+          <li>Environmental behavior</li>
+          <li>Education policy</li>
+          <li>Welfare programs</li>
+          <li>Digital government</li>
+          <li>Policy evaluation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Behavioral Economics</h1>
+      <p>Understand the foundations of behavioral economics and its departure from traditional economic theory.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Traditional vs Behavioral Economics</h3>
+        <p>Compare and contrast the assumptions and methods of traditional and behavioral economics.</p>
+        <span class="behavioral-badge">Rationality</span>
+        <span class="behavioral-badge">Psychology</span>
+        <span class="behavioral-badge">Realism</span>
+        <div class="behavioral-box">
+          Traditional economics assumes people are perfectly rational, have unlimited cognitive abilities, and always maximize their utility. Behavioral economics recognizes that people are human - they make systematic errors, have limited cognitive capacity, and are influenced by emotions and social factors.
+        </div>
+        <div class="code-example">
+          # Traditional vs Behavioral Economics Comparison<br>
+          economics_comparison = {<br>
+          &nbsp;&nbsp;"traditional_economics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumptions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"rationality": "Perfect rational actors",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"information": "Perfect or near-perfect information",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"preferences": "Stable and consistent preferences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"computation": "Unlimited cognitive abilities"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Mathematical modeling", "Equilibrium analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"goal": "Elegant theoretical predictions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strengths": ["Clear predictions", "Mathematical rigor", "Policy insights"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"behavioral_economics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumptions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"bounded_rationality": "Limited cognitive capacity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"systematic_biases": "Predictable errors in judgment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"context_effects": "Decisions influenced by framing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"social_influences": "Preferences affected by others"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Experiments", "Psychological insights", "Field studies"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"goal": "Realistic understanding of human behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strengths": ["Empirical accuracy", "Policy relevance", "Predictive power"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bounded Rationality</h3>
+        <p>Explore Herbert Simon's concept of bounded rationality and its implications for economic decision-making.</p>
+        <div class="concept-highlight">
+          Bounded Rationality Components:<br>
+          • Limited cognitive capacity to process information<br>
+          • Satisficing rather than optimizing behavior<br>
+          • Use of heuristics and shortcuts<br>
+          • Environmental constraints on decision-making
+        </div>
+        <div class="bias-insight">
+          <strong>Implications for Economic Theory:</strong><br>
+          • Markets may not always clear efficiently<br>
+          • Information processing costs matter<br>
+          • Simple rules often outperform complex optimization<br>
+          • Context and presentation affect choices
+        </div>
+        <div class="code-example">
+          # Bounded Rationality Framework<br>
+          bounded_rationality = {<br>
+          &nbsp;&nbsp;"cognitive_limitations": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"working_memory": "Limited capacity for processing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"attention": "Selective focus on information",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"time_constraints": "Pressure to decide quickly",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"information_overload": "Too much data to process"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"decision_strategies": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"satisficing": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Choose first acceptable option",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"vs_optimizing": "Good enough vs best possible",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Faster decisions", "Lower cognitive cost"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"heuristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Mental shortcuts for decision-making",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Rules of thumb", "Pattern recognition"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"trade_off": "Speed vs accuracy"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"economic_implications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"market_outcomes": "May deviate from theoretical predictions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"firm_behavior": "Strategic simplicity often preferred",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_design": "Must account for cognitive limitations"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Systematic Biases</h3>
+        <p>Understand how cognitive biases create predictable patterns of deviation from rational choice.</p>
+        <div class="decision-tool">
+          <strong>Key Characteristics of Systematic Biases:</strong><br>
+          • Predictable and consistent across individuals<br>
+          • Often unconscious and automatic<br>
+          • Persist even when people are aware of them<br>
+          • Can be beneficial in some contexts but harmful in others
+        </div>
+        <div class="heuristic-indicator">
+          <strong>Common Categories:</strong><br>
+          • Cognitive biases: Errors in thinking and memory<br>
+          • Emotional biases: Influence of emotions on decisions<br>
+          • Social biases: Impact of social context and others<br>
+          • Motivational biases: Self-serving interpretations
+        </div>
+        <div class="code-example">
+          # Systematic Biases Classification<br>
+          systematic_biases = {<br>
+          &nbsp;&nbsp;"cognitive_biases": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"anchoring": "Over-reliance on first information",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"availability": "Judging by ease of recall",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"representativeness": "Judging by similarity to prototypes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"confirmation": "Seeking confirming evidence"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"emotional_biases": {<br>
+          &nbsp;&
