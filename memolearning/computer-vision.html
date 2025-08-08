@@ -1,0 +1,728 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Computer Vision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #4c1d95, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(76, 29, 149, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '👁️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #4c1d95;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #4c1d95, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(76, 29, 149, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .cv-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #4c1d95;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .vision-box {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #4c1d95;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .algorithm-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .detection-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .performance-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>👁️ Computer Vision</h1>
+    <p>Master the art and science of teaching machines to see and interpret visual information</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Computer Vision Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Specialized Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Vision Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Algorithms & Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">45+</span>
+          <div class="stat-label">Practical Projects</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Image Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the basics of digital images, pixel representation, and fundamental image operations.</p>
+        <ul class="topics-list">
+          <li>Digital image representation</li>
+          <li>Color spaces and models</li>
+          <li>Image file formats</li>
+          <li>Pixel operations</li>
+          <li>Spatial and frequency domains</li>
+          <li>Image quality metrics</li>
+          <li>Noise and artifacts</li>
+          <li>Image acquisition systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Image Processing Techniques</h3>
+        </div>
+        <p class="unit-description">Master essential image processing operations including filtering, enhancement, and transformations.</p>
+        <ul class="topics-list">
+          <li>Linear and nonlinear filtering</li>
+          <li>Convolution operations</li>
+          <li>Edge detection algorithms</li>
+          <li>Morphological operations</li>
+          <li>Histogram processing</li>
+          <li>Image enhancement</li>
+          <li>Geometric transformations</li>
+          <li>Multi-scale processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Feature Detection and Description</h3>
+        </div>
+        <p class="unit-description">Explore algorithms for detecting and describing distinctive features in images.</p>
+        <ul class="topics-list">
+          <li>Corner detection</li>
+          <li>Blob detection</li>
+          <li>Scale-invariant features</li>
+          <li>SIFT and SURF</li>
+          <li>ORB and FAST</li>
+          <li>Feature descriptors</li>
+          <li>Feature matching</li>
+          <li>Keypoint evaluation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Image Classification</h3>
+        </div>
+        <p class="unit-description">Build systems to categorize images into predefined classes using traditional and deep learning methods.</p>
+        <ul class="topics-list">
+          <li>Traditional classification pipelines</li>
+          <li>Bag of visual words</li>
+          <li>Convolutional Neural Networks</li>
+          <li>Popular CNN architectures</li>
+          <li>Transfer learning</li>
+          <li>Data augmentation</li>
+          <li>Multi-class vs multi-label</li>
+          <li>Performance evaluation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Object Detection</h3>
+        </div>
+        <p class="unit-description">Learn to locate and identify multiple objects within images using state-of-the-art detection frameworks.</p>
+        <ul class="topics-list">
+          <li>Sliding window approaches</li>
+          <li>Two-stage detectors</li>
+          <li>One-stage detectors</li>
+          <li>YOLO family</li>
+          <li>R-CNN variants</li>
+          <li>Anchor-based vs anchor-free</li>
+          <li>Non-maximum suppression</li>
+          <li>Evaluation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Image Segmentation</h3>
+        </div>
+        <p class="unit-description">Partition images into meaningful regions and segments using classical and deep learning approaches.</p>
+        <ul class="topics-list">
+          <li>Thresholding techniques</li>
+          <li>Region growing</li>
+          <li>Watershed algorithm</li>
+          <li>Graph-based segmentation</li>
+          <li>Semantic segmentation</li>
+          <li>Instance segmentation</li>
+          <li>Panoptic segmentation</li>
+          <li>Medical image segmentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Facial Recognition and Analysis</h3>
+        </div>
+        <p class="unit-description">Develop systems for face detection, recognition, and facial attribute analysis.</p>
+        <ul class="topics-list">
+          <li>Face detection algorithms</li>
+          <li>Facial landmark detection</li>
+          <li>Face recognition methods</li>
+          <li>Eigenfaces and Fisherfaces</li>
+          <li>Deep face recognition</li>
+          <li>Facial expression analysis</li>
+          <li>Age and gender estimation</li>
+          <li>Anti-spoofing techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">3D Computer Vision</h3>
+        </div>
+        <p class="unit-description">Understand depth perception, 3D reconstruction, and spatial understanding from 2D images.</p>
+        <ul class="topics-list">
+          <li>Camera geometry</li>
+          <li>Stereo vision</li>
+          <li>Depth estimation</li>
+          <li>Structure from motion</li>
+          <li>3D reconstruction</li>
+          <li>Point cloud processing</li>
+          <li>SLAM algorithms</li>
+          <li>Neural radiance fields</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Video Analysis</h3>
+        </div>
+        <p class="unit-description">Process temporal sequences of images for motion analysis, tracking, and video understanding.</p>
+        <ul class="topics-list">
+          <li>Optical flow estimation</li>
+          <li>Motion detection</li>
+          <li>Object tracking</li>
+          <li>Action recognition</li>
+          <li>Video classification</li>
+          <li>Temporal segmentation</li>
+          <li>Video stabilization</li>
+          <li>Real-time processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Medical Image Analysis</h3>
+        </div>
+        <p class="unit-description">Apply computer vision techniques to medical imaging for diagnosis and treatment planning.</p>
+        <ul class="topics-list">
+          <li>Medical imaging modalities</li>
+          <li>DICOM standard</li>
+          <li>Image registration</li>
+          <li>Medical image segmentation</li>
+          <li>Computer-aided diagnosis</li>
+          <li>Radiomics</li>
+          <li>Deep learning in radiology</li>
+          <li>Regulatory considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Advanced Deep Learning for Vision</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge deep learning architectures and techniques for computer vision.</p>
+        <ul class="topics-list">
+          <li>Vision transformers</li>
+          <li>Attention mechanisms</li>
+          <li>Generative adversarial networks</li>
+          <li>Self-supervised learning</li>
+          <li>Few-shot learning</li>
+          <li>Neural architecture search</li>
+          <li>Efficient architectures</li>
+          <li>Multimodal learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Applications and Deployment</h3>
+        </div>
+        <p class="unit-description">Build real-world computer vision applications and deploy them in production environments.</p>
+        <ul class="topics-list">
+          <li>Autonomous vehicles</li>
+          <li>Surveillance systems</li>
+          <li>Augmented reality</li>
+          <li>Industrial inspection</li>
+          <li>Mobile applications</li>
+          <li>Edge deployment</li>
+          <li>Performance optimization</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Image Fundamentals</h1>
+      <p>Learn the basics of digital images, pixel representation, and fundamental image operations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Digital Image Representation</h3>
+        <p>Understand how images are stored and represented in digital form, including sampling and quantization.</p>
+        <span class="cv-badge">Pixels</span>
+        <span class="cv-badge">Sampling</span>
+        <span class="cv-badge">Quantization</span>
+        <div class="vision-box">
+          A digital image is a 2D array of pixels, where each pixel represents the intensity or color at a specific location. The process involves spatial sampling (determining pixel locations) and amplitude quantization (determining intensity levels).
+        </div>
+        <div class="code-example">
+          # Digital Image Representation<br>
+          image_representation = {<br>
+          &nbsp;&nbsp;"definition": "2D function f(x,y) where x,y are spatial coordinates",<br>
+          &nbsp;&nbsp;"digitization": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sampling": "Convert continuous spatial coordinates to discrete grid",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quantization": "Convert continuous intensity values to discrete levels",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"result": "M x N array of integer values"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"pixel_properties": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"grayscale": "Single intensity value (0-255 for 8-bit)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"color": "Multiple channels (RGB, HSV, etc.)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"bit_depth": "Number of bits per pixel (1, 8, 16, 32)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dynamic_range": "Ratio between maximum and minimum intensity"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"resolution_types": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"spatial": "Number of pixels in image (width x height)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"intensity": "Number of gray levels (2^bit_depth)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"temporal": "Frame rate for video sequences"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Color Spaces and Models</h3>
+        <p>Explore different ways to represent and manipulate color information in digital images.</p>
+        <div class="concept-highlight">
+          Common Color Spaces:<br>
+          • RGB: Red, Green, Blue - additive color model<br>
+          • HSV: Hue, Saturation, Value - intuitive for humans<br>
+          • LAB: Lightness, A, B - perceptually uniform<br>
+          • YUV: Luminance and chrominance - used in video<br>
+          • CMYK: Cyan, Magenta, Yellow, Black - printing
+        </div>
+        <div class="algorithm-insight">
+          <strong>Color Space Conversion:</strong><br>
+          Converting between color spaces involves mathematical transformations. RGB to grayscale: Gray = 0.299*R + 0.587*G + 0.114*B (weighted sum based on human perception).
+        </div>
+        <div class="code-example">
+          # Color Space Analysis<br>
+          color_spaces = {<br>
+          &nbsp;&nbsp;"rgb": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Red, Green, Blue channels",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"range": "0-255 for each channel (8-bit)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Hardware-oriented", "Simple operations"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Not perceptually uniform", "Poor for color-based segmentation"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"hsv": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Hue (0-360°), Saturation (0-100%), Value (0-100%)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Intuitive", "Good for color filtering", "Separates color from intensity"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": ["Color-based object detection", "Skin detection", "Image enhancement"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"lab": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "L* (lightness), a* (green-red), b* (blue-yellow)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Perceptually uniform", "Device-independent"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": ["Color correction", "Quality assessment", "Medical imaging"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pixel Operations</h3>
+        <p>Learn fundamental operations that can be performed on individual pixels and their neighborhoods.</p>
+        <div class="detection-tool">
+          <strong>Types of Pixel Operations:</strong><br>
+          • Point operations: Transform individual pixels independently<br>
+          • Local operations: Use neighborhood information<br>
+          • Global operations: Use entire image statistics<br>
+          • Geometric operations: Change spatial relationships
+        </div>
+        <div class="performance-indicator">
+          <strong>Operation Complexity:</strong><br>
+          Point operations are O(N) where N is number of pixels. Local operations are O(N×k) where k is neighborhood size. Choose efficiently based on requirements.
+        </div>
+        <div class="code-example">
+          # Pixel Operations Categories<br>
+          pixel_operations = {<br>
+          &nbsp;&nbsp;"point_operations": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Output pixel depends only on input pixel at same location",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"brightness": "g(x,y) = f(x,y) + c",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"contrast": "g(x,y) = a * f(x,y)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gamma_correction": "g(x,y) = c * f(x,y)^γ",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"thresholding": "g(x,y) = 255 if f(x,y) > T else 0"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "O(width × height)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"neighborhood_operations": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Output depends on input pixel and its neighbors",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Convolution",
