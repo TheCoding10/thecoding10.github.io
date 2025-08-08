@@ -1,0 +1,733 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Business</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1e3a8a 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #1e3a8a);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💼';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #1e3a8a);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .business-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e3a8a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .case-study {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .business-framework {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💼 Introduction to Business</h1>
+    <p>Master fundamental business concepts, operations, and strategy for success in the modern economy</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Introduction to Business Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Business Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Real-World Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Business Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand what business is, different types of businesses, and the role of business in society.</p>
+        <ul class="topics-list">
+          <li>What is business and entrepreneurship</li>
+          <li>Business objectives and goals</li>
+          <li>Types of business organizations</li>
+          <li>Profit and value creation</li>
+          <li>Stakeholders and stakeholder theory</li>
+          <li>Business environment analysis</li>
+          <li>Economic systems and business</li>
+          <li>Business ethics and social responsibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Business Ownership & Legal Forms</h3>
+        </div>
+        <p class="unit-description">Explore different business structures, ownership models, and legal considerations.</p>
+        <ul class="topics-list">
+          <li>Sole proprietorships</li>
+          <li>Partnerships and LLPs</li>
+          <li>Corporations and incorporation</li>
+          <li>Limited liability companies (LLCs)</li>
+          <li>Franchising models</li>
+          <li>Joint ventures and alliances</li>
+          <li>Legal and regulatory compliance</li>
+          <li>Intellectual property basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Management & Leadership</h3>
+        </div>
+        <p class="unit-description">Learn management principles, leadership styles, and organizational behavior.</p>
+        <ul class="topics-list">
+          <li>Management functions and roles</li>
+          <li>Planning and goal setting</li>
+          <li>Organizing and structure</li>
+          <li>Leading and motivating teams</li>
+          <li>Controlling and performance management</li>
+          <li>Leadership styles and theories</li>
+          <li>Communication and delegation</li>
+          <li>Change management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Marketing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand marketing concepts, customer behavior, and promotional strategies.</p>
+        <ul class="topics-list">
+          <li>Marketing concept and orientation</li>
+          <li>Target markets and segmentation</li>
+          <li>Marketing mix (4 Ps)</li>
+          <li>Product development and lifecycle</li>
+          <li>Pricing strategies</li>
+          <li>Distribution channels</li>
+          <li>Promotion and advertising</li>
+          <li>Digital marketing basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Operations Management</h3>
+        </div>
+        <p class="unit-description">Learn how businesses create products and services efficiently and effectively.</p>
+        <ul class="topics-list">
+          <li>Operations strategy and design</li>
+          <li>Production planning and control</li>
+          <li>Supply chain management</li>
+          <li>Quality management systems</li>
+          <li>Inventory management</li>
+          <li>Process improvement</li>
+          <li>Technology in operations</li>
+          <li>Service operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Human Resources Management</h3>
+        </div>
+        <p class="unit-description">Explore how organizations manage their most important asset - people.</p>
+        <ul class="topics-list">
+          <li>HR planning and job analysis</li>
+          <li>Recruitment and selection</li>
+          <li>Training and development</li>
+          <li>Performance management</li>
+          <li>Compensation and benefits</li>
+          <li>Employee relations</li>
+          <li>Workplace diversity and inclusion</li>
+          <li>Employment law basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Financial Management</h3>
+        </div>
+        <p class="unit-description">Understand financial principles, accounting basics, and money management in business.</p>
+        <ul class="topics-list">
+          <li>Financial statements overview</li>
+          <li>Cash flow management</li>
+          <li>Budgeting and forecasting</li>
+          <li>Financial ratios and analysis</li>
+          <li>Funding sources and capital</li>
+          <li>Investment decisions</li>
+          <li>Risk management</li>
+          <li>Financial planning basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Strategic Planning</h3>
+        </div>
+        <p class="unit-description">Learn how businesses develop long-term strategies and competitive advantages.</p>
+        <ul class="topics-list">
+          <li>Strategic planning process</li>
+          <li>Mission, vision, and values</li>
+          <li>SWOT analysis</li>
+          <li>Competitive analysis</li>
+          <li>Generic business strategies</li>
+          <li>Strategic implementation</li>
+          <li>Performance measurement</li>
+          <li>Strategic control systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Information Technology in Business</h3>
+        </div>
+        <p class="unit-description">Explore how technology transforms business operations and creates opportunities.</p>
+        <ul class="topics-list">
+          <li>Business information systems</li>
+          <li>E-commerce and digital business</li>
+          <li>Data management and analytics</li>
+          <li>Cybersecurity for business</li>
+          <li>Enterprise software systems</li>
+          <li>Digital transformation</li>
+          <li>Technology planning</li>
+          <li>Emerging technologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">International Business</h3>
+        </div>
+        <p class="unit-description">Understand global business environments, trade, and international operations.</p>
+        <ul class="topics-list">
+          <li>Global business environment</li>
+          <li>International trade theories</li>
+          <li>Cultural considerations</li>
+          <li>Political and legal environments</li>
+          <li>Exchange rates and currency</li>
+          <li>Global market entry strategies</li>
+          <li>International organizations</li>
+          <li>Multinational corporation management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Business Ethics & Sustainability</h3>
+        </div>
+        <p class="unit-description">Learn about ethical decision-making, corporate responsibility, and sustainable business practices.</p>
+        <ul class="topics-list">
+          <li>Business ethics frameworks</li>
+          <li>Ethical decision-making models</li>
+          <li>Corporate social responsibility</li>
+          <li>Sustainability and triple bottom line</li>
+          <li>Environmental business practices</li>
+          <li>Stakeholder capitalism</li>
+          <li>Ethical leadership</li>
+          <li>Governance and compliance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Entrepreneurship & Innovation</h3>
+        </div>
+        <p class="unit-description">Explore entrepreneurial thinking, innovation processes, and starting new ventures.</p>
+        <ul class="topics-list">
+          <li>Entrepreneurial mindset</li>
+          <li>Opportunity recognition</li>
+          <li>Business model development</li>
+          <li>Innovation and creativity</li>
+          <li>Startup financing</li>
+          <li>Business plan creation</li>
+          <li>Risk assessment and management</li>
+          <li>Scaling and growth strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Business Fundamentals</h1>
+      <p>Understand what business is, different types of businesses, and the role of business in society.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Business and Entrepreneurship</h3>
+        <p>Learn the fundamental definition of business and how entrepreneurs create value in the economy.</p>
+        <span class="business-badge">Value Creation</span>
+        <span class="business-badge">Economics</span>
+        <span class="business-badge">Innovation</span>
+        <div class="algorithm-box">
+          Business is an organization that provides goods or services to customers in exchange for money, with the goal of creating value for all stakeholders including customers, employees, investors, and society.
+        </div>
+        <div class="code-example">
+          # Business fundamentals framework<br>
+          business_definition = {<br>
+          &nbsp;&nbsp;"purpose": "Create value for stakeholders",<br>
+          &nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Identify customer needs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Develop products/services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Deliver value to customers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Generate revenue and profit"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"inputs": ["Capital", "Labor", "Technology", "Resources"],<br>
+          &nbsp;&nbsp;"outputs": ["Products", "Services", "Jobs", "Innovation"],<br>
+          &nbsp;&nbsp;"stakeholders": ["Customers", "Employees", "Investors", "Community"],<br>
+          &nbsp;&nbsp;"success_measures": ["Profitability", "Growth", "Customer satisfaction"]<br>
+          }<br>
+          <br>
+          # Entrepreneurship characteristics<br>
+          entrepreneur_traits = [<br>
+          &nbsp;&nbsp;"Risk-taking willingness",<br>
+          &nbsp;&nbsp;"Innovation and creativity",<br>
+          &nbsp;&nbsp;"Opportunity recognition",<br>
+          &nbsp;&nbsp;"Resource mobilization",<br>
+          &nbsp;&nbsp;"Value creation focus"<br>
+          ]
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Business Objectives and Goals</h3>
+        <p>Explore the various objectives businesses pursue beyond just profit maximization.</p>
+        <div class="concept-highlight">
+          Primary Objectives: Profit maximization, Growth, Market share<br>
+          Secondary Objectives: Customer satisfaction, Employee welfare, Social impact<br>
+          Long-term vs Short-term: Balancing immediate returns with sustainable growth
+        </div>
+        <div class="business-framework">
+          SMART Goals Framework for Business:<br>
+          • Specific: Clear and well-defined<br>
+          • Measurable: Quantifiable metrics<br>
+          • Achievable: Realistic and attainable<br>
+          • Relevant: Aligned with business strategy<br>
+          • Time-bound: Clear deadlines and milestones
+        </div>
+        <div class="code-example">
+          # Business objectives hierarchy<br>
+          business_objectives = {<br>
+          &nbsp;&nbsp;"financial": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"revenue_growth": "15% annually",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"profit_margin": "20% target",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"return_on_investment": "12% minimum",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cost_reduction": "5% operational costs"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"market": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"market_share": "25% in 3 years",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_acquisition": "1000 new customers/month",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_retention": "90% annual retention",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"brand_recognition": "Top 3 in industry"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"operational": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quality_standards": "99.5% defect-free",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"delivery_time": "Same-day shipping",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"efficiency": "20% productivity increase",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"innovation": "2 new products per year"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"social": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"employee_satisfaction": "85% engagement score",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"environmental_impact": "Carbon neutral by 2030",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"community_investment": "1% revenue to charity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"diversity": "50% diverse leadership"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Business Organizations</h3>
+        <p>Understand different ways businesses can be structured and organized based on size, industry, and ownership.</p>
+        <div class="algorithm-box">
+          Businesses can be classified by size (micro, small, medium, large), industry sector (primary, secondary, tertiary), ownership structure (private, public, non-profit), and geographic scope (local, national, global).
+        </div>
+        <div class="case-study">
+          <strong>Case Study:</strong> Amazon started as a small online bookstore (small business, tertiary sector, private) and evolved into a large multinational corporation (large business, multiple sectors, public company) demonstrating how businesses can transform over time.
+        </div>
+        <div class="code-example">
+          # Business classification system<br>
+          business_types = {<br>
+          &nbsp;&nbsp;"by_size": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"micro": "< 10 employees, < $1M revenue",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"small": "10-50 employees, $1M-$10M revenue",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"medium": "50-250 employees, $10M-$100M revenue",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"large": "> 250 employees, > $100M revenue"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_sector": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary": "Agriculture, mining, fishing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"secondary": "Manufacturing, construction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"tertiary": "Services, retail, healthcare",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quaternary": "Information, research, technology"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_ownership": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"private": "Owned by individuals/private groups",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"public": "Shares traded on stock exchanges",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"non_profit": "Mission-driven, reinvest profits",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"government": "Owned and operated by state"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_scope": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"local": "Serves local community",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"national": "Operates within one country",<br>
