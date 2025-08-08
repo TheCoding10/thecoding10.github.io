@@ -1,0 +1,741 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Labor Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #dc2626 50%, #f97316 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '👷';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c2d12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .labor-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .labor-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .wage-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .employment-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .discrimination-indicator {
+      background: #fdf2f8;
+      border: 1px solid #fce7f3;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be185d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>👷 Labor Economics</h1>
+    <p>Analyze labor markets, wage determination, employment patterns, and workforce dynamics</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Labor Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~135</span>
+          <div class="stat-label">Labor Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Labor Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">95+</span>
+          <div class="stat-label">Workforce Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Labor Economics</h3>
+        </div>
+        <p class="unit-description">Understand the scope of labor economics and basic labor market concepts.</p>
+        <ul class="topics-list">
+          <li>Labor economics scope</li>
+          <li>Labor market participants</li>
+          <li>Labor vs other factors</li>
+          <li>Employment relationships</li>
+          <li>Labor market institutions</li>
+          <li>Labor market data</li>
+          <li>Historical perspective</li>
+          <li>Policy applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Labor Supply Theory</h3>
+        </div>
+        <p class="unit-description">Analyze individual and household decisions about work, leisure, and labor force participation.</p>
+        <ul class="topics-list">
+          <li>Work-leisure choice</li>
+          <li>Income and substitution effects</li>
+          <li>Labor supply elasticity</li>
+          <li>Life cycle labor supply</li>
+          <li>Family labor supply</li>
+          <li>Reservation wage</li>
+          <li>Hours vs participation</li>
+          <li>Empirical evidence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Labor Demand Theory</h3>
+        </div>
+        <p class="unit-description">Study how firms make employment and wage decisions to maximize profits.</p>
+        <ul class="topics-list">
+          <li>Production with labor</li>
+          <li>Marginal productivity theory</li>
+          <li>Short-run labor demand</li>
+          <li>Long-run labor demand</li>
+          <li>Labor demand elasticity</li>
+          <li>Quasi-fixed costs</li>
+          <li>Employment adjustment</li>
+          <li>Technology and labor demand</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Labor Market Equilibrium</h3>
+        </div>
+        <p class="unit-description">Examine how labor supply and demand interact to determine wages and employment.</p>
+        <ul class="topics-list">
+          <li>Competitive equilibrium</li>
+          <li>Wage determination</li>
+          <li>Employment levels</li>
+          <li>Market adjustments</li>
+          <li>Efficiency wages</li>
+          <li>Search and matching</li>
+          <li>Labor market segmentation</li>
+          <li>Regional labor markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Human Capital Theory</h3>
+        </div>
+        <p class="unit-description">Understand investment in education, training, and skills development.</p>
+        <ul class="topics-list">
+          <li>Human capital concept</li>
+          <li>Education investment</li>
+          <li>Returns to schooling</li>
+          <li>On-the-job training</li>
+          <li>Experience and earnings</li>
+          <li>Skills-biased change</li>
+          <li>Signaling theory</li>
+          <li>Policy implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Wage Structure and Inequality</h3>
+        </div>
+        <p class="unit-description">Analyze patterns of wage differences across workers, jobs, and time.</p>
+        <ul class="topics-list">
+          <li>Wage distribution</li>
+          <li>Skill premiums</li>
+          <li>Occupational differences</li>
+          <li>Industry wage premiums</li>
+          <li>Rising inequality</li>
+          <li>Technology impact</li>
+          <li>Globalization effects</li>
+          <li>Institutional factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Labor Market Discrimination</h3>
+        </div>
+        <p class="unit-description">Study discrimination in employment, wages, and career advancement.</p>
+        <ul class="topics-list">
+          <li>Types of discrimination</li>
+          <li>Taste-based discrimination</li>
+          <li>Statistical discrimination</li>
+          <li>Gender wage gap</li>
+          <li>Racial disparities</li>
+          <li>Occupational segregation</li>
+          <li>Anti-discrimination policy</li>
+          <li>Measuring discrimination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Labor Mobility and Migration</h3>
+        </div>
+        <p class="unit-description">Examine geographic and occupational mobility of workers.</p>
+        <ul class="topics-list">
+          <li>Migration theory</li>
+          <li>Internal migration</li>
+          <li>International migration</li>
+          <li>Job mobility</li>
+          <li>Job search theory</li>
+          <li>Moving costs</li>
+          <li>Brain drain/gain</li>
+          <li>Migration policy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Unemployment</h3>
+        </div>
+        <p class="unit-description">Analyze causes, types, and consequences of unemployment.</p>
+        <ul class="topics-list">
+          <li>Unemployment measurement</li>
+          <li>Types of unemployment</li>
+          <li>Job search models</li>
+          <li>Duration dependence</li>
+          <li>Unemployment insurance</li>
+          <li>Natural rate</li>
+          <li>Hysteresis effects</li>
+          <li>Youth unemployment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Labor Unions and Collective Bargaining</h3>
+        </div>
+        <p class="unit-description">Study the role of unions in wage setting and workplace conditions.</p>
+        <ul class="topics-list">
+          <li>Union membership trends</li>
+          <li>Union wage premium</li>
+          <li>Collective bargaining</li>
+          <li>Strike activity</li>
+          <li>Right-to-work laws</li>
+          <li>Union effects on productivity</li>
+          <li>Public sector unions</li>
+          <li>International comparisons</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Labor Market Policy</h3>
+        </div>
+        <p class="unit-description">Evaluate government interventions in labor markets and their effectiveness.</p>
+        <ul class="topics-list">
+          <li>Minimum wage policy</li>
+          <li>Employment protection</li>
+          <li>Active labor market policy</li>
+          <li>Training programs</li>
+          <li>Work-sharing</li>
+          <li>Payroll taxes</li>
+          <li>Employment subsidies</li>
+          <li>Policy evaluation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Future of Work</h3>
+        </div>
+        <p class="unit-description">Explore emerging trends and challenges in modern labor markets.</p>
+        <ul class="topics-list">
+          <li>Technological unemployment</li>
+          <li>Gig economy</li>
+          <li>Remote work</li>
+          <li>Skills mismatch</li>
+          <li>Job polarization</li>
+          <li>Platform labor</li>
+          <li>Work-life balance</li>
+          <li>Policy adaptations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Labor Economics</h1>
+      <p>Understand the scope of labor economics and basic labor market concepts.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Labor Economics Scope</h3>
+        <p>Explore what labor economics studies and its importance in understanding the economy.</p>
+        <span class="labor-badge">Work & Employment</span>
+        <span class="labor-badge">Wage Determination</span>
+        <span class="labor-badge">Labor Markets</span>
+        <div class="labor-box">
+          Labor economics is the study of how labor markets function, including the determination of wages, employment levels, and working conditions. It examines both the supply and demand for labor, and how various factors influence these market outcomes.
+        </div>
+        <div class="code-example">
+          # Labor Economics Framework<br>
+          labor_economics = {<br>
+          &nbsp;&nbsp;"definition": "Study of labor markets and employment relationships",<br>
+          &nbsp;&nbsp;"key_questions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"wage_determination": "Why do wages differ across workers?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"employment_levels": "What determines job creation?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"unemployment": "Why does unemployment exist?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"human_capital": "How do education and training affect earnings?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"discrimination": "Why do wage gaps persist?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_effects": "How do labor policies affect outcomes?"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"scope": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"microeconomics": ["Individual labor supply", "Firm hiring decisions"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"macroeconomics": ["Aggregate unemployment", "Labor force trends"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"institutional": ["Unions", "Government regulation", "Social norms"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"international": ["Migration", "Trade effects", "Comparative systems"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_analysis": "Evaluate labor market interventions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_decisions": "Inform hiring and compensation strategies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"individual_choices": "Guide career and education decisions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"social_issues": "Address inequality and discrimination"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Labor Market Participants</h3>
+        <p>Identify the key actors in labor markets and their roles in employment relationships.</p>
+        <div class="concept-highlight">
+          Key Labor Market Actors:<br>
+          • Workers: Supply labor services<br>
+          • Employers: Demand labor services<br>
+          • Government: Sets rules and policies<br>
+          • Unions: Represent worker interests
+        </div>
+        <div class="wage-insight">
+          <strong>Labor Market Dynamics:</strong><br>
+          • Workers seek to maximize utility (income, job satisfaction)<br>
+          • Employers seek to maximize profits<br>
+          • Government balances efficiency and equity<br>
+          • Unions negotiate collective agreements
+        </div>
+        <div class="code-example">
+          # Labor Market Participants<br>
+          market_participants = {<br>
+          &nbsp;&nbsp;"workers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"objectives": ["Higher wages", "Job security", "Good conditions"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"decisions": ["Labor force participation", "Hours worked", "Job search"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"heterogeneity": ["Skills", "Preferences", "Demographics"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"constraints": ["Human capital", "Geographic mobility", "Family"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"employers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"objectives": ["Profit maximization", "Productivity", "Cost control"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"decisions": ["Hiring", "Wage setting", "Training investment"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Small firms", "Large corporations", "Public sector"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"constraints": ["Technology", "Product demand", "Regulation"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"government": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"roles": ["Regulation", "Taxation", "Social insurance"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policies": ["Minimum wage", "Employment law", "Training programs"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"objectives": ["Full employment", "Equity", "Economic growth"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Fiscal policy", "Labor standards", "Immigration"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"unions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"functions": ["Wage negotiation", "Job protection", "Voice"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"coverage": ["Private sector", "Public sector", "Craft unions"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"power_sources": ["Membership", "Strike threat", "Political"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trends": ["Declining membership", "Changing structure"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Labor Market Institutions</h3>
+        <p>Understand the formal and informal institutions that shape labor market outcomes.</p>
+        <div class="employment-tool">
+          <strong>Types of Labor Market Institutions:</strong><br>
+          • Legal frameworks: Employment law, contract enforcement<br>
+          • Social norms: Work ethics, fairness concepts<br>
+          • Organizations: Trade unions, employer associations<br>
+          • Programs: Training, unemployment insurance
+        </div>
+        <div class="discrimination-indicator">
+          <strong>Institutional Variation:</strong><br>
+          • Countries differ in labor market flexibility<br>
+          • Employment protection varies significantly<br>
+          • Social safety nets have different designs<br>
+          • Collective bargaining coverage differs widely
+        </div>
+        <div class="code-example">
+          # Labor Market Institutions<br>
+          labor_institutions = {<br>
+          &nbsp;&nbsp;"legal_framework": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"employment_law": ["Hiring/firing rules", "Working time", "Safety"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"contract_types": ["Permanent", "Temporary", "Part-time"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dispute_resolution": ["Labor courts", "Arbitration", "Mediation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"enforcement": ["Labor inspectors", "Penalties", "Compliance"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"social_institutions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"work_culture": ["Work-life balance", "Career orientation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"education_system": ["Vocational training", "University paths"],<br
