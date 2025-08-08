@@ -1,0 +1,746 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Business Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #8b5cf6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581c87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .analytics-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #581c87;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .algorithm-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .data-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .analytics-tool {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .kpi-metric {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Business Analytics</h1>
+    <p>Transform data into actionable insights for strategic business decision-making</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Business Analytics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Analytics Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Tools & Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Business Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Business Analytics</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of business analytics and its role in modern organizations.</p>
+        <ul class="topics-list">
+          <li>What is business analytics</li>
+          <li>Types of analytics</li>
+          <li>Data-driven decision making</li>
+          <li>Analytics value chain</li>
+          <li>Analytics maturity model</li>
+          <li>Business intelligence vs analytics</li>
+          <li>Analytics applications</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Management & Quality</h3>
+        </div>
+        <p class="unit-description">Learn essential data management principles and quality assurance techniques.</p>
+        <ul class="topics-list">
+          <li>Data lifecycle management</li>
+          <li>Data sources and types</li>
+          <li>Data collection methods</li>
+          <li>Data quality dimensions</li>
+          <li>Data cleaning and preprocessing</li>
+          <li>Data integration</li>
+          <li>Data governance</li>
+          <li>Data security and privacy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Descriptive Analytics</h3>
+        </div>
+        <p class="unit-description">Master techniques for describing and summarizing business data.</p>
+        <ul class="topics-list">
+          <li>Exploratory data analysis</li>
+          <li>Statistical measures</li>
+          <li>Data distribution analysis</li>
+          <li>Correlation and relationships</li>
+          <li>Time series analysis</li>
+          <li>Benchmarking and KPIs</li>
+          <li>Dashboard design</li>
+          <li>Reporting best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Data Visualization</h3>
+        </div>
+        <p class="unit-description">Create compelling visual representations of data for effective communication.</p>
+        <ul class="topics-list">
+          <li>Visualization principles</li>
+          <li>Chart types and selection</li>
+          <li>Color theory and design</li>
+          <li>Interactive visualizations</li>
+          <li>Storytelling with data</li>
+          <li>Dashboard development</li>
+          <li>Visualization tools</li>
+          <li>Mobile and responsive design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Predictive Analytics</h3>
+        </div>
+        <p class="unit-description">Use statistical models and machine learning to predict future outcomes.</p>
+        <ul class="topics-list">
+          <li>Predictive modeling concepts</li>
+          <li>Regression analysis</li>
+          <li>Classification techniques</li>
+          <li>Time series forecasting</li>
+          <li>Model validation</li>
+          <li>Ensemble methods</li>
+          <li>Feature engineering</li>
+          <li>Model deployment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Prescriptive Analytics</h3>
+        </div>
+        <p class="unit-description">Learn optimization and simulation techniques for decision support.</p>
+        <ul class="topics-list">
+          <li>Optimization fundamentals</li>
+          <li>Linear programming</li>
+          <li>Decision analysis</li>
+          <li>Simulation modeling</li>
+          <li>Scenario analysis</li>
+          <li>Risk analysis</li>
+          <li>Resource allocation</li>
+          <li>Decision support systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Customer Analytics</h3>
+        </div>
+        <p class="unit-description">Analyze customer behavior and develop customer-centric strategies.</p>
+        <ul class="topics-list">
+          <li>Customer segmentation</li>
+          <li>RFM analysis</li>
+          <li>Customer lifetime value</li>
+          <li>Churn prediction</li>
+          <li>Market basket analysis</li>
+          <li>Recommendation systems</li>
+          <li>Customer journey mapping</li>
+          <li>A/B testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Financial Analytics</h3>
+        </div>
+        <p class="unit-description">Apply analytics to financial data for better financial management and planning.</p>
+        <ul class="topics-list">
+          <li>Financial ratio analysis</li>
+          <li>Budgeting and forecasting</li>
+          <li>Risk analytics</li>
+          <li>Credit scoring</li>
+          <li>Fraud detection</li>
+          <li>Portfolio optimization</li>
+          <li>Cost analysis</li>
+          <li>Performance measurement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Operations Analytics</h3>
+        </div>
+        <p class="unit-description">Optimize operations through data analysis and process improvement.</p>
+        <ul class="topics-list">
+          <li>Process analysis</li>
+          <li>Quality control analytics</li>
+          <li>Supply chain analytics</li>
+          <li>Inventory optimization</li>
+          <li>Capacity planning</li>
+          <li>Scheduling optimization</li>
+          <li>Maintenance analytics</li>
+          <li>Lean and Six Sigma</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Marketing Analytics</h3>
+        </div>
+        <p class="unit-description">Measure and optimize marketing effectiveness through data analysis.</p>
+        <ul class="topics-list">
+          <li>Marketing mix modeling</li>
+          <li>Attribution analysis</li>
+          <li>Campaign effectiveness</li>
+          <li>Social media analytics</li>
+          <li>Web analytics</li>
+          <li>Brand analytics</li>
+          <li>Pricing analytics</li>
+          <li>Market research analytics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Big Data & Analytics Technologies</h3>
+        </div>
+        <p class="unit-description">Understand big data technologies and modern analytics platforms.</p>
+        <ul class="topics-list">
+          <li>Big data characteristics</li>
+          <li>Data warehousing</li>
+          <li>Cloud analytics platforms</li>
+          <li>NoSQL databases</li>
+          <li>Hadoop ecosystem</li>
+          <li>Spark and real-time analytics</li>
+          <li>Analytics software tools</li>
+          <li>Technology selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Analytics Strategy & Implementation</h3>
+        </div>
+        <p class="unit-description">Develop and implement analytics strategies for organizational success.</p>
+        <ul class="topics-list">
+          <li>Analytics strategy development</li>
+          <li>Building analytics capabilities</li>
+          <li>Change management</li>
+          <li>Analytics team structure</li>
+          <li>ROI measurement</li>
+          <li>Governance and standards</li>
+          <li>Future trends</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Business Analytics</h1>
+      <p>Understand the fundamentals of business analytics and its role in modern organizations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Business Analytics</h3>
+        <p>Learn the fundamental definition and scope of business analytics in organizational decision-making.</p>
+        <span class="analytics-badge">Data-Driven</span>
+        <span class="analytics-badge">Decision Making</span>
+        <span class="analytics-badge">Insights</span>
+        <div class="algorithm-box">
+          Business Analytics is the practice of iterative, methodical exploration of an organization's data, with emphasis on statistical analysis, to drive business planning and decision-making. It transforms raw data into meaningful insights for strategic advantage.
+        </div>
+        <div class="code-example">
+          # Business analytics definition framework<br>
+          business_analytics = {<br>
+          &nbsp;&nbsp;"definition": "Data-driven approach to business decision making",<br>
+          &nbsp;&nbsp;"core_components": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Data collection and management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Statistical analysis and modeling",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Visualization and reporting",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Insight generation and interpretation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Decision support and action"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"key_characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"evidence_based": "Decisions based on data, not intuition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quantitative": "Uses mathematical and statistical methods",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"systematic": "Follows structured analytical processes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"actionable": "Provides insights that lead to action"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"business_value": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Improved decision quality",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Reduced uncertainty and risk",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Increased operational efficiency",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Enhanced competitive advantage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Better customer understanding"<br>
+          &nbsp;&nbsp;]<br>
+          }<br>
+          <br>
+          # Analytics vs traditional approaches<br>
+          comparison = {<br>
+          &nbsp;&nbsp;"traditional": "Intuition, experience, best practices",<br>
+          &nbsp;&nbsp;"analytics": "Data, evidence, statistical validation"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Analytics</h3>
+        <p>Understand the four main types of analytics and their applications in business.</p>
+        <div class="concept-highlight">
+          Four Types of Analytics:<br>
+          • Descriptive: What happened? (Reporting, dashboards)<br>
+          • Diagnostic: Why did it happen? (Root cause analysis)<br>
+          • Predictive: What will happen? (Forecasting, modeling)<br>
+          • Prescriptive: What should we do? (Optimization, recommendations)
+        </div>
+        <div class="data-insight">
+          <strong>Analytics Progression:</strong> Organizations typically mature through these analytics types sequentially, with each level building on the previous one. Most companies start with descriptive analytics before advancing to predictive and prescriptive approaches.
+        </div>
+        <div class="code-example">
+          # Types of analytics framework<br>
+          analytics_types = {<br>
+          &nbsp;&nbsp;"descriptive": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"question": "What happened?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Understand past performance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"techniques": ["Reporting", "Dashboards", "KPIs", "Data mining"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Sales reports", "Website traffic", "Financial statements"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "Low",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"value": "Foundational understanding"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"diagnostic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"question": "Why did it happen?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Understand cause and effect",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"techniques": ["Drill-down", "Correlation analysis", "Root cause analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Sales decline analysis", "Customer churn reasons"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "Medium",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"value": "Problem identification"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"predictive": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"question": "What will happen?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Forecast future outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"techniques": ["Regression", "Machine learning", "Time series"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Demand forecasting", "Risk assessment"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "High",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"value": "Proactive planning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"prescriptive": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"question": "What should we do?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Recommend optimal actions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"techniques": ["Optimization", "Simulation", "Decision trees"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Pricing optimization", "Resource allocation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "Very high",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"value": "Optimal decision making"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data-Driven Decision Making</h3>
+        <p>Learn how to structure decision-making processes around data and analytics.</p>
+        <div class="algorithm-box">
+          Data-driven decision making (DDDM) is a process that involves collecting data based on measurable goals or KPIs, analyzing patterns and facts from these insights, and utilizing them to develop strategies and activities that benefit the business.
+        </div>
+        <div class="kpi-metric">
+          <strong>Critical Success Factors:</strong><br>
+          • Data quality and accessibility<br>
+          • Analytical skills and tools<br>
+          • Organizational culture that values evidence<br>
+          • Clear metrics and KPIs<br>
+          • Leadership support and commitment
+        </div>
+        <div class="code-example">
+          # Data-driven decision making process<br>
+          dddm_process = {<br>
+          &nbsp;&nbsp;"step_1_define": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"action": "Define the business problem",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"questions": ["What decision needs to be made?", "What are the success criteria?"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outputs": ["Problem statement", "Success metrics"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"step_2_collect": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"action": "
