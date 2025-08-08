@@ -1,0 +1,738 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Microeconomics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💹';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .micro-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .micro-box {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #059669;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .market-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .theory-tool {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #a16207;
+    }
+
+    .equilibrium-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💹 Microeconomics</h1>
+    <p>Master individual and firm behavior, market structures, and resource allocation mechanisms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Microeconomics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Micro Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Economic Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <div class="stat-label">Market Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Consumer Choice Theory</h3>
+        </div>
+        <p class="unit-description">Analyze how consumers make decisions to maximize utility given budget constraints.</p>
+        <ul class="topics-list">
+          <li>Utility maximization</li>
+          <li>Budget constraints</li>
+          <li>Indifference curves</li>
+          <li>Marginal utility theory</li>
+          <li>Consumer equilibrium</li>
+          <li>Income and substitution effects</li>
+          <li>Giffen and Veblen goods</li>
+          <li>Consumer surplus</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Demand Theory</h3>
+        </div>
+        <p class="unit-description">Understand the factors that determine demand and how demand curves are derived.</p>
+        <ul class="topics-list">
+          <li>Law of demand</li>
+          <li>Demand curve shifts</li>
+          <li>Individual vs market demand</li>
+          <li>Normal and inferior goods</li>
+          <li>Substitutes and complements</li>
+          <li>Demand forecasting</li>
+          <li>Network effects</li>
+          <li>Behavioral demand factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Producer Theory</h3>
+        </div>
+        <p class="unit-description">Examine production functions, costs, and how firms optimize their production decisions.</p>
+        <ul class="topics-list">
+          <li>Production functions</li>
+          <li>Short-run vs long-run</li>
+          <li>Marginal product</li>
+          <li>Law of diminishing returns</li>
+          <li>Isoquants and isocosts</li>
+          <li>Returns to scale</li>
+          <li>Cost minimization</li>
+          <li>Producer surplus</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Cost Analysis</h3>
+        </div>
+        <p class="unit-description">Master different cost concepts and understand how costs behave in short and long run.</p>
+        <ul class="topics-list">
+          <li>Fixed and variable costs</li>
+          <li>Total, average, and marginal costs</li>
+          <li>Short-run cost curves</li>
+          <li>Long-run cost curves</li>
+          <li>Economies of scale</li>
+          <li>Economies of scope</li>
+          <li>Learning curves</li>
+          <li>Cost structures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Perfect Competition</h3>
+        </div>
+        <p class="unit-description">Study the benchmark model of perfect competition and its efficiency properties.</p>
+        <ul class="topics-list">
+          <li>Perfect competition assumptions</li>
+          <li>Firm's demand curve</li>
+          <li>Profit maximization</li>
+          <li>Short-run equilibrium</li>
+          <li>Long-run equilibrium</li>
+          <li>Entry and exit</li>
+          <li>Economic efficiency</li>
+          <li>Welfare analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Monopoly</h3>
+        </div>
+        <p class="unit-description">Analyze monopoly behavior, pricing strategies, and welfare effects of market power.</p>
+        <ul class="topics-list">
+          <li>Monopoly characteristics</li>
+          <li>Barriers to entry</li>
+          <li>Monopoly pricing</li>
+          <li>Price discrimination</li>
+          <li>Deadweight loss</li>
+          <li>Natural monopoly</li>
+          <li>Monopoly regulation</li>
+          <li>Innovation incentives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Monopolistic Competition</h3>
+        </div>
+        <p class="unit-description">Understand markets with many firms selling differentiated products.</p>
+        <ul class="topics-list">
+          <li>Product differentiation</li>
+          <li>Short-run equilibrium</li>
+          <li>Long-run equilibrium</li>
+          <li>Excess capacity</li>
+          <li>Advertising and marketing</li>
+          <li>Brand loyalty</li>
+          <li>Innovation and variety</li>
+          <li>Efficiency implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Oligopoly</h3>
+        </div>
+        <p class="unit-description">Explore strategic behavior in markets dominated by a few large firms.</p>
+        <ul class="topics-list">
+          <li>Oligopoly characteristics</li>
+          <li>Strategic interdependence</li>
+          <li>Cournot competition</li>
+          <li>Bertrand competition</li>
+          <li>Stackelberg model</li>
+          <li>Collusion and cartels</li>
+          <li>Game theory applications</li>
+          <li>Antitrust policy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Factor Markets</h3>
+        </div>
+        <p class="unit-description">Analyze labor, capital, and land markets and factor price determination.</p>
+        <ul class="topics-list">
+          <li>Derived demand</li>
+          <li>Labor market equilibrium</li>
+          <li>Wage determination</li>
+          <li>Monopsony</li>
+          <li>Capital markets</li>
+          <li>Interest rates</li>
+          <li>Land rent theory</li>
+          <li>Income distribution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Market Failures</h3>
+        </div>
+        <p class="unit-description">Identify when markets fail to allocate resources efficiently and potential solutions.</p>
+        <ul class="topics-list">
+          <li>Externalities</li>
+          <li>Public goods</li>
+          <li>Common pool resources</li>
+          <li>Information asymmetries</li>
+          <li>Moral hazard</li>
+          <li>Adverse selection</li>
+          <li>Government intervention</li>
+          <li>Pigouvian taxes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Game Theory</h3>
+        </div>
+        <p class="unit-description">Apply strategic thinking to analyze interactions between economic agents.</p>
+        <ul class="topics-list">
+          <li>Strategic games</li>
+          <li>Nash equilibrium</li>
+          <li>Dominant strategies</li>
+          <li>Prisoner's dilemma</li>
+          <li>Repeated games</li>
+          <li>Sequential games</li>
+          <li>Auction theory</li>
+          <li>Mechanism design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Behavioral Economics</h3>
+        </div>
+        <p class="unit-description">Explore how psychological factors influence economic decision-making.</p>
+        <ul class="topics-list">
+          <li>Bounded rationality</li>
+          <li>Prospect theory</li>
+          <li>Loss aversion</li>
+          <li>Mental accounting</li>
+          <li>Anchoring bias</li>
+          <li>Nudge theory</li>
+          <li>Social preferences</li>
+          <li>Choice architecture</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Consumer Choice Theory</h1>
+      <p>Analyze how consumers make decisions to maximize utility given budget constraints.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Utility Maximization</h3>
+        <p>Understand how consumers choose combinations of goods to maximize their satisfaction.</p>
+        <span class="micro-badge">Rational Choice</span>
+        <span class="micro-badge">Optimization</span>
+        <span class="micro-badge">Preferences</span>
+        <div class="micro-box">
+          Consumers are assumed to be rational and seek to maximize their utility (satisfaction) subject to their budget constraint. They compare the marginal utility per dollar spent across different goods to make optimal choices.
+        </div>
+        <div class="code-example">
+          # Utility Maximization Model<br>
+          utility_maximization = {<br>
+          &nbsp;&nbsp;"assumptions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"rational_consumers": "Make consistent choices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complete_preferences": "Can rank all bundles",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"transitive_preferences": "Consistent ordering",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"more_is_better": "Non-satiation assumption"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"utility_function": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "U = f(x1, x2, ..., xn)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ordinal_nature": "Only rankings matter",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cobb_douglas": "U = x1^a × x2^b",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"perfect_substitutes": "U = ax1 + bx2",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"perfect_complements": "U = min(ax1, bx2)"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"optimization_condition": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"rule": "MUx/Px = MUy/Py",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"meaning": "Equal marginal utility per dollar",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mathematical": "∂U/∂x1 / P1 = ∂U/∂x2 / P2"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Budget Constraints</h3>
+        <p>Learn how income and prices limit consumer choices and define feasible consumption sets.</p>
+        <div class="concept-highlight">
+          Budget Constraint Components:<br>
+          • Income (I): Total money available for spending<br>
+          • Prices (P1, P2): Cost per unit of each good<br>
+          • Budget Line: I = P1×X1 + P2×X2<br>
+          • Slope: -P1/P2 (relative price ratio)
+        </div>
+        <div class="market-insight">
+          <strong>Budget Line Properties:</strong><br>
+          • Shows all affordable combinations<br>
+          • Negative slope indicates trade-offs<br>
+          • Shifts with income changes<br>
+          • Rotates with price changes
+        </div>
+        <div class="code-example">
+          # Budget Constraint Analysis<br>
+          budget_constraint = {<br>
+          &nbsp;&nbsp;"equation": "I = P1*X1 + P2*X2",<br>
+          &nbsp;&nbsp;"intercepts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"x1_intercept": "I/P1",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"x2_intercept": "I/P2"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"slope": "-P1/P2",<br>
+          &nbsp;&nbsp;"changes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"income_increase": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"effect": "Parallel outward shift",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reason": "Can afford more of both goods"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"price_increase_x1": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"effect": "Inward rotation around x2 intercept",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reason": "X1 becomes relatively expensive"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"feasible_set": "All points on or below budget line"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Indifference Curves</h3>
+        <p>Explore how to represent consumer preferences graphically using indifference curves.</p>
+        <div class="theory-tool">
+          <strong>Indifference Curve Properties:</strong><br>
+          • Downward sloping (more of one good, less of another)<br>
+          • Higher curves represent higher utility levels<br>
+          • Cannot intersect each other<br>
+          • Convex to origin (diminishing marginal rate of substitution)
+        </div>
+        <div class="equilibrium-indicator">
+          <strong>Marginal Rate of Substitution (MRS):</strong><br>
+          MRS = -ΔX2/ΔX1 = MU1/MU2<br>
+          Measures willingness to trade one good for another while maintaining same utility level
+        </div>
+        <div class="code-example">
+          # Indifference Curve Analysis<br>
+          indifference_curves = {<br>
+          &nbsp;&nbsp;"definition": "Combinations giving same utility level",<br>
+          &nbsp;&nbsp;"properties": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"downward_sloping": "Trade-off between goods",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"non_intersecting": "Consistency of preferences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"convex_to_origin": "Diminishing MRS",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"higher_is_better": "More utility on higher curves"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"marginal_rate_substitution": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"formula": "MRS = -dx2/dx1 = MU1/MU2",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interpretation": "Willingness to substitute",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"diminishing": "Becomes smaller along curve"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"special_cases": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"perfect_substitutes": "Straight lines",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"perfect_complements": "L-shaped curves",<br>
+          &nbsp
