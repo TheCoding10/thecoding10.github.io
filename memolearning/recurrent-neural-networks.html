@@ -1,0 +1,728 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Recurrent Neural Networks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #155e75 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔄';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0e7490;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .rnn-badge {
+      display: inline-block;
+      background: #e0f7fa;
+      color: #155e75;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .sequence-box {
+      background: #f0fdff;
+      border: 1px solid #a5f3fc;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #155e75;
+    }
+
+    .memory-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .recurrent-formula {
+      background: #fef3c7;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      text-align: center;
+      color: #92400e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔄 Recurrent Neural Networks</h1>
+    <p>Master sequential data processing, memory mechanisms, and temporal pattern recognition with RNNs</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to data science courses')">← Back to Data Science</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Recurrent Neural Networks Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~75</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">RNN Variants</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Sequential Data and Time Series</h3>
+        </div>
+        <p class="unit-description">Understand sequential data types and why specialized architectures are needed.</p>
+        <ul class="topics-list">
+          <li>Sequential data types</li>
+          <li>Time series characteristics</li>
+          <li>Temporal dependencies</li>
+          <li>Variable-length sequences</li>
+          <li>Sequential patterns</li>
+          <li>Traditional sequence methods</li>
+          <li>Need for neural approaches</li>
+          <li>RNN motivation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Basic RNN Architecture</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental structure and operation of recurrent neural networks.</p>
+        <ul class="topics-list">
+          <li>RNN basic structure</li>
+          <li>Hidden state concept</li>
+          <li>Recurrent connections</li>
+          <li>Unfolding through time</li>
+          <li>Parameter sharing</li>
+          <li>Forward propagation</li>
+          <li>RNN computation</li>
+          <li>Sequence processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Backpropagation Through Time</h3>
+        </div>
+        <p class="unit-description">Master the training algorithm for recurrent neural networks.</p>
+        <ul class="topics-list">
+          <li>BPTT algorithm</li>
+          <li>Unfolding computational graph</li>
+          <li>Gradient computation</li>
+          <li>Temporal gradient flow</li>
+          <li>Truncated BPTT</li>
+          <li>Computational complexity</li>
+          <li>Memory requirements</li>
+          <li>Training challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Vanishing Gradient Problem</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental challenge in training deep RNNs.</p>
+        <ul class="topics-list">
+          <li>Gradient flow problems</li>
+          <li>Vanishing gradients</li>
+          <li>Exploding gradients</li>
+          <li>Long-term dependencies</li>
+          <li>Mathematical analysis</li>
+          <li>Impact on learning</li>
+          <li>Gradient clipping</li>
+          <li>Solution approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Long Short-Term Memory (LSTM)</h3>
+        </div>
+        <p class="unit-description">Master LSTM networks for learning long-term dependencies.</p>
+        <ul class="topics-list">
+          <li>LSTM motivation</li>
+          <li>Cell state mechanism</li>
+          <li>Gate structures</li>
+          <li>Forget gate</li>
+          <li>Input gate</li>
+          <li>Output gate</li>
+          <li>LSTM computation</li>
+          <li>Variants and improvements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Gated Recurrent Unit (GRU)</h3>
+        </div>
+        <p class="unit-description">Learn the simplified yet effective GRU architecture.</p>
+        <ul class="topics-list">
+          <li>GRU design principles</li>
+          <li>Reset gate</li>
+          <li>Update gate</li>
+          <li>Hidden state update</li>
+          <li>GRU vs LSTM</li>
+          <li>Computational efficiency</li>
+          <li>Performance comparison</li>
+          <li>When to use GRU</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Bidirectional RNNs</h3>
+        </div>
+        <p class="unit-description">Process sequences in both forward and backward directions.</p>
+        <ul class="topics-list">
+          <li>Bidirectional concept</li>
+          <li>Forward and backward passes</li>
+          <li>Information fusion</li>
+          <li>Complete sequence context</li>
+          <li>Bidirectional LSTM/GRU</li>
+          <li>Applications</li>
+          <li>Computational requirements</li>
+          <li>Implementation details</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Sequence-to-Sequence Models</h3>
+        </div>
+        <p class="unit-description">Build encoder-decoder architectures for sequence transformation tasks.</p>
+        <ul class="topics-list">
+          <li>Encoder-decoder paradigm</li>
+          <li>Sequence encoding</li>
+          <li>Context vector</li>
+          <li>Decoding process</li>
+          <li>Teacher forcing</li>
+          <li>Inference strategies</li>
+          <li>Beam search</li>
+          <li>Applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Attention Mechanisms</h3>
+        </div>
+        <p class="unit-description">Enhance sequence models with attention for better performance.</p>
+        <ul class="topics-list">
+          <li>Attention motivation</li>
+          <li>Attention weights</li>
+          <li>Context vector computation</li>
+          <li>Additive attention</li>
+          <li>Multiplicative attention</li>
+          <li>Self-attention</li>
+          <li>Multi-head attention</li>
+          <li>Attention visualization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Text Processing with RNNs</h3>
+        </div>
+        <p class="unit-description">Apply RNNs to natural language processing tasks.</p>
+        <ul class="topics-list">
+          <li>Text representation</li>
+          <li>Word embeddings</li>
+          <li>Language modeling</li>
+          <li>Text generation</li>
+          <li>Sentiment analysis</li>
+          <li>Named entity recognition</li>
+          <li>Machine translation</li>
+          <li>Text summarization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Time Series Forecasting</h3>
+        </div>
+        <p class="unit-description">Use RNNs for predicting future values in time series data.</p>
+        <ul class="topics-list">
+          <li>Time series characteristics</li>
+          <li>Forecasting objectives</li>
+          <li>Data preprocessing</li>
+          <li>Sliding window approach</li>
+          <li>Multi-step prediction</li>
+          <li>Evaluation metrics</li>
+          <li>Seasonal patterns</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced RNN Topics</h3>
+        </div>
+        <p class="unit-description">Explore advanced techniques and modern developments in RNN research.</p>
+        <ul class="topics-list">
+          <li>Stacked RNNs</li>
+          <li>Residual connections</li>
+          <li>Dropout in RNNs</li>
+          <li>Batch normalization</li>
+          <li>RNN regularization</li>
+          <li>Transformer comparison</li>
+          <li>RNN limitations</li>
+          <li>Future directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Sequential Data and Time Series</h1>
+      <p>Understand sequential data types and why specialized architectures are needed.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sequential Data Types</h3>
+        <p>Learn about different types of sequential data and their characteristics.</p>
+        <span class="rnn-badge">Time Series</span>
+        <span class="rnn-badge">Text</span>
+        <span class="rnn-badge">Speech</span>
+        <div class="sequence-box">
+          Sequential data has an inherent order where the position of elements matters. Examples include time series (stock prices, weather), text (words in sentences), speech (audio signals), and biological sequences (DNA, proteins).
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Temporal Dependencies</h3>
+        <p>Understand how elements in sequences depend on previous elements.</p>
+        <div class="memory-highlight">
+          Short-term Dependencies: Current element depends on recent past<br>
+          Long-term Dependencies: Current element depends on distant past<br>
+          Variable Dependencies: Dependency length varies across sequences<br>
+          Context Sensitivity: Meaning changes based on surrounding elements
+        </div>
+        <div class="code-example">
+          import numpy as np<br>
+          import matplotlib.pyplot as plt<br>
+          <br>
+          def demonstrate_temporal_dependencies():<br>
+          &nbsp;&nbsp;"""Show examples of temporal dependencies in sequences"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== TEMPORAL DEPENDENCIES EXAMPLES ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example 1: Short-term dependency (moving average)<br>
+          &nbsp;&nbsp;print("\\n🔄 Short-term Dependency Example:")<br>
+          &nbsp;&nbsp;np.random.seed(42)<br>
+          &nbsp;&nbsp;raw_data = np.random.randn(100)<br>
+          &nbsp;&nbsp;window_size = 3<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Moving average depends on last 3 values<br>
+          &nbsp;&nbsp;moving_avg = []<br>
+          &nbsp;&nbsp;for i in range(window_size, len(raw_data)):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;avg = np.mean(raw_data[i-window_size:i])<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;moving_avg.append(avg)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print(f"  Current value depends on previous {window_size} values")<br>
+          &nbsp;&nbsp;print(f"  Example: MA at t=5 = mean of values at t=[2,3,4]")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example 2: Long-term dependency (cumulative sum)<br>
+          &nbsp;&nbsp;print("\\n📈 Long-term Dependency Example:")<br>
+          &nbsp;&nbsp;cumsum = np.cumsum(raw_data)<br>
+          &nbsp;&nbsp;print(f"  Cumulative sum depends on ALL previous values")<br>
+          &nbsp;&nbsp;print(f"  Value at t=50 influenced by every value from t=0 to t=49")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example 3: Text dependencies<br>
+          &nbsp;&nbsp;print("\\n📝 Text Dependency Examples:")<br>
+          &nbsp;&nbsp;examples = {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Short-term": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"text": "The cat sat on the ___",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"dependency": "Next word depends on 'the' (immediate context)"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Long-term": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"text": "John went to the store. He bought milk. Later, ___ went home.",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"dependency": "'He' refers to 'John' from much earlier"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;for dep_type, example in examples.items():<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  {dep_type}:")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"    Text: {example['text']}")<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"    Dependency: {example['dependency']}")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return raw_data, moving_avg, cumsum<br>
+          <br>
+          # Run demonstration<br>
+          data, ma, cs = demonstrate_temporal_dependencies()<br>
+          <br>
+          print("\\n=== WHY RNNS ARE NEEDED ===")<br>
+          rnn_advantages = [<br>
+          &nbsp;&nbsp;"🧠 Memory: Can remember previous inputs",<br>
+          &nbsp;&nbsp;"🔄 Recurrence: Process sequences of variable length",<br>
+          &nbsp;&nbsp;"📊 Patterns: Learn temporal patterns and dependencies",<br>
+          &nbsp;&nbsp;"🎯 Context: Use context to make better predictions",<br>
+          &nbsp;&nbsp;"⚡ Efficiency: Share parameters across time steps"<br>
+          ]<br>
+          <br>
+          for advantage in rnn_advantages:<br>
+          &nbsp;&nbsp;print(f"  {advantage}")
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable-Length Sequences</h3>
+        <p>Handle sequences of different lengths, a key challenge in sequential modeling.</p>
+        <div class="sequence-box">
+          Real-world sequences vary in length: sentences have different word counts, time series have different durations, and audio clips have different lengths. RNNs naturally handle this variability.
+        </div>
+        <div class="code-example">
+          # Variable-length sequence handling<br>
+          <br>
+          def demonstrate_variable_length_sequences():<br>
+          &nbsp;&nbsp;"""Show challenges and solutions for variable-length sequences"""<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("=== VARIABLE-LENGTH SEQUENCE CHALLENGES ===")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Example sentences of different lengths<br>
+          &nbsp;&nbsp;sentences = [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Hello",                           # Length: 1<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"How are you?",                   # Length: 3<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"This is a longer sentence",      # Length: 5<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Machine learning with neural networks"  # Length: 5<br>
+          &nbsp;&nbsp;]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Tokenize sentences<br>
+          &nbsp;&nbsp;tokenized = [sentence.split() for sentence in sentences]<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;print("📝 Example Sentences:")<br>
+          &nbsp;&nbsp;for i, (original, tokens) in enumerate(zip(sentences, tokenized)):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print(f"  {i+1}. '{original}' → {tokens} (length: {len(tokens)})")<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Show the problem with traditional neural networks<br>
+          &nbsp;&nbsp;print("\\n❌ Traditional Neural Network Problem:")<br>
+          &nbsp;&nbsp;print("  - Fixed input size required")<br>
+          &nbsp;&nbsp;print("  - Need to pad or truncate sequences")<br>
