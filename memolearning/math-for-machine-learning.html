@@ -1,0 +1,731 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Math for Machine Learning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #4f46e5 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e1b4b, #3730a3);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 27, 75, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e1b4b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3730a3;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e1b4b, #3730a3);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 27, 75, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .math-badge {
+      display: inline-block;
+      background: #f0f4ff;
+      color: #1e1b4b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .formula-box {
+      background: #f0f4ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e1b4b;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .algorithm-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .computation-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .theorem-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Math for Machine Learning</h1>
+    <p>Master the mathematical foundations essential for understanding machine learning algorithms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Math for Machine Learning Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Mathematical Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Key Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">60+</span>
+          <div class="stat-label">Practical Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Linear Algebra Fundamentals</h3>
+        </div>
+        <p class="unit-description">Build the foundation of vectors, matrices, and linear transformations essential for ML.</p>
+        <ul class="topics-list">
+          <li>Vectors and vector spaces</li>
+          <li>Matrix operations</li>
+          <li>Linear transformations</li>
+          <li>Eigenvalues and eigenvectors</li>
+          <li>Matrix decompositions</li>
+          <li>Norms and inner products</li>
+          <li>Orthogonality</li>
+          <li>Computational considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Calculus and Optimization</h3>
+        </div>
+        <p class="unit-description">Master derivatives, gradients, and optimization techniques for training ML models.</p>
+        <ul class="topics-list">
+          <li>Multivariable calculus</li>
+          <li>Partial derivatives</li>
+          <li>Gradients and Jacobians</li>
+          <li>Chain rule</li>
+          <li>Optimization theory</li>
+          <li>Gradient descent</li>
+          <li>Constrained optimization</li>
+          <li>Lagrange multipliers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Probability Theory</h3>
+        </div>
+        <p class="unit-description">Understand probability distributions, Bayes' theorem, and uncertainty quantification.</p>
+        <ul class="topics-list">
+          <li>Probability axioms</li>
+          <li>Conditional probability</li>
+          <li>Bayes' theorem</li>
+          <li>Random variables</li>
+          <li>Probability distributions</li>
+          <li>Joint distributions</li>
+          <li>Independence</li>
+          <li>Expectation and variance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Statistics and Inference</h3>
+        </div>
+        <p class="unit-description">Learn statistical methods for model evaluation, hypothesis testing, and parameter estimation.</p>
+        <ul class="topics-list">
+          <li>Descriptive statistics</li>
+          <li>Sampling distributions</li>
+          <li>Central limit theorem</li>
+          <li>Confidence intervals</li>
+          <li>Hypothesis testing</li>
+          <li>Maximum likelihood estimation</li>
+          <li>Bayesian inference</li>
+          <li>Bootstrap methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Information Theory</h3>
+        </div>
+        <p class="unit-description">Explore entropy, mutual information, and information-theoretic foundations of learning.</p>
+        <ul class="topics-list">
+          <li>Entropy and mutual information</li>
+          <li>Kullback-Leibler divergence</li>
+          <li>Cross-entropy</li>
+          <li>Information gain</li>
+          <li>Channel capacity</li>
+          <li>Data compression</li>
+          <li>Rate-distortion theory</li>
+          <li>Information bottleneck</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Numerical Methods</h3>
+        </div>
+        <p class="unit-description">Study computational algorithms for solving mathematical problems in machine learning.</p>
+        <ul class="topics-list">
+          <li>Numerical stability</li>
+          <li>Iterative methods</li>
+          <li>Root finding</li>
+          <li>Numerical integration</li>
+          <li>Matrix computations</li>
+          <li>Solving linear systems</li>
+          <li>Finite differences</li>
+          <li>Approximation methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Graph Theory</h3>
+        </div>
+        <p class="unit-description">Understand graphs, networks, and their applications in machine learning and data analysis.</p>
+        <ul class="topics-list">
+          <li>Graph representations</li>
+          <li>Graph algorithms</li>
+          <li>Shortest paths</li>
+          <li>Network centrality</li>
+          <li>Spectral graph theory</li>
+          <li>Graph embeddings</li>
+          <li>Random walks</li>
+          <li>Community detection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Functional Analysis</h3>
+        </div>
+        <p class="unit-description">Explore function spaces, operators, and theoretical foundations for advanced ML methods.</p>
+        <ul class="topics-list">
+          <li>Metric spaces</li>
+          <li>Normed spaces</li>
+          <li>Hilbert spaces</li>
+          <li>Linear operators</li>
+          <li>Reproducing kernel Hilbert spaces</li>
+          <li>Functional derivatives</li>
+          <li>Variational methods</li>
+          <li>Approximation theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Convex Optimization</h3>
+        </div>
+        <p class="unit-description">Master convex sets, functions, and optimization algorithms crucial for many ML problems.</p>
+        <ul class="topics-list">
+          <li>Convex sets and functions</li>
+          <li>Convex optimization problems</li>
+          <li>Duality theory</li>
+          <li>KKT conditions</li>
+          <li>Interior point methods</li>
+          <li>Subgradient methods</li>
+          <li>Proximal methods</li>
+          <li>ADMM</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Matrix Factorization</h3>
+        </div>
+        <p class="unit-description">Study matrix decomposition techniques for dimensionality reduction and data analysis.</p>
+        <ul class="topics-list">
+          <li>Principal Component Analysis</li>
+          <li>Singular Value Decomposition</li>
+          <li>Non-negative matrix factorization</li>
+          <li>Matrix completion</li>
+          <li>Low-rank approximations</li>
+          <li>Tensor decompositions</li>
+          <li>Sparse coding</li>
+          <li>Dictionary learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Differential Geometry</h3>
+        </div>
+        <p class="unit-description">Explore manifolds, metrics, and geometric approaches to machine learning.</p>
+        <ul class="topics-list">
+          <li>Manifolds and charts</li>
+          <li>Tangent spaces</li>
+          <li>Riemannian metrics</li>
+          <li>Geodesics</li>
+          <li>Curvature</li>
+          <li>Lie groups</li>
+          <li>Differential forms</li>
+          <li>Information geometry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge mathematical concepts in modern machine learning research.</p>
+        <ul class="topics-list">
+          <li>Optimal transport</li>
+          <li>Tropical geometry</li>
+          <li>Algebraic topology</li>
+          <li>Persistent homology</li>
+          <li>Quantum computing basics</li>
+          <li>Category theory</li>
+          <li>Computational complexity</li>
+          <li>Mathematical foundations of deep learning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Linear Algebra Fundamentals</h1>
+      <p>Build the foundation of vectors, matrices, and linear transformations essential for ML.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Vectors and Vector Spaces</h3>
+        <p>Understand the fundamental building blocks of linear algebra and their geometric interpretations.</p>
+        <span class="math-badge">Vector Operations</span>
+        <span class="math-badge">Linear Combinations</span>
+        <span class="math-badge">Basis</span>
+        <div class="formula-box">
+          A vector space V over a field F is a set equipped with two operations (addition and scalar multiplication) that satisfy eight axioms including associativity, commutativity, and distributivity.
+        </div>
+        <div class="code-example">
+          # Vector Space Properties<br>
+          vector_space = {<br>
+          &nbsp;&nbsp;"definition": "Set V with addition and scalar multiplication",<br>
+          &nbsp;&nbsp;"axioms": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"closure": "u + v ∈ V for all u, v ∈ V",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"associativity": "(u + v) + w = u + (v + w)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"commutativity": "u + v = v + u",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"zero_element": "∃ 0 ∈ V such that v + 0 = v",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"additive_inverse": "∃ -v such that v + (-v) = 0",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scalar_closure": "αv ∈ V for α ∈ F, v ∈ V",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"distributivity": "α(u + v) = αu + αv",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"compatibility": "α(βv) = (αβ)v"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"examples": ["R^n", "Polynomial spaces", "Function spaces", "Matrix spaces"],<br>
+          &nbsp;&nbsp;"ml_applications": ["Feature vectors", "Parameter spaces", "Hidden representations"]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Matrix Operations</h3>
+        <p>Master matrix arithmetic, properties, and their role in linear transformations and ML algorithms.</p>
+        <div class="concept-highlight">
+          Essential Matrix Operations:<br>
+          • Addition and scalar multiplication<br>
+          • Matrix multiplication (not commutative!)<br>
+          • Transpose and conjugate transpose<br>
+          • Inverse (when it exists)<br>
+          • Determinant and trace
+        </div>
+        <div class="algorithm-insight">
+          <strong>Matrix Multiplication Complexity:</strong><br>
+          Standard algorithm: O(n³) for n×n matrices. More efficient algorithms exist (Strassen's O(n^2.807), current best ~O(n^2.373)) but have large constants.
+        </div>
+        <div class="code-example">
+          # Matrix Operations Framework<br>
+          matrix_ops = {<br>
+          &nbsp;&nbsp;"multiplication": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "(AB)_ij = Σ_k A_ik * B_kj",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"properties": ["Associative", "Distributive", "NOT commutative"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "O(n³) for n×n matrices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ml_use": "Forward propagation, weight updates"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"transpose": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "(A^T)_ij = A_ji",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"properties": ["(A^T)^T = A", "(AB)^T = B^T A^T"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ml_use": "Gradient computation, covariance matrices"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"inverse": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "A^(-1) such that AA^(-1) = I",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"existence": "Only for square, full-rank matrices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ml_use": "Solving linear systems, computing pseudoinverse"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Eigenvalues and Eigenvectors</h3>
+        <p>Explore the fundamental concept that underlies PCA, spectral methods, and many ML algorithms.</p>
+        <div class="computation-tool">
+          <strong>Eigenvalue Problem:</strong><br>
+          For matrix A, find λ (eigenvalue) and v (eigenvector) such that:<br>
+          Av = λv<br><br>
+          This is equivalent to solving: det(A - λI) = 0
+        </div>
+        <div class="theorem-indicator">
+          <strong>Spectral Theorem:</strong><br>
+          Every symmetric real matrix can be diagonalized by an orthogonal matrix. This forms the mathematical foundation for Principal Component Analysis (PCA).
+        </div>
+        <div class="code-example">
+          # Eigendecomposition Applications<br>
+          eigendecomposition = {<br>
+          &nbsp;&nbsp;"definition": "A = QΛQ^(-1) where Λ is diagonal",<br>
+          &nbsp;&nbsp;"symmetric_case": "A = QΛQ^T (orthogonal eigenvectors)",<br>
+          &nbsp;&nbsp;"ml_applications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pca": "Find principal components via covariance matrix eigendecomposition",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"spectral_clustering": "Use eigenvectors of graph Laplacian",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"markov_chains": "Steady state via dominant eigenvector",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"neural_networks": "Analyze layer dynamics and gradients"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"computational_notes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"power_method": "Iterative method for dominant eigenvalue",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"qr_algorithm": "Standard method for all eigenvalues",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"sparse_methods": "Arnoldi/Lanczos for large sparse matrices"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">←
