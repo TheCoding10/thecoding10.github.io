@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Public Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #166534 0%, #16a34a 50%, #22c55e 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #166534, #16a34a);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(22, 101, 52, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🏛️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #166534;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #16a34a;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #166534, #16a34a);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(22, 101, 52, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .public-badge {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #166534;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .public-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #166534;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .market-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .policy-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .efficiency-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🏛️ Public Economics</h1>
+    <p>Analyze government's role in the economy through taxation, spending, and market intervention</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Public Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~125</span>
+          <div class="stat-label">Policy Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Policy Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">85+</span>
+          <div class="stat-label">Real-World Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Public Economics</h3>
+        </div>
+        <p class="unit-description">Understand the economic rationale for government intervention and public policy.</p>
+        <ul class="topics-list">
+          <li>Role of government</li>
+          <li>Market failures</li>
+          <li>Public goods theory</li>
+          <li>Externalities</li>
+          <li>Government failures</li>
+          <li>Welfare economics</li>
+          <li>Efficiency vs equity</li>
+          <li>Policy evaluation methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Public Goods</h3>
+        </div>
+        <p class="unit-description">Analyze the characteristics and provision of public goods and services.</p>
+        <ul class="topics-list">
+          <li>Pure public goods</li>
+          <li>Non-rivalry and non-excludability</li>
+          <li>Free rider problem</li>
+          <li>Samuelson condition</li>
+          <li>Club goods</li>
+          <li>Common pool resources</li>
+          <li>Public goods provision</li>
+          <li>Local public goods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Externalities</h3>
+        </div>
+        <p class="unit-description">Study spillover effects and government policies to address them.</p>
+        <ul class="topics-list">
+          <li>Positive and negative externalities</li>
+          <li>Coase theorem</li>
+          <li>Pigouvian taxes</li>
+          <li>Cap and trade</li>
+          <li>Environmental regulation</li>
+          <li>Network externalities</li>
+          <li>Congestion pricing</li>
+          <li>Social cost of carbon</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Public Choice Theory</h3>
+        </div>
+        <p class="unit-description">Examine how political processes affect economic outcomes and policy decisions.</p>
+        <ul class="topics-list">
+          <li>Voting theory</li>
+          <li>Median voter theorem</li>
+          <li>Interest groups</li>
+          <li>Rent seeking</li>
+          <li>Political economy</li>
+          <li>Bureaucracy</li>
+          <li>Electoral competition</li>
+          <li>Constitutional economics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Taxation Theory</h3>
+        </div>
+        <p class="unit-description">Understand the principles of optimal taxation and tax system design.</p>
+        <ul class="topics-list">
+          <li>Tax incidence</li>
+          <li>Deadweight loss</li>
+          <li>Optimal taxation</li>
+          <li>Ramsey rule</li>
+          <li>Tax equity principles</li>
+          <li>Ability to pay</li>
+          <li>Benefit principle</li>
+          <li>Tax progressivity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Income Taxation</h3>
+        </div>
+        <p class="unit-description">Analyze personal and corporate income tax systems and their economic effects.</p>
+        <ul class="topics-list">
+          <li>Personal income tax</li>
+          <li>Tax brackets and rates</li>
+          <li>Deductions and credits</li>
+          <li>Corporate income tax</li>
+          <li>Tax incidence</li>
+          <li>Labor supply effects</li>
+          <li>Saving and investment</li>
+          <li>Tax avoidance and evasion</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Commodity and Sales Taxes</h3>
+        </div>
+        <p class="unit-description">Study indirect taxes, including sales taxes, excise taxes, and value-added taxes.</p>
+        <ul class="topics-list">
+          <li>Sales tax systems</li>
+          <li>Value-added tax (VAT)</li>
+          <li>Excise taxes</li>
+          <li>Sin taxes</li>
+          <li>Tax incidence analysis</li>
+          <li>Optimal commodity taxation</li>
+          <li>Border adjustments</li>
+          <li>Administrative considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Government Expenditure</h3>
+        </div>
+        <p class="unit-description">Examine government spending patterns, priorities, and their economic impacts.</p>
+        <ul class="topics-list">
+          <li>Public expenditure theory</li>
+          <li>Budget process</li>
+          <li>Cost-benefit analysis</li>
+          <li>Government investment</li>
+          <li>Public sector efficiency</li>
+          <li>Fiscal federalism</li>
+          <li>Intergovernmental transfers</li>
+          <li>Expenditure evaluation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Social Insurance</h3>
+        </div>
+        <p class="unit-description">Analyze social safety net programs and their design principles.</p>
+        <ul class="topics-list">
+          <li>Social Security systems</li>
+          <li>Unemployment insurance</li>
+          <li>Health insurance</li>
+          <li>Disability insurance</li>
+          <li>Insurance market failures</li>
+          <li>Moral hazard</li>
+          <li>Adverse selection</li>
+          <li>Social insurance design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Redistribution and Welfare</h3>
+        </div>
+        <p class="unit-description">Study government policies aimed at reducing inequality and poverty.</p>
+        <ul class="topics-list">
+          <li>Income redistribution</li>
+          <li>Welfare programs</li>
+          <li>Negative income tax</li>
+          <li>Earned Income Tax Credit</li>
+          <li>Cash vs in-kind transfers</li>
+          <li>Poverty measurement</li>
+          <li>Work incentives</li>
+          <li>Universal basic income</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Fiscal Federalism</h3>
+        </div>
+        <p class="unit-description">Understand the division of fiscal responsibilities across government levels.</p>
+        <ul class="topics-list">
+          <li>Decentralization theorem</li>
+          <li>Assignment of functions</li>
+          <li>Fiscal competition</li>
+          <li>Tax competition</li>
+          <li>Intergovernmental grants</li>
+          <li>Fiscal equalization</li>
+          <li>Local public finance</li>
+          <li>Tiebout model</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Regulation and Antitrust</h3>
+        </div>
+        <p class="unit-description">Examine government regulation of markets and competition policy.</p>
+        <ul class="topics-list">
+          <li>Natural monopoly regulation</li>
+          <li>Price regulation</li>
+          <li>Rate-of-return regulation</li>
+          <li>Price cap regulation</li>
+          <li>Antitrust policy</li>
+          <li>Market concentration</li>
+          <li>Merger policy</li>
+          <li>Deregulation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Public Economics</h1>
+      <p>Understand the economic rationale for government intervention and public policy.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Role of Government</h3>
+        <p>Explore the theoretical and practical justifications for government involvement in the economy.</p>
+        <span class="public-badge">Market Failure</span>
+        <span class="public-badge">Public Goods</span>
+        <span class="public-badge">Redistribution</span>
+        <div class="public-box">
+          Government plays several key roles in modern economies: correcting market failures, providing public goods, redistributing income, and stabilizing the economy. Each role requires different policy tools and involves trade-offs between efficiency and equity.
+        </div>
+        <div class="code-example">
+          # Government Functions Framework<br>
+          government_roles = {<br>
+          &nbsp;&nbsp;"economic_functions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"allocation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Correct market failures",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Regulation", "Public provision", "Taxes/subsidies"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Public goods", "Externality correction", "Natural monopoly"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"distribution": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Achieve desired income distribution",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Progressive taxation", "Transfer programs", "Social insurance"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Welfare", "Food stamps", "Medicaid"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stabilization": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Maintain macroeconomic stability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Fiscal policy", "Monetary policy", "Automatic stabilizers"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Unemployment benefits", "Counter-cyclical spending"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"justifications": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"efficiency": "Markets don't always produce optimal outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"equity": "Market outcomes may be unfair",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"paternalism": "Individuals may not act in own best interest",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"merit_goods": "Society values certain goods beyond private demand"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Failures</h3>
+        <p>Identify situations where markets fail to allocate resources efficiently.</p>
+        <div class="concept-highlight">
+          Types of Market Failures:<br>
+          • Public goods: Non-rivalry and non-excludability<br>
+          • Externalities: Costs/benefits not reflected in prices<br>
+          • Natural monopolies: Declining average costs<br>
+          • Information asymmetries: Unequal access to information
+        </div>
+        <div class="market-insight">
+          <strong>Market Failure Conditions:</strong><br>
+          • Perfect competition assumptions violated<br>
+          • Social marginal cost ≠ private marginal cost<br>
+          • Social marginal benefit ≠ private marginal benefit<br>
+          • Missing markets or incomplete contracts
+        </div>
+        <div class="code-example">
+          # Market Failure Classification<br>
+          market_failures = {<br>
+          &nbsp;&nbsp;"public_goods": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Non-rivalry", "Non-excludability"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Free rider problem",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"result": "Under-provision by private markets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solution": "Government provision or subsidies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["National defense", "Basic research", "Lighthouses"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"externalities": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Positive", "Negative"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Third-party effects not priced",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"result": "Over/under-production",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solutions": ["Pigouvian taxes", "Subsidies", "Regulation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Pollution", "Education", "R&D spillovers"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"natural_monopoly": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": "Declining average cost",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Single firm most efficient",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"result": "Monopoly pricing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solutions": ["Price regulation", "Public ownership"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Utilities", "Railroads", "Water systems"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"information_problems": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Asymmetric info", "Adverse selection", "Moral hazard"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Informed party has advantage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"result": "Market unraveling or inefficiency",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"solutions": ["Regulation", "Disclosure", "Insurance"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Healthcare", "Financial markets", "Used cars"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Efficiency vs Equity</h3>
+        <p>Understand the fundamental trade-off between economic efficiency and distributional equity.</p>
+        <div class="policy-tool">
+          <strong>The Efficiency-Equity Trade-off:</strong><br>
+          Policies that improve equity often reduce efficiency, and vice versa. This creates difficult choices for policymakers about how to balance these competing objectives in policy design.
+        </div>
+        <div class="efficiency-indicator">
+          <strong>Key Considerations:</strong><br>
+          • Pareto efficiency: No one can be made better off without making someone worse off<br>
+          • Distributional concerns: How resources are shared across society<br>
+          • Deadweight losses: Efficiency costs of redistribution<br>
+          • Social welfare functions: Aggregating individual preferences
+        </div>
+        <div class="code-example">
+          # Efficiency vs Equity Analysis<br>
+          efficiency_equity = {<br>
+          &nbsp;&nbsp;"efficiency_concepts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp
