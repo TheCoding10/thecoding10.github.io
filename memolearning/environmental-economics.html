@@ -1,0 +1,751 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Environmental Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #065f46, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 95, 70, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌱';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #065f46;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #065f46, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 95, 70, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .env-badge {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .policy-box {
+      background: #f0fdf4;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .economic-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .market-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .externality-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌍 Environmental Economics</h1>
+    <p>Study the economic causes of environmental problems and design market-based solutions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Environmental Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Environmental Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Policy Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Real-World Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Environmental Economics</h3>
+        </div>
+        <p class="unit-description">Understand the intersection of economic theory and environmental challenges.</p>
+        <ul class="topics-list">
+          <li>Economic approach to environment</li>
+          <li>Market failures</li>
+          <li>Sustainability concepts</li>
+          <li>Natural capital</li>
+          <li>Ecosystem services</li>
+          <li>Environmental valuation</li>
+          <li>Policy framework</li>
+          <li>Historical development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Externalities and Market Failures</h3>
+        </div>
+        <p class="unit-description">Analyze how external costs and benefits lead to market inefficiencies.</p>
+        <ul class="topics-list">
+          <li>Negative externalities</li>
+          <li>Positive externalities</li>
+          <li>Coase theorem</li>
+          <li>Property rights</li>
+          <li>Transaction costs</li>
+          <li>Public goods</li>
+          <li>Common pool resources</li>
+          <li>Tragedy of commons</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Environmental Valuation</h3>
+        </div>
+        <p class="unit-description">Learn methods to assign economic values to environmental goods and services.</p>
+        <ul class="topics-list">
+          <li>Total economic value</li>
+          <li>Use vs non-use values</li>
+          <li>Revealed preference methods</li>
+          <li>Stated preference methods</li>
+          <li>Contingent valuation</li>
+          <li>Choice experiments</li>
+          <li>Hedonic pricing</li>
+          <li>Travel cost method</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Pollution Control Policies</h3>
+        </div>
+        <p class="unit-description">Compare command-and-control and market-based approaches to pollution control.</p>
+        <ul class="topics-list">
+          <li>Command-and-control</li>
+          <li>Environmental standards</li>
+          <li>Pigouvian taxes</li>
+          <li>Pollution permits</li>
+          <li>Cap-and-trade systems</li>
+          <li>Subsidies</li>
+          <li>Deposit-refund systems</li>
+          <li>Policy effectiveness</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Climate Change Economics</h3>
+        </div>
+        <p class="unit-description">Examine the economic dimensions of climate change and mitigation strategies.</p>
+        <ul class="topics-list">
+          <li>Climate science basics</li>
+          <li>Social cost of carbon</li>
+          <li>Discount rates</li>
+          <li>Integrated assessment models</li>
+          <li>Carbon pricing</li>
+          <li>Adaptation economics</li>
+          <li>International agreements</li>
+          <li>Carbon markets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Natural Resource Economics</h3>
+        </div>
+        <p class="unit-description">Study the optimal use and conservation of renewable and non-renewable resources.</p>
+        <ul class="topics-list">
+          <li>Resource depletion</li>
+          <li>Hotelling's rule</li>
+          <li>Renewable resources</li>
+          <li>Maximum sustainable yield</li>
+          <li>Fisheries management</li>
+          <li>Forest economics</li>
+          <li>Water resources</li>
+          <li>Resource substitution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cost-Benefit Analysis</h3>
+        </div>
+        <p class="unit-description">Learn to evaluate environmental projects and policies using economic analysis.</p>
+        <ul class="topics-list">
+          <li>CBA framework</li>
+          <li>Present value calculation</li>
+          <li>Benefit identification</li>
+          <li>Cost estimation</li>
+          <li>Uncertainty analysis</li>
+          <li>Sensitivity analysis</li>
+          <li>Distributional effects</li>
+          <li>Decision criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Environmental Justice</h3>
+        </div>
+        <p class="unit-description">Explore the distributional impacts of environmental problems and policies.</p>
+        <ul class="topics-list">
+          <li>Environmental inequality</li>
+          <li>Distributional analysis</li>
+          <li>Environmental racism</li>
+          <li>Procedural justice</li>
+          <li>Corrective justice</li>
+          <li>Policy design</li>
+          <li>Compensation mechanisms</li>
+          <li>Community participation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Green Growth and Development</h3>
+        </div>
+        <p class="unit-description">Examine the relationship between economic development and environmental quality.</p>
+        <ul class="topics-list">
+          <li>Environmental Kuznets curve</li>
+          <li>Decoupling</li>
+          <li>Green GDP</li>
+          <li>Sustainable development</li>
+          <li>Circular economy</li>
+          <li>Green innovation</li>
+          <li>Resource efficiency</li>
+          <li>Developing countries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Trade and Environment</h3>
+        </div>
+        <p class="unit-description">Analyze the complex interactions between international trade and environmental policy.</p>
+        <ul class="topics-list">
+          <li>Trade-environment linkages</li>
+          <li>Pollution haven hypothesis</li>
+          <li>Environmental dumping</li>
+          <li>Border tax adjustments</li>
+          <li>Green trade measures</li>
+          <li>WTO environmental provisions</li>
+          <li>Carbon leakage</li>
+          <li>Global value chains</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Corporate Environmental Strategy</h3>
+        </div>
+        <p class="unit-description">Study how firms integrate environmental considerations into business decisions.</p>
+        <ul class="topics-list">
+          <li>Environmental management</li>
+          <li>Green supply chains</li>
+          <li>Corporate sustainability</li>
+          <li>Eco-innovation</li>
+          <li>Environmental reporting</li>
+          <li>Porter hypothesis</li>
+          <li>Stakeholder pressure</li>
+          <li>Competitive advantage</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Future Challenges</h3>
+        </div>
+        <p class="unit-description">Explore emerging issues and evolving approaches in environmental economics.</p>
+        <ul class="topics-list">
+          <li>Behavioral economics</li>
+          <li>Experimental methods</li>
+          <li>Big data applications</li>
+          <li>Artificial intelligence</li>
+          <li>Planetary boundaries</li>
+          <li>Ecosystem accounting</li>
+          <li>Nature-based solutions</li>
+          <li>Policy innovation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Environmental Economics</h1>
+      <p>Understand the intersection of economic theory and environmental challenges.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Economic Approach to Environment</h3>
+        <p>Learn how economists analyze environmental problems using market principles and efficiency concepts.</p>
+        <span class="env-badge">Market Analysis</span>
+        <span class="env-badge">Efficiency</span>
+        <span class="env-badge">Welfare Economics</span>
+        <div class="policy-box">
+          Environmental economics applies economic theory to environmental problems. It assumes people respond to incentives and seeks to design policies that align private incentives with social goals.
+        </div>
+        <div class="code-example">
+          # Environmental Economics Framework<br>
+          environmental_economics = {<br>
+          &nbsp;&nbsp;"definition": "Application of economic theory to environmental problems",<br>
+          &nbsp;&nbsp;"core_assumptions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"rational_actors": "People respond to incentives",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scarcity": "Resources are limited",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"trade_offs": "Every choice has opportunity costs",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"efficiency": "Markets generally allocate resources well"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_questions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Why do environmental problems occur?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"What are the costs and benefits of environmental protection?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"How can policy correct market failures?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"What is the optimal level of pollution?"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"tools": ["Supply and demand", "Cost-benefit analysis", "Game theory", "Welfare economics"]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Market Failures</h3>
+        <p>Understand why markets alone often fail to protect the environment and lead to overuse of natural resources.</p>
+        <div class="concept-highlight">
+          Market Failure Sources:<br>
+          • Externalities (costs/benefits not reflected in prices)<br>
+          • Public goods (non-excludable, non-rivalrous)<br>
+          • Common pool resources (rivalry without excludability)<br>
+          • Information asymmetries<br>
+          • Market power
+        </div>
+        <div class="economic-insight">
+          <strong>The Environment as Market Failure:</strong><br>
+          Environmental problems often arise because the environment provides services (like waste absorption) for free, leading to overuse. Markets work best when property rights are clearly defined and enforceable.
+        </div>
+        <div class="externality-indicator">
+          <strong>Classic Example - Air Pollution:</strong><br>
+          A factory polluting the air imposes costs on society (health problems, reduced visibility) that aren't included in the factory's costs. This leads to too much pollution from society's perspective.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sustainability Concepts</h3>
+        <p>Explore different definitions of sustainability and their implications for economic policy.</p>
+        <div class="market-tool">
+          <strong>Types of Sustainability:</strong><br>
+          • Weak sustainability: Natural capital can be substituted by human-made capital<br>
+          • Strong sustainability: Critical natural capital must be preserved<br>
+          • Environmental sustainability: Focus on ecosystem health and resilience
+        </div>
+        <div class="code-example">
+          # Sustainability Framework<br>
+          sustainability_types = {<br>
+          &nbsp;&nbsp;"weak_sustainability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"principle": "Total capital stock (natural + human-made) is maintained",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumption": "Perfect substitutability between capital types",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_focus": "Economic growth with some environmental protection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Converting forest to farmland if economic value increases"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"strong_sustainability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"principle": "Critical natural capital must be preserved",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"assumption": "Limited substitutability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"policy_focus": "Protect essential ecosystems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Biodiversity hotspots cannot be converted"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"indicators": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"weak": ["GDP per capita", "Total wealth", "Genuine savings"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strong": ["Species count", "Forest cover", "Water quality"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Externalities and Market Failures</h1>
+      <p>Analyze how external costs and benefits lead to market inefficiencies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Negative Externalities</h3>
+        <p>Study situations where private activities impose costs on others without compensation.</p>
+        <span class="env-badge">External Costs</span>
+        <span class="env-badge">Pollution</span>
+        <span class="env-badge">Overproduction</span>
+        <div class="externality-indicator">
+          <strong>Negative Externality Effects:</strong><br>
+          When producers don't pay the full social cost of their activities, they produce too much from society's perspective. The market equilibrium exceeds the socially optimal level.
+        </div>
+        <div class="code-example">
+          # Negative Externality Analysis<br>
+          negative_externality = {<br>
+          &nbsp;&nbsp;"definition": "Cost imposed on third parties without compensation",<br>
+          &nbsp;&nbsp;"market_outcome": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"private_cost": "Cost borne by producer",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"external_cost": "Cost imposed on others",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"social_cost": "Private cost + External cost",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"problem": "Market price only reflects private cost"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"examples": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Factory air pollution affecting public health",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Loud music disturbing neighbors",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Traffic congestion from individual driving",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Greenhouse gas emissions contributing to climate change"<br>
+          &nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;"solutions": ["Pigouvian taxes", "Regulations", "Property rights", "Cap-and-trade"]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Coase Theorem</h
