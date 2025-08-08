@@ -1,0 +1,752 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Strategic Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎯';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .strategy-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .framework-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .strategic-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .competitive-advantage {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .strategy-metric {
+      background: #fef7ff;
+      border: 1px solid #f3e8ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎯 Strategic Management</h1>
+    <p>Master the art and science of strategic planning and execution for competitive advantage</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to business courses')">← Back to Business Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Strategic Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Strategic Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Frameworks & Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">80+</span>
+          <div class="stat-label">Case Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Strategic Management</h3>
+        </div>
+        <p class="unit-description">Understand the foundations of strategic management and its role in organizational success.</p>
+        <ul class="topics-list">
+          <li>Strategy definition and concepts</li>
+          <li>Strategic management process</li>
+          <li>Levels of strategy</li>
+          <li>Strategic leadership</li>
+          <li>Stakeholder theory</li>
+          <li>Corporate governance</li>
+          <li>Strategic thinking</li>
+          <li>Strategy schools of thought</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">External Environment Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze the external environment to identify opportunities and threats.</p>
+        <ul class="topics-list">
+          <li>General environment analysis</li>
+          <li>Industry analysis</li>
+          <li>Porter's Five Forces</li>
+          <li>Competitor analysis</li>
+          <li>Environmental scanning</li>
+          <li>Scenario planning</li>
+          <li>PESTEL analysis</li>
+          <li>Strategic groups</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Internal Environment Analysis</h3>
+        </div>
+        <p class="unit-description">Assess internal capabilities and resources for competitive advantage.</p>
+        <ul class="topics-list">
+          <li>Resource-based view</li>
+          <li>Core competencies</li>
+          <li>Value chain analysis</li>
+          <li>VRIO framework</li>
+          <li>Organizational capabilities</li>
+          <li>Knowledge management</li>
+          <li>Internal audit</li>
+          <li>Strengths and weaknesses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">SWOT Analysis & Strategic Planning</h3>
+        </div>
+        <p class="unit-description">Integrate internal and external analysis for comprehensive strategic planning.</p>
+        <ul class="topics-list">
+          <li>SWOT analysis framework</li>
+          <li>TOWS matrix</li>
+          <li>Strategic issues identification</li>
+          <li>Strategic alternatives</li>
+          <li>Strategic choice</li>
+          <li>Decision-making tools</li>
+          <li>Strategic planning process</li>
+          <li>Vision and mission</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Business-Level Strategy</h3>
+        </div>
+        <p class="unit-description">Develop strategies for competing effectively in specific business markets.</p>
+        <ul class="topics-list">
+          <li>Generic strategies</li>
+          <li>Cost leadership</li>
+          <li>Differentiation strategy</li>
+          <li>Focus strategies</li>
+          <li>Blue ocean strategy</li>
+          <li>Strategic positioning</li>
+          <li>Customer value proposition</li>
+          <li>Competitive dynamics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Corporate-Level Strategy</h3>
+        </div>
+        <p class="unit-description">Explore strategies for managing multiple businesses and creating corporate value.</p>
+        <ul class="topics-list">
+          <li>Corporate strategy types</li>
+          <li>Diversification strategies</li>
+          <li>Portfolio management</li>
+          <li>BCG matrix</li>
+          <li>GE McKinsey matrix</li>
+          <li>Synergy creation</li>
+          <li>Vertical integration</li>
+          <li>Corporate restructuring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">International Strategy</h3>
+        </div>
+        <p class="unit-description">Develop strategies for competing in global markets and managing international operations.</p>
+        <ul class="topics-list">
+          <li>Globalization drivers</li>
+          <li>International expansion</li>
+          <li>Entry mode strategies</li>
+          <li>Global integration</li>
+          <li>Local responsiveness</li>
+          <li>International configurations</li>
+          <li>Global value chains</li>
+          <li>Cultural considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Strategic Alliances & Networks</h3>
+        </div>
+        <p class="unit-description">Learn how to create and manage strategic partnerships and network relationships.</p>
+        <ul class="topics-list">
+          <li>Alliance strategies</li>
+          <li>Joint ventures</li>
+          <li>Strategic networks</li>
+          <li>Partnership management</li>
+          <li>Ecosystem strategies</li>
+          <li>Platform strategies</li>
+          <li>Collaboration models</li>
+          <li>Alliance governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Innovation & Entrepreneurial Strategy</h3>
+        </div>
+        <p class="unit-description">Develop strategies for innovation, entrepreneurship, and new venture creation.</p>
+        <ul class="topics-list">
+          <li>Innovation strategies</li>
+          <li>Disruptive innovation</li>
+          <li>Entrepreneurial orientation</li>
+          <li>New venture strategy</li>
+          <li>Technology strategy</li>
+          <li>R&D management</li>
+          <li>Open innovation</li>
+          <li>Digital transformation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Strategy Implementation</h3>
+        </div>
+        <p class="unit-description">Learn how to effectively implement and execute strategic plans.</p>
+        <ul class="topics-list">
+          <li>Implementation process</li>
+          <li>Organizational design</li>
+          <li>Strategy-structure fit</li>
+          <li>Change management</li>
+          <li>Leadership and culture</li>
+          <li>Resource allocation</li>
+          <li>Systems and processes</li>
+          <li>Implementation barriers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Strategic Control & Performance</h3>
+        </div>
+        <p class="unit-description">Develop systems for monitoring, controlling, and evaluating strategic performance.</p>
+        <ul class="topics-list">
+          <li>Strategic control systems</li>
+          <li>Balanced scorecard</li>
+          <li>Performance measurement</li>
+          <li>Key performance indicators</li>
+          <li>Strategic feedback</li>
+          <li>Corrective actions</li>
+          <li>Continuous improvement</li>
+          <li>Learning organization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Strategic Leadership & Governance</h3>
+        </div>
+        <p class="unit-description">Master strategic leadership and corporate governance for sustainable competitive advantage.</p>
+        <ul class="topics-list">
+          <li>Strategic leadership</li>
+          <li>CEO and top management</li>
+          <li>Board of directors</li>
+          <li>Corporate governance</li>
+          <li>Stakeholder management</li>
+          <li>Ethics and responsibility</li>
+          <li>Strategic decision-making</li>
+          <li>Future of strategy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Strategic Management</h1>
+      <p>Understand the foundations of strategic management and its role in organizational success.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Strategy Definition and Concepts</h3>
+        <p>Explore the fundamental definitions and key concepts that form the foundation of strategic management.</p>
+        <span class="strategy-badge">Core Concepts</span>
+        <span class="strategy-badge">Strategic Thinking</span>
+        <span class="strategy-badge">Competitive Advantage</span>
+        <div class="framework-box">
+          Strategy is the unified, comprehensive, and integrated plan that relates the strategic advantages of the firm to the challenges of the environment and ensures that the basic objectives of the enterprise are achieved through proper execution.
+        </div>
+        <div class="code-example">
+          # Strategy Definition Framework<br>
+          strategy_definition = {<br>
+          &nbsp;&nbsp;"core_concept": "Pattern of decisions and actions",<br>
+          &nbsp;&nbsp;"key_elements": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"direction": "Where the organization is going",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scope": "What businesses to compete in",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantage": "How to compete successfully",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"resources": "What capabilities to develop",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"logic": "How elements fit together"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"future_oriented": "Focuses on long-term direction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integrated": "Coordinates all activities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"value_creating": "Generates superior performance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"unique": "Differentiates from competitors"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"strategic_questions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Where do we compete?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"How do we compete?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"What is our competitive advantage?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"How do we create value?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"What is our strategic logic?"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Strategic Management Process</h3>
+        <p>Understand the systematic approach to strategic management and its key phases.</p>
+        <div class="concept-highlight">
+          Strategic Management Process Phases:<br>
+          • Analysis: Understanding the strategic situation<br>
+          • Formulation: Developing strategic options<br>
+          • Implementation: Putting strategy into action<br>
+          • Evaluation: Monitoring and controlling performance
+        </div>
+        <div class="strategic-insight">
+          <strong>Process Characteristics:</strong><br>
+          • Iterative: Continuous cycle of refinement<br>
+          • Dynamic: Adapts to changing conditions<br>
+          • Comprehensive: Considers all aspects<br>
+          • Integrative: Links analysis to action
+        </div>
+        <div class="code-example">
+          # Strategic Management Process<br>
+          strategic_process = {<br>
+          &nbsp;&nbsp;"phase_1_analysis": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Understand strategic situation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"External environment analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Internal environment analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Stakeholder analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Performance analysis"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outputs": ["Opportunities", "Threats", "Strengths", "Weaknesses"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"phase_2_formulation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Develop strategic options",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Mission and vision setting",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategic alternative generation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategy evaluation and selection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategic planning"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outputs": ["Strategic plan", "Resource allocation", "Objectives"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"phase_3_implementation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Execute strategic plans",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Organizational design",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Resource deployment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Change management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Leadership and culture"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outputs": ["Implemented strategy", "Performance results"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"phase_4_evaluation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Monitor and control performance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Performance measurement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategic control",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Corrective actions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Strategic learning"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outputs": ["Performance feedback", "Strategic adjustments"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Levels of Strategy</h3>
+        <p>Learn about the different hierarchical levels of strategy within organizations.</p>
+        <div class="competitive-advantage">
+          <strong>Three Levels of Strategy:</strong><br>
+          • Corporate Level: What businesses to compete in<br>
+          • Business Level: How to compete in specific markets<br>
+          • Functional Level: How functions support strategy<br>
+          Each level has distinct scope and decision domains
+        </div>
+        <div class="strategy-metric">
+          <strong>Strategy Integration:</strong><br>
+          • Vertical consistency across levels<br>
+          • Horizontal coordination within levels<br>
+          • Resource allocation alignment<br>
+          • Performance measurement integration
+        </div>
+        <div class="code-example">
+          # Levels of Strategy Framework<br>
+          strategy_levels = {<br>
+          &nbsp;&nbsp;"corporate_level": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scope": "Entire organization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_questions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"What businesses should we be in?",<br>
