@@ -1,0 +1,752 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Development Economics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌱';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(185, 28, 28, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .dev-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .dev-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .poverty-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .growth-tool {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .inequality-indicator {
+      background: #fdf2f8;
+      border: 1px solid #fce7f3;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be185d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌱 Development Economics</h1>
+    <p>Explore poverty reduction, economic growth, and sustainable development in emerging economies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to economics courses')">← Back to Economics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Development Economics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~130</span>
+          <div class="stat-label">Development Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Development Models</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">90+</span>
+          <div class="stat-label">Policy Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Development</h3>
+        </div>
+        <p class="unit-description">Define development, understand its measurement, and explore different development paradigms.</p>
+        <ul class="topics-list">
+          <li>Defining development</li>
+          <li>Growth vs development</li>
+          <li>Measuring development</li>
+          <li>Human Development Index</li>
+          <li>Millennium Development Goals</li>
+          <li>Sustainable Development Goals</li>
+          <li>Development theories evolution</li>
+          <li>Contemporary challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Poverty and Inequality</h3>
+        </div>
+        <p class="unit-description">Analyze poverty measurement, causes, and the relationship between inequality and development.</p>
+        <ul class="topics-list">
+          <li>Absolute vs relative poverty</li>
+          <li>Poverty measurement</li>
+          <li>Poverty lines</li>
+          <li>Multidimensional poverty</li>
+          <li>Income inequality</li>
+          <li>Gini coefficient</li>
+          <li>Kuznets curve</li>
+          <li>Poverty traps</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Economic Growth Theory</h3>
+        </div>
+        <p class="unit-description">Study theories of economic growth and their application to developing countries.</p>
+        <ul class="topics-list">
+          <li>Solow growth model</li>
+          <li>Endogenous growth theory</li>
+          <li>Capital accumulation</li>
+          <li>Technological progress</li>
+          <li>Human capital</li>
+          <li>Convergence hypothesis</li>
+          <li>Growth accounting</li>
+          <li>Institutional factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Population and Development</h3>
+        </div>
+        <p class="unit-description">Examine the relationship between population dynamics and economic development.</p>
+        <ul class="topics-list">
+          <li>Population growth models</li>
+          <li>Demographic transition</li>
+          <li>Malthusian theory</li>
+          <li>Population and resources</li>
+          <li>Fertility decisions</li>
+          <li>Mortality and health</li>
+          <li>Migration patterns</li>
+          <li>Aging populations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Human Capital</h3>
+        </div>
+        <p class="unit-description">Understand the role of education and health in economic development.</p>
+        <ul class="topics-list">
+          <li>Education and growth</li>
+          <li>Returns to education</li>
+          <li>School enrollment patterns</li>
+          <li>Education quality</li>
+          <li>Health and productivity</li>
+          <li>Nutrition and development</li>
+          <li>Disease burden</li>
+          <li>Human capital policies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Rural Development</h3>
+        </div>
+        <p class="unit-description">Explore agricultural development, land tenure, and rural transformation.</p>
+        <ul class="topics-list">
+          <li>Agricultural productivity</li>
+          <li>Green Revolution</li>
+          <li>Land tenure systems</li>
+          <li>Farm size and efficiency</li>
+          <li>Rural credit markets</li>
+          <li>Agricultural technology</li>
+          <li>Rural-urban migration</li>
+          <li>Food security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Labor Markets</h3>
+        </div>
+        <p class="unit-description">Analyze labor market characteristics and employment challenges in developing countries.</p>
+        <ul class="topics-list">
+          <li>Labor market dualism</li>
+          <li>Informal sector</li>
+          <li>Unemployment and underemployment</li>
+          <li>Child labor</li>
+          <li>Gender and labor</li>
+          <li>Wage determination</li>
+          <li>Skills and training</li>
+          <li>Labor mobility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Financial Development</h3>
+        </div>
+        <p class="unit-description">Study financial systems, credit markets, and microfinance in developing economies.</p>
+        <ul class="topics-list">
+          <li>Financial systems development</li>
+          <li>Credit market imperfections</li>
+          <li>Rural credit</li>
+          <li>Microfinance</li>
+          <li>Banking development</li>
+          <li>Capital markets</li>
+          <li>Financial inclusion</li>
+          <li>Mobile banking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Trade and Development</h3>
+        </div>
+        <p class="unit-description">Examine the role of international trade in economic development strategies.</p>
+        <ul class="topics-list">
+          <li>Trade and growth</li>
+          <li>Export-led development</li>
+          <li>Import substitution</li>
+          <li>Comparative advantage</li>
+          <li>Terms of trade</li>
+          <li>Trade liberalization</li>
+          <li>Global value chains</li>
+          <li>South-South trade</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Foreign Aid and Investment</h3>
+        </div>
+        <p class="unit-description">Analyze the effectiveness of foreign aid and foreign direct investment in development.</p>
+        <ul class="topics-list">
+          <li>Types of foreign aid</li>
+          <li>Aid effectiveness</li>
+          <li>Aid dependency</li>
+          <li>Foreign direct investment</li>
+          <li>Technology transfer</li>
+          <li>Multinational corporations</li>
+          <li>Resource curse</li>
+          <li>Aid conditionality</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Institutions and Governance</h3>
+        </div>
+        <p class="unit-description">Understand how institutions and governance quality affect development outcomes.</p>
+        <ul class="topics-list">
+          <li>Institutional economics</li>
+          <li>Property rights</li>
+          <li>Rule of law</li>
+          <li>Corruption</li>
+          <li>Political institutions</li>
+          <li>Democratic governance</li>
+          <li>State capacity</li>
+          <li>Institutional reform</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Sustainable Development</h3>
+        </div>
+        <p class="unit-description">Explore environmental challenges and sustainable development strategies.</p>
+        <ul class="topics-list">
+          <li>Environmental economics</li>
+          <li>Natural resource management</li>
+          <li>Climate change impacts</li>
+          <li>Green growth</li>
+          <li>Sustainable agriculture</li>
+          <li>Energy and development</li>
+          <li>Urban sustainability</li>
+          <li>Circular economy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Development</h1>
+      <p>Define development, understand its measurement, and explore different development paradigms.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Defining Development</h3>
+        <p>Explore different conceptualizations of development beyond simple economic growth.</p>
+        <span class="dev-badge">Multidimensional</span>
+        <span class="dev-badge">Human-Centered</span>
+        <span class="dev-badge">Sustainable</span>
+        <div class="dev-box">
+          Development is a multifaceted process of economic, social, and political transformation that improves people's lives. It encompasses not just income growth, but improvements in health, education, freedom, and environmental sustainability.
+        </div>
+        <div class="code-example">
+          # Development Definitions Framework<br>
+          development_concepts = {<br>
+          &nbsp;&nbsp;"economic_development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Sustained increase in living standards",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"indicators": ["GDP per capita", "Productivity growth", "Structural transformation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": "Ignores distribution and non-income aspects"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"human_development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Expanding people's choices and capabilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dimensions": ["Long healthy life", "Knowledge", "Decent standard of living"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measure": "Human Development Index (HDI)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"sustainable_development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Development that meets present needs without compromising future",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pillars": ["Economic", "Social", "Environmental"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"framework": "Sustainable Development Goals (SDGs)"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"capabilities_approach": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Focus on what people can do and be",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"key_thinkers": ["Amartya Sen", "Martha Nussbaum"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"emphasis": "Freedom and agency"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Growth vs Development</h3>
+        <p>Distinguish between economic growth and broader development processes.</p>
+        <div class="concept-highlight">
+          Key Distinctions:<br>
+          • Growth: Quantitative increase in economic output<br>
+          • Development: Qualitative improvements in well-being<br>
+          • Growth is necessary but not sufficient for development<br>
+          • Development includes social and institutional changes
+        </div>
+        <div class="poverty-insight">
+          <strong>Growth-Development Relationship:</strong><br>
+          • High growth may not reduce poverty if inequality increases<br>
+          • Quality of growth matters (pro-poor vs pro-rich)<br>
+          • Environmental sustainability constrains long-term growth<br>
+          • Institutional development enables sustainable growth
+        </div>
+        <div class="code-example">
+          # Growth vs Development Comparison<br>
+          growth_development = {<br>
+          &nbsp;&nbsp;"economic_growth": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Increase in real GDP or GDP per capita",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": "Percentage change in output",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Quantity of production",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeframe": "Usually annual measurement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"limitations": ["Ignores distribution", "Environmental costs", "Quality of life"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"economic_development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Structural transformation improving living standards",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"measurement": "Multiple indicators (HDI, poverty rates, etc.)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Quality of life improvements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeframe": "Long-term process",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": ["Health", "Education", "Infrastructure", "Institutions"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"relationship": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"necessary_but_not_sufficient": "Growth needed but not enough",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quality_matters": "How growth is achieved and distributed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"feedback_effects": "Development can promote future growth"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Human Development Index</h3>
+        <p>Understand how HDI measures development through health, education, and income dimensions.</p>
+        <div class="growth-tool">
+          <strong>HDI Components:</strong><br>
+          • Life Expectancy Index: Health and longevity<br>
+          • Education Index: Knowledge and learning<br>
+          • Income Index: Standard of living<br>
+          • Geometric mean of the three indices
+        </div>
+        <div class="inequality-indicator">
+          <strong>HDI Limitations:</strong><br>
+          • Doesn't capture inequality within countries<br>
+          • Equal weighting may not reflect preferences<br>
+          • Missing dimensions (environment, freedom, security)<br>
+          • Data quality issues in some countries
+        </div>
+        <div class="code-example">
+          # Human Development Index Calculation<br>
+          def calculate_hdi(life_expectancy, education_index, income_index):<br>
+          &nbsp;&nbsp;"""Calculate HDI using geometric mean"""<br>
+          &nbsp;&nbsp;import math<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Normalize life expectancy (min=20, max=85)<br>
+          &nbsp;&nbsp;life_index = (life_expectancy - 20) / (85 - 20)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# HDI is geometric mean of three indices<br>
+          &nbsp;&nbsp;hdi = (life_index * education_index * income_index) ** (1/3)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return hdi<br>
+          <br>
+          def calculate_income_index(gni_per_capita):<br>
+          &nbsp;&nbsp;"""Calculate income index using log transformation"""<br>
+          &nbsp;&nbsp;import math<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;# Log transformation (min=$100, max=$75,000)<br>
+          &nbsp;&nbsp;min_income = math.log(100)<br>
+          &nbsp;&nbsp;max_income = math.log(75000)<br>
+          &nbsp;&nbsp;actual_income = math.log(gni_per_capita)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;income_index = (actual_income - min_income) / (max_income - min_income)<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;return income_index<br>
+          <br>
+          # HDI Categories<br>
+          h
