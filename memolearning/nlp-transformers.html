@@ -1,0 +1,734 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning NLP & Transformers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #064e3b, #047857);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 78, 59, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💬';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #064e3b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #047857;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #064e3b, #047857);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 78, 59, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .nlp-badge {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #064e3b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .language-box {
+      background: #f0fdf4;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #064e3b;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .transformer-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .attention-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .training-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💬 NLP & Transformers</h1>
+    <p>Master natural language processing and the revolutionary transformer architecture</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">NLP & Transformers Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Specialized Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~105</span>
+          <div class="stat-label">NLP Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Model Architectures</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Language Tasks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">NLP Fundamentals</h3>
+        </div>
+        <p class="unit-description">Introduction to natural language processing, linguistic concepts, and computational approaches.</p>
+        <ul class="topics-list">
+          <li>What is NLP?</li>
+          <li>Linguistic foundations</li>
+          <li>Levels of language analysis</li>
+          <li>NLP pipeline overview</li>
+          <li>Challenges in NLP</li>
+          <li>Language resources</li>
+          <li>Evaluation metrics</li>
+          <li>Historical development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Text Preprocessing</h3>
+        </div>
+        <p class="unit-description">Essential text cleaning, normalization, and preprocessing techniques for NLP tasks.</p>
+        <ul class="topics-list">
+          <li>Text cleaning and normalization</li>
+          <li>Tokenization strategies</li>
+          <li>Stop word removal</li>
+          <li>Stemming and lemmatization</li>
+          <li>Regular expressions</li>
+          <li>Unicode handling</li>
+          <li>Subword tokenization</li>
+          <li>Language detection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Text Representation</h3>
+        </div>
+        <p class="unit-description">Learn various methods to convert text into numerical representations for machine learning.</p>
+        <ul class="topics-list">
+          <li>Bag of words</li>
+          <li>TF-IDF</li>
+          <li>N-gram models</li>
+          <li>Word embeddings</li>
+          <li>Word2Vec and GloVe</li>
+          <li>Contextual embeddings</li>
+          <li>Document embeddings</li>
+          <li>Sparse vs dense representations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Classical NLP Tasks</h3>
+        </div>
+        <p class="unit-description">Master fundamental NLP tasks using traditional machine learning approaches.</p>
+        <ul class="topics-list">
+          <li>Text classification</li>
+          <li>Sentiment analysis</li>
+          <li>Named entity recognition</li>
+          <li>Part-of-speech tagging</li>
+          <li>Information extraction</li>
+          <li>Text clustering</li>
+          <li>Topic modeling</li>
+          <li>Keyword extraction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Sequence Models</h3>
+        </div>
+        <p class="unit-description">Explore RNNs, LSTMs, and GRUs for sequential text processing and language modeling.</p>
+        <ul class="topics-list">
+          <li>Recurrent neural networks</li>
+          <li>LSTM and GRU</li>
+          <li>Bidirectional RNNs</li>
+          <li>Sequence-to-sequence models</li>
+          <li>Encoder-decoder architecture</li>
+          <li>Language modeling</li>
+          <li>Text generation</li>
+          <li>Attention mechanisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Attention and Transformers</h3>
+        </div>
+        <p class="unit-description">Understand the transformer architecture that revolutionized NLP and deep learning.</p>
+        <ul class="topics-list">
+          <li>Attention mechanism</li>
+          <li>Self-attention</li>
+          <li>Multi-head attention</li>
+          <li>Transformer architecture</li>
+          <li>Positional encoding</li>
+          <li>Layer normalization</li>
+          <li>Residual connections</li>
+          <li>Training strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Pre-trained Language Models</h3>
+        </div>
+        <p class="unit-description">Leverage powerful pre-trained models like BERT, GPT, and their variants.</p>
+        <ul class="topics-list">
+          <li>Transfer learning in NLP</li>
+          <li>BERT and variants</li>
+          <li>GPT family</li>
+          <li>T5 and UL2</li>
+          <li>Fine-tuning strategies</li>
+          <li>Prompt engineering</li>
+          <li>In-context learning</li>
+          <li>Model comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Advanced NLP Tasks</h3>
+        </div>
+        <p class="unit-description">Tackle complex language understanding and generation tasks with modern techniques.</p>
+        <ul class="topics-list">
+          <li>Machine translation</li>
+          <li>Question answering</li>
+          <li>Text summarization</li>
+          <li>Dialogue systems</li>
+          <li>Natural language inference</li>
+          <li>Coreference resolution</li>
+          <li>Semantic parsing</li>
+          <li>Knowledge graphs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Multimodal and Multilingual NLP</h3>
+        </div>
+        <p class="unit-description">Explore systems that combine text with other modalities and handle multiple languages.</p>
+        <ul class="topics-list">
+          <li>Vision-language models</li>
+          <li>Speech and text integration</li>
+          <li>Cross-modal understanding</li>
+          <li>Multilingual models</li>
+          <li>Cross-lingual transfer</li>
+          <li>Low-resource languages</li>
+          <li>Code-switching</li>
+          <li>Cultural considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Large Language Models</h3>
+        </div>
+        <p class="unit-description">Understand the architecture, training, and capabilities of large-scale language models.</p>
+        <ul class="topics-list">
+          <li>Scaling laws</li>
+          <li>Training large models</li>
+          <li>Emergent abilities</li>
+          <li>Prompt engineering</li>
+          <li>Chain-of-thought reasoning</li>
+          <li>In-context learning</li>
+          <li>Model alignment</li>
+          <li>Efficiency techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">NLP Applications</h3>
+        </div>
+        <p class="unit-description">Build real-world NLP applications and systems for various domains and use cases.</p>
+        <ul class="topics-list">
+          <li>Search and information retrieval</li>
+          <li>Conversational AI</li>
+          <li>Content moderation</li>
+          <li>Document processing</li>
+          <li>Social media analysis</li>
+          <li>Financial NLP</li>
+          <li>Healthcare NLP</li>
+          <li>Legal tech applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Ethics and Future Directions</h3>
+        </div>
+        <p class="unit-description">Explore ethical considerations, limitations, and future developments in NLP.</p>
+        <ul class="topics-list">
+          <li>Bias in language models</li>
+          <li>Fairness and inclusivity</li>
+          <li>Privacy considerations</li>
+          <li>Misinformation detection</li>
+          <li>Model interpretability</li>
+          <li>Environmental impact</li>
+          <li>Emerging research areas</li>
+          <li>Career opportunities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: NLP Fundamentals</h1>
+      <p>Introduction to natural language processing, linguistic concepts, and computational approaches.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is NLP?</h3>
+        <p>Understand the scope, definition, and interdisciplinary nature of natural language processing.</p>
+        <span class="nlp-badge">Definition</span>
+        <span class="nlp-badge">Scope</span>
+        <span class="nlp-badge">Applications</span>
+        <div class="language-box">
+          Natural Language Processing (NLP) is a field of artificial intelligence that focuses on the interaction between computers and human language. It combines computational linguistics, machine learning, and deep learning to enable machines to understand, interpret, and generate human language.
+        </div>
+        <div class="code-example">
+          # NLP Definition and Scope<br>
+          nlp_overview = {<br>
+          &nbsp;&nbsp;"definition": "Computational processing of human language",<br>
+          &nbsp;&nbsp;"core_components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"computational_linguistics": "Mathematical and algorithmic approaches to language",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"machine_learning": "Data-driven approaches to language understanding",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deep_learning": "Neural network-based language models",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cognitive_science": "Understanding human language processing"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"main_goals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"understanding": "Extract meaning from text and speech",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"generation": "Produce coherent and contextually appropriate text",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interaction": "Enable natural communication between humans and machines",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"translation": "Convert between different languages"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Virtual assistants", "Machine translation", "Sentiment analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Search engines", "Chatbots", "Document summarization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Question answering", "Content recommendation"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Linguistic Foundations</h3>
+        <p>Explore the linguistic principles that underpin computational approaches to language processing.</p>
+        <div class="concept-highlight">
+          Key Linguistic Concepts:<br>
+          • Phonetics/Phonology: Sound systems of language<br>
+          • Morphology: Word structure and formation<br>
+          • Syntax: Sentence structure and grammar rules<br>
+          • Semantics: Meaning of words and sentences<br>
+          • Pragmatics: Context and intended meaning
+        </div>
+        <div class="transformer-insight">
+          <strong>Ambiguity Challenge:</strong><br>
+          Natural language is inherently ambiguous at multiple levels. A single sentence can have multiple valid interpretations based on syntax, semantics, or context. This makes NLP particularly challenging compared to formal languages.
+        </div>
+        <div class="code-example">
+          # Linguistic Levels in NLP<br>
+          linguistic_levels = {<br>
+          &nbsp;&nbsp;"phonological": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Sound patterns and pronunciation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nlp_tasks": ["Speech recognition", "Text-to-speech", "Phonetic analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Converting /kæt/ to 'cat'"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"morphological": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Word structure and formation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nlp_tasks": ["Stemming", "Lemmatization", "Morphological analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "'running' → stem: 'run', suffix: '-ing'"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"syntactic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Sentence structure and grammar",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nlp_tasks": ["Parsing", "POS tagging", "Grammar checking"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Subject-verb-object structure analysis"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"semantic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Meaning of words and sentences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nlp_tasks": ["Word sense disambiguation", "Semantic role labeling"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "'bank' → financial institution vs. river bank"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"pragmatic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Context-dependent meaning",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nlp_tasks": ["Dialogue systems", "Discourse analysis"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "'Can you pass the salt?' → request, not question"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Challenges in NLP</h3>
+        <p>Understand the fundamental challenges that make natural language processing complex and difficult.</p>
+        <div class="attention-tool">
+          <strong>Core NLP Challenges:</strong><br>
+          • Ambiguity: Multiple valid interpretations<br>
+          • Context dependency: Meaning changes with context<br>
+          • Variability: Different ways to express same idea<br>
+          • World knowledge: Implicit assumptions and common sense<br>
+          • Cultural and social factors: Language use varies across groups
+        </div>
+        <div class="training-indicator">
+          <strong>Data Challenges:</strong><br>
+          Language data is often noisy, biased, and sparse for many languages and domains. Quality labeled data is expensive to create, and language constantly evolves with new words and meanings.
+        </div>
+        <div class="code-example">
+          # NLP Challenge Categories<br>
+          nlp_challenges = {<br>
+          &nbsp;&nbsp;"linguistic_challenges": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ambiguity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"lexical": "Word has multiple meanings",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"syntactic": "Multiple parse trees possible",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"semantic": "Multiple interpretations of meaning",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"example": "'I saw the man with the telescope'"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"variability
