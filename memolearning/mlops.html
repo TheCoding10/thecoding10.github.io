@@ -1,0 +1,738 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning MLOps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #14b8a6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #134e4a, #0f766e);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(19, 78, 74, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #134e4a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f766e;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #134e4a, #0f766e);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(19, 78, 74, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .mlops-badge {
+      display: inline-block;
+      background: #f0fdfa;
+      color: #134e4a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .pipeline-box {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #134e4a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .automation-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .deployment-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .monitoring-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚙️ MLOps</h1>
+    <p>Master machine learning operations for scalable, reliable, and automated ML systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">MLOps Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">MLOps Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Operations Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Tools & Platforms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Best Practices</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to MLOps</h3>
+        </div>
+        <p class="unit-description">Understand the principles, benefits, and challenges of machine learning operations.</p>
+        <ul class="topics-list">
+          <li>What is MLOps?</li>
+          <li>DevOps vs MLOps</li>
+          <li>ML lifecycle challenges</li>
+          <li>MLOps maturity model</li>
+          <li>Key stakeholders</li>
+          <li>Business value</li>
+          <li>Common pitfalls</li>
+          <li>Success metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">ML Pipeline Design</h3>
+        </div>
+        <p class="unit-description">Design and implement end-to-end machine learning pipelines for production systems.</p>
+        <ul class="topics-list">
+          <li>Pipeline architecture</li>
+          <li>Data ingestion</li>
+          <li>Feature engineering</li>
+          <li>Model training</li>
+          <li>Model validation</li>
+          <li>Model deployment</li>
+          <li>Pipeline orchestration</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Version Control for ML</h3>
+        </div>
+        <p class="unit-description">Implement version control strategies for code, data, and models in ML projects.</p>
+        <ul class="topics-list">
+          <li>Git for ML projects</li>
+          <li>Data versioning</li>
+          <li>Model versioning</li>
+          <li>Experiment tracking</li>
+          <li>Artifact management</li>
+          <li>Reproducibility</li>
+          <li>Branching strategies</li>
+          <li>Collaboration workflows</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Continuous Integration for ML</h3>
+        </div>
+        <p class="unit-description">Build automated testing and integration pipelines for machine learning systems.</p>
+        <ul class="topics-list">
+          <li>CI/CD concepts</li>
+          <li>Automated testing</li>
+          <li>Data validation</li>
+          <li>Model testing</li>
+          <li>Integration testing</li>
+          <li>Pipeline automation</li>
+          <li>Quality gates</li>
+          <li>Feedback loops</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Model Deployment Strategies</h3>
+        </div>
+        <p class="unit-description">Learn various deployment patterns and strategies for ML models in production.</p>
+        <ul class="topics-list">
+          <li>Deployment patterns</li>
+          <li>Blue-green deployment</li>
+          <li>Canary releases</li>
+          <li>A/B testing</li>
+          <li>Shadow deployment</li>
+          <li>Multi-model serving</li>
+          <li>Edge deployment</li>
+          <li>Rollback strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Monitoring and Observability</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive monitoring for ML systems and model performance.</p>
+        <ul class="topics-list">
+          <li>ML monitoring strategy</li>
+          <li>Data drift detection</li>
+          <li>Model drift monitoring</li>
+          <li>Performance metrics</li>
+          <li>Business metrics</li>
+          <li>Alerting systems</li>
+          <li>Incident response</li>
+          <li>Observability tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Infrastructure as Code</h3>
+        </div>
+        <p class="unit-description">Manage ML infrastructure using code-based approaches for scalability and reliability.</p>
+        <ul class="topics-list">
+          <li>Infrastructure concepts</li>
+          <li>Terraform for ML</li>
+          <li>CloudFormation</li>
+          <li>Kubernetes for ML</li>
+          <li>Container orchestration</li>
+          <li>Resource management</li>
+          <li>Environment consistency</li>
+          <li>Cost optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Feature Stores</h3>
+        </div>
+        <p class="unit-description">Build and manage centralized feature stores for consistent feature engineering.</p>
+        <ul class="topics-list">
+          <li>Feature store concepts</li>
+          <li>Feature engineering</li>
+          <li>Feature discovery</li>
+          <li>Feature serving</li>
+          <li>Feature lineage</li>
+          <li>Real-time features</li>
+          <li>Batch features</li>
+          <li>Popular solutions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Experiment Management</h3>
+        </div>
+        <p class="unit-description">Track, compare, and manage ML experiments for optimal model development.</p>
+        <ul class="topics-list">
+          <li>Experiment tracking</li>
+          <li>Hyperparameter tuning</li>
+          <li>Model comparison</li>
+          <li>Metadata management</li>
+          <li>Experiment reproducibility</li>
+          <li>Collaboration tools</li>
+          <li>MLflow</li>
+          <li>Weights & Biases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Model Governance</h3>
+        </div>
+        <p class="unit-description">Implement governance frameworks for responsible and compliant ML systems.</p>
+        <ul class="topics-list">
+          <li>Model governance framework</li>
+          <li>Model registry</li>
+          <li>Compliance requirements</li>
+          <li>Audit trails</li>
+          <li>Risk management</li>
+          <li>Model approval processes</li>
+          <li>Documentation standards</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">MLOps Platforms</h3>
+        </div>
+        <p class="unit-description">Explore and compare popular MLOps platforms and tools for end-to-end ML workflows.</p>
+        <ul class="topics-list">
+          <li>Platform comparison</li>
+          <li>Kubeflow</li>
+          <li>MLflow</li>
+          <li>AWS SageMaker</li>
+          <li>Google AI Platform</li>
+          <li>Azure ML</li>
+          <li>Open source tools</li>
+          <li>Platform selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced MLOps Topics</h3>
+        </div>
+        <p class="unit-description">Explore advanced concepts and emerging trends in machine learning operations.</p>
+        <ul class="topics-list">
+          <li>AutoML integration</li>
+          <li>Federated learning</li>
+          <li>Edge MLOps</li>
+          <li>Multi-cloud strategies</li>
+          <li>MLOps security</li>
+          <li>Continuous learning</li>
+          <li>Future trends</li>
+          <li>Career paths</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to MLOps</h1>
+      <p>Understand the principles, benefits, and challenges of machine learning operations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is MLOps?</h3>
+        <p>Learn the definition, scope, and importance of MLOps in modern machine learning development.</p>
+        <span class="mlops-badge">Operations</span>
+        <span class="mlops-badge">Automation</span>
+        <span class="mlops-badge">Reliability</span>
+        <div class="pipeline-box">
+          MLOps (Machine Learning Operations) is a set of practices that combines machine learning, DevOps, and data engineering to deploy and maintain ML systems in production reliably and efficiently. It bridges the gap between model development and production deployment.
+        </div>
+        <div class="code-example">
+          # MLOps Definition and Scope<br>
+          mlops_framework = {<br>
+          &nbsp;&nbsp;"definition": "Practices for deploying and maintaining ML systems in production",<br>
+          &nbsp;&nbsp;"core_principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"automation": "Automate ML workflows from training to deployment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"collaboration": "Enable cross-functional team collaboration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"continuous_integration": "Automated testing and validation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"continuous_deployment": "Automated model deployment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monitoring": "Continuous monitoring of model performance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"governance": "Model versioning and compliance"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_components": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_pipeline": "Automated data ingestion and preprocessing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"model_pipeline": "Training, validation, and deployment automation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"infrastructure": "Scalable and reliable compute resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monitoring": "Performance and drift detection systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"governance": "Version control and compliance frameworks"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"business_benefits": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Faster time to market",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Improved model reliability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Reduced operational overhead",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Better collaboration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Risk mitigation"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">DevOps vs MLOps</h3>
+        <p>Understand the similarities and key differences between traditional DevOps and MLOps practices.</p>
+        <div class="concept-highlight">
+          Key Differences:<br>
+          • DevOps: Focus on software delivery and infrastructure<br>
+          • MLOps: Focus on data, models, and ML-specific workflows<br>
+          • DevOps: Code versioning and testing<br>
+          • MLOps: Code, data, and model versioning with ML-specific testing<br>
+          • DevOps: Application monitoring<br>
+          • MLOps: Model performance and data drift monitoring
+        </div>
+        <div class="automation-insight">
+          <strong>Shared Principles:</strong><br>
+          Both DevOps and MLOps emphasize automation, continuous integration/deployment, monitoring, and collaboration. MLOps extends these principles to handle the unique challenges of machine learning systems.
+        </div>
+        <div class="code-example">
+          # DevOps vs MLOps Comparison<br>
+          comparison = {<br>
+          &nbsp;&nbsp;"shared_principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"automation": "Automate repetitive tasks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ci_cd": "Continuous integration and deployment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monitoring": "Continuous system monitoring",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"collaboration": "Cross-functional team collaboration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"version_control": "Track changes and enable rollbacks"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"devops_focus": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"artifacts": ["Code", "Configuration", "Infrastructure"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"testing": ["Unit tests", "Integration tests", "Performance tests"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deployment": ["Application deployment", "Blue-green", "Canary"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monitoring": ["System metrics", "Application logs", "User behavior"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"mlops_additions": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"artifacts": ["+ Data", "+ Models", "+ Feature stores"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"testing": ["+ Data validation", "+ Model testing", "+ A/B testing"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deployment": ["+ Model serving", "+ Shadow deployment", "+ Feature flags"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"monitoring": ["+ Model drift", "+ Data drift", "+ Business metrics"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"unique_challenges": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Data quality and drift",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Model performance degradation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Experimental nature of ML",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Reproducibility requirements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Regulatory compliance"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">MLOps Maturity Model</h3>
+        <p>Assess and improve your organization's MLOps capabilities using maturity models.</p>
+        <div class="deployment-tool">
+          <strong>Maturity Levels:</strong><br>
+          • Level 0: Manual processes, ad-hoc workflows<br>
+          • Level 1: Automated training pipelines<br>
+          • Level 2: Automated deployment and monitoring<br>
+          • Level 3: Full automation with continuous learning<br>
+          • Level 4: Advanced optimization and governance
+        </div>
+        <div class="monitoring-indicator">
+          <strong>Assessment Areas:</strong><br>
+          Evaluate your organization across data management, model development, deployment automation, monitoring capabilities, and governance practices to determine current maturity level.
+        </div>
+        <div class="code-example">
+          # MLOps Maturity Assessment<br>
+          maturity_model = {<br>
+          &nbsp;&nbsp;"level_0_manual": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Manual data preparation", "Notebook-based development", "Manual deployment"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Inconsistent results", "Long deployment times", "No monitoring"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"next_steps": ["Automate data pipelines", "Version control", "Basic CI/CD"]<br>
+          &nbsp;&nbsp;},<br>
