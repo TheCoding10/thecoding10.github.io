@@ -1,0 +1,743 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning AI Project Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #fb923c 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '💡';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c2d12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .project-badge {
+      display: inline-block;
+      background: #fff7ed;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .design-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .planning-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .execution-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .risk-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>💡 AI Project Design</h1>
+    <p>Learn to design, plan, and execute successful AI projects from conception to deployment</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">AI Project Design Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Design Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~75</span>
+          <div class="stat-label">Project Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Methodologies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Case Studies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">AI Project Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the unique characteristics and requirements of AI projects.</p>
+        <ul class="topics-list">
+          <li>AI project characteristics</li>
+          <li>Success factors</li>
+          <li>Common failure modes</li>
+          <li>Project lifecycle</li>
+          <li>Stakeholder management</li>
+          <li>Expectations setting</li>
+          <li>Value proposition</li>
+          <li>Project types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Problem Definition</h3>
+        </div>
+        <p class="unit-description">Learn to properly define and frame problems suitable for AI solutions.</p>
+        <ul class="topics-list">
+          <li>Problem identification</li>
+          <li>Problem framing</li>
+          <li>AI suitability assessment</li>
+          <li>Success metrics</li>
+          <li>Constraint analysis</li>
+          <li>Alternative solutions</li>
+          <li>Problem decomposition</li>
+          <li>Requirement gathering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Feasibility Assessment</h3>
+        </div>
+        <p class="unit-description">Evaluate technical, business, and operational feasibility of AI projects.</p>
+        <ul class="topics-list">
+          <li>Technical feasibility</li>
+          <li>Data availability</li>
+          <li>Resource requirements</li>
+          <li>Timeline estimation</li>
+          <li>Risk assessment</li>
+          <li>Cost-benefit analysis</li>
+          <li>ROI calculation</li>
+          <li>Go/no-go decisions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Data Strategy</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive data strategies for AI project success.</p>
+        <ul class="topics-list">
+          <li>Data requirements</li>
+          <li>Data sources</li>
+          <li>Data quality assessment</li>
+          <li>Data collection planning</li>
+          <li>Annotation strategies</li>
+          <li>Privacy considerations</li>
+          <li>Data governance</li>
+          <li>Synthetic data</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Solution Architecture</h3>
+        </div>
+        <p class="unit-description">Design robust and scalable architectures for AI solutions.</p>
+        <ul class="topics-list">
+          <li>Architecture patterns</li>
+          <li>Component design</li>
+          <li>Technology selection</li>
+          <li>Scalability planning</li>
+          <li>Integration design</li>
+          <li>Security architecture</li>
+          <li>Performance requirements</li>
+          <li>Documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Project Planning</h3>
+        </div>
+        <p class="unit-description">Create detailed project plans and manage AI project complexities.</p>
+        <ul class="topics-list">
+          <li>Project methodologies</li>
+          <li>Work breakdown structure</li>
+          <li>Timeline planning</li>
+          <li>Resource allocation</li>
+          <li>Milestone definition</li>
+          <li>Risk mitigation</li>
+          <li>Quality planning</li>
+          <li>Communication plans</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Team Building</h3>
+        </div>
+        <p class="unit-description">Assemble and manage effective AI project teams with diverse skills.</p>
+        <ul class="topics-list">
+          <li>Role definitions</li>
+          <li>Skill requirements</li>
+          <li>Team composition</li>
+          <li>Collaboration models</li>
+          <li>Communication strategies</li>
+          <li>Knowledge transfer</li>
+          <li>Performance management</li>
+          <li>Continuous learning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Prototype Development</h3>
+        </div>
+        <p class="unit-description">Build effective prototypes to validate concepts and gather feedback.</p>
+        <ul class="topics-list">
+          <li>Prototype strategies</li>
+          <li>MVP definition</li>
+          <li>Rapid prototyping</li>
+          <li>Proof of concept</li>
+          <li>User testing</li>
+          <li>Feedback collection</li>
+          <li>Iteration planning</li>
+          <li>Validation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Ethics and Bias</h3>
+        </div>
+        <p class="unit-description">Address ethical considerations and bias prevention in AI project design.</p>
+        <ul class="topics-list">
+          <li>Ethical frameworks</li>
+          <li>Bias identification</li>
+          <li>Fairness metrics</li>
+          <li>Transparency requirements</li>
+          <li>Accountability measures</li>
+          <li>Privacy protection</li>
+          <li>Regulatory compliance</li>
+          <li>Stakeholder impact</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Implementation Management</h3>
+        </div>
+        <p class="unit-description">Manage the implementation phase with agile practices and risk mitigation.</p>
+        <ul class="topics-list">
+          <li>Agile methodologies</li>
+          <li>Sprint planning</li>
+          <li>Progress tracking</li>
+          <li>Quality assurance</li>
+          <li>Change management</li>
+          <li>Issue resolution</li>
+          <li>Stakeholder updates</li>
+          <li>Scope management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Deployment and Launch</h3>
+        </div>
+        <p class="unit-description">Plan and execute successful deployment and launch strategies for AI solutions.</p>
+        <ul class="topics-list">
+          <li>Deployment planning</li>
+          <li>Launch strategies</li>
+          <li>User training</li>
+          <li>Change management</li>
+          <li>Performance monitoring</li>
+          <li>Support processes</li>
+          <li>Rollback procedures</li>
+          <li>Success measurement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Project Evaluation</h3>
+        </div>
+        <p class="unit-description">Evaluate project outcomes and extract lessons learned for future improvements.</p>
+        <ul class="topics-list">
+          <li>Success evaluation</li>
+          <li>Impact measurement</li>
+          <li>Lessons learned</li>
+          <li>Knowledge capture</li>
+          <li>Process improvement</li>
+          <li>Portfolio management</li>
+          <li>Future planning</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: AI Project Fundamentals</h1>
+      <p>Understand the unique characteristics and requirements of AI projects.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">AI Project Characteristics</h3>
+        <p>Learn what makes AI projects different from traditional software projects and their unique challenges.</p>
+        <span class="project-badge">Uncertainty</span>
+        <span class="project-badge">Experimentation</span>
+        <span class="project-badge">Data-Driven</span>
+        <div class="design-box">
+          AI projects are fundamentally different from traditional software projects due to their experimental nature, data dependency, and inherent uncertainty. Success requires embracing iteration and learning from failures.
+        </div>
+        <div class="code-example">
+          # AI Project Characteristics<br>
+          ai_project_traits = {<br>
+          &nbsp;&nbsp;"experimental_nature": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Outcome uncertainty until experimentation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implications": ["Iterative approach needed", "Hypothesis-driven development", "Failure is part of learning"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"management_approach": "Embrace experimentation and rapid prototyping"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"data_dependency": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Quality and quantity of data determines success",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Data availability", "Data quality", "Annotation costs", "Privacy constraints"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mitigation": "Early data assessment and acquisition planning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"technical_complexity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Complex algorithms and infrastructure requirements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"considerations": ["Model selection", "Training infrastructure", "Deployment complexity"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"approach": "Start simple, iterate toward complexity"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"performance_variability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Model performance can vary with data changes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["Continuous monitoring", "Model retraining", "Performance tracking"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"planning": "Build monitoring and maintenance into project scope"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Success Factors</h3>
+        <p>Identify the key factors that contribute to successful AI project outcomes.</p>
+        <div class="concept-highlight">
+          Critical Success Factors:<br>
+          • Clear problem definition and business value<br>
+          • Strong data foundation and quality<br>
+          • Appropriate team skills and expertise<br>
+          • Stakeholder alignment and support<br>
+          • Realistic expectations and timelines<br>
+          • Iterative development approach
+        </div>
+        <div class="planning-insight">
+          <strong>Success Pattern:</strong><br>
+          Successful AI projects typically start with a clear business problem, validate data availability early, build simple baselines quickly, and iterate based on feedback and results.
+        </div>
+        <div class="code-example">
+          # AI Project Success Framework<br>
+          success_factors = {<br>
+          &nbsp;&nbsp;"business_alignment": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"clear_problem": "Well-defined business problem with measurable impact",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stakeholder_buy_in": "Strong support from business stakeholders",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"realistic_expectations": "Understanding of AI capabilities and limitations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"success_metrics": "Clear, measurable success criteria"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"technical_foundation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_quality": "Sufficient, high-quality, relevant data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technical_expertise": "Team with appropriate AI/ML skills",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"infrastructure": "Adequate compute and deployment infrastructure",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"baseline_approach": "Start with simple models and iterate"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"project_management": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"agile_methodology": "Iterative development with frequent checkpoints",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"risk_management": "Early identification and mitigation of key risks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cross_functional_team": "Collaboration between business, technical, and domain experts",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"continuous_learning": "Regular retrospectives and process improvement"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Failure Modes</h3>
+        <p>Understand typical reasons why AI projects fail and how to avoid these pitfalls.</p>
+        <div class="execution-tool">
+          <strong>Prevention Strategies:</strong><br>
+          • Validate data availability and quality early<br>
+          • Set realistic expectations about AI capabilities<br>
+          • Start with simple solutions and iterate<br>
+          • Maintain focus on business value<br>
+          • Invest in team skills and training
+        </div>
+        <div class="risk-indicator">
+          <strong>High-Risk Indicators:</strong><br>
+          Poor data quality, unrealistic timelines, lack of domain expertise, unclear success metrics, and insufficient stakeholder engagement are strong predictors of project failure.
+        </div>
+        <div class="code-example">
+          # Common AI Project Failure Modes<br>
+          failure_modes = {<br>
+          &nbsp;&nbsp;"data_related": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"insufficient_data": "Not enough data to train effective models",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"poor_data_quality": "Noisy, incomplete, or biased data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_access_issues": "Legal, technical, or organizational barriers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prevention": "Early data assessment and acquisition planning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"expectation_mismatch": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"overambitious_goals": "Expecting human-level performance immediately",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"wrong_problem_framing": "Applying AI to problems better solved otherwise",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"unrealistic_timelines": "Underestimating AI development complexity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prevention": "Education and realistic goal setting"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"technical_issues": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"skill_gaps": "Insufficient AI/ML expertise on team",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"infrastructure_limitations": "Inadequate compute or deployment resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integration_challenges": "Difficulty integrating AI into existing systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prevention": "Skill assessment and infrastructure planning"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"organizational_barriers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"resistance_to_change": "User adoption challenges",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"lack_of_support": "Insufficient stak
