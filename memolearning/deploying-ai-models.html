@@ -1,0 +1,734 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Deploying AI Models</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(185, 28, 28, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .deploy-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .deployment-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .infrastructure-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .monitoring-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .scaling-indicator {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Deploying AI Models</h1>
+    <p>Master the art of taking AI models from development to production at scale</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Deploying AI Models Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Deployment Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">Deployment Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Platforms & Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Production Patterns</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Deployment Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the key concepts, challenges, and considerations for deploying AI models to production.</p>
+        <ul class="topics-list">
+          <li>Development vs production</li>
+          <li>Deployment strategies</li>
+          <li>Infrastructure requirements</li>
+          <li>Performance considerations</li>
+          <li>Scalability planning</li>
+          <li>Security implications</li>
+          <li>Cost optimization</li>
+          <li>Deployment lifecycle</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Model Serving Architectures</h3>
+        </div>
+        <p class="unit-description">Learn different architectures and patterns for serving AI models in production environments.</p>
+        <ul class="topics-list">
+          <li>Batch vs real-time serving</li>
+          <li>Model-as-a-Service</li>
+          <li>Microservices architecture</li>
+          <li>Serverless deployments</li>
+          <li>Edge computing</li>
+          <li>Hybrid approaches</li>
+          <li>Load balancing strategies</li>
+          <li>Fault tolerance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Containerization and Docker</h3>
+        </div>
+        <p class="unit-description">Master containerization techniques for packaging and deploying AI models consistently.</p>
+        <ul class="topics-list">
+          <li>Docker fundamentals</li>
+          <li>Dockerfile best practices</li>
+          <li>Multi-stage builds</li>
+          <li>Container optimization</li>
+          <li>GPU support</li>
+          <li>Registry management</li>
+          <li>Security scanning</li>
+          <li>Image versioning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Kubernetes for AI</h3>
+        </div>
+        <p class="unit-description">Deploy and orchestrate AI models using Kubernetes for scalable production systems.</p>
+        <ul class="topics-list">
+          <li>Kubernetes basics</li>
+          <li>AI workload patterns</li>
+          <li>Resource management</li>
+          <li>Auto-scaling</li>
+          <li>GPU scheduling</li>
+          <li>Service mesh</li>
+          <li>Operators for ML</li>
+          <li>Monitoring and logging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Cloud Deployment Platforms</h3>
+        </div>
+        <p class="unit-description">Leverage cloud platforms for scalable and managed AI model deployment solutions.</p>
+        <ul class="topics-list">
+          <li>AWS AI services</li>
+          <li>Google Cloud AI Platform</li>
+          <li>Azure Machine Learning</li>
+          <li>Serverless inference</li>
+          <li>Managed endpoints</li>
+          <li>Multi-cloud strategies</li>
+          <li>Cost optimization</li>
+          <li>Vendor comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Model Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize AI models for production deployment through quantization, pruning, and acceleration.</p>
+        <ul class="topics-list">
+          <li>Model quantization</li>
+          <li>Pruning techniques</li>
+          <li>Knowledge distillation</li>
+          <li>ONNX optimization</li>
+          <li>TensorRT acceleration</li>
+          <li>Hardware-specific optimization</li>
+          <li>Benchmarking</li>
+          <li>Trade-off analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">CI/CD for AI Models</h3>
+        </div>
+        <p class="unit-description">Implement continuous integration and deployment pipelines for AI model lifecycles.</p>
+        <ul class="topics-list">
+          <li>MLOps pipelines</li>
+          <li>Automated testing</li>
+          <li>Model validation</li>
+          <li>Deployment automation</li>
+          <li>Rollback strategies</li>
+          <li>A/B testing</li>
+          <li>Canary deployments</li>
+          <li>Blue-green deployment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Monitoring and Observability</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive monitoring and observability for production AI systems.</p>
+        <ul class="topics-list">
+          <li>Performance monitoring</li>
+          <li>Model drift detection</li>
+          <li>Data quality monitoring</li>
+          <li>Infrastructure metrics</li>
+          <li>Alerting systems</li>
+          <li>Distributed tracing</li>
+          <li>Log aggregation</li>
+          <li>Health checks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Security and Compliance</h3>
+        </div>
+        <p class="unit-description">Ensure security and regulatory compliance for AI model deployments.</p>
+        <ul class="topics-list">
+          <li>Security best practices</li>
+          <li>Data privacy</li>
+          <li>Access control</li>
+          <li>Encryption</li>
+          <li>Vulnerability scanning</li>
+          <li>Compliance frameworks</li>
+          <li>Audit trails</li>
+          <li>Risk management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Edge and Mobile Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy AI models to edge devices and mobile platforms for local inference.</p>
+        <ul class="topics-list">
+          <li>Edge computing concepts</li>
+          <li>Mobile deployment</li>
+          <li>TensorFlow Lite</li>
+          <li>Core ML</li>
+          <li>ONNX Runtime</li>
+          <li>Federated learning</li>
+          <li>Offline capabilities</li>
+          <li>Resource constraints</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Performance and Scaling</h3>
+        </div>
+        <p class="unit-description">Optimize performance and implement scaling strategies for high-traffic AI applications.</p>
+        <ul class="topics-list">
+          <li>Performance profiling</li>
+          <li>Horizontal scaling</li>
+          <li>Vertical scaling</li>
+          <li>Caching strategies</li>
+          <li>Batch processing</li>
+          <li>GPU utilization</li>
+          <li>Load testing</li>
+          <li>Capacity planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Deployment Patterns</h3>
+        </div>
+        <p class="unit-description">Explore advanced deployment patterns and emerging technologies for AI model serving.</p>
+        <ul class="topics-list">
+          <li>Multi-model serving</li>
+          <li>Model ensembles</li>
+          <li>Shadow deployments</li>
+          <li>Feature flags</li>
+          <li>Chaos engineering</li>
+          <li>Service mesh integration</li>
+          <li>Event-driven architectures</li>
+          <li>Future trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Deployment Fundamentals</h1>
+      <p>Understand the key concepts, challenges, and considerations for deploying AI models to production.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development vs Production</h3>
+        <p>Learn the critical differences between development and production environments for AI models.</p>
+        <span class="deploy-badge">Environment</span>
+        <span class="deploy-badge">Requirements</span>
+        <span class="deploy-badge">Constraints</span>
+        <div class="deployment-box">
+          Moving from development to production involves significant changes in requirements, constraints, and operational considerations. Understanding these differences is crucial for successful AI model deployment.
+        </div>
+        <div class="code-example">
+          # Development vs Production Environment<br>
+          environment_comparison = {<br>
+          &nbsp;&nbsp;"development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Model experimentation and validation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"data": "Clean, curated datasets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"performance": "Focus on accuracy and metrics",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"infrastructure": "Flexible, researcher-friendly",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"timeline": "Iterative, experimental",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"monitoring": "Basic validation metrics"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Jupyter notebooks", "Local GPUs", "Small datasets", "Ad-hoc scripts"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"production": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Reliable service delivery to end users",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"data": "Real-world, noisy, streaming data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"performance": "Latency, throughput, availability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"infrastructure": "Scalable, reliable, secure",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"timeline": "24/7 operation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"monitoring": "Comprehensive observability"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["High availability", "Security", "Compliance", "Cost efficiency"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"key_differences": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scale": "Individual requests vs millions of users",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"reliability": "Best effort vs SLA guarantees",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"security": "Open access vs restricted, audited",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"maintenance": "Manual vs automated operations"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Deployment Strategies</h3>
+        <p>Explore different strategies for deploying AI models to minimize risk and maximize reliability.</p>
+        <div class="concept-highlight">
+          Common Deployment Strategies:<br>
+          • Blue-Green: Two identical environments, switch traffic instantly<br>
+          • Canary: Gradual rollout to subset of users<br>
+          • Rolling: Sequential replacement of instances<br>
+          • A/B Testing: Compare multiple model versions<br>
+          • Shadow: Run new model alongside existing without serving traffic
+        </div>
+        <div class="infrastructure-insight">
+          <strong>Risk Mitigation:</strong><br>
+          Each deployment strategy offers different trade-offs between deployment speed, risk exposure, and resource requirements. Choose based on your risk tolerance and infrastructure capabilities.
+        </div>
+        <div class="code-example">
+          # Deployment Strategy Patterns<br>
+          deployment_strategies = {<br>
+          &nbsp;&nbsp;"blue_green": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Two identical production environments",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Deploy new model to green environment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Test green environment thoroughly",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Switch load balancer to green",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Keep blue as fallback"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Instant rollback", "Zero downtime", "Full testing"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Double infrastructure cost", "Complex data consistency"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"canary": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Gradual rollout to increasing user percentages",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Deploy to 5% of traffic",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Monitor metrics and errors",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Gradually increase to 25%, 50%, 100%",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Rollback if issues detected"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Risk limitation", "Real user feedback", "Performance validation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Slower rollout", "Complex monitoring", "Partial user experience"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"shadow": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "New model processes requests but doesn't serve responses",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_cases": ["Performance testing", "Behavior analysis", "Safety validation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Zero user impact", "Real workload testing"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Additional infrastructure", "Complex comparison analysis"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Infrastructure Requirements</h3>
+        <p>Understand the infrastructure components and requirements for AI model deployment.</p>
+        <div class="monitoring-tool">
+          <strong>Core Infrastructure Components:</strong><br>
+          • Compute resources: CPUs, GPUs, memory, storage<br>
+          • Networking: Load balancers, CDNs, API gateways<br>
+          • Storage: Model artifacts, data, logs, metrics<br>
+          • Orchestration: Container platforms, schedulers<br>
+          • Monitoring: Metrics, logs, traces, alerts
+        </div>
+        <div class="scaling-indicator">
+          <strong>
