@@ -1,0 +1,741 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Cloud Services (AWS & GCP)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '☁️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e3a8a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .cloud-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .aws-badge {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .gcp-badge {
+      background: #f0fdf4;
+      color: #14532d;
+    }
+
+    .service-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e3a8a;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .architecture-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .security-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .cost-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>☁️ Cloud Services (AWS & GCP)</h1>
+    <p>Master cloud computing fundamentals and services on Amazon Web Services and Google Cloud Platform</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Cloud Services (AWS & GCP) Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Cloud Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~110</span>
+          <div class="stat-label">Cloud Services</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Architecture Patterns</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Hands-on Labs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Cloud Computing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand core cloud computing concepts, service models, and deployment strategies.</p>
+        <ul class="topics-list">
+          <li>Cloud computing models</li>
+          <li>IaaS, PaaS, SaaS</li>
+          <li>Public vs private cloud</li>
+          <li>Cloud benefits and challenges</li>
+          <li>Shared responsibility model</li>
+          <li>Cloud economics</li>
+          <li>Migration strategies</li>
+          <li>Provider comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">AWS Core Services</h3>
+        </div>
+        <p class="unit-description">Master essential AWS services including compute, storage, and networking.</p>
+        <ul class="topics-list">
+          <li>EC2 instances</li>
+          <li>S3 storage</li>
+          <li>VPC networking</li>
+          <li>IAM security</li>
+          <li>RDS databases</li>
+          <li>Lambda functions</li>
+          <li>CloudFormation</li>
+          <li>CLI and SDKs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">GCP Core Services</h3>
+        </div>
+        <p class="unit-description">Learn Google Cloud Platform's fundamental services and unique capabilities.</p>
+        <ul class="topics-list">
+          <li>Compute Engine</li>
+          <li>Cloud Storage</li>
+          <li>VPC networks</li>
+          <li>Cloud Identity</li>
+          <li>Cloud SQL</li>
+          <li>Cloud Functions</li>
+          <li>Deployment Manager</li>
+          <li>gcloud CLI</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Serverless Computing</h3>
+        </div>
+        <p class="unit-description">Build scalable applications using serverless architectures and functions.</p>
+        <ul class="topics-list">
+          <li>Serverless concepts</li>
+          <li>AWS Lambda</li>
+          <li>Google Cloud Functions</li>
+          <li>Event-driven architecture</li>
+          <li>API Gateway</li>
+          <li>Step Functions</li>
+          <li>Cloud Workflows</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Container Services</h3>
+        </div>
+        <p class="unit-description">Deploy and manage containerized applications using cloud-native solutions.</p>
+        <ul class="topics-list">
+          <li>Container fundamentals</li>
+          <li>Amazon ECS</li>
+          <li>Amazon EKS</li>
+          <li>Google Kubernetes Engine</li>
+          <li>Cloud Run</li>
+          <li>Container registries</li>
+          <li>Service mesh</li>
+          <li>Monitoring containers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Services</h3>
+        </div>
+        <p class="unit-description">Leverage cloud data services for storage, processing, and analytics.</p>
+        <ul class="topics-list">
+          <li>Relational databases</li>
+          <li>NoSQL databases</li>
+          <li>Data warehouses</li>
+          <li>Big data processing</li>
+          <li>ETL services</li>
+          <li>Real-time analytics</li>
+          <li>Data lakes</li>
+          <li>Data governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">AI and Machine Learning</h3>
+        </div>
+        <p class="unit-description">Utilize cloud AI/ML services for building intelligent applications.</p>
+        <ul class="topics-list">
+          <li>AWS AI services</li>
+          <li>Google AI Platform</li>
+          <li>Pre-trained models</li>
+          <li>Custom model training</li>
+          <li>MLOps pipelines</li>
+          <li>AutoML</li>
+          <li>Model deployment</li>
+          <li>Edge inference</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Security and Identity</h3>
+        </div>
+        <p class="unit-description">Implement robust security and identity management in cloud environments.</p>
+        <ul class="topics-list">
+          <li>Identity and access management</li>
+          <li>Multi-factor authentication</li>
+          <li>Encryption at rest</li>
+          <li>Encryption in transit</li>
+          <li>Network security</li>
+          <li>Compliance frameworks</li>
+          <li>Security monitoring</li>
+          <li>Incident response</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Monitoring and Operations</h3>
+        </div>
+        <p class="unit-description">Monitor, log, and operate cloud applications effectively.</p>
+        <ul class="topics-list">
+          <li>CloudWatch monitoring</li>
+          <li>Stackdriver operations</li>
+          <li>Log aggregation</li>
+          <li>Distributed tracing</li>
+          <li>Alerting strategies</li>
+          <li>Performance optimization</li>
+          <li>Cost monitoring</li>
+          <li>Automation tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">DevOps and CI/CD</h3>
+        </div>
+        <p class="unit-description">Implement DevOps practices and continuous integration/deployment pipelines.</p>
+        <ul class="topics-list">
+          <li>Infrastructure as Code</li>
+          <li>AWS CodePipeline</li>
+          <li>Google Cloud Build</li>
+          <li>Git integration</li>
+          <li>Automated testing</li>
+          <li>Blue-green deployments</li>
+          <li>Configuration management</li>
+          <li>Release strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Cost Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize cloud costs through proper resource management and billing strategies.</p>
+        <ul class="topics-list">
+          <li>Cost analysis tools</li>
+          <li>Resource tagging</li>
+          <li>Reserved instances</li>
+          <li>Spot instances</li>
+          <li>Auto-scaling</li>
+          <li>Right-sizing</li>
+          <li>Budget controls</li>
+          <li>FinOps practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Multi-Cloud and Migration</h3>
+        </div>
+        <p class="unit-description">Plan and execute cloud migrations and multi-cloud strategies.</p>
+        <ul class="topics-list">
+          <li>Migration assessment</li>
+          <li>Migration strategies</li>
+          <li>Multi-cloud architectures</li>
+          <li>Hybrid cloud</li>
+          <li>Data migration</li>
+          <li>Application modernization</li>
+          <li>Vendor management</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Cloud Computing Fundamentals</h1>
+      <p>Understand core cloud computing concepts, service models, and deployment strategies.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cloud Computing Models</h3>
+        <p>Learn the fundamental service models that define how cloud resources are delivered and consumed.</p>
+        <span class="cloud-badge">IaaS</span>
+        <span class="cloud-badge">PaaS</span>
+        <span class="cloud-badge">SaaS</span>
+        <div class="service-box">
+          Cloud computing is delivered through three primary service models: Infrastructure as a Service (IaaS), Platform as a Service (PaaS), and Software as a Service (SaaS). Each model provides different levels of control and management responsibility.
+        </div>
+        <div class="code-example">
+          # Cloud Service Models<br>
+          cloud_service_models = {<br>
+          &nbsp;&nbsp;"iaas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Infrastructure as a Service",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provides": ["Virtual machines", "Storage", "Networks", "Load balancers"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_manages": ["OS", "Runtime", "Applications", "Data"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_manages": ["Physical infrastructure", "Virtualization", "Networking"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"aws": "EC2, VPC, EBS",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gcp": "Compute Engine, VPC, Persistent Disks"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_cases": ["Custom applications", "Legacy migrations", "Development environments"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"paas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Platform as a Service",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provides": ["Development platform", "Runtime environment", "Database", "Web server"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_manages": ["Applications", "Data", "Configuration"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_manages": ["OS", "Runtime", "Infrastructure"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"aws": "Elastic Beanstalk, Lambda",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gcp": "App Engine, Cloud Functions"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_cases": ["Web applications", "API development", "Microservices"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"saas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Software as a Service",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provides": ["Complete applications", "User interface", "Data storage"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_manages": ["User data", "Access controls", "Configuration"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_manages": ["Everything else"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Gmail", "Office 365", "Salesforce", "Slack"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_cases": ["Email", "CRM", "Collaboration", "Analytics"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Public vs Private Cloud</h3>
+        <p>Understand different cloud deployment models and their appropriate use cases.</p>
+        <div class="concept-highlight">
+          Cloud Deployment Models:<br>
+          • Public Cloud: Multi-tenant, shared infrastructure, cost-effective<br>
+          • Private Cloud: Dedicated infrastructure, enhanced security and control<br>
+          • Hybrid Cloud: Combination of public and private clouds<br>
+          • Community Cloud: Shared among organizations with common requirements<br>
+          • Multi-Cloud: Using multiple cloud providers simultaneously
+        </div>
+        <div class="architecture-insight">
+          <strong>Deployment Decision Factors:</strong><br>
+          Choose deployment models based on security requirements, compliance needs, cost constraints, performance requirements, and existing infrastructure investments.
+        </div>
+        <div class="code-example">
+          # Cloud Deployment Models<br>
+          deployment_models = {<br>
+          &nbsp;&nbsp;"public_cloud": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Shared infrastructure", "Internet accessible", "Pay-per-use"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Lower costs", "Scalability", "No maintenance", "Global reach"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Less control", "Security concerns", "Compliance limitations"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"best_for": ["Startups", "Variable workloads", "Development/testing", "Web applications"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"private_cloud": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Dedicated infrastructure", "Enhanced security", "Full control"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Security", "Compliance", "Customization", "Performance"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disadvantages": ["Higher costs", "Maintenance overhead", "Limited scalability"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"best_for": ["Regulated industries", "Sensitive data", "Consistent workloads"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"hybrid_cloud": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Combines public and private", "Data/workload portability"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantages": ["Flexibility", "Cost optimization", "Compliance", "Scalability"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Complexity", "Integration", "Management", "Security"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"use_cases": ["Burst to cloud", "Data sensitivity", "Regulatory compliance"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shared Responsibility Model</h3>
+        <p>Understand the division of security and operational responsibilities between cloud providers and customers.</p>
+        <div class="security-tool">
+          <strong>Provider Responsibilities:</strong><br>
+          • Physical security of data centers<br>
+          • Infrastructure and network controls<br>
+          • Host operating system patching<br>
+          • Hypervisor security<br>
+          • Service availability and durability
+        </div>
+        <div class="cost-indicator">
+          <strong>Customer Responsibilities:</strong><br>
+          • Data classification and protection<br>
+          • Identity and access management<br>
+          • Application-level controls<br>
+          • Operating system updates<br>
+          • Network traffic
