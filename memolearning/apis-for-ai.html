@@ -1,0 +1,739 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning APIs for AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7e22ce 0%, #9333ea 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7e22ce, #9333ea);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(126, 34, 206, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔗';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7e22ce;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #9333ea;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7e22ce, #9333ea);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(126, 34, 206, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .api-badge {
+      display: inline-block;
+      background: #faf5ff;
+      color: #7e22ce;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .endpoint-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7e22ce;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .integration-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .security-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .performance-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔗 APIs for AI</h1>
+    <p>Master building, consuming, and deploying APIs for AI applications and services</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">APIs for AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Comprehensive Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">API Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Integration Patterns</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Practical Examples</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">API Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basics of APIs, REST principles, and their role in AI applications.</p>
+        <ul class="topics-list">
+          <li>What are APIs?</li>
+          <li>REST architectural style</li>
+          <li>HTTP methods and status codes</li>
+          <li>API design principles</li>
+          <li>Request and response formats</li>
+          <li>API documentation</li>
+          <li>Best practices</li>
+          <li>Common pitfalls</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Building AI APIs</h3>
+        </div>
+        <p class="unit-description">Learn to create robust APIs that serve machine learning models and AI services.</p>
+        <ul class="topics-list">
+          <li>Model serving architectures</li>
+          <li>API frameworks</li>
+          <li>Request validation</li>
+          <li>Response formatting</li>
+          <li>Error handling</li>
+          <li>Input preprocessing</li>
+          <li>Output postprocessing</li>
+          <li>Batch vs real-time APIs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Consuming AI APIs</h3>
+        </div>
+        <p class="unit-description">Master techniques for integrating with third-party AI services and APIs.</p>
+        <ul class="topics-list">
+          <li>API client development</li>
+          <li>Authentication methods</li>
+          <li>Rate limiting handling</li>
+          <li>Retry strategies</li>
+          <li>SDK integration</li>
+          <li>Popular AI services</li>
+          <li>Cost optimization</li>
+          <li>Vendor comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Authentication and Security</h3>
+        </div>
+        <p class="unit-description">Implement secure authentication and authorization for AI APIs.</p>
+        <ul class="topics-list">
+          <li>API key management</li>
+          <li>OAuth 2.0 flows</li>
+          <li>JWT tokens</li>
+          <li>Role-based access control</li>
+          <li>Input sanitization</li>
+          <li>Data encryption</li>
+          <li>Audit logging</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">API Documentation and Testing</h3>
+        </div>
+        <p class="unit-description">Create comprehensive documentation and robust testing strategies for AI APIs.</p>
+        <ul class="topics-list">
+          <li>OpenAPI specification</li>
+          <li>Interactive documentation</li>
+          <li>Code examples</li>
+          <li>Unit testing APIs</li>
+          <li>Integration testing</li>
+          <li>Load testing</li>
+          <li>Mock services</li>
+          <li>Test automation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Performance and Scaling</h3>
+        </div>
+        <p class="unit-description">Optimize API performance and implement scaling strategies for high-traffic AI services.</p>
+        <ul class="topics-list">
+          <li>Performance monitoring</li>
+          <li>Caching strategies</li>
+          <li>Load balancing</li>
+          <li>Auto-scaling</li>
+          <li>Database optimization</li>
+          <li>CDN integration</li>
+          <li>Async processing</li>
+          <li>Bottleneck identification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Real-time AI APIs</h3>
+        </div>
+        <p class="unit-description">Build real-time AI services using WebSockets, streaming, and event-driven architectures.</p>
+        <ul class="topics-list">
+          <li>WebSocket APIs</li>
+          <li>Server-sent events</li>
+          <li>Streaming responses</li>
+          <li>Real-time predictions</li>
+          <li>Connection management</li>
+          <li>Message queuing</li>
+          <li>Event-driven patterns</li>
+          <li>Latency optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">API Gateway and Management</h3>
+        </div>
+        <p class="unit-description">Learn to manage and orchestrate multiple AI APIs using gateway solutions.</p>
+        <ul class="topics-list">
+          <li>API gateway concepts</li>
+          <li>Traffic routing</li>
+          <li>Rate limiting</li>
+          <li>Request transformation</li>
+          <li>Analytics and monitoring</li>
+          <li>Version management</li>
+          <li>Circuit breakers</li>
+          <li>Service mesh integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">GraphQL for AI</h3>
+        </div>
+        <p class="unit-description">Explore GraphQL as an alternative to REST for flexible AI data querying.</p>
+        <ul class="topics-list">
+          <li>GraphQL fundamentals</li>
+          <li>Schema design</li>
+          <li>Resolvers for AI models</li>
+          <li>Query optimization</li>
+          <li>Subscriptions</li>
+          <li>Federation</li>
+          <li>Caching strategies</li>
+          <li>GraphQL vs REST</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Microservices for AI</h3>
+        </div>
+        <p class="unit-description">Design microservice architectures for scalable AI applications.</p>
+        <ul class="topics-list">
+          <li>Microservices patterns</li>
+          <li>Service decomposition</li>
+          <li>Inter-service communication</li>
+          <li>Data consistency</li>
+          <li>Distributed tracing</li>
+          <li>Container orchestration</li>
+          <li>Service discovery</li>
+          <li>Failure handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">API Monetization</h3>
+        </div>
+        <p class="unit-description">Implement business models and monetization strategies for AI APIs.</p>
+        <ul class="topics-list">
+          <li>Pricing models</li>
+          <li>Usage tracking</li>
+          <li>Billing systems</li>
+          <li>Quota management</li>
+          <li>Subscription handling</li>
+          <li>Free tier strategies</li>
+          <li>Analytics for business</li>
+          <li>Customer onboarding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Future of AI APIs</h3>
+        </div>
+        <p class="unit-description">Explore emerging trends and technologies shaping the future of AI APIs.</p>
+        <ul class="topics-list">
+          <li>Serverless AI APIs</li>
+          <li>Edge computing</li>
+          <li>API standards evolution</li>
+          <li>No-code/low-code integration</li>
+          <li>AI API marketplaces</li>
+          <li>Ethical AI considerations</li>
+          <li>Regulatory compliance</li>
+          <li>Industry trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: API Fundamentals</h1>
+      <p>Understand the basics of APIs, REST principles, and their role in AI applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are APIs?</h3>
+        <p>Learn the fundamental concepts of Application Programming Interfaces and their importance in modern software development.</p>
+        <span class="api-badge">Interface</span>
+        <span class="api-badge">Communication</span>
+        <span class="api-badge">Integration</span>
+        <div class="endpoint-box">
+          An API (Application Programming Interface) is a set of protocols, routines, and tools that specify how software components should interact. APIs enable different applications to communicate and share data seamlessly.
+        </div>
+        <div class="code-example">
+          # API Fundamentals<br>
+          api_concepts = {<br>
+          &nbsp;&nbsp;"definition": "Set of protocols for building and integrating application software",<br>
+          &nbsp;&nbsp;"purpose": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"abstraction": "Hide implementation details",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"modularity": "Enable component reuse",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"interoperability": "Allow different systems to communicate",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scalability": "Support distributed architectures"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"types": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"web_apis": "HTTP-based interfaces for web services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"library_apis": "Programming interfaces for code libraries",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"operating_system_apis": "System calls and OS functions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"database_apis": "Interfaces for data access and manipulation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"ai_context": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"model_serving": "Expose AI models as web services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_integration": "Connect AI systems with data sources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"workflow_orchestration": "Chain multiple AI services",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"third_party_integration": "Access external AI capabilities"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">REST Architectural Style</h3>
+        <p>Master the principles of Representational State Transfer (REST) for building scalable web APIs.</p>
+        <div class="concept-highlight">
+          REST Principles:<br>
+          • Stateless: Each request contains all necessary information<br>
+          • Client-server: Separation of concerns between UI and data storage<br>
+          • Cacheable: Responses should be cacheable when appropriate<br>
+          • Uniform interface: Consistent resource identification and manipulation<br>
+          • Layered system: Support for intermediary layers like proxies<br>
+          • Code on demand (optional): Server can send executable code
+        </div>
+        <div class="integration-insight">
+          <strong>RESTful AI APIs:</strong><br>
+          REST is ideal for AI APIs because it provides a simple, scalable approach to exposing model predictions and managing AI resources. The stateless nature fits well with model inference patterns.
+        </div>
+        <div class="code-example">
+          # REST API Design for AI<br>
+          rest_ai_api = {<br>
+          &nbsp;&nbsp;"resources": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"models": "/api/v1/models",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"predictions": "/api/v1/models/{model_id}/predict",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"training_jobs": "/api/v1/training",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"datasets": "/api/v1/datasets"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"http_methods": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"GET": "Retrieve model info or prediction results",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"POST": "Submit prediction requests or start training",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"PUT": "Update model configuration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"DELETE": "Remove models or stop training jobs"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"example_endpoints": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"list_models": "GET /api/v1/models",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"get_model": "GET /api/v1/models/sentiment-v1",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"predict": "POST /api/v1/models/sentiment-v1/predict",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"batch_predict": "POST /api/v1/models/sentiment-v1/batch"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">HTTP Methods and Status Codes</h3>
+        <p>Understand proper usage of HTTP methods and status codes for meaningful API communication.</p>
+        <div class="security-tool">
+          <strong>HTTP Methods for AI APIs:</strong><br>
+          • GET: Retrieve model metadata, prediction results, training status<br>
+          • POST: Submit predictions, start training, upload data<br>
+          • PUT: Update model configurations, replace datasets<br>
+          • PATCH: Partial updates to model settings<br>
+          • DELETE: Remove models, cancel jobs, clear caches
+        </div>
+        <div class="performance-indicator">
+          <strong>Status Code Best Practices:</strong><br>
+          Use appropriate status codes to help clients understand response outcomes and implement proper error handling. This is crucial for robust AI API integrations.
+        </div>
+        <div class="code-example">
+          # HTTP Status Codes for AI APIs<br>
+          ai_api_status_codes = {<br>
+          &nbsp;&nbsp;"success_codes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"200": "Prediction completed successfully",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"201": "Model created or training job started",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"202": "Prediction request accepted for processing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"204": "Model deleted successfully"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"client_error_codes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"400": "Invalid input data format",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"401": "Authentication required",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"403": "Insufficient permissions for model access",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"404": "Model not found",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"422": "Input validation failed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"429": "Rate limit exceeded"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"server_error_codes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"500": "Model inference failed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"502": "Upstream model service unavailable",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"503": "Service temporarily overloade
