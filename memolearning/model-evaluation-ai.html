@@ -1,0 +1,734 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Model Evaluation & AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #78350f, #92400e);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(120, 53, 15, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #78350f;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #78350f, #92400e);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(120, 53, 15, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .eval-badge {
+      display: inline-block;
+      background: #fef7ed;
+      color: #78350f;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .metrics-box {
+      background: #fef7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #78350f;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .validation-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .testing-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .bias-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Model Evaluation & AI</h1>
+    <p>Master the critical skills of assessing, validating, and improving AI model performance</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Model Evaluation & AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Essential Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Evaluation Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Metrics & Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Practical Techniques</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Evaluation Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the principles and importance of proper model evaluation in AI systems.</p>
+        <ul class="topics-list">
+          <li>Why evaluation matters</li>
+          <li>Evaluation framework</li>
+          <li>Types of evaluation</li>
+          <li>Evaluation lifecycle</li>
+          <li>Common pitfalls</li>
+          <li>Stakeholder perspectives</li>
+          <li>Quality assurance</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Data Splitting and Validation</h3>
+        </div>
+        <p class="unit-description">Master techniques for properly splitting data and validating model performance.</p>
+        <ul class="topics-list">
+          <li>Train/validation/test splits</li>
+          <li>Cross-validation methods</li>
+          <li>Stratified sampling</li>
+          <li>Time series validation</li>
+          <li>Nested cross-validation</li>
+          <li>Bootstrap methods</li>
+          <li>Data leakage prevention</li>
+          <li>Sample size considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Classification Metrics</h3>
+        </div>
+        <p class="unit-description">Learn comprehensive metrics for evaluating classification model performance.</p>
+        <ul class="topics-list">
+          <li>Confusion matrices</li>
+          <li>Accuracy and its limitations</li>
+          <li>Precision and recall</li>
+          <li>F1-score and F-beta</li>
+          <li>ROC curves and AUC</li>
+          <li>Precision-recall curves</li>
+          <li>Multi-class metrics</li>
+          <li>Class imbalance handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Regression Metrics</h3>
+        </div>
+        <p class="unit-description">Explore metrics and techniques for evaluating regression model performance.</p>
+        <ul class="topics-list">
+          <li>Mean squared error</li>
+          <li>Mean absolute error</li>
+          <li>R-squared and variants</li>
+          <li>Root mean squared error</li>
+          <li>Mean absolute percentage error</li>
+          <li>Residual analysis</li>
+          <li>Prediction intervals</li>
+          <li>Heteroscedasticity detection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Overfitting and Underfitting</h3>
+        </div>
+        <p class="unit-description">Understand bias-variance tradeoff and techniques to detect and prevent overfitting.</p>
+        <ul class="topics-list">
+          <li>Bias-variance decomposition</li>
+          <li>Overfitting detection</li>
+          <li>Underfitting identification</li>
+          <li>Learning curves</li>
+          <li>Validation curves</li>
+          <li>Regularization techniques</li>
+          <li>Early stopping</li>
+          <li>Model complexity analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Statistical Testing</h3>
+        </div>
+        <p class="unit-description">Apply statistical methods to compare models and assess significance of results.</p>
+        <ul class="topics-list">
+          <li>Hypothesis testing</li>
+          <li>Paired t-tests</li>
+          <li>McNemar's test</li>
+          <li>Wilcoxon signed-rank test</li>
+          <li>Confidence intervals</li>
+          <li>Multiple comparisons</li>
+          <li>Effect size estimation</li>
+          <li>Statistical power</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Model Interpretability</h3>
+        </div>
+        <p class="unit-description">Learn techniques to understand and explain model decisions and behavior.</p>
+        <ul class="topics-list">
+          <li>Interpretability vs explainability</li>
+          <li>Feature importance</li>
+          <li>SHAP values</li>
+          <li>LIME explanations</li>
+          <li>Permutation importance</li>
+          <li>Partial dependence plots</li>
+          <li>Global vs local explanations</li>
+          <li>Model-agnostic methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Fairness and Bias Detection</h3>
+        </div>
+        <p class="unit-description">Evaluate models for fairness and detect various types of bias in AI systems.</p>
+        <ul class="topics-list">
+          <li>Types of bias</li>
+          <li>Fairness definitions</li>
+          <li>Demographic parity</li>
+          <li>Equalized odds</li>
+          <li>Individual fairness</li>
+          <li>Bias detection methods</li>
+          <li>Mitigation strategies</li>
+          <li>Ethical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">A/B Testing for ML</h3>
+        </div>
+        <p class="unit-description">Design and analyze experiments to evaluate model performance in production.</p>
+        <ul class="topics-list">
+          <li>Experimental design</li>
+          <li>Randomization strategies</li>
+          <li>Statistical power analysis</li>
+          <li>Multi-armed bandits</li>
+          <li>Online evaluation</li>
+          <li>Treatment effect estimation</li>
+          <li>Causal inference</li>
+          <li>Practical considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Domain-Specific Evaluation</h3>
+        </div>
+        <p class="unit-description">Learn specialized evaluation techniques for different AI application domains.</p>
+        <ul class="topics-list">
+          <li>Computer vision metrics</li>
+          <li>NLP evaluation</li>
+          <li>Recommender systems</li>
+          <li>Time series forecasting</li>
+          <li>Reinforcement learning</li>
+          <li>Information retrieval</li>
+          <li>Anomaly detection</li>
+          <li>Generative models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Production Monitoring</h3>
+        </div>
+        <p class="unit-description">Monitor model performance and detect degradation in production environments.</p>
+        <ul class="topics-list">
+          <li>Model drift detection</li>
+          <li>Data drift monitoring</li>
+          <li>Performance monitoring</li>
+          <li>Concept drift</li>
+          <li>Real-time evaluation</li>
+          <li>Alerting systems</li>
+          <li>Model retraining triggers</li>
+          <li>MLOps integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge evaluation methods and emerging challenges in AI assessment.</p>
+        <ul class="topics-list">
+          <li>Uncertainty quantification</li>
+          <li>Robustness testing</li>
+          <li>Adversarial evaluation</li>
+          <li>Human-in-the-loop evaluation</li>
+          <li>Multi-objective optimization</li>
+          <li>Evaluation automation</li>
+          <li>Benchmark design</li>
+          <li>Future challenges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Evaluation Fundamentals</h1>
+      <p>Understand the principles and importance of proper model evaluation in AI systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Why Evaluation Matters</h3>
+        <p>Understand the critical importance of rigorous evaluation in building reliable AI systems.</p>
+        <span class="eval-badge">Reliability</span>
+        <span class="eval-badge">Trust</span>
+        <span class="eval-badge">Performance</span>
+        <div class="metrics-box">
+          Proper evaluation is the cornerstone of trustworthy AI. Without rigorous assessment, we cannot determine if a model will perform reliably in real-world scenarios, potentially leading to costly failures or harmful decisions.
+        </div>
+        <div class="code-example">
+          # Importance of Model Evaluation<br>
+          evaluation_importance = {<br>
+          &nbsp;&nbsp;"reliability_assurance": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Ensures model performs consistently",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"risks_without": ["Unpredictable failures", "Production incidents", "User dissatisfaction"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"benefits": ["Confident deployment", "Risk mitigation", "Quality assurance"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"performance_optimization": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Identifies areas for improvement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"enables": ["Model comparison", "Hyperparameter tuning", "Architecture selection"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"outcomes": ["Better accuracy", "Improved efficiency", "Reduced errors"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"stakeholder_trust": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Builds confidence in AI systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"stakeholders": ["Users", "Regulators", "Business leaders", "Technical teams"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["Transparency", "Reproducibility", "Documented metrics"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"business_impact": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cost_savings": "Prevents expensive post-deployment fixes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"revenue_protection": "Maintains customer satisfaction",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"compliance": "Meets regulatory requirements"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Evaluation Framework</h3>
+        <p>Learn the systematic approach to designing comprehensive evaluation strategies.</p>
+        <div class="concept-highlight">
+          Key Framework Components:<br>
+          • Define evaluation objectives and success criteria<br>
+          • Select appropriate metrics for the problem domain<br>
+          • Design robust validation methodology<br>
+          • Plan for multiple evaluation perspectives<br>
+          • Consider computational and time constraints
+        </div>
+        <div class="validation-insight">
+          <strong>Multi-Dimensional Evaluation:</strong><br>
+          Modern AI systems require evaluation across multiple dimensions: accuracy, fairness, robustness, interpretability, efficiency, and usability. No single metric captures all aspects of model quality.
+        </div>
+        <div class="code-example">
+          # Evaluation Framework Structure<br>
+          evaluation_framework = {<br>
+          &nbsp;&nbsp;"objectives": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"primary": "Main performance goal (e.g., accuracy, F1-score)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"secondary": ["Fairness", "Robustness", "Interpretability", "Efficiency"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"constraints": ["Latency requirements", "Memory limits", "Cost targets"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"evaluation_phases": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"development": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Model selection and hyperparameter tuning",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Cross-validation", "Hold-out validation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"frequency": "Continuous during development"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pre_deployment": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Final performance assessment",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Test set evaluation", "Stress testing"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"criteria": "Go/no-go decision gates"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"production": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"purpose": "Ongoing monitoring and validation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"methods": ["A/B testing", "Performance monitoring"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"triggers": "Model update or retraining decisions"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Pitfalls</h3>
+        <p>Identify and avoid the most frequent mistakes in model evaluation practices.</p>
+        <div class="testing-tool">
+          <strong>Major Evaluation Pitfalls:</strong><br>
+          • Data leakage: Information from test set influencing training<br>
+          • Inappropriate metrics: Using accuracy for imbalanced datasets<br>
+          • Overfitting to validation set: Multiple testing without correction<br>
+          • Insufficient test data: Drawing conclusions from small samples<br>
+          • Ignoring real-world constraints: Laboratory vs production differences
+        </div>
+        <div class="bias-indicator">
+          <strong>Selection Bias:</strong><br>
+          Using non-representative data for evaluation can lead to overly optimistic performance estimates. Ensure your test data reflects the real-world distribution and edge cases.
+        </div>
+        <div class="code-example">
+          # Common Evaluation Pitfalls<br>
+          evaluation_pitfalls = {<br>
+          &nbsp;&nbsp;"data_leakage": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Test information influences training",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Using future data to predict past events",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Preprocessing before train/test split",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Feature selection on entire dataset"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"prevention": ["Proper data splitting", "Pipeline design", "Temporal awareness"]<br>
+          &nbsp;&nbsp;},<br
