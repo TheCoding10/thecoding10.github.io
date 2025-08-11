@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Introduction to Cybersecurity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🛡️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ef4444;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .security-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .threat-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .defense-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .protection-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .vulnerability-indicator {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🛡️ Introduction to Cybersecurity</h1>
+    <p>Learn the fundamentals of protecting digital assets and understanding cyber threats</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Introduction to Cybersecurity Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Security Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">Security Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Threat Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Defense Techniques</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Cybersecurity Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the core concepts, principles, and importance of cybersecurity.</p>
+        <ul class="topics-list">
+          <li>What is cybersecurity?</li>
+          <li>CIA triad</li>
+          <li>Security objectives</li>
+          <li>Threat landscape</li>
+          <li>Attack vectors</li>
+          <li>Risk assessment</li>
+          <li>Security frameworks</li>
+          <li>Career pathways</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Threats and Vulnerabilities</h3>
+        </div>
+        <p class="unit-description">Learn about different types of cyber threats and common vulnerabilities.</p>
+        <ul class="topics-list">
+          <li>Malware types</li>
+          <li>Social engineering</li>
+          <li>Phishing attacks</li>
+          <li>Advanced persistent threats</li>
+          <li>Insider threats</li>
+          <li>Zero-day exploits</li>
+          <li>Vulnerability assessment</li>
+          <li>Threat intelligence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Cryptography Basics</h3>
+        </div>
+        <p class="unit-description">Explore fundamental cryptographic concepts and their applications in security.</p>
+        <ul class="topics-list">
+          <li>Encryption principles</li>
+          <li>Symmetric encryption</li>
+          <li>Asymmetric encryption</li>
+          <li>Hash functions</li>
+          <li>Digital signatures</li>
+          <li>Public key infrastructure</li>
+          <li>Cryptographic protocols</li>
+          <li>Key management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Network Security</h3>
+        </div>
+        <p class="unit-description">Learn to secure networks and understand network-based attacks and defenses.</p>
+        <ul class="topics-list">
+          <li>Network protocols</li>
+          <li>Firewalls</li>
+          <li>Intrusion detection systems</li>
+          <li>VPN technologies</li>
+          <li>Network monitoring</li>
+          <li>Wireless security</li>
+          <li>Network segmentation</li>
+          <li>DDoS protection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Web Application Security</h3>
+        </div>
+        <p class="unit-description">Understand web application vulnerabilities and security best practices.</p>
+        <ul class="topics-list">
+          <li>OWASP Top 10</li>
+          <li>SQL injection</li>
+          <li>Cross-site scripting</li>
+          <li>Authentication flaws</li>
+          <li>Session management</li>
+          <li>Input validation</li>
+          <li>Secure coding practices</li>
+          <li>Web application testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Identity and Access Management</h3>
+        </div>
+        <p class="unit-description">Learn to manage user identities and control access to systems and data.</p>
+        <ul class="topics-list">
+          <li>Authentication methods</li>
+          <li>Multi-factor authentication</li>
+          <li>Authorization models</li>
+          <li>Role-based access control</li>
+          <li>Single sign-on</li>
+          <li>Directory services</li>
+          <li>Privileged access management</li>
+          <li>Identity governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Incident Response</h3>
+        </div>
+        <p class="unit-description">Develop skills for detecting, responding to, and recovering from security incidents.</p>
+        <ul class="topics-list">
+          <li>Incident response lifecycle</li>
+          <li>Detection and analysis</li>
+          <li>Containment strategies</li>
+          <li>Evidence collection</li>
+          <li>Recovery procedures</li>
+          <li>Lessons learned</li>
+          <li>Communication plans</li>
+          <li>Team coordination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Security Architecture</h3>
+        </div>
+        <p class="unit-description">Design secure systems and understand security architecture principles.</p>
+        <ul class="topics-list">
+          <li>Security design principles</li>
+          <li>Defense in depth</li>
+          <li>Zero trust architecture</li>
+          <li>Secure development lifecycle</li>
+          <li>Threat modeling</li>
+          <li>Security patterns</li>
+          <li>Risk management</li>
+          <li>Architecture reviews</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Compliance and Governance</h3>
+        </div>
+        <p class="unit-description">Understand regulatory requirements and security governance frameworks.</p>
+        <ul class="topics-list">
+          <li>Regulatory landscape</li>
+          <li>GDPR compliance</li>
+          <li>SOX requirements</li>
+          <li>PCI DSS standards</li>
+          <li>Security policies</li>
+          <li>Audit processes</li>
+          <li>Risk management</li>
+          <li>Governance frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Security Tools and Technologies</h3>
+        </div>
+        <p class="unit-description">Learn to use essential cybersecurity tools and technologies.</p>
+        <ul class="topics-list">
+          <li>Security information and event management</li>
+          <li>Vulnerability scanners</li>
+          <li>Penetration testing tools</li>
+          <li>Antivirus solutions</li>
+          <li>Endpoint protection</li>
+          <li>Security orchestration</li>
+          <li>Threat hunting tools</li>
+          <li>Digital forensics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Emerging Threats</h3>
+        </div>
+        <p class="unit-description">Explore new and evolving cybersecurity threats and challenges.</p>
+        <ul class="topics-list">
+          <li>IoT security</li>
+          <li>Cloud security</li>
+          <li>AI and ML threats</li>
+          <li>Supply chain attacks</li>
+          <li>Ransomware evolution</li>
+          <li>State-sponsored attacks</li>
+          <li>Mobile security</li>
+          <li>Future trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Practical Cybersecurity</h3>
+        </div>
+        <p class="unit-description">Apply cybersecurity knowledge through hands-on exercises and real-world scenarios.</p>
+        <ul class="topics-list">
+          <li>Lab exercises</li>
+          <li>Capture the flag</li>
+          <li>Security assessments</li>
+          <li>Incident simulations</li>
+          <li>Case studies</li>
+          <li>Best practices</li>
+          <li>Continuous learning</li>
+          <li>Professional development</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Cybersecurity Fundamentals</h1>
+      <p>Understand the core concepts, principles, and importance of cybersecurity.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Cybersecurity?</h3>
+        <p>Learn the definition, scope, and importance of cybersecurity in today's digital world.</p>
+        <span class="security-badge">Definition</span>
+        <span class="security-badge">Scope</span>
+        <span class="security-badge">Importance</span>
+        <div class="threat-box">
+          Cybersecurity is the practice of protecting systems, networks, and data from digital attacks, unauthorized access, and damage. It encompasses technologies, processes, and practices designed to safeguard the confidentiality, integrity, and availability of information.
+        </div>
+        <div class="code-example">
+          # Cybersecurity Definition Framework<br>
+          cybersecurity = {<br>
+          &nbsp;&nbsp;"definition": "Protection of digital assets from cyber threats",<br>
+          &nbsp;&nbsp;"core_objectives": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"confidentiality": "Ensure information is accessible only to authorized users",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integrity": "Maintain accuracy and completeness of data",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"availability": "Ensure systems and data are accessible when needed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authentication": "Verify identity of users and systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authorization": "Control access to resources based on permissions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"non_repudiation": "Prevent denial of actions performed"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"scope": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"information_security": "Protecting data in all forms",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"network_security": "Securing network infrastructure",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"application_security": "Protecting software applications",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"endpoint_security": "Securing individual devices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cloud_security": "Protecting cloud-based resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"operational_security": "Securing business processes"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"importance": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Protect sensitive data and privacy",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Maintain business continuity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Comply with regulations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Preserve reputation and trust",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Prevent financial losses"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">CIA Triad</h3>
+        <p>Master the foundational security model of Confidentiality, Integrity, and Availability.</p>
+        <div class="concept-highlight">
+          CIA Triad Components:<br>
+          • Confidentiality: Information is accessible only to authorized users<br>
+          • Integrity: Information remains accurate and unaltered<br>
+          • Availability: Information and systems are accessible when needed<br>
+          These three principles form the foundation of all cybersecurity efforts
+        </div>
+        <div class="defense-insight">
+          <strong>Balancing the Triad:</strong><br>
+          Security measures often involve trade-offs between the three principles. For example, increasing security (confidentiality) might reduce system performance (availability). Understanding these trade-offs is crucial for effective security design.
+        </div>
+        <div class="code-example">
+          # CIA Triad Implementation<br>
+          cia_triad = {<br>
+          &nbsp;&nbsp;"confidentiality": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Protecting information from unauthorized disclosure",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"threats": ["Data breaches", "Eavesdropping", "Insider threats", "Social engineering"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Encryption",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Access controls",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Authentication",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data classification",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Privacy protection"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Medical records", "Financial data", "Trade secrets"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"integrity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Ensuring information accuracy and preventing unauthorized changes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"threats": ["Data tampering", "Unauthorized modifications", "Malware", "System errors"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Digital signatures",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Hash functions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Version control",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Checksums",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Access logging"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Financial transactions", "Legal documents", "Software code"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"availability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Ensuring systems and data are accessible when needed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"threats": ["DDoS attacks", "Hardware failures", "Natural disasters", "Power outages"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Redundancy",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Backup systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Disaster recovery",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Load balancing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Maintenance"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Emergency services", "E-commerce sites", "Communication systems"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Landscape</h3>
+        <p>Understand the current cybersecurity threat environment and its evolution.</p>
+        <div class="protection-tool">
+          <strong>Current Threat Categories:</strong><br>
+          • Cybercriminals seeking financial gain<br>
+          • Nation-state actors pursuing strategic objectives<br>
+          • Hacktivists promoting ideological causes<br>
+          • Insider threats from within organizations<br>
+          • Script kiddies using existing tools
+        </div>
+        <div class="vulnerability-indicator">
+          <strong>Threat Evolution:</strong>
