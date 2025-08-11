@@ -1,0 +1,737 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Responsible AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #713f12 0%, #a16207 50%, #ca8a04 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #713f12, #a16207);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(113, 63, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #713f12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #a16207;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #713f12, #a16207);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(113, 63, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .ethics-badge {
+      display: inline-block;
+      background: #fffbeb;
+      color: #713f12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .principle-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .bias-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .fairness-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .governance-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ Responsible AI</h1>
+    <p>Learn to develop and deploy AI systems that are ethical, fair, transparent, and beneficial to society</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Responsible AI Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Ethics Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~70</span>
+          <div class="stat-label">Ethical Principles</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Case Studies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">AI Ethics Foundations</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental ethical principles and frameworks for responsible AI development.</p>
+        <ul class="topics-list">
+          <li>Ethical principles</li>
+          <li>Moral frameworks</li>
+          <li>Stakeholder analysis</li>
+          <li>Value alignment</li>
+          <li>Ethical decision-making</li>
+          <li>Cultural considerations</li>
+          <li>Historical context</li>
+          <li>Future implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Bias and Fairness</h3>
+        </div>
+        <p class="unit-description">Learn to identify, measure, and mitigate bias in AI systems for fair outcomes.</p>
+        <ul class="topics-list">
+          <li>Types of bias</li>
+          <li>Sources of bias</li>
+          <li>Fairness definitions</li>
+          <li>Bias detection methods</li>
+          <li>Mitigation strategies</li>
+          <li>Fairness metrics</li>
+          <li>Trade-offs</li>
+          <li>Evaluation techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Transparency and Explainability</h3>
+        </div>
+        <p class="unit-description">Build transparent and explainable AI systems that users can understand and trust.</p>
+        <ul class="topics-list">
+          <li>Interpretability concepts</li>
+          <li>Explanation methods</li>
+          <li>Model transparency</li>
+          <li>User-centered explanations</li>
+          <li>Visualization techniques</li>
+          <li>Trust and understanding</li>
+          <li>Communication strategies</li>
+          <li>Regulatory requirements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Privacy and Data Protection</h3>
+        </div>
+        <p class="unit-description">Implement privacy-preserving techniques and comply with data protection regulations.</p>
+        <ul class="topics-list">
+          <li>Privacy principles</li>
+          <li>Data minimization</li>
+          <li>Consent mechanisms</li>
+          <li>Anonymization techniques</li>
+          <li>Differential privacy</li>
+          <li>Federated learning</li>
+          <li>GDPR compliance</li>
+          <li>Privacy by design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Accountability and Governance</h3>
+        </div>
+        <p class="unit-description">Establish governance frameworks and accountability mechanisms for AI systems.</p>
+        <ul class="topics-list">
+          <li>Governance frameworks</li>
+          <li>Accountability mechanisms</li>
+          <li>Responsibility assignment</li>
+          <li>Audit processes</li>
+          <li>Risk management</li>
+          <li>Compliance monitoring</li>
+          <li>Incident response</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Safety and Robustness</h3>
+        </div>
+        <p class="unit-description">Ensure AI systems are safe, reliable, and robust against adversarial attacks.</p>
+        <ul class="topics-list">
+          <li>Safety principles</li>
+          <li>Risk assessment</li>
+          <li>Failure modes</li>
+          <li>Adversarial robustness</li>
+          <li>Testing strategies</li>
+          <li>Monitoring systems</li>
+          <li>Incident prevention</li>
+          <li>Recovery procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Human-AI Interaction</h3>
+        </div>
+        <p class="unit-description">Design ethical human-AI interactions that preserve human agency and dignity.</p>
+        <ul class="topics-list">
+          <li>Human-centered design</li>
+          <li>Agency preservation</li>
+          <li>Meaningful human control</li>
+          <li>User empowerment</li>
+          <li>Automation levels</li>
+          <li>Trust calibration</li>
+          <li>User experience ethics</li>
+          <li>Digital wellbeing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Societal Impact</h3>
+        </div>
+        <p class="unit-description">Assess and address the broader societal implications of AI systems.</p>
+        <ul class="topics-list">
+          <li>Impact assessment</li>
+          <li>Social implications</li>
+          <li>Economic effects</li>
+          <li>Environmental impact</li>
+          <li>Digital divide</li>
+          <li>Future of work</li>
+          <li>Democratic values</li>
+          <li>Global perspectives</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Regulatory Landscape</h3>
+        </div>
+        <p class="unit-description">Navigate the evolving regulatory environment for AI systems across different jurisdictions.</p>
+        <ul class="topics-list">
+          <li>Regulatory frameworks</li>
+          <li>Compliance requirements</li>
+          <li>International standards</li>
+          <li>Sector-specific rules</li>
+          <li>Legal liability</li>
+          <li>Policy development</li>
+          <li>Global coordination</li>
+          <li>Future regulations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Ethical AI Design</h3>
+        </div>
+        <p class="unit-description">Integrate ethical considerations into the AI development lifecycle from design to deployment.</p>
+        <ul class="topics-list">
+          <li>Ethics by design</li>
+          <li>Value-sensitive design</li>
+          <li>Ethical requirements</li>
+          <li>Design principles</li>
+          <li>Development processes</li>
+          <li>Team training</li>
+          <li>Tools and methods</li>
+          <li>Quality assurance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Industry Applications</h3>
+        </div>
+        <p class="unit-description">Explore responsible AI practices across different industries and use cases.</p>
+        <ul class="topics-list">
+          <li>Healthcare AI ethics</li>
+          <li>Financial AI fairness</li>
+          <li>Criminal justice systems</li>
+          <li>Hiring and recruitment</li>
+          <li>Education technology</li>
+          <li>Autonomous vehicles</li>
+          <li>Content moderation</li>
+          <li>Smart cities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Future of Responsible AI</h3>
+        </div>
+        <p class="unit-description">Examine emerging challenges and future directions in responsible AI development.</p>
+        <ul class="topics-list">
+          <li>Emerging challenges</li>
+          <li>Technology trends</li>
+          <li>Research frontiers</li>
+          <li>Global collaboration</li>
+          <li>Education needs</li>
+          <li>Professional development</li>
+          <li>Advocacy and action</li>
+          <li>Vision for the future</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: AI Ethics Foundations</h1>
+      <p>Understand the fundamental ethical principles and frameworks for responsible AI development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ethical Principles</h3>
+        <p>Learn the core ethical principles that should guide AI development and deployment decisions.</p>
+        <span class="ethics-badge">Beneficence</span>
+        <span class="ethics-badge">Non-maleficence</span>
+        <span class="ethics-badge">Autonomy</span>
+        <span class="ethics-badge">Justice</span>
+        <div class="principle-box">
+          The four fundamental principles of AI ethics are: Beneficence (do good), Non-maleficence (do no harm), Autonomy (respect for persons), and Justice (fairness). These principles provide a foundation for ethical decision-making in AI development.
+        </div>
+        <div class="code-example">
+          # Core AI Ethics Principles<br>
+          ethics_principles = {<br>
+          &nbsp;&nbsp;"beneficence": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "AI should benefit individuals and society",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Improve human wellbeing",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Solve important problems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Enhance human capabilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Create positive social impact"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"considerations": ["Intended benefits", "Unintended consequences", "Distribution of benefits"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"non_maleficence": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "AI should not cause harm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"harm_types": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Physical harm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Psychological harm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Economic harm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Social harm",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Environmental harm"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mitigation": ["Risk assessment", "Safety measures", "Monitoring systems"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"autonomy": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Respect for human agency and self-determination",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Informed consent",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Meaningful choice",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Human oversight",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Right to explanation"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": "Design systems that empower rather than replace human judgment"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"justice": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Fair distribution of benefits and burdens",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"dimensions": ["Distributive justice", "Procedural justice", "Recognition justice"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus_areas": ["Bias prevention", "Equal access", "Fair outcomes"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Moral Frameworks</h3>
+        <p>Explore different moral frameworks and how they apply to AI development and decision-making.</p>
+        <div class="concept-highlight">
+          Major Ethical Frameworks:<br>
+          • Consequentialism: Focus on outcomes and consequences<br>
+          • Deontology: Focus on duties and rules<br>
+          • Virtue Ethics: Focus on character and virtues<br>
+          • Care Ethics: Focus on relationships and care<br>
+          • Principlism: Combining multiple principles
+        </div>
+        <div class="bias-insight">
+          <strong>Framework Application:</strong><br>
+          Different ethical frameworks may lead to different conclusions about AI decisions. Understanding multiple perspectives helps create more robust ethical reasoning and better stakeholder engagement.
+        </div>
+        <div class="code-example">
+          # Ethical Frameworks for AI<br>
+          ethical_frameworks = {<br>
+          &nbsp;&nbsp;"consequentialism": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Outcomes and consequences",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ai_application": "Evaluate AI based on overall utility and outcomes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strengths": ["Clear evaluation criteria", "Practical decision-making"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Difficulty predicting all consequences", "May justify harmful means"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Deploy AI if overall societal benefit outweighs risks"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"deontology": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Duties, rights, and rules",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ai_application": "Establish inviolable rules for AI behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"strengths": ["Clear moral rules", "Protects individual rights"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Rigid rules may conflict", "Difficulty in rule specification"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Never use AI to deceive users, regardless of benefits"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"virtue_ethics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"focus": "Character traits and virtues",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ai_application": "Design AI to embody and promote virtues",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"virtues": ["Honesty", "Compassion", "Justice", "Prudence"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": "AI should demonstrate and encourage virtuous behavior",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "Design AI assistants to be honest and trustworthy"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Value Alignment</h3>
+        <p>Understand how to align AI systems with human values and diverse stakeholder interests.</p>
+        <div class="fairness-tool">
+          <strong>Value Identification Process:</strong><br>
+          • Stakeholder mapping and engagement<br>
+          • Value elicitation through surveys and interviews<br>
+          • Cross-cultural value analysis<br>
+          • Conflict resolution and prioritization<br>
+          • Iterative refinement and validation
+        </div>
+        <div class="governance-indicator">
+          <strong>Alignment Challenges:</strong><br>
+          Values differ across cultures, individuals, and contexts. Perfect alignment is impossible, but systems should be designed to respect core
