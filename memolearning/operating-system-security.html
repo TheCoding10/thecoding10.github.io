@@ -1,0 +1,740 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Operating System Security</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🖥️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .os-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .system-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .security-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .control-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .vulnerability-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🖥️ Operating System Security</h1>
+    <p>Master the fundamentals of securing operating systems and system-level security controls</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Operating System Security Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Security Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">OS Security Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Security Mechanisms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Practical Techniques</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">OS Security Foundations</h3>
+        </div>
+        <p class="unit-description">Understand the fundamental security concepts and architecture of operating systems.</p>
+        <ul class="topics-list">
+          <li>OS security principles</li>
+          <li>Security architecture</li>
+          <li>Threat models</li>
+          <li>Security boundaries</li>
+          <li>Reference monitor</li>
+          <li>Trusted computing base</li>
+          <li>Security kernels</li>
+          <li>Assurance levels</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Authentication Systems</h3>
+        </div>
+        <p class="unit-description">Learn how operating systems authenticate users and manage credentials.</p>
+        <ul class="topics-list">
+          <li>Authentication mechanisms</li>
+          <li>Password systems</li>
+          <li>Multi-factor authentication</li>
+          <li>Biometric authentication</li>
+          <li>Single sign-on</li>
+          <li>Credential storage</li>
+          <li>Account management</li>
+          <li>Authentication protocols</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Access Control Models</h3>
+        </div>
+        <p class="unit-description">Master different access control models and their implementation in operating systems.</p>
+        <ul class="topics-list">
+          <li>Discretionary access control</li>
+          <li>Mandatory access control</li>
+          <li>Role-based access control</li>
+          <li>Attribute-based access control</li>
+          <li>Access control lists</li>
+          <li>Capabilities</li>
+          <li>Security labels</li>
+          <li>Policy enforcement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Memory Protection</h3>
+        </div>
+        <p class="unit-description">Understand memory protection mechanisms and defenses against memory-based attacks.</p>
+        <ul class="topics-list">
+          <li>Virtual memory</li>
+          <li>Address space layout</li>
+          <li>Memory segmentation</li>
+          <li>Page protection</li>
+          <li>Buffer overflow protection</li>
+          <li>Data execution prevention</li>
+          <li>Address space randomization</li>
+          <li>Memory encryption</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">File System Security</h3>
+        </div>
+        <p class="unit-description">Learn file system security features and protection mechanisms.</p>
+        <ul class="topics-list">
+          <li>File permissions</li>
+          <li>Access control enforcement</li>
+          <li>File encryption</li>
+          <li>Integrity protection</li>
+          <li>Audit trails</li>
+          <li>Backup security</li>
+          <li>Secure deletion</li>
+          <li>File system hardening</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Process Security</h3>
+        </div>
+        <p class="unit-description">Explore process isolation, privilege management, and secure execution environments.</p>
+        <ul class="topics-list">
+          <li>Process isolation</li>
+          <li>Privilege separation</li>
+          <li>Sandboxing</li>
+          <li>Containers</li>
+          <li>Virtualization security</li>
+          <li>System calls</li>
+          <li>Resource limits</li>
+          <li>Process monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Network Security</h3>
+        </div>
+        <p class="unit-description">Understand operating system network security features and protocols.</p>
+        <ul class="topics-list">
+          <li>Network stack security</li>
+          <li>Firewall integration</li>
+          <li>VPN support</li>
+          <li>Secure protocols</li>
+          <li>Network monitoring</li>
+          <li>Intrusion detection</li>
+          <li>Traffic filtering</li>
+          <li>Network isolation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">System Hardening</h3>
+        </div>
+        <p class="unit-description">Learn techniques for hardening operating systems against attacks.</p>
+        <ul class="topics-list">
+          <li>Security baselines</li>
+          <li>Service management</li>
+          <li>Security configurations</li>
+          <li>Patch management</li>
+          <li>Security templates</li>
+          <li>Compliance frameworks</li>
+          <li>Vulnerability assessment</li>
+          <li>Security benchmarks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Malware Protection</h3>
+        </div>
+        <p class="unit-description">Explore operating system defenses against malware and malicious code.</p>
+        <ul class="topics-list">
+          <li>Malware detection</li>
+          <li>Antivirus integration</li>
+          <li>Behavior monitoring</li>
+          <li>Code signing</li>
+          <li>Application whitelisting</li>
+          <li>Quarantine mechanisms</li>
+          <li>Real-time protection</li>
+          <li>Rootkit detection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Logging and Auditing</h3>
+        </div>
+        <p class="unit-description">Master system logging, auditing, and security monitoring capabilities.</p>
+        <ul class="topics-list">
+          <li>Security event logging</li>
+          <li>Audit policies</li>
+          <li>Log management</li>
+          <li>Event correlation</li>
+          <li>Forensic analysis</li>
+          <li>Compliance reporting</li>
+          <li>Log protection</li>
+          <li>Monitoring tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Platform-Specific Security</h3>
+        </div>
+        <p class="unit-description">Explore security features unique to different operating system platforms.</p>
+        <ul class="topics-list">
+          <li>Windows security</li>
+          <li>Linux security</li>
+          <li>macOS security</li>
+          <li>Mobile OS security</li>
+          <li>Embedded systems</li>
+          <li>Real-time systems</li>
+          <li>Cloud OS security</li>
+          <li>IoT security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Topics</h3>
+        </div>
+        <p class="unit-description">Explore advanced operating system security concepts and emerging technologies.</p>
+        <ul class="topics-list">
+          <li>Trusted platform modules</li>
+          <li>Secure boot</li>
+          <li>Hardware security</li>
+          <li>Hypervisor security</li>
+          <li>Microkernel security</li>
+          <li>Zero trust architecture</li>
+          <li>AI-enhanced security</li>
+          <li>Future trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: OS Security Foundations</h1>
+      <p>Understand the fundamental security concepts and architecture of operating systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">OS Security Principles</h3>
+        <p>Learn the fundamental principles that guide secure operating system design and implementation.</p>
+        <span class="os-badge">Design Principles</span>
+        <span class="os-badge">Security Goals</span>
+        <span class="os-badge">Trade-offs</span>
+        <div class="system-box">
+          Operating system security is built on fundamental principles including least privilege, defense in depth, fail-safe defaults, economy of mechanism, complete mediation, and separation of privilege. These principles guide all security design decisions.
+        </div>
+        <div class="code-example">
+          # OS Security Principles<br>
+          os_security_principles = {<br>
+          &nbsp;&nbsp;"least_privilege": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Grant minimum access rights necessary for task completion",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": ["User accounts", "Process privileges", "Service accounts"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"benefits": ["Limits damage from compromise", "Reduces attack surface"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"challenges": ["Usability vs security", "Privilege escalation needs"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"defense_in_depth": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Multiple layers of security controls",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"layers": ["Hardware", "Kernel", "System services", "Applications"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Firewall + antivirus + access controls", "Authentication + authorization + auditing"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advantage": "Single point of failure prevention"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"fail_safe_defaults": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Default to secure state when system fails",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Deny access by default", "Secure boot", "Default deny firewall rules"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"principle": "Explicit grant rather than explicit deny"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"complete_mediation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Check every access to every object",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": ["Reference monitor", "Access control checks"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["No bypass", "Tamper-proof", "Verifiable"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Security Architecture</h3>
+        <p>Understand how security is integrated into operating system architecture and design.</p>
+        <div class="concept-highlight">
+          Key Architecture Components:<br>
+          • Trusted Computing Base (TCB): Security-critical components<br>
+          • Reference Monitor: Mediates all access decisions<br>
+          • Security Kernel: Core security functionality<br>
+          • Security Perimeter: Boundary between trusted and untrusted<br>
+          • Security Policy: Rules governing system behavior
+        </div>
+        <div class="security-insight">
+          <strong>Architecture Trade-offs:</strong><br>
+          Security architecture involves balancing security, performance, and usability. More security often means complexity, which can reduce performance and usability while potentially introducing new vulnerabilities.
+        </div>
+        <div class="code-example">
+          # OS Security Architecture<br>
+          security_architecture = {<br>
+          &nbsp;&nbsp;"trusted_computing_base": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Set of all hardware, firmware, and software critical to security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": ["Hardware", "Microcode", "OS kernel", "Security modules"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"properties": ["Small size", "Well-defined", "Verified"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"goal": "Minimize attack surface"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"reference_monitor": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Abstract machine that mediates all access",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Complete mediation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Isolation from subjects",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Verification possible"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": "Security kernel or hypervisor"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"security_levels": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"user_mode": "Unprivileged execution mode",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"kernel_mode": "Privileged execution mode",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"hypervisor_mode": "Higher privilege than kernel",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"hardware_mode": "Hardware-enforced security"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Models</h3>
+        <p>Learn to identify and analyze potential threats against operating system security.</p>
+        <div class="control-tool">
+          <strong>Common OS Threats:</strong><br>
+          • Privilege escalation attacks<br>
+          • Code injection and execution<br>
+          • Information disclosure<br>
+          • Denial of service attacks<br>
+          • Malware and rootkits<br>
+          • Physical access attacks
+        </div>
+        <div class="vulnerability-indicator">
+          <strong>Attack Vectors:</strong><br>
+          Operating systems face threats from multiple vectors including network attacks, local attacks, physical access, and supply chain compromises. Understanding these helps design appropriate defenses.
+        </div>
+        <div class="code-example">
+          # OS Threat Model<br>
+          os_threat_model = {<br>
+          &nbsp;&nbsp;"privilege_escalation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"description": "Gaining higher privileges than authorized",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Buffer overflows", "Race conditions", "Configuration errors"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"targets": ["Kernel", "System services", "SUID programs"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mitigations": ["DEP/NX", "ASLR", "Control flow integrity"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"malware_threats": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"types": ["Viruses", "Worms", "Trojans", "Rootkits", "Ransomware"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"infection_vectors": ["Email", "Downloads", "Removable media", "Network"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"persistence_methods": ["Registry", "Boot sectors", "System files"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"defenses": ["Antivirus", "Behavior monitoring", "Application control"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"physical_threats": {<br
