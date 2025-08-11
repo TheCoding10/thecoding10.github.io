@@ -1,0 +1,739 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Cryptography for Cybersecurity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #831843 0%, #be185d 50%, #ec4899 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #831843, #be185d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(131, 24, 67, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #831843;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be185d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #831843, #be185d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(131, 24, 67, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .crypto-badge {
+      display: inline-block;
+      background: #fdf2f8;
+      color: #831843;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .cipher-box {
+      background: #fdf2f8;
+      border: 1px solid #fbcfe8;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #831843;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .algorithm-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .security-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .attack-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔐 Cryptography for Cybersecurity</h1>
+    <p>Master cryptographic concepts and their applications in modern cybersecurity</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Cryptography for Cybersecurity Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Crypto Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Cryptographic Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Algorithms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">35+</span>
+          <div class="stat-label">Security Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Cryptography Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the basic principles, history, and mathematical foundations of cryptography.</p>
+        <ul class="topics-list">
+          <li>Cryptography overview</li>
+          <li>Historical ciphers</li>
+          <li>Mathematical foundations</li>
+          <li>Security goals</li>
+          <li>Threat models</li>
+          <li>Kerckhoffs' principle</li>
+          <li>Perfect secrecy</li>
+          <li>Computational security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Symmetric Encryption</h3>
+        </div>
+        <p class="unit-description">Learn symmetric encryption algorithms and their practical applications in cybersecurity.</p>
+        <ul class="topics-list">
+          <li>Block ciphers</li>
+          <li>Stream ciphers</li>
+          <li>DES and AES</li>
+          <li>Modes of operation</li>
+          <li>Key management</li>
+          <li>Initialization vectors</li>
+          <li>Padding schemes</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Public Key Cryptography</h3>
+        </div>
+        <p class="unit-description">Master asymmetric encryption and its revolutionary impact on secure communications.</p>
+        <ul class="topics-list">
+          <li>RSA algorithm</li>
+          <li>Elliptic curve cryptography</li>
+          <li>Diffie-Hellman key exchange</li>
+          <li>Key pair generation</li>
+          <li>Public key infrastructure</li>
+          <li>Hybrid cryptosystems</li>
+          <li>Forward secrecy</li>
+          <li>Quantum resistance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Hash Functions</h3>
+        </div>
+        <p class="unit-description">Explore cryptographic hash functions and their crucial role in data integrity.</p>
+        <ul class="topics-list">
+          <li>Hash function properties</li>
+          <li>MD5 and SHA families</li>
+          <li>Collision resistance</li>
+          <li>Message authentication</li>
+          <li>HMAC construction</li>
+          <li>Password hashing</li>
+          <li>Merkle trees</li>
+          <li>Blockchain applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Digital Signatures</h3>
+        </div>
+        <p class="unit-description">Learn digital signature schemes for authentication and non-repudiation.</p>
+        <ul class="topics-list">
+          <li>Signature algorithms</li>
+          <li>RSA signatures</li>
+          <li>DSA and ECDSA</li>
+          <li>Signature verification</li>
+          <li>Certificate authorities</li>
+          <li>Code signing</li>
+          <li>Blind signatures</li>
+          <li>Multi-signatures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Key Management</h3>
+        </div>
+        <p class="unit-description">Master the critical aspects of cryptographic key lifecycle management.</p>
+        <ul class="topics-list">
+          <li>Key generation</li>
+          <li>Key distribution</li>
+          <li>Key storage</li>
+          <li>Key rotation</li>
+          <li>Key escrow</li>
+          <li>Hardware security modules</li>
+          <li>Key derivation</li>
+          <li>Secure deletion</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Network Security Protocols</h3>
+        </div>
+        <p class="unit-description">Understand how cryptography secures network communications and protocols.</p>
+        <ul class="topics-list">
+          <li>TLS/SSL protocols</li>
+          <li>IPSec</li>
+          <li>SSH protocol</li>
+          <li>VPN technologies</li>
+          <li>Wireless security</li>
+          <li>Email security</li>
+          <li>Protocol analysis</li>
+          <li>Vulnerability assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Cryptographic Attacks</h3>
+        </div>
+        <p class="unit-description">Learn about various attacks against cryptographic systems and their countermeasures.</p>
+        <ul class="topics-list">
+          <li>Attack classifications</li>
+          <li>Brute force attacks</li>
+          <li>Side-channel attacks</li>
+          <li>Differential cryptanalysis</li>
+          <li>Linear cryptanalysis</li>
+          <li>Meet-in-the-middle</li>
+          <li>Birthday attacks</li>
+          <li>Implementation flaws</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Random Number Generation</h3>
+        </div>
+        <p class="unit-description">Understand the critical importance of randomness in cryptographic systems.</p>
+        <ul class="topics-list">
+          <li>Entropy sources</li>
+          <li>Pseudorandom generators</li>
+          <li>True random generators</li>
+          <li>Seed management</li>
+          <li>Randomness testing</li>
+          <li>Hardware randomness</li>
+          <li>Entropy pools</li>
+          <li>Common weaknesses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Applied Cryptography</h3>
+        </div>
+        <p class="unit-description">Explore real-world applications of cryptography in modern systems.</p>
+        <ul class="topics-list">
+          <li>Database encryption</li>
+          <li>File system encryption</li>
+          <li>Cloud security</li>
+          <li>Mobile device security</li>
+          <li>IoT cryptography</li>
+          <li>Cryptocurrency basics</li>
+          <li>Zero-knowledge proofs</li>
+          <li>Homomorphic encryption</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Post-Quantum Cryptography</h3>
+        </div>
+        <p class="unit-description">Prepare for the quantum computing era with quantum-resistant cryptographic systems.</p>
+        <ul class="topics-list">
+          <li>Quantum threats</li>
+          <li>Lattice-based cryptography</li>
+          <li>Code-based cryptography</li>
+          <li>Multivariate cryptography</li>
+          <li>Hash-based signatures</li>
+          <li>NIST standardization</li>
+          <li>Migration strategies</li>
+          <li>Hybrid approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Practical Implementation</h3>
+        </div>
+        <p class="unit-description">Learn best practices for implementing cryptography in real-world applications.</p>
+        <ul class="topics-list">
+          <li>Cryptographic libraries</li>
+          <li>Implementation pitfalls</li>
+          <li>Performance optimization</li>
+          <li>Security evaluation</li>
+          <li>Compliance standards</li>
+          <li>Code review practices</li>
+          <li>Testing methodologies</li>
+          <li>Future trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Cryptography Fundamentals</h1>
+      <p>Understand the basic principles, history, and mathematical foundations of cryptography.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cryptography Overview</h3>
+        <p>Learn the definition, purpose, and fundamental concepts of cryptography in cybersecurity.</p>
+        <span class="crypto-badge">Definition</span>
+        <span class="crypto-badge">Goals</span>
+        <span class="crypto-badge">Applications</span>
+        <div class="cipher-box">
+          Cryptography is the science of securing information through mathematical techniques. It provides confidentiality, integrity, authentication, and non-repudiation - the four pillars of information security.
+        </div>
+        <div class="code-example">
+          # Cryptography Fundamentals<br>
+          cryptography_basics = {<br>
+          &nbsp;&nbsp;"definition": "Science of protecting information using mathematical techniques",<br>
+          &nbsp;&nbsp;"core_goals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"confidentiality": "Ensuring information remains secret",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integrity": "Detecting unauthorized modifications",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authentication": "Verifying identity of communicating parties",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"non_repudiation": "Preventing denial of actions"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"main_types": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"symmetric": "Same key for encryption and decryption",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"asymmetric": "Different keys for encryption and decryption",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"hash_functions": "One-way functions for data integrity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"digital_signatures": "Cryptographic proof of authenticity"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"applications": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Secure communications (HTTPS, TLS)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Data protection (file encryption)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Identity verification (digital certificates)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Financial transactions (banking, cryptocurrency)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Access control (password hashing)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Software integrity (code signing)"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Ciphers</h3>
+        <p>Explore the evolution of cryptography from ancient times to modern digital systems.</p>
+        <div class="concept-highlight">
+          Classical Cipher Examples:<br>
+          • Caesar Cipher: Simple substitution with fixed shift<br>
+          • Vigenère Cipher: Polyalphabetic substitution<br>
+          • Playfair Cipher: Digraph substitution<br>
+          • Enigma Machine: Mechanical rotor-based encryption<br>
+          • One-Time Pad: Theoretically unbreakable cipher
+        </div>
+        <div class="algorithm-insight">
+          <strong>Lessons from History:</strong><br>
+          Historical ciphers teach us that security through obscurity fails, frequency analysis can break substitution ciphers, and key management is crucial. These lessons shaped modern cryptographic principles.
+        </div>
+        <div class="code-example">
+          # Historical Cryptography Evolution<br>
+          historical_ciphers = {<br>
+          &nbsp;&nbsp;"caesar_cipher": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"period": "Ancient Rome (~50 BC)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"method": "Shift each letter by fixed amount",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "HELLO → KHOOR (shift 3)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"weakness": "Only 25 possible keys, frequency analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"significance": "First documented systematic encryption"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"vigenere_cipher": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"period": "16th century",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"method": "Multiple Caesar ciphers with keyword",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advancement": "Resists simple frequency analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"weakness": "Repeating key patterns can be exploited",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"significance": "First polyalphabetic cipher"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"enigma_machine": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"period": "World War II (1930s-1940s)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"method": "Mechanical rotor-based substitution",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"complexity": "158 quintillion possible settings",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"breakthrough": "Broken by Allied cryptanalysts",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"impact": "Led to development of modern computers"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"lessons_learned": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Security through obscurity is insufficient",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Key management is critical",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Mathematical foundations are essential",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Computational power changes the game"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mathematical Foundations</h3>
+        <p>Understand the mathematical concepts that underpin modern cryptographic algorithms.</p>
+        <div class="security-tool">
+          <strong>Key Mathematical Concepts:</strong><br>
+          • Modular arithmetic and number theory<br>
+          • Prime numbers and factorization<br>
+          • Discrete logarithms<br>
+          • Elliptic curves<br>
+          • Information theory<br>
+          • Computational complexity
+        </div>
+        <div class="attack-indicator">
+          <strong>Computational Hardness:</strong><br>
+          Modern cryptography relies on mathematical problems that are easy to compute in one direction but computationally infeasible to reverse without additional information (the key).
+        </div>
+        <div class="code-example">
+          # Mathematical Foundations<br>
+          crypto_math = {<br>
+          &nbsp;&nbsp;"modular_arithmetic": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"concept": "Arithmetic with wraparound at fixed modulus",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"example": "7 + 6 ≡ 1 (mod 12)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"applications": ["Block ciphers", "Hash functions", "Key generation"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"importance": "Fundamental to most cryptographic operations"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"prime_numbers": {<br>
