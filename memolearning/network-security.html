@@ -1,0 +1,727 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Network Security</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🛡️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .security-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .defense-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .attack-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .mitigation-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .threat-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🛡️ Network Security</h1>
+    <p>Master advanced network security concepts, threats, and defensive strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Network Security Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Security Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Security Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Attack Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Defense Mechanisms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Network Security Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand core network security principles, threat landscape, and security frameworks.</p>
+        <ul class="topics-list">
+          <li>Security principles</li>
+          <li>Threat landscape</li>
+          <li>Risk assessment</li>
+          <li>Security frameworks</li>
+          <li>Attack vectors</li>
+          <li>Defense strategies</li>
+          <li>Security policies</li>
+          <li>Compliance requirements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Cryptography and PKI</h3>
+        </div>
+        <p class="unit-description">Master cryptographic principles, encryption methods, and Public Key Infrastructure.</p>
+        <ul class="topics-list">
+          <li>Cryptographic fundamentals</li>
+          <li>Symmetric encryption</li>
+          <li>Asymmetric encryption</li>
+          <li>Digital signatures</li>
+          <li>Hash functions</li>
+          <li>PKI infrastructure</li>
+          <li>Certificate management</li>
+          <li>Key distribution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Firewall Technologies</h3>
+        </div>
+        <p class="unit-description">Learn firewall types, configurations, and advanced firewall technologies for network protection.</p>
+        <ul class="topics-list">
+          <li>Firewall architectures</li>
+          <li>Packet filtering</li>
+          <li>Stateful inspection</li>
+          <li>Application layer gateways</li>
+          <li>Next-generation firewalls</li>
+          <li>Firewall rules</li>
+          <li>DMZ design</li>
+          <li>Firewall management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">VPN and Remote Access</h3>
+        </div>
+        <p class="unit-description">Implement secure remote access solutions using VPN technologies and authentication methods.</p>
+        <ul class="topics-list">
+          <li>VPN fundamentals</li>
+          <li>IPSec protocols</li>
+          <li>SSL/TLS VPNs</li>
+          <li>Site-to-site VPNs</li>
+          <li>Remote access VPNs</li>
+          <li>Authentication methods</li>
+          <li>VPN security</li>
+          <li>Zero trust access</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Intrusion Detection Systems</h3>
+        </div>
+        <p class="unit-description">Deploy and manage IDS/IPS systems for real-time threat detection and prevention.</p>
+        <ul class="topics-list">
+          <li>IDS fundamentals</li>
+          <li>Network-based IDS</li>
+          <li>Host-based IDS</li>
+          <li>Intrusion prevention</li>
+          <li>Signature-based detection</li>
+          <li>Anomaly detection</li>
+          <li>False positives</li>
+          <li>SIEM integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Network Attacks and Threats</h3>
+        </div>
+        <p class="unit-description">Analyze common network attacks, attack methodologies, and threat actor tactics.</p>
+        <ul class="topics-list">
+          <li>Attack classifications</li>
+          <li>Reconnaissance techniques</li>
+          <li>DoS and DDoS attacks</li>
+          <li>Man-in-the-middle attacks</li>
+          <li>Session hijacking</li>
+          <li>DNS attacks</li>
+          <li>Advanced persistent threats</li>
+          <li>Attack frameworks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Wireless Security</h3>
+        </div>
+        <p class="unit-description">Secure wireless networks and understand wireless-specific security challenges and solutions.</p>
+        <ul class="topics-list">
+          <li>Wireless vulnerabilities</li>
+          <li>WPA2/WPA3 security</li>
+          <li>Enterprise wireless</li>
+          <li>Wireless attacks</li>
+          <li>Rogue access points</li>
+          <li>Wireless monitoring</li>
+          <li>Bluetooth security</li>
+          <li>IoT wireless security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Network Access Control</h3>
+        </div>
+        <p class="unit-description">Implement network access control solutions and identity management systems.</p>
+        <ul class="topics-list">
+          <li>NAC fundamentals</li>
+          <li>802.1X authentication</li>
+          <li>RADIUS and TACACS+</li>
+          <li>Device compliance</li>
+          <li>Endpoint security</li>
+          <li>Guest access</li>
+          <li>BYOD policies</li>
+          <li>Identity federation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Network Forensics</h3>
+        </div>
+        <p class="unit-description">Learn network forensics techniques for incident response and digital investigations.</p>
+        <ul class="topics-list">
+          <li>Forensics principles</li>
+          <li>Network evidence</li>
+          <li>Packet analysis</li>
+          <li>Log analysis</li>
+          <li>Timeline reconstruction</li>
+          <li>Evidence preservation</li>
+          <li>Forensic tools</li>
+          <li>Legal considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cloud Network Security</h3>
+        </div>
+        <p class="unit-description">Secure cloud networks and understand cloud-specific security challenges and solutions.</p>
+        <ul class="topics-list">
+          <li>Cloud security models</li>
+          <li>Virtual networks</li>
+          <li>Cloud firewalls</li>
+          <li>Identity and access</li>
+          <li>Data protection</li>
+          <li>Hybrid cloud security</li>
+          <li>Container security</li>
+          <li>Serverless security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Security Monitoring and SOC</h3>
+        </div>
+        <p class="unit-description">Build security operations centers and implement continuous monitoring capabilities.</p>
+        <ul class="topics-list">
+          <li>SOC fundamentals</li>
+          <li>Security monitoring</li>
+          <li>SIEM platforms</li>
+          <li>Threat intelligence</li>
+          <li>Incident response</li>
+          <li>Automation and orchestration</li>
+          <li>Metrics and KPIs</li>
+          <li>Team management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Emerging Security Technologies</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge security technologies and future trends in network security.</p>
+        <ul class="topics-list">
+          <li>Zero trust architecture</li>
+          <li>AI-driven security</li>
+          <li>Quantum cryptography</li>
+          <li>Software-defined security</li>
+          <li>Edge computing security</li>
+          <li>5G security</li>
+          <li>IoT security</li>
+          <li>Future threats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Network Security Fundamentals</h1>
+      <p>Understand core network security principles, threat landscape, and security frameworks.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Security Principles</h3>
+        <p>Learn the fundamental principles that guide network security design and implementation.</p>
+        <span class="security-badge">Confidentiality</span>
+        <span class="security-badge">Integrity</span>
+        <span class="security-badge">Availability</span>
+        <div class="defense-box">
+          The CIA triad (Confidentiality, Integrity, Availability) forms the foundation of network security. Understanding these principles is essential for designing secure networks and evaluating security controls.
+        </div>
+        <div class="code-example">
+          # Core Security Principles<br>
+          security_principles = {<br>
+          &nbsp;&nbsp;"cia_triad": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"confidentiality": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Information accessible only to authorized parties",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threats": ["Eavesdropping", "Data theft", "Unauthorized access"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Encryption", "Access control", "Authentication"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"network_example": "Encrypting data in transit with TLS/SSL"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integrity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Data remains accurate and unmodified",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threats": ["Data tampering", "Man-in-the-middle", "Malware"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Digital signatures", "Checksums", "Version control"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"network_example": "Using HMAC to verify packet integrity"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"availability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"definition": "Resources accessible when needed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threats": ["DoS attacks", "System failures", "Network outages"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Redundancy", "Load balancing", "Incident response"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"network_example": "Implementing failover mechanisms"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"additional_principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authentication": "Verifying identity of users and systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authorization": "Granting appropriate access rights",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"accountability": "Tracking actions and maintaining audit trails",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"non_repudiation": "Preventing denial of actions or transactions"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Landscape</h3>
+        <p>Understand the current network security threat environment and emerging attack trends.</p>
+        <div class="concept-highlight">
+          Major Threat Categories:<br>
+          • External threats: Hackers, cybercriminals, nation-states<br>
+          • Internal threats: Malicious insiders, negligent employees<br>
+          • Advanced persistent threats: Long-term, targeted attacks<br>
+          • Automated threats: Botnets, worms, automated scanning<br>
+          • Supply chain threats: Compromised vendors or partners
+        </div>
+        <div class="attack-insight">
+          <strong>Evolving Threat Landscape:</strong><br>
+          Modern threats are increasingly sophisticated, persistent, and targeted. Attackers use AI, machine learning, and automation to scale attacks and evade detection. Understanding these trends is crucial for effective defense.
+        </div>
+        <div class="code-example">
+          # Network Threat Landscape<br>
+          threat_landscape = {<br>
+          &nbsp;&nbsp;"threat_actors": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"script_kiddies": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"motivation": "Fame, curiosity, proving skills",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capabilities": "Low to moderate, use existing tools",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"targets": "Opportunistic, low-hanging fruit",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threat_level": "Low to moderate"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cybercriminals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"motivation": "Financial gain",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capabilities": "Moderate to high, organized groups",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"targets": "High-value targets, financial institutions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threat_level": "High"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"nation_states": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"motivation": "Espionage, political influence, warfare",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"capabilities": "Very high, unlimited resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"targets": "Critical infrastructure, government, military",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"threat_level": "Critical"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"attack_trends": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"AI-powered attacks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Cloud-native threats",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Supply chain compromises",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Ransomware-as-a-Service",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Living-off-the-land techniques",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Zero-day exploits",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Social engineering automation"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Security Frameworks</h3>
+        <p>Learn industry-standard security frameworks and how to apply them to network security programs.</p>
+        <div class="mitigation-tool">
+          <strong>Popular Security Frameworks:</strong><br>
+          • NIST Cybersecurity Framework: Identify, Protect, Detect, Respond, Recover<br>
+          • ISO 27001: International standard for information
