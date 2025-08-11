@@ -1,0 +1,746 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning AI Capstone Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎓';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581c87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .capstone-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #581c87;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .project-box {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .development-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .implementation-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .presentation-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎓 AI Capstone Project</h1>
+    <p>Apply your AI knowledge to design, develop, and deploy a comprehensive real-world project</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to computer science courses')">← Back to CS Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">AI Capstone Project Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Project Phases</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Deliverables</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Project Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100+</span>
+          <div class="stat-label">Hours of Work</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Project Planning</h3>
+        </div>
+        <p class="unit-description">Define project scope, objectives, and create a comprehensive project plan.</p>
+        <ul class="topics-list">
+          <li>Project ideation</li>
+          <li>Problem definition</li>
+          <li>Scope planning</li>
+          <li>Objective setting</li>
+          <li>Success criteria</li>
+          <li>Timeline creation</li>
+          <li>Resource planning</li>
+          <li>Risk assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Literature Review</h3>
+        </div>
+        <p class="unit-description">Conduct comprehensive research on existing solutions and state-of-the-art approaches.</p>
+        <ul class="topics-list">
+          <li>Research methodology</li>
+          <li>Academic sources</li>
+          <li>Industry reports</li>
+          <li>Competitive analysis</li>
+          <li>Technology review</li>
+          <li>Gap analysis</li>
+          <li>Reference management</li>
+          <li>Synthesis and insights</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Data Strategy</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive data acquisition, preparation, and management strategies.</p>
+        <ul class="topics-list">
+          <li>Data requirements</li>
+          <li>Data sources</li>
+          <li>Collection methods</li>
+          <li>Quality assessment</li>
+          <li>Preprocessing pipeline</li>
+          <li>Annotation strategy</li>
+          <li>Privacy compliance</li>
+          <li>Data governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">System Architecture</h3>
+        </div>
+        <p class="unit-description">Design the overall system architecture and technical implementation approach.</p>
+        <ul class="topics-list">
+          <li>Architecture design</li>
+          <li>Technology stack</li>
+          <li>Component selection</li>
+          <li>Integration planning</li>
+          <li>Scalability design</li>
+          <li>Security architecture</li>
+          <li>Performance requirements</li>
+          <li>Documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Model Development</h3>
+        </div>
+        <p class="unit-description">Develop, train, and optimize AI models for your specific problem domain.</p>
+        <ul class="topics-list">
+          <li>Model selection</li>
+          <li>Baseline implementation</li>
+          <li>Feature engineering</li>
+          <li>Model training</li>
+          <li>Hyperparameter tuning</li>
+          <li>Model optimization</li>
+          <li>Cross-validation</li>
+          <li>Performance analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Implementation</h3>
+        </div>
+        <p class="unit-description">Build the complete system integrating all components into a working solution.</p>
+        <ul class="topics-list">
+          <li>System integration</li>
+          <li>API development</li>
+          <li>User interface</li>
+          <li>Database design</li>
+          <li>Backend services</li>
+          <li>Model serving</li>
+          <li>Error handling</li>
+          <li>Code quality</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Testing and Validation</h3>
+        </div>
+        <p class="unit-description">Comprehensively test and validate your AI system across multiple dimensions.</p>
+        <ul class="topics-list">
+          <li>Testing strategy</li>
+          <li>Unit testing</li>
+          <li>Integration testing</li>
+          <li>Model validation</li>
+          <li>Performance testing</li>
+          <li>User testing</li>
+          <li>Bias evaluation</li>
+          <li>Edge case analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy your AI system to a production environment with proper monitoring.</p>
+        <ul class="topics-list">
+          <li>Deployment strategy</li>
+          <li>Cloud deployment</li>
+          <li>Containerization</li>
+          <li>CI/CD pipeline</li>
+          <li>Monitoring setup</li>
+          <li>Logging configuration</li>
+          <li>Performance monitoring</li>
+          <li>Maintenance procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Evaluation and Analysis</h3>
+        </div>
+        <p class="unit-description">Conduct thorough evaluation and analysis of your project results and impact.</p>
+        <ul class="topics-list">
+          <li>Results analysis</li>
+          <li>Performance metrics</li>
+          <li>Comparative analysis</li>
+          <li>Impact assessment</li>
+          <li>Limitation analysis</li>
+          <li>Statistical significance</li>
+          <li>Visualization</li>
+          <li>Interpretation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Documentation</h3>
+        </div>
+        <p class="unit-description">Create comprehensive documentation for your project and research findings.</p>
+        <ul class="topics-list">
+          <li>Technical documentation</li>
+          <li>User documentation</li>
+          <li>API documentation</li>
+          <li>Research report</li>
+          <li>Code documentation</li>
+          <li>Deployment guide</li>
+          <li>Troubleshooting guide</li>
+          <li>Future work</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Presentation Preparation</h3>
+        </div>
+        <p class="unit-description">Prepare compelling presentations and demonstrations of your AI project.</p>
+        <ul class="topics-list">
+          <li>Presentation structure</li>
+          <li>Storytelling techniques</li>
+          <li>Visual design</li>
+          <li>Demo preparation</li>
+          <li>Audience analysis</li>
+          <li>Technical explanations</li>
+          <li>Q&A preparation</li>
+          <li>Presentation practice</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Final Presentation</h3>
+        </div>
+        <p class="unit-description">Deliver your final presentation and demonstrate the completed AI project.</p>
+        <ul class="topics-list">
+          <li>Project showcase</li>
+          <li>Live demonstration</li>
+          <li>Results presentation</li>
+          <li>Impact discussion</li>
+          <li>Lessons learned</li>
+          <li>Future improvements</li>
+          <li>Peer review</li>
+          <li>Portfolio development</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Project Planning</h1>
+      <p>Define project scope, objectives, and create a comprehensive project plan.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Project Ideation</h3>
+        <p>Generate and evaluate innovative AI project ideas that align with your interests and career goals.</p>
+        <span class="capstone-badge">Innovation</span>
+        <span class="capstone-badge">Creativity</span>
+        <span class="capstone-badge">Feasibility</span>
+        <div class="project-box">
+          Start with a problem you're passionate about solving. Great capstone projects address real-world challenges, demonstrate technical depth, and showcase your unique perspective and skills.
+        </div>
+        <div class="code-example">
+          # Project Ideation Framework<br>
+          project_ideation = {<br>
+          &nbsp;&nbsp;"inspiration_sources": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"personal_interests": "Problems you've encountered in daily life",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"academic_research": "Recent papers and breakthrough studies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"industry_challenges": "Current problems in your target industry",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"social_impact": "Opportunities to benefit society",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technical_curiosity": "Technologies you want to explore"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"evaluation_criteria": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technical_feasibility": "Can be completed with available resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"innovation_level": "Novel approach or application",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"learning_opportunity": "Develops new skills and knowledge",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"portfolio_value": "Demonstrates capabilities to employers",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"personal_passion": "Maintains motivation throughout project"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"project_categories": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Computer vision applications",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Natural language processing tools",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Predictive analytics systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Recommendation engines",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Autonomous systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Healthcare AI solutions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Educational technology",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Environmental monitoring"<br>
+          &nbsp;&nbsp;]<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Problem Definition</h3>
+        <p>Clearly articulate the problem you're solving and why it matters to your target audience.</p>
+        <div class="concept-highlight">
+          Problem Statement Components:<br>
+          • Who is affected by this problem?<br>
+          • What exactly is the problem?<br>
+          • Where does this problem occur?<br>
+          • When does this problem manifest?<br>
+          • Why is this problem important to solve?<br>
+          • How might AI help address this problem?
+        </div>
+        <div class="development-insight">
+          <strong>Problem Validation:</strong><br>
+          Validate your problem through stakeholder interviews, market research, and literature review. Ensure the problem is significant enough to warrant an AI solution and that simpler approaches haven't already solved it effectively.
+        </div>
+        <div class="code-example">
+          # Problem Definition Template<br>
+          problem_definition = {<br>
+          &nbsp;&nbsp;"problem_statement": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"target_users": "Who experiences this problem?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"current_situation": "What is the existing state?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"desired_outcome": "What would success look like?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pain_points": "Specific frustrations and inefficiencies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scale_impact": "How many people/organizations affected?"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"ai_suitability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_availability": "Is relevant data available?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"pattern_recognition": "Are there learnable patterns?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"automation_benefit": "Would automation provide value?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"human_vs_ai": "What should remain human-controlled?",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"ethical_considerations": "Are there ethical concerns?"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"success_metrics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quantitative": ["Accuracy", "Speed", "Cost reduction"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"qualitative": ["User satisfaction", "Ease of use", "Trust"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_impact": ["ROI", "Market adoption", "Competitive advantage"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Scope Planning</h3>
+        <p>Define clear project boundaries and deliverables to ensure successful completion within time constraints.</p>
+        <div class="implementation-tool">
+          <strong>Scope Definition Process:</strong><br>
+          • Core functionality (must-have features)<br>
+          • Extended functionality (nice-to-have features)<br>
+          • Out-of-scope items (future work)<br>
+          • Technical constraints and limitations<br>
+          • Resource and time boundaries
+        </div>
+        <div class="presentation-indicator">
+          <strong>Scope Creep Prevention:</strong><br>
+          Clearly document what's included and excluded from your project. Resist the temptation to add features during development. Focus on delivering a polished core solution rather than an incomplete feature-rich system.
+        </div>
+        <div class="code-example">
+          # Project Scope Framework<br>
+          project_scope = {<br>
+          &nbsp;&nbsp;"core_deliverables": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"minimum_viable_product": "Essential features for basic functionality",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technical_implementation": "Working AI model and integration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"user_interface": "Basic but functional interface",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"documentation": "Technical and user documentation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"evaluation": "Performance analysis and results"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"stretch_goals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"advanced_features": "Additional functionality if time permits",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"optimization": "Performance improvements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"user_experience": "Enhanced interface and usability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deployment": "Production-ready deployment"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"explicit_exclusions": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Features requiring additional data sources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Complex integrations with external systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Mobile app development",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Commercial-grade scalability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Multi-language support"<br>
