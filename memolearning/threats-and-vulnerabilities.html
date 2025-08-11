@@ -1,0 +1,728 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Threats and Vulnerabilities</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #dc2626 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(127, 29, 29, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚠️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7f1d1d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(127, 29, 29, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .threat-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #7f1d1d;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .vulnerability-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .attack-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .mitigation-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .risk-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚠️ Threats and Vulnerabilities</h1>
+    <p>Identify, analyze, and mitigate cybersecurity threats and vulnerabilities across all attack vectors</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Threats and Vulnerabilities Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Threat Categories</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Attack Vectors</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Vulnerability Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">40+</span>
+          <div class="stat-label">Mitigation Strategies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Threat Landscape Overview</h3>
+        </div>
+        <p class="unit-description">Understand the current cybersecurity threat landscape and threat actor motivations.</p>
+        <ul class="topics-list">
+          <li>Threat classifications</li>
+          <li>Threat actors</li>
+          <li>Attack motivations</li>
+          <li>Threat intelligence</li>
+          <li>Attack trends</li>
+          <li>Threat modeling</li>
+          <li>Risk assessment</li>
+          <li>Industry impacts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Malware Analysis</h3>
+        </div>
+        <p class="unit-description">Study different types of malware, their behaviors, and detection techniques.</p>
+        <ul class="topics-list">
+          <li>Malware categories</li>
+          <li>Virus mechanisms</li>
+          <li>Worms and trojans</li>
+          <li>Ransomware</li>
+          <li>Spyware and adware</li>
+          <li>Rootkits</li>
+          <li>Behavioral analysis</li>
+          <li>Anti-malware tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Network Attacks</h3>
+        </div>
+        <p class="unit-description">Explore network-based attacks and vulnerabilities in network protocols and services.</p>
+        <ul class="topics-list">
+          <li>Reconnaissance attacks</li>
+          <li>DoS and DDoS</li>
+          <li>Man-in-the-middle</li>
+          <li>Packet sniffing</li>
+          <li>Protocol attacks</li>
+          <li>DNS attacks</li>
+          <li>Wireless attacks</li>
+          <li>Network defenses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Web Application Vulnerabilities</h3>
+        </div>
+        <p class="unit-description">Learn about common web application vulnerabilities and secure coding practices.</p>
+        <ul class="topics-list">
+          <li>OWASP Top 10</li>
+          <li>SQL injection</li>
+          <li>Cross-site scripting</li>
+          <li>CSRF attacks</li>
+          <li>Authentication flaws</li>
+          <li>Session management</li>
+          <li>Input validation</li>
+          <li>Web app security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Social Engineering</h3>
+        </div>
+        <p class="unit-description">Understand human-based attacks and psychological manipulation techniques.</p>
+        <ul class="topics-list">
+          <li>Social engineering tactics</li>
+          <li>Phishing attacks</li>
+          <li>Pretexting</li>
+          <li>Baiting and quid pro quo</li>
+          <li>Physical security</li>
+          <li>Tailgating</li>
+          <li>Human psychology</li>
+          <li>Awareness training</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">System Vulnerabilities</h3>
+        </div>
+        <p class="unit-description">Identify and mitigate vulnerabilities in operating systems and applications.</p>
+        <ul class="topics-list">
+          <li>OS vulnerabilities</li>
+          <li>Buffer overflows</li>
+          <li>Privilege escalation</li>
+          <li>Zero-day exploits</li>
+          <li>Patch management</li>
+          <li>Configuration issues</li>
+          <li>Hardening techniques</li>
+          <li>Vulnerability scanning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Advanced Persistent Threats</h3>
+        </div>
+        <p class="unit-description">Study sophisticated, long-term attack campaigns and their characteristics.</p>
+        <ul class="topics-list">
+          <li>APT characteristics</li>
+          <li>Attack lifecycle</li>
+          <li>Lateral movement</li>
+          <li>Data exfiltration</li>
+          <li>Persistence techniques</li>
+          <li>Command and control</li>
+          <li>Attribution challenges</li>
+          <li>APT defense</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Mobile Security Threats</h3>
+        </div>
+        <p class="unit-description">Examine security threats specific to mobile devices and applications.</p>
+        <ul class="topics-list">
+          <li>Mobile threat landscape</li>
+          <li>Platform vulnerabilities</li>
+          <li>Malicious apps</li>
+          <li>Data leakage</li>
+          <li>Network threats</li>
+          <li>Physical security</li>
+          <li>BYOD risks</li>
+          <li>Mobile security controls</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Cloud Security Threats</h3>
+        </div>
+        <p class="unit-description">Understand unique security challenges and threats in cloud environments.</p>
+        <ul class="topics-list">
+          <li>Cloud threat models</li>
+          <li>Shared responsibility</li>
+          <li>Data breaches</li>
+          <li>Insecure APIs</li>
+          <li>Account hijacking</li>
+          <li>Insider threats</li>
+          <li>Compliance issues</li>
+          <li>Cloud security controls</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">IoT and Emerging Threats</h3>
+        </div>
+        <p class="unit-description">Explore security challenges in IoT devices and emerging technology threats.</p>
+        <ul class="topics-list">
+          <li>IoT vulnerabilities</li>
+          <li>Embedded systems</li>
+          <li>Industrial control systems</li>
+          <li>Smart city security</li>
+          <li>AI/ML threats</li>
+          <li>Quantum computing</li>
+          <li>Emerging attack vectors</li>
+          <li>Future security challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Vulnerability Assessment</h3>
+        </div>
+        <p class="unit-description">Learn systematic approaches to identify and assess security vulnerabilities.</p>
+        <ul class="topics-list">
+          <li>Assessment methodologies</li>
+          <li>Scanning techniques</li>
+          <li>Vulnerability databases</li>
+          <li>Risk scoring</li>
+          <li>Penetration testing</li>
+          <li>Red team exercises</li>
+          <li>Tool selection</li>
+          <li>Reporting and remediation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Threat Mitigation Strategies</h3>
+        </div>
+        <p class="unit-description">Develop comprehensive strategies for preventing, detecting, and responding to threats.</p>
+        <ul class="topics-list">
+          <li>Defense in depth</li>
+          <li>Preventive controls</li>
+          <li>Detective controls</li>
+          <li>Corrective controls</li>
+          <li>Incident response</li>
+          <li>Threat hunting</li>
+          <li>Security frameworks</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Threat Landscape Overview</h1>
+      <p>Understand the current cybersecurity threat landscape and threat actor motivations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Classifications</h3>
+        <p>Learn to categorize and classify different types of cybersecurity threats based on various characteristics.</p>
+        <span class="threat-badge">Categories</span>
+        <span class="threat-badge">Taxonomy</span>
+        <span class="threat-badge">Classification</span>
+        <div class="vulnerability-box">
+          Threats can be classified by origin (internal/external), intent (malicious/accidental), target (data/systems/people), and method (technical/physical/social). Understanding these classifications helps prioritize security efforts.
+        </div>
+        <div class="code-example">
+          # Threat Classification Framework<br>
+          threat_classifications = {<br>
+          &nbsp;&nbsp;"by_origin": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"internal": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Threats from within the organization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sources": ["Employees", "Contractors", "Business partners"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Privileged access", "Inside knowledge", "Trust relationships"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Data theft by employee", "Sabotage", "Accidental data loss"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"external": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Threats from outside the organization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"sources": ["Cybercriminals", "Nation-states", "Hacktivists", "Competitors"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Limited initial access", "Reconnaissance required", "Remote attacks"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Malware attacks", "Network intrusions", "DDoS attacks"]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_intent": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"malicious": "Deliberate attempts to cause harm or gain unauthorized access",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"accidental": "Unintentional actions that create security risks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"environmental": "Natural disasters or infrastructure failures"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"by_method": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"technical": "Exploiting technological vulnerabilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"physical": "Direct access to systems or facilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"social": "Manipulating human behavior and psychology"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Actors</h3>
+        <p>Identify different types of threat actors, their capabilities, motivations, and typical attack patterns.</p>
+        <div class="concept-highlight">
+          Major Threat Actor Categories:<br>
+          • Nation-State: Government-sponsored attacks with advanced capabilities<br>
+          • Cybercriminals: Financially motivated organized crime groups<br>
+          • Hacktivists: Politically motivated attackers seeking to make statements<br>
+          • Insider Threats: Employees or partners with legitimate access<br>
+          • Script Kiddies: Low-skill attackers using existing tools
+        </div>
+        <div class="attack-insight">
+          <strong>Threat Actor Analysis:</strong><br>
+          Understanding threat actors helps predict attack methods, targets, and timing. Nation-states typically focus on espionage and disruption, while cybercriminals prioritize financial gain through ransomware and fraud.
+        </div>
+        <div class="code-example">
+          # Threat Actor Profiles<br>
+          threat_actors = {<br>
+          &nbsp;&nbsp;"nation_state": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capabilities": ["Advanced persistent threats", "Zero-day exploits", "Custom malware"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"motivations": ["Espionage", "Disruption", "Strategic advantage"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"targets": ["Government agencies", "Critical infrastructure", "Defense contractors"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Well-funded", "Patient", "Sophisticated"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["APT1", "Lazarus Group", "Fancy Bear"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"cybercriminals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capabilities": ["Commodity malware", "Social engineering", "Underground markets"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"motivations": ["Financial gain", "Personal enrichment"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"targets": ["Financial institutions", "Healthcare", "Small businesses"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Profit-driven", "Opportunistic", "Risk-averse"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Ransomware", "Banking trojans", "Credit card fraud"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"hacktivists": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"capabilities": ["DDoS attacks", "Website defacement", "Data leaks"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"motivations": ["Political agenda", "Social justice", "Awareness"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"targets": ["Government sites", "Corporations", "Opposition groups"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"characteristics": ["Ideologically driven", "Public operations", "Media-focused"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Anonymous", "LulzSec", "Syrian Electronic Army"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Threat Intelligence</h3>
+        <p>Learn to gather, analyze, and apply threat intelligence to improve organizational security posture.</p>
+        <div class="mitigation-tool">
+          <strong>Intelligence Types:</strong><br>
+          • Strategic: High-level trends and long-term threats<br>
+          • Tactical: Specific techniques and procedures<br>
+          • Technical: Technical indicators and signatures<br>
+          • Operational: Ongoing campaigns and actor activities<br>
+          • Sources: Commercial feeds, open source, government, industry sharing
+        </div>
+        <div class="risk-indicator">
+          <strong>Intelligence Lifecycle:</strong><br>
+          Effective threat intelligence follows a cycle: Requirements → Collection → Processing → Analysis → Dissemination → Feedback. This ensures intelligence is actionable and meets organizational needs.
+        </div>
+        <div class="code-example">
+          # Threat Intelligence Framework<br>
+          threat_intelligence = {
