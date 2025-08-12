@@ -1,0 +1,766 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Web Application Security</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1e3a8a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .web-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .http-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .vulnerability-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .sql-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .xss-showcase {
+      background: #f3e8ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .security-note {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .api-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .csrf-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌐 Web Application Security</h1>
+    <p>Master the art of securing web applications against modern threats and vulnerabilities</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Web Application Security Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Security Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~90</span>
+          <div class="stat-label">Attack Vectors</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Testing Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">OWASP</span>
+          <div class="stat-label">Top 10 Coverage</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Web Security Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the foundations of web application security, HTTP protocol, and security principles.</p>
+        <ul class="topics-list">
+          <li>HTTP/HTTPS protocols</li>
+          <li>Web architecture basics</li>
+          <li>Security principles</li>
+          <li>Threat modeling</li>
+          <li>Security development lifecycle</li>
+          <li>Defense in depth</li>
+          <li>Common attack vectors</li>
+          <li>Security testing basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">OWASP Top 10</h3>
+        </div>
+        <p class="unit-description">Master the most critical web application security risks as defined by OWASP.</p>
+        <ul class="topics-list">
+          <li>Injection attacks</li>
+          <li>Broken authentication</li>
+          <li>Sensitive data exposure</li>
+          <li>XML external entities</li>
+          <li>Broken access control</li>
+          <li>Security misconfigurations</li>
+          <li>Cross-site scripting</li>
+          <li>Insecure deserialization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">SQL Injection</h3>
+        </div>
+        <p class="unit-description">Understand, identify, and prevent SQL injection vulnerabilities in web applications.</p>
+        <ul class="topics-list">
+          <li>SQL injection types</li>
+          <li>Union-based attacks</li>
+          <li>Boolean-based blind SQLi</li>
+          <li>Time-based blind SQLi</li>
+          <li>Error-based SQLi</li>
+          <li>NoSQL injection</li>
+          <li>Prevention techniques</li>
+          <li>Automated testing tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Cross-Site Scripting (XSS)</h3>
+        </div>
+        <p class="unit-description">Learn about XSS vulnerabilities, exploitation techniques, and mitigation strategies.</p>
+        <ul class="topics-list">
+          <li>Reflected XSS</li>
+          <li>Stored XSS</li>
+          <li>DOM-based XSS</li>
+          <li>XSS payloads</li>
+          <li>Bypass techniques</li>
+          <li>Content Security Policy</li>
+          <li>Input validation</li>
+          <li>Output encoding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Authentication and Session Management</h3>
+        </div>
+        <p class="unit-description">Secure user authentication and session management in web applications.</p>
+        <ul class="topics-list">
+          <li>Authentication mechanisms</li>
+          <li>Password security</li>
+          <li>Multi-factor authentication</li>
+          <li>Session management</li>
+          <li>JWT security</li>
+          <li>OAuth and OpenID Connect</li>
+          <li>Brute force protection</li>
+          <li>Account lockout policies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Access Control and Authorization</h3>
+        </div>
+        <p class="unit-description">Implement proper access control mechanisms and authorization frameworks.</p>
+        <ul class="topics-list">
+          <li>Access control models</li>
+          <li>Role-based access control</li>
+          <li>Attribute-based access control</li>
+          <li>Privilege escalation</li>
+          <li>Insecure direct object references</li>
+          <li>Authorization testing</li>
+          <li>API access control</li>
+          <li>File upload security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cross-Site Request Forgery (CSRF)</h3>
+        </div>
+        <p class="unit-description">Understand and prevent CSRF attacks that exploit user trust.</p>
+        <ul class="topics-list">
+          <li>CSRF attack mechanics</li>
+          <li>State-changing operations</li>
+          <li>CSRF tokens</li>
+          <li>SameSite cookies</li>
+          <li>Referer validation</li>
+          <li>Custom headers</li>
+          <li>Double-submit cookies</li>
+          <li>CSRF testing techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">API Security</h3>
+        </div>
+        <p class="unit-description">Secure REST APIs, GraphQL, and other web service architectures.</p>
+        <ul class="topics-list">
+          <li>REST API security</li>
+          <li>GraphQL security</li>
+          <li>API authentication</li>
+          <li>Rate limiting</li>
+          <li>Input validation</li>
+          <li>API versioning</li>
+          <li>CORS configuration</li>
+          <li>API testing tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">File Upload Security</h3>
+        </div>
+        <p class="unit-description">Secure file upload functionality against various attack vectors.</p>
+        <ul class="topics-list">
+          <li>File type validation</li>
+          <li>File size restrictions</li>
+          <li>Path traversal attacks</li>
+          <li>Remote code execution</li>
+          <li>Malware scanning</li>
+          <li>Content-Type validation</li>
+          <li>Secure file storage</li>
+          <li>Image processing security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Security Headers and Configuration</h3>
+        </div>
+        <p class="unit-description">Configure security headers and server settings for enhanced protection.</p>
+        <ul class="topics-list">
+          <li>Content Security Policy</li>
+          <li>HTTP Strict Transport Security</li>
+          <li>X-Frame-Options</li>
+          <li>X-Content-Type-Options</li>
+          <li>Referrer Policy</li>
+          <li>Feature Policy</li>
+          <li>Server configuration</li>
+          <li>Security scanning tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Client-Side Security</h3>
+        </div>
+        <p class="unit-description">Secure client-side code and protect against browser-based attacks.</p>
+        <ul class="topics-list">
+          <li>JavaScript security</li>
+          <li>DOM manipulation attacks</li>
+          <li>Client-side validation</li>
+          <li>Browser security features</li>
+          <li>Clickjacking protection</li>
+          <li>Postmessage security</li>
+          <li>WebSocket security</li>
+          <li>Local storage security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Cryptography in Web Applications</h3>
+        </div>
+        <p class="unit-description">Implement proper cryptographic controls for data protection.</p>
+        <ul class="topics-list">
+          <li>Encryption at rest</li>
+          <li>Encryption in transit</li>
+          <li>Hashing and salting</li>
+          <li>Digital signatures</li>
+          <li>Key management</li>
+          <li>Certificate validation</li>
+          <li>Random number generation</li>
+          <li>Cryptographic failures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Security Testing and Tools</h3>
+        </div>
+        <p class="unit-description">Master security testing methodologies and automated testing tools.</p>
+        <ul class="topics-list">
+          <li>SAST tools</li>
+          <li>DAST tools</li>
+          <li>IAST tools</li>
+          <li>Manual testing techniques</li>
+          <li>Burp Suite usage</li>
+          <li>OWASP ZAP</li>
+          <li>Security test automation</li>
+          <li>Vulnerability reporting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Secure Development Practices</h3>
+        </div>
+        <p class="unit-description">Integrate security into the software development lifecycle.</p>
+        <ul class="topics-list">
+          <li>Secure coding practices</li>
+          <li>Security by design</li>
+          <li>Code review guidelines</li>
+          <li>Threat modeling</li>
+          <li>Security requirements</li>
+          <li>DevSecOps integration</li>
+          <li>Security training</li>
+          <li>Incident response</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Web Security Fundamentals</h1>
+      <p>Learn the foundations of web application security, HTTP protocol, and security principles.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">HTTP/HTTPS Protocols</h3>
+        <p>Understand the fundamental protocols that power web communications and their security implications.</p>
+        <span class="web-badge">HTTP Methods</span>
+        <span class="web-badge">Status Codes</span>
+        <span class="web-badge">Headers</span>
+        <span class="web-badge">TLS/SSL</span>
+        <div class="http-box">
+          HTTP is a stateless protocol that forms the foundation of web communication. HTTPS adds encryption through TLS/SSL to protect data in transit from eavesdropping and tampering.
+        </div>
+        <div class="code-example">
+          # HTTP Request Structure<br>
+          http_request = {<br>
+          &nbsp;&nbsp;"method": "GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS",<br>
+          &nbsp;&nbsp;"url": "https://example.com/api/users",<br>
+          &nbsp;&nbsp;"headers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Host": "example.com",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"User-Agent": "Mozilla/5.0...",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Accept": "application/json",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Authorization": "Bearer token",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Content-Type": "application/json",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"Cookie": "sessionid=abc123"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"body": "Request data (for POST/PUT/PATCH)"<br>
+          }<br><br>
+          # Security Headers<br>
+          security_headers = {<br>
+          &nbsp;&nbsp;"Strict-Transport-Security": "max-age=31536000; includeSubDomains",<br>
+          &nbsp;&nbsp;"Content-Security-Policy": "default-src 'self'",<br>
+          &nbsp;&nbsp;"X-Frame-Options": "DENY",<br>
+          &nbsp;&nbsp;"X-Content-Type-Options": "nosniff",<br>
+          &nbsp;&nbsp;"X-XSS-Protection": "1; mode=block"<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Web Architecture Basics</h3>
+        <p>Learn about web application architecture components and their security considerations.</p>
+        <div class="security-note">
+          <strong>Web Application Components:</strong><br>
+          • Client-side: Browser, JavaScript, HTML, CSS<br>
+          • Server-side: Web server, application server, database<br>
+          • Network: Load balancers, CDN, firewalls<br>
+          • Infrastructure: Cloud services, containers, microservices
+        </div>
+        <div class="vulnerability-highlight">
+          <strong>Common Architecture Vulnerabilities:</strong><br>
+          Each component introduces potential attack vectors. Understanding the full stack helps identify where security controls should be implemented and how attacks can propagate through the system.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Security Principles</h3>
+        <p>Master fundamental security principles that guide web application security design.</p>
+        <div class="code-example">
+          # Core Security Principles<br>
+          security_principles = {<br>
+          &nbsp;&nbsp;"confidentiality": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Protecting data from unauthorized access",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Encryption", "Access controls", "Data classification"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"integrity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Ensuring data accuracy and completeness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Digital signatures", "Checksums", "Input validation"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"availability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Ensuring systems are accessible when needed",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"controls": ["Redundancy", "DDoS protection", "Monitoring"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"authentication": "Verifying user identity",<br>
+          &nbsp;&nbsp;"authorization": "Controlling resource access",<br>
+          &nbsp;&nbsp;"non_repudiation": "Preventing denial of actions"<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">
