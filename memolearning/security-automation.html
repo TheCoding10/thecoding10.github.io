@@ -1,0 +1,755 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Security Automation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #134e4a 0%, #059669 50%, #10b981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #134e4a, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(19, 78, 74, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🤖';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #134e4a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #134e4a, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(19, 78, 74, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .automation-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #134e4a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .scripting-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .workflow-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .orchestration-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .api-showcase {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .playbook-note {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .ml-highlight {
+      background: #f3e8ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #8b5cf6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .devsecops-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .metrics-note {
+      background: #fdf2f8;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be185d;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🤖 Security Automation</h1>
+    <p>Master the automation of security processes, workflows, and incident response</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Security Automation Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">Automation Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~65</span>
+          <div class="stat-label">Automation Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">Tools & Platforms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">SOAR</span>
+          <div class="stat-label">Focus Area</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Automation Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core principles and concepts of security automation.</p>
+        <ul class="topics-list">
+          <li>Automation concepts</li>
+          <li>Benefits and challenges</li>
+          <li>Automation strategies</li>
+          <li>Process identification</li>
+          <li>ROI calculation</li>
+          <li>Risk considerations</li>
+          <li>Implementation planning</li>
+          <li>Success metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Scripting for Security</h3>
+        </div>
+        <p class="unit-description">Master scripting languages and techniques for security automation tasks.</p>
+        <ul class="topics-list">
+          <li>Python for security</li>
+          <li>PowerShell automation</li>
+          <li>Bash scripting</li>
+          <li>API interactions</li>
+          <li>Data manipulation</li>
+          <li>Error handling</li>
+          <li>Logging and monitoring</li>
+          <li>Code security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Security Orchestration (SOAR)</h3>
+        </div>
+        <p class="unit-description">Implement Security Orchestration, Automation, and Response platforms.</p>
+        <ul class="topics-list">
+          <li>SOAR architecture</li>
+          <li>Platform evaluation</li>
+          <li>Workflow design</li>
+          <li>Playbook development</li>
+          <li>Integration patterns</li>
+          <li>Case management</li>
+          <li>Metrics and reporting</li>
+          <li>Platform administration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Incident Response Automation</h3>
+        </div>
+        <p class="unit-description">Automate incident response processes and improve response times.</p>
+        <ul class="topics-list">
+          <li>Automated detection</li>
+          <li>Alert enrichment</li>
+          <li>Response playbooks</li>
+          <li>Containment automation</li>
+          <li>Evidence collection</li>
+          <li>Communication automation</li>
+          <li>Recovery processes</li>
+          <li>Lessons learned</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Threat Intelligence Automation</h3>
+        </div>
+        <p class="unit-description">Automate threat intelligence collection, analysis, and distribution.</p>
+        <ul class="topics-list">
+          <li>Feed automation</li>
+          <li>IOC processing</li>
+          <li>Threat hunting automation</li>
+          <li>Intelligence analysis</li>
+          <li>Attribution automation</li>
+          <li>Reporting automation</li>
+          <li>Sharing platforms</li>
+          <li>Quality assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Vulnerability Management Automation</h3>
+        </div>
+        <p class="unit-description">Automate vulnerability scanning, assessment, and remediation processes.</p>
+        <ul class="topics-list">
+          <li>Automated scanning</li>
+          <li>Vulnerability correlation</li>
+          <li>Risk prioritization</li>
+          <li>Patch management</li>
+          <li>Remediation workflows</li>
+          <li>Compliance checking</li>
+          <li>Reporting automation</li>
+          <li>Metrics tracking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Security Testing Automation</h3>
+        </div>
+        <p class="unit-description">Implement automated security testing in development and production environments.</p>
+        <ul class="topics-list">
+          <li>SAST automation</li>
+          <li>DAST automation</li>
+          <li>IAST integration</li>
+          <li>Container scanning</li>
+          <li>Infrastructure testing</li>
+          <li>Penetration testing automation</li>
+          <li>Compliance testing</li>
+          <li>Result correlation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">DevSecOps Automation</h3>
+        </div>
+        <p class="unit-description">Integrate security automation into DevOps pipelines and processes.</p>
+        <ul class="topics-list">
+          <li>CI/CD security gates</li>
+          <li>Infrastructure as code security</li>
+          <li>Container security automation</li>
+          <li>Secrets management</li>
+          <li>Policy as code</li>
+          <li>Compliance automation</li>
+          <li>Security feedback loops</li>
+          <li>Deployment security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Machine Learning for Security</h3>
+        </div>
+        <p class="unit-description">Apply machine learning and AI techniques to security automation.</p>
+        <ul class="topics-list">
+          <li>Anomaly detection</li>
+          <li>Behavioral analysis</li>
+          <li>Threat classification</li>
+          <li>Predictive analytics</li>
+          <li>Natural language processing</li>
+          <li>Model training</li>
+          <li>Feature engineering</li>
+          <li>ML operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cloud Security Automation</h3>
+        </div>
+        <p class="unit-description">Automate security controls and monitoring in cloud environments.</p>
+        <ul class="topics-list">
+          <li>Cloud configuration automation</li>
+          <li>Policy enforcement</li>
+          <li>Resource monitoring</li>
+          <li>Compliance automation</li>
+          <li>Auto-scaling security</li>
+          <li>Multi-cloud automation</li>
+          <li>Serverless security</li>
+          <li>Cost optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Automation Governance and Metrics</h3>
+        </div>
+        <p class="unit-description">Establish governance frameworks and measure automation effectiveness.</p>
+        <ul class="topics-list">
+          <li>Automation governance</li>
+          <li>Change management</li>
+          <li>Quality assurance</li>
+          <li>Performance metrics</li>
+          <li>ROI measurement</li>
+          <li>Risk assessment</li>
+          <li>Continuous improvement</li>
+          <li>Future planning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Automation Fundamentals</h1>
+      <p>Learn the core principles and concepts of security automation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Automation Concepts</h3>
+        <p>Understand the fundamental principles and terminology of security automation.</p>
+        <span class="automation-badge">Process</span>
+        <span class="automation-badge">Workflow</span>
+        <span class="automation-badge">Orchestration</span>
+        <span class="automation-badge">Integration</span>
+        <div class="scripting-box">
+          Security automation involves using technology to perform security tasks with minimal human intervention. It encompasses process automation, workflow orchestration, and intelligent decision-making to improve security operations efficiency and effectiveness.
+        </div>
+        <div class="code-example">
+          # Security Automation Framework<br>
+          automation_framework = {<br>
+          &nbsp;&nbsp;"automation_types": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"task_automation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Automate individual security tasks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Log parsing", "Alert creation", "Data collection"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"complexity": "Low",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"impact": "Efficiency improvement"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process_automation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Automate end-to-end security processes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Incident response", "Vulnerability management"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"complexity": "Medium",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"impact": "Process standardization"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"intelligent_automation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "AI-driven automated decision making",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Threat hunting", "Anomaly detection"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"complexity": "High",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"impact": "Enhanced capabilities"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"automation_principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"repeatability": "Consistent execution of tasks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"reliability": "Dependable and error-free operation",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scalability": "Handle increasing workloads",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"transparency": "Clear audit trails and logging",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"flexibility": "Adaptable to changing requirements"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"implementation_layers": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"data_layer": "Data collection and normalization",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"logic_layer": "Business rules and decision logic",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integration_layer": "System and tool integration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"presentation_layer": "Dashboards and reporting"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Benefits and Challenges</h3>
+        <p>Explore the advantages and potential obstacles of implementing security automation.</p>
+        <div class="workflow-highlight">
+          <strong>Key Benefits:</strong><br>
+          • Faster Response Times: Automated processes respond in seconds/minutes vs hours/days<br>
+          • Consistency: Eliminates human error and ensures standardized responses<br>
+          • Scalability: Handle large volumes of events without linear staff increases<br>
+          • Resource Optimization: Free up analysts for higher-value activities<br>
+          • 24/7 Operations: Continuous monitoring and response capabilities
+        </div>
+        <div class="orchestration-insight">
+          <strong>Common Challenges:</strong><br>
+          Initial complexity in setup, potential for false positives, integration difficulties, skills gap, and resistance to change. Successful automation requires careful planning, stakeholder buy-in, and iterative improvement.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Process Identification</h3>
+        <p>Learn how to identify and prioritize security processes suitable for automation.</p>
+        <div class="api-showcase">
+          <strong>Automation Candidates:</strong><br>
+          • High-volume, repetitive tasks<br>
+          • Well-defined, rule-based processes<br>
+          • Time-sensitive operations<br>
+          • Error-prone manual activities<br>
+          • Standard operating procedures<br>
+          • Data collection and enrichment tasks
+        </div>
+        <div class="code-example">
+          # Process Evaluation Matrix<br>
+          evaluation_criteria = {<br>
+          &nbsp;&nbsp;"volume": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"high": "1000+ events/day",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"medium": "100-1000 events/day",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"low": "< 100 events/day"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"complexity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"low": "Simple, rule-based decisions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"medium": "Some conditional logic",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"high": "Complex decision trees"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"urgency": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"critical": "Seconds to minutes",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"high": "Minutes to hours",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"normal": "Hours to days"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"automation_score": "volume × urgency / complexity",<br>
+          &nbsp;&nbsp;"priority_matrix": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"quick_wins": "High score, low effort",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"major_projects": "High score, high effort",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"fill_ins": "Low score, low effort",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"avoid": "Low score, high effort"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Scripting for Security</h1>
