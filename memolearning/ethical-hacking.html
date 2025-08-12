@@ -1,0 +1,756 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Ethical Hacking and Penetration Testing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔴';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c2d12;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .hack-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .recon-box {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .vulnerability-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .exploit-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .tool-showcase {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .ethical-note {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎯 Ethical Hacking & Penetration Testing</h1>
+    <p>Master the art of ethical hacking to identify vulnerabilities and strengthen cybersecurity defenses</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Ethical Hacking Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Hacking Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~100</span>
+          <div class="stat-label">Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Tools & Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Attack Vectors</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Ethical Hacking Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the foundations of ethical hacking, legal considerations, and professional standards.</p>
+        <ul class="topics-list">
+          <li>Ethics and legality</li>
+          <li>Hacker types and motivations</li>
+          <li>Legal frameworks</li>
+          <li>Penetration testing methodology</li>
+          <li>Professional certifications</li>
+          <li>Rules of engagement</li>
+          <li>Documentation standards</li>
+          <li>Industry best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Reconnaissance and Information Gathering</h3>
+        </div>
+        <p class="unit-description">Master passive and active reconnaissance techniques to gather intelligence about targets.</p>
+        <ul class="topics-list">
+          <li>Passive reconnaissance</li>
+          <li>Active reconnaissance</li>
+          <li>OSINT techniques</li>
+          <li>Social media intelligence</li>
+          <li>DNS enumeration</li>
+          <li>Whois and domain analysis</li>
+          <li>Google hacking</li>
+          <li>Metadata analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Scanning and Enumeration</h3>
+        </div>
+        <p class="unit-description">Discover and analyze network services, ports, and system configurations.</p>
+        <ul class="topics-list">
+          <li>Network scanning</li>
+          <li>Port scanning techniques</li>
+          <li>Service enumeration</li>
+          <li>Version detection</li>
+          <li>Operating system fingerprinting</li>
+          <li>Banner grabbing</li>
+          <li>SNMP enumeration</li>
+          <li>SMB enumeration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Vulnerability Assessment</h3>
+        </div>
+        <p class="unit-description">Identify, analyze, and prioritize security vulnerabilities in systems and applications.</p>
+        <ul class="topics-list">
+          <li>Vulnerability identification</li>
+          <li>CVE database analysis</li>
+          <li>Risk assessment</li>
+          <li>Automated scanning tools</li>
+          <li>Manual testing techniques</li>
+          <li>False positive analysis</li>
+          <li>Vulnerability prioritization</li>
+          <li>Reporting and documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">System Hacking</h3>
+        </div>
+        <p class="unit-description">Learn to exploit system vulnerabilities and gain unauthorized access to target systems.</p>
+        <ul class="topics-list">
+          <li>Password attacks</li>
+          <li>Buffer overflow exploitation</li>
+          <li>Privilege escalation</li>
+          <li>Registry manipulation</li>
+          <li>Backdoor installation</li>
+          <li>Rootkit deployment</li>
+          <li>Steganography</li>
+          <li>Covering tracks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Network Attacks</h3>
+        </div>
+        <p class="unit-description">Explore network-based attack vectors and techniques for compromising network infrastructure.</p>
+        <ul class="topics-list">
+          <li>ARP spoofing</li>
+          <li>MAC flooding</li>
+          <li>DHCP attacks</li>
+          <li>VLAN hopping</li>
+          <li>DNS poisoning</li>
+          <li>Session hijacking</li>
+          <li>Man-in-the-middle attacks</li>
+          <li>Network sniffing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Web Application Security</h3>
+        </div>
+        <p class="unit-description">Identify and exploit vulnerabilities in web applications and APIs.</p>
+        <ul class="topics-list">
+          <li>OWASP Top 10</li>
+          <li>SQL injection</li>
+          <li>Cross-site scripting (XSS)</li>
+          <li>Cross-site request forgery (CSRF)</li>
+          <li>Authentication bypass</li>
+          <li>Session management flaws</li>
+          <li>File upload vulnerabilities</li>
+          <li>API security testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Wireless Network Security</h3>
+        </div>
+        <p class="unit-description">Test the security of wireless networks and mobile communications.</p>
+        <ul class="topics-list">
+          <li>WiFi security protocols</li>
+          <li>WPA/WPA2 cracking</li>
+          <li>Rogue access points</li>
+          <li>Evil twin attacks</li>
+          <li>Bluetooth attacks</li>
+          <li>RFID/NFC security</li>
+          <li>Wireless packet analysis</li>
+          <li>Mobile device security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Social Engineering</h3>
+        </div>
+        <p class="unit-description">Understand and practice social engineering techniques to test human factors in security.</p>
+        <ul class="topics-list">
+          <li>Psychological manipulation</li>
+          <li>Phishing attacks</li>
+          <li>Pretexting</li>
+          <li>Baiting and quid pro quo</li>
+          <li>Physical social engineering</li>
+          <li>Tailgating and piggybacking</li>
+          <li>Phone-based attacks</li>
+          <li>Awareness training</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Malware Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze and understand malicious software to improve defense mechanisms.</p>
+        <ul class="topics-list">
+          <li>Malware types and families</li>
+          <li>Static analysis</li>
+          <li>Dynamic analysis</li>
+          <li>Sandbox environments</li>
+          <li>Reverse engineering</li>
+          <li>Behavioral analysis</li>
+          <li>Signature creation</li>
+          <li>Incident response</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Cryptography and PKI</h3>
+        </div>
+        <p class="unit-description">Test cryptographic implementations and public key infrastructure security.</p>
+        <ul class="topics-list">
+          <li>Cryptographic attacks</li>
+          <li>Hash function analysis</li>
+          <li>Symmetric key attacks</li>
+          <li>Asymmetric key attacks</li>
+          <li>PKI vulnerabilities</li>
+          <li>Certificate attacks</li>
+          <li>Implementation flaws</li>
+          <li>Side-channel attacks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Cloud Security Testing</h3>
+        </div>
+        <p class="unit-description">Assess security in cloud environments and cloud-native applications.</p>
+        <ul class="topics-list">
+          <li>Cloud service models</li>
+          <li>Shared responsibility model</li>
+          <li>Container security</li>
+          <li>Serverless security</li>
+          <li>IAM misconfigurations</li>
+          <li>Storage bucket attacks</li>
+          <li>API gateway security</li>
+          <li>Multi-tenant issues</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">IoT and Embedded Systems</h3>
+        </div>
+        <p class="unit-description">Explore security vulnerabilities in Internet of Things devices and embedded systems.</p>
+        <ul class="topics-list">
+          <li>IoT architecture</li>
+          <li>Firmware analysis</li>
+          <li>Hardware hacking</li>
+          <li>Communication protocols</li>
+          <li>Device authentication</li>
+          <li>Update mechanisms</li>
+          <li>Physical attacks</li>
+          <li>Industrial control systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Penetration Testing Methodology</h3>
+        </div>
+        <p class="unit-description">Master structured approaches to penetration testing and security assessments.</p>
+        <ul class="topics-list">
+          <li>Testing frameworks</li>
+          <li>PTES methodology</li>
+          <li>OWASP testing guide</li>
+          <li>Scoping and planning</li>
+          <li>Risk-based testing</li>
+          <li>Test case development</li>
+          <li>Quality assurance</li>
+          <li>Continuous testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Reporting and Remediation</h3>
+        </div>
+        <p class="unit-description">Create effective security reports and guide remediation efforts.</p>
+        <ul class="topics-list">
+          <li>Executive reporting</li>
+          <li>Technical documentation</li>
+          <li>Risk scoring</li>
+          <li>Remediation guidance</li>
+          <li>Proof of concept</li>
+          <li>Timeline recommendations</li>
+          <li>Compliance mapping</li>
+          <li>Retesting procedures</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Ethical Hacking Fundamentals</h1>
+      <p>Learn the foundations of ethical hacking, legal considerations, and professional standards.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ethics and Legality</h3>
+        <p>Understand the ethical principles and legal frameworks governing ethical hacking practices.</p>
+        <span class="hack-badge">Legal Framework</span>
+        <span class="hack-badge">Professional Ethics</span>
+        <span class="hack-badge">Authorization</span>
+        <div class="ethical-note">
+          Ethical hacking requires explicit written authorization and adherence to strict legal and ethical guidelines. Never perform security testing without proper permission and scope definition.
+        </div>
+        <div class="code-example">
+          # Ethical Hacking Principles<br>
+          ethical_hacking = {<br>
+          &nbsp;&nbsp;"core_principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"authorization": "Always obtain written permission",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"scope": "Stay within defined boundaries",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"confidentiality": "Protect client information",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"integrity": "Do no harm to systems",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"disclosure": "Report findings responsibly"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"legal_considerations": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"cfaa": "Computer Fraud and Abuse Act (US)",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"gdpr": "Data protection regulations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"local_laws": "Jurisdiction-specific requirements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"contracts": "Service agreements and NDAs"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"professional_standards": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"certifications": ["CEH", "OSCP", "CISSP", "CISM"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"organizations": ["EC-Council", "ISC2", "SANS", "CompTIA"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"code_of_ethics": "Professional conduct guidelines"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hacker Types and Motivations</h3>
+        <p>Explore different categories of hackers and their various motivations and methodologies.</p>
+        <div class="vulnerability-highlight">
+          <strong>Hacker Classifications:</strong><br>
+          • White Hat: Ethical hackers working to improve security<br>
+          • Black Hat: Malicious hackers with criminal intent<br>
+          • Gray Hat: Hackers operating in ethical gray areas<br>
+          • Script Kiddies: Inexperienced hackers using existing tools<br>
+          • Hacktivists: Politically motivated hacking groups<br>
+          • Nation-State: Government-sponsored cyber operations
+        </div>
+        <div class="exploit-insight">
+          <strong>Understanding Motivations:</strong><br>
+          Recognizing different hacker motivations helps in threat modeling and developing appropriate defense strategies. Financial gain, political activism, espionage, and curiosity drive different attack patterns.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Penetration Testing Methodology</h3>
+        <p>Learn structured approaches to conducting professional penetration testing engagements.</p>
+        <div class="tool-showcase">
+          <strong>Standard Methodologies:</strong><br>
+          • PTES (Penetration Testing Execution Standard)<br>
+          • OWASP Testing Framework<br>
+          • NIST SP 800-115<br>
+          • OSSTMM (Open Source Security Testing Methodology)<br>
+          • ISSAF (Information Systems Security Assessment Framework)
+        </div>
+        <div class="code-example">
+          # Penetration Testing Phases<br>
+          pentest_methodology = {<br>
+          &nbsp;&nbsp;"pre_engagement": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": ["Scoping", "Contracts", "Rules of engagement"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deliverables": ["SOW", "Legal agreements", "Contact list"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"intelligence_gathering": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": ["OSINT", "Reconnaissance", "Target profiling"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"tools": ["Google dorking", "Social media", "DNS enumeration"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"threat_modeling": {
