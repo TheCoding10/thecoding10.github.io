@@ -1,0 +1,749 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Security Operations and SOC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔒';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .soc-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .monitoring-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .alert-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .siem-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .threat-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .playbook-note {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .automation-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .metrics-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔒 Security Operations & SOC</h1>
+    <p>Master the operations and management of Security Operations Centers and continuous monitoring</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Security Operations & SOC Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">SOC Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~85</span>
+          <div class="stat-label">Operational Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">20+</span>
+          <div class="stat-label">SOC Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <div class="stat-label">Operations Focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">SOC Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the foundational concepts, structure, and purpose of Security Operations Centers.</p>
+        <ul class="topics-list">
+          <li>SOC mission and objectives</li>
+          <li>SOC types and models</li>
+          <li>Organizational structure</li>
+          <li>Roles and responsibilities</li>
+          <li>SOC maturity models</li>
+          <li>Business alignment</li>
+          <li>Cost-benefit analysis</li>
+          <li>SOC governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Security Monitoring and Detection</h3>
+        </div>
+        <p class="unit-description">Master continuous security monitoring techniques and threat detection methodologies.</p>
+        <ul class="topics-list">
+          <li>Continuous monitoring</li>
+          <li>Log collection and analysis</li>
+          <li>Event correlation</li>
+          <li>Anomaly detection</li>
+          <li>Signature-based detection</li>
+          <li>Behavioral analysis</li>
+          <li>Real-time monitoring</li>
+          <li>Monitoring strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">SIEM and Log Management</h3>
+        </div>
+        <p class="unit-description">Implement and manage Security Information and Event Management systems effectively.</p>
+        <ul class="topics-list">
+          <li>SIEM architecture</li>
+          <li>Log aggregation</li>
+          <li>Parsing and normalization</li>
+          <li>Correlation rules</li>
+          <li>Dashboard creation</li>
+          <li>Use case development</li>
+          <li>Tuning and optimization</li>
+          <li>SIEM administration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Threat Intelligence Integration</h3>
+        </div>
+        <p class="unit-description">Integrate threat intelligence feeds and leverage intelligence for enhanced detection.</p>
+        <ul class="topics-list">
+          <li>Threat intelligence types</li>
+          <li>Intelligence feeds</li>
+          <li>IOC management</li>
+          <li>Threat hunting</li>
+          <li>Attribution analysis</li>
+          <li>Intelligence platforms</li>
+          <li>Tactical intelligence</li>
+          <li>Strategic intelligence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Alert Triage and Analysis</h3>
+        </div>
+        <p class="unit-description">Develop skills in prioritizing, investigating, and analyzing security alerts.</p>
+        <ul class="topics-list">
+          <li>Alert prioritization</li>
+          <li>Triage procedures</li>
+          <li>Investigation methodologies</li>
+          <li>Evidence collection</li>
+          <li>Impact assessment</li>
+          <li>False positive reduction</li>
+          <li>Escalation procedures</li>
+          <li>Case management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Incident Response Coordination</h3>
+        </div>
+        <p class="unit-description">Coordinate incident response activities and manage security incidents effectively.</p>
+        <ul class="topics-list">
+          <li>Incident classification</li>
+          <li>Response coordination</li>
+          <li>Communication protocols</li>
+          <li>Stakeholder management</li>
+          <li>Resource allocation</li>
+          <li>Timeline management</li>
+          <li>External coordination</li>
+          <li>Recovery oversight</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">SOC Tools and Technologies</h3>
+        </div>
+        <p class="unit-description">Master the tools and technologies essential for effective SOC operations.</p>
+        <ul class="topics-list">
+          <li>SIEM platforms</li>
+          <li>SOAR solutions</li>
+          <li>Threat hunting tools</li>
+          <li>Network monitoring</li>
+          <li>Endpoint detection</li>
+          <li>Vulnerability scanners</li>
+          <li>Forensic tools</li>
+          <li>Communication systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Security Orchestration and Automation</h3>
+        </div>
+        <p class="unit-description">Implement automation and orchestration to improve SOC efficiency and response times.</p>
+        <ul class="topics-list">
+          <li>Automation strategies</li>
+          <li>Playbook development</li>
+          <li>Workflow automation</li>
+          <li>Response automation</li>
+          <li>Tool integration</li>
+          <li>API utilization</li>
+          <li>Orchestration platforms</li>
+          <li>Automation metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Threat Hunting</h3>
+        </div>
+        <p class="unit-description">Develop proactive threat hunting capabilities to identify advanced persistent threats.</p>
+        <ul class="topics-list">
+          <li>Hunting methodologies</li>
+          <li>Hypothesis development</li>
+          <li>Hunt techniques</li>
+          <li>Data analysis</li>
+          <li>Hunting tools</li>
+          <li>IOC development</li>
+          <li>Hunt campaigns</li>
+          <li>Threat landscape analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">SOC Metrics and Reporting</h3>
+        </div>
+        <p class="unit-description">Establish meaningful metrics and reporting systems to measure SOC effectiveness.</p>
+        <ul class="topics-list">
+          <li>KPI development</li>
+          <li>Performance metrics</li>
+          <li>Efficiency measurements</li>
+          <li>Quality metrics</li>
+          <li>Executive reporting</li>
+          <li>Operational dashboards</li>
+          <li>Trend analysis</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">SOC Team Management</h3>
+        </div>
+        <p class="unit-description">Manage SOC teams effectively including staffing, training, and career development.</p>
+        <ul class="topics-list">
+          <li>Team structure</li>
+          <li>Staffing models</li>
+          <li>Skill development</li>
+          <li>Training programs</li>
+          <li>Career progression</li>
+          <li>Performance management</li>
+          <li>Knowledge management</li>
+          <li>Team collaboration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">SOC Evolution and Future Trends</h3>
+        </div>
+        <p class="unit-description">Understand emerging trends and future directions in SOC operations and technologies.</p>
+        <ul class="topics-list">
+          <li>Cloud SOC models</li>
+          <li>AI and machine learning</li>
+          <li>Zero trust integration</li>
+          <li>DevSecOps alignment</li>
+          <li>Managed SOC services</li>
+          <li>Hybrid SOC models</li>
+          <li>Technology convergence</li>
+          <li>Future capabilities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: SOC Fundamentals</h1>
+      <p>Learn the foundational concepts, structure, and purpose of Security Operations Centers.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SOC Mission and Objectives</h3>
+        <p>Understand the core mission and strategic objectives that drive SOC operations.</p>
+        <span class="soc-badge">Detection</span>
+        <span class="soc-badge">Response</span>
+        <span class="soc-badge">Recovery</span>
+        <span class="soc-badge">Prevention</span>
+        <div class="monitoring-box">
+          A SOC's primary mission is to detect, analyze, and respond to cybersecurity incidents using a combination of technology solutions and human expertise. The SOC serves as the central hub for security monitoring and incident coordination.
+        </div>
+        <div class="code-example">
+          # SOC Core Objectives<br>
+          soc_objectives = {<br>
+          &nbsp;&nbsp;"primary_mission": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"detect": "Identify security threats and incidents",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"analyze": "Investigate and assess security events",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"respond": "Execute incident response procedures",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"recover": "Restore normal operations quickly"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"operational_goals": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"coverage": "24x7x365 monitoring capability",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"visibility": "Comprehensive security visibility",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"speed": "Rapid detection and response times",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"accuracy": "Minimize false positives",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"coordination": "Effective incident coordination"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"strategic_outcomes": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"risk_reduction": "Lower organizational cyber risk",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"compliance": "Meet regulatory requirements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"business_protection": "Safeguard business operations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"reputation": "Protect organizational reputation"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"success_metrics": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mttr": "Mean Time to Response",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"mttd": "Mean Time to Detection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"accuracy": "Alert accuracy percentage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"coverage": "Asset monitoring coverage"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SOC Types and Models</h3>
+        <p>Explore different SOC organizational models and deployment approaches.</p>
+        <div class="alert-highlight">
+          <strong>SOC Delivery Models:</strong><br>
+          • In-house SOC: Fully internal team and infrastructure<br>
+          • Outsourced SOC: Fully managed by external provider<br>
+          • Hybrid SOC: Combination of internal and external resources<br>
+          • Virtual SOC: Distributed team using cloud technologies<br>
+          • Co-managed SOC: Shared responsibilities with provider
+        </div>
+        <div class="siem-insight">
+          <strong>Model Selection Factors:</strong><br>
+          Consider organizational size, budget, expertise availability, compliance requirements, and risk tolerance when choosing a SOC model. Each approach has distinct advantages and trade-offs.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Organizational Structure</h3>
+        <p>Learn about SOC organizational structures and reporting relationships.</p>
+        <div class="threat-showcase">
+          <strong>Typical SOC Hierarchy:</strong><br>
+          • SOC Manager: Overall SOC leadership and strategy<br>
+          • SOC Analysts (L1): Initial alert triage and escalation<br>
+          • SOC Analysts (L2): Incident investigation and analysis<br>
+          • SOC Analysts (L3): Advanced analysis and threat hunting<br>
+          • SOC Engineers: Tool management and maintenance<br>
+          • Threat Intelligence Analysts: Intelligence gathering and analysis
+        </div>
+        <div class="code-example">
+          # SOC Staffing Model<br>
+          soc_structure = {<br>
+          &nbsp;&nbsp;"tier_1_analysts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"responsibilities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Monitor security dashboards",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Perform initial alert triage",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Execute standard playbooks",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Escalate complex incidents"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"skills": ["Basic security concepts", "Tool operation", "Documentation"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"tier_2_analysts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"responsibilities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Investigate escalated incidents",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Perform deeper analysis",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Coordinate response activities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Develop new detection rules"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"skills": ["Incident response", "Forensics", "Malware analysis"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"tier_3_analysts": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"responsibilities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Handle complex investigations",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Conduct threat hunting",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Develop advanced analytics",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Mentor junior analysts"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"skills": ["Advanced analysis", "
