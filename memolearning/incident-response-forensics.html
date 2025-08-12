@@ -1,0 +1,748 @@
+</style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔍 Incident Response & Digital Forensics</h1>
+    <p>Master the investigation of security incidents and recovery of digital evidence</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Incident Response & Forensics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">13</span>
+          <div class="stat-label">Forensics Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~75</span>
+          <div class="stat-label">Investigation Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">30+</span>
+          <div class="stat-label">Forensic Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">NIST</span>
+          <div class="stat-label">Framework Aligned</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Incident Response Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the foundations of incident response, frameworks, and organizational preparation.</p>
+        <ul class="topics-list">
+          <li>Incident response lifecycle</li>
+          <li>NIST framework</li>
+          <li>Team structure and roles</li>
+          <li>Incident classification</li>
+          <li>Communication protocols</li>
+          <li>Legal considerations</li>
+          <li>Documentation standards</li>
+          <li>Continuous improvement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Digital Forensics Principles</h3>
+        </div>
+        <p class="unit-description">Master the fundamental principles and methodologies of digital forensic investigations.</p>
+        <ul class="topics-list">
+          <li>Forensic methodology</li>
+          <li>Evidence acquisition</li>
+          <li>Chain of custody</li>
+          <li>Legal admissibility</li>
+          <li>Forensic imaging</li>
+          <li>Hash verification</li>
+          <li>Write protection</li>
+          <li>Documentation procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Incident Detection and Analysis</h3>
+        </div>
+        <p class="unit-description">Develop skills in detecting security incidents and performing initial analysis.</p>
+        <ul class="topics-list">
+          <li>Security monitoring</li>
+          <li>Log analysis</li>
+          <li>Anomaly detection</li>
+          <li>Indicator identification</li>
+          <li>Threat intelligence</li>
+          <li>Correlation techniques</li>
+          <li>False positive analysis</li>
+          <li>Escalation procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Evidence Acquisition and Preservation</h3>
+        </div>
+        <p class="unit-description">Learn proper techniques for acquiring and preserving digital evidence.</p>
+        <ul class="topics-list">
+          <li>Live system acquisition</li>
+          <li>Dead system imaging</li>
+          <li>Memory dumps</li>
+          <li>Network captures</li>
+          <li>Mobile device acquisition</li>
+          <li>Cloud evidence collection</li>
+          <li>Volatile data preservation</li>
+          <li>Evidence integrity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">File System Forensics</h3>
+        </div>
+        <p class="unit-description">Analyze file systems and recover deleted or hidden data from storage devices.</p>
+        <ul class="topics-list">
+          <li>File system structures</li>
+          <li>NTFS analysis</li>
+          <li>ext3/ext4 analysis</li>
+          <li>FAT file systems</li>
+          <li>Deleted file recovery</li>
+          <li>File carving</li>
+          <li>Metadata analysis</li>
+          <li>Timeline reconstruction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Memory Forensics</h3>
+        </div>
+        <p class="unit-description">Investigate volatile memory to uncover running processes, network connections, and malware.</p>
+        <ul class="topics-list">
+          <li>Memory structure</li>
+          <li>Process analysis</li>
+          <li>Network connections</li>
+          <li>Registry analysis</li>
+          <li>Malware detection</li>
+          <li>Rootkit analysis</li>
+          <li>Volatility framework</li>
+          <li>Memory artifacts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Network Forensics</h3>
+        </div>
+        <p class="unit-description">Analyze network traffic and communications to reconstruct attack scenarios.</p>
+        <ul class="topics-list">
+          <li>Packet capture analysis</li>
+          <li>Protocol analysis</li>
+          <li>Traffic reconstruction</li>
+          <li>Email forensics</li>
+          <li>Web traffic analysis</li>
+          <li>Encrypted traffic</li>
+          <li>Network timeline</li>
+          <li>Intrusion detection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Malware Analysis</h3>
+        </div>
+        <p class="unit-description">Analyze malicious software to understand attack vectors and develop countermeasures.</p>
+        <ul class="topics-list">
+          <li>Static analysis</li>
+          <li>Dynamic analysis</li>
+          <li>Behavioral analysis</li>
+          <li>Code analysis</li>
+          <li>Sandbox analysis</li>
+          <li>Reverse engineering</li>
+          <li>Indicator extraction</li>
+          <li>Attribution analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Mobile Device Forensics</h3>
+        </div>
+        <p class="unit-description">Investigate smartphones, tablets, and IoT devices for digital evidence.</p>
+        <ul class="topics-list">
+          <li>iOS forensics</li>
+          <li>Android forensics</li>
+          <li>Physical acquisition</li>
+          <li>Logical acquisition</li>
+          <li>App data analysis</li>
+          <li>Communication records</li>
+          <li>Location data</li>
+          <li>Cloud synchronization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cloud Forensics</h3>
+        </div>
+        <p class="unit-description">Investigate incidents in cloud environments and analyze cloud-based evidence.</p>
+        <ul class="topics-list">
+          <li>Cloud architecture forensics</li>
+          <li>Virtual machine analysis</li>
+          <li>Container forensics</li>
+          <li>Cloud logs analysis</li>
+          <li>API forensics</li>
+          <li>Multi-tenancy challenges</li>
+          <li>Jurisdictional issues</li>
+          <li>Cloud provider cooperation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Timeline Analysis and Reconstruction</h3>
+        </div>
+        <p class="unit-description">Create comprehensive timelines to understand the sequence of events during incidents.</p>
+        <ul class="topics-list">
+          <li>Timeline methodologies</li>
+          <li>Timestamp analysis</li>
+          <li>Correlation techniques</li>
+          <li>Event reconstruction</li>
+          <li>Super timeline creation</li>
+          <li>Temporal analysis</li>
+          <li>Timeline visualization</li>
+          <li>Cross-evidence correlation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Forensic Reporting and Legal Considerations</h3>
+        </div>
+        <p class="unit-description">Prepare forensic reports and understand legal requirements for digital evidence.</p>
+        <ul class="topics-list">
+          <li>Report writing</li>
+          <li>Expert testimony</li>
+          <li>Legal procedures</li>
+          <li>Evidence presentation</li>
+          <li>Court admissibility</li>
+          <li>Cross-examination</li>
+          <li>Privacy laws</li>
+          <li>International considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Recovery and Lessons Learned</h3>
+        </div>
+        <p class="unit-description">Focus on post-incident recovery activities and organizational learning.</p>
+        <ul class="topics-list">
+          <li>System restoration</li>
+          <li>Business continuity</li>
+          <li>Post-incident review</li>
+          <li>Lessons learned</li>
+          <li>Process improvement</li>
+          <li>Training updates</li>
+          <li>Tool evaluation</li>
+          <li>Capability maturity</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Incident Response Fundamentals</h1>
+      <p>Learn the foundations of incident response, frameworks, and organizational preparation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Incident Response Lifecycle</h3>
+        <p>Understand the structured approach to handling security incidents from detection to recovery.</p>
+        <span class="forensics-badge">Preparation</span>
+        <span class="forensics-badge">Detection</span>
+        <span class="forensics-badge">Analysis</span>
+        <span class="forensics-badge">Containment</span>
+        <span class="forensics-badge">Eradication</span>
+        <span class="forensics-badge">Recovery</span>
+        <div class="incident-box">
+          The incident response lifecycle provides a systematic approach to managing security incidents. Each phase has specific objectives, activities, and deliverables that ensure effective incident handling.
+        </div>
+        <div class="code-example">
+          # NIST Incident Response Lifecycle<br>
+          incident_lifecycle = {<br>
+          &nbsp;&nbsp;"preparation": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Develop incident response plan",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Train incident response team",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Establish communication procedures",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Deploy monitoring tools"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"deliverables": ["IR plan", "Team contact list", "Tool inventory"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"detection_and_analysis": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Monitor security events",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Analyze potential incidents",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Validate incident occurrence",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Assess incident scope and impact"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"tools": ["SIEM", "IDS/IPS", "Log analysis", "Threat intelligence"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"containment_eradication_recovery": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"short_term_containment": "Immediate isolation and damage control",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"long_term_containment": "Temporary fixes and system hardening",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"eradication": "Remove malware and vulnerabilities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"recovery": "Restore systems and return to normal operations"<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"post_incident_activity": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"lessons_learned": "Review incident handling effectiveness",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"evidence_retention": "Preserve evidence per legal requirements",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"process_improvement": "Update procedures based on findings"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Team Structure and Roles</h3>
+        <p>Establish effective incident response team structures with clearly defined roles and responsibilities.</p>
+        <div class="evidence-highlight">
+          <strong>Core IR Team Roles:</strong><br>
+          • Incident Response Manager: Overall coordination and decision-making<br>
+          • Security Analyst: Technical analysis and investigation<br>
+          • Forensics Specialist: Evidence collection and analysis<br>
+          • Communications Lead: Internal and external communications<br>
+          • Legal Counsel: Legal guidance and compliance<br>
+          • IT Operations: System restoration and technical support
+        </div>
+        <div class="timeline-insight">
+          <strong>Team Activation Criteria:</strong><br>
+          Define clear criteria for when to activate the incident response team, escalation procedures, and communication protocols. Consider time zones, availability, and skill requirements for different incident types.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Incident Classification</h3>
+        <p>Learn to properly classify and prioritize incidents based on impact and severity.</p>
+        <div class="tool-showcase">
+          <strong>Classification Factors:</strong><br>
+          • Functional Impact: Effect on business operations<br>
+          • Information Impact: Confidentiality, integrity, availability<br>
+          • Recoverability: Time and resources needed for recovery<br>
+          • Scope: Number of systems, users, or locations affected
+        </div>
+        <div class="code-example">
+          # Incident Classification Matrix<br>
+          classification = {<br>
+          &nbsp;&nbsp;"severity_levels": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"critical": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"impact": "Severe business disruption<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Incident Response and Digital Forensics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(88, 28, 135, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #581c87;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #581c87, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(88, 28, 135, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .forensics-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #581c87;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .incident-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .evidence-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .timeline-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .tool-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .chain-of-custody {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .memory-analysis {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .network-forensics {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:
