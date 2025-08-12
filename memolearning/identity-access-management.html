@@ -1,0 +1,735 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Identity and Access Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #365314 0%, #4d7c0f 50%, #65a30d 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #365314, #4d7c0f);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(54, 83, 20, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #365314;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4d7c0f;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #365314, #4d7c0f);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(54, 83, 20, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .iam-badge {
+      display: inline-block;
+      background: #f7fee7;
+      color: #365314;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .identity-box {
+      background: #f7fee7;
+      border: 1px solid #bef264;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #365314;
+    }
+
+    .concept-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .authentication-insight {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .authorization-tool {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .compliance-indicator {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔐 Identity and Access Management</h1>
+    <p>Master the principles and technologies for managing digital identities and controlling access to resources</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Identity and Access Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">IAM Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">IAM Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Technologies</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Implementation Patterns</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">IAM Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand the core concepts, principles, and components of identity and access management.</p>
+        <ul class="topics-list">
+          <li>IAM principles</li>
+          <li>Identity lifecycle</li>
+          <li>Access control models</li>
+          <li>Security frameworks</li>
+          <li>Compliance requirements</li>
+          <li>Risk management</li>
+          <li>Business justification</li>
+          <li>IAM architecture</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Digital Identity</h3>
+        </div>
+        <p class="unit-description">Learn about digital identity concepts, identity providers, and identity federation.</p>
+        <ul class="topics-list">
+          <li>Identity concepts</li>
+          <li>Digital identity types</li>
+          <li>Identity attributes</li>
+          <li>Identity providers</li>
+          <li>Identity federation</li>
+          <li>Trust relationships</li>
+          <li>Identity verification</li>
+          <li>Privacy considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Authentication Methods</h3>
+        </div>
+        <p class="unit-description">Master various authentication techniques and multi-factor authentication implementations.</p>
+        <ul class="topics-list">
+          <li>Authentication factors</li>
+          <li>Password security</li>
+          <li>Multi-factor authentication</li>
+          <li>Biometric authentication</li>
+          <li>Certificate-based auth</li>
+          <li>Token-based systems</li>
+          <li>Passwordless authentication</li>
+          <li>Risk-based authentication</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Authorization and Access Control</h3>
+        </div>
+        <p class="unit-description">Implement effective authorization mechanisms and access control policies.</p>
+        <ul class="topics-list">
+          <li>Authorization concepts</li>
+          <li>Role-based access control</li>
+          <li>Attribute-based access control</li>
+          <li>Policy-based access control</li>
+          <li>Discretionary access control</li>
+          <li>Mandatory access control</li>
+          <li>Least privilege principle</li>
+          <li>Separation of duties</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Single Sign-On (SSO)</h3>
+        </div>
+        <p class="unit-description">Deploy and manage single sign-on solutions for improved user experience and security.</p>
+        <ul class="topics-list">
+          <li>SSO concepts</li>
+          <li>SAML protocol</li>
+          <li>OAuth and OpenID Connect</li>
+          <li>SSO architecture</li>
+          <li>Identity providers</li>
+          <li>Service providers</li>
+          <li>SSO security considerations</li>
+          <li>SSO implementation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Directory Services</h3>
+        </div>
+        <p class="unit-description">Understand directory services, LDAP, and Active Directory for identity management.</p>
+        <ul class="topics-list">
+          <li>Directory concepts</li>
+          <li>LDAP protocol</li>
+          <li>Active Directory</li>
+          <li>Directory schemas</li>
+          <li>Directory replication</li>
+          <li>Group management</li>
+          <li>Directory security</li>
+          <li>Cloud directories</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Privileged Access Management</h3>
+        </div>
+        <p class="unit-description">Secure and manage privileged accounts and administrative access to critical systems.</p>
+        <ul class="topics-list">
+          <li>Privileged account types</li>
+          <li>PAM architecture</li>
+          <li>Password vaulting</li>
+          <li>Session management</li>
+          <li>Just-in-time access</li>
+          <li>Privilege escalation</li>
+          <li>Administrative workflows</li>
+          <li>PAM monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Identity Governance</h3>
+        </div>
+        <p class="unit-description">Implement identity governance frameworks for compliance and risk management.</p>
+        <ul class="topics-list">
+          <li>Governance frameworks</li>
+          <li>Access reviews</li>
+          <li>Certification campaigns</li>
+          <li>Role mining</li>
+          <li>Segregation of duties</li>
+          <li>Compliance reporting</li>
+          <li>Risk analytics</li>
+          <li>Policy enforcement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Identity Provisioning</h3>
+        </div>
+        <p class="unit-description">Automate identity lifecycle management and account provisioning processes.</p>
+        <ul class="topics-list">
+          <li>Provisioning concepts</li>
+          <li>Account lifecycle</li>
+          <li>Automated provisioning</li>
+          <li>Joiner-mover-leaver</li>
+          <li>Workflow automation</li>
+          <li>Connector technologies</li>
+          <li>Reconciliation</li>
+          <li>De-provisioning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cloud IAM</h3>
+        </div>
+        <p class="unit-description">Manage identities and access in cloud environments and hybrid architectures.</p>
+        <ul class="topics-list">
+          <li>Cloud identity models</li>
+          <li>AWS IAM</li>
+          <li>Azure Active Directory</li>
+          <li>Google Cloud Identity</li>
+          <li>Hybrid identity</li>
+          <li>Cloud federation</li>
+          <li>Multi-cloud IAM</li>
+          <li>Cloud security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">IAM Monitoring and Analytics</h3>
+        </div>
+        <p class="unit-description">Implement monitoring, auditing, and analytics for identity and access management.</p>
+        <ul class="topics-list">
+          <li>IAM monitoring</li>
+          <li>Access analytics</li>
+          <li>Audit logging</li>
+          <li>Anomaly detection</li>
+          <li>Risk scoring</li>
+          <li>Compliance monitoring</li>
+          <li>Identity analytics</li>
+          <li>Incident response</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Emerging IAM Technologies</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge IAM technologies and future trends in identity management.</p>
+        <ul class="topics-list">
+          <li>Zero trust architecture</li>
+          <li>Decentralized identity</li>
+          <li>Blockchain identity</li>
+          <li>AI in IAM</li>
+          <li>Passwordless future</li>
+          <li>IoT identity</li>
+          <li>Privacy-preserving IAM</li>
+          <li>Future trends</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: IAM Fundamentals</h1>
+      <p>Understand the core concepts, principles, and components of identity and access management.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">IAM Principles</h3>
+        <p>Learn the fundamental principles that govern effective identity and access management systems.</p>
+        <span class="iam-badge">Authentication</span>
+        <span class="iam-badge">Authorization</span>
+        <span class="iam-badge">Accountability</span>
+        <div class="identity-box">
+          IAM is built on three core pillars: Authentication (proving who you are), Authorization (determining what you can access), and Accountability (tracking what you do). These form the foundation of all IAM systems.
+        </div>
+        <div class="code-example">
+          # IAM Core Principles<br>
+          iam_principles = {<br>
+          &nbsp;&nbsp;"authentication": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Verification of claimed identity",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"methods": ["Something you know", "Something you have", "Something you are"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"factors": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"knowledge": "Passwords, PINs, security questions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"possession": "Tokens, smart cards, mobile devices",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"inherence": "Biometrics, behavioral patterns"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"best_practices": ["Multi-factor authentication", "Strong password policies", "Regular credential updates"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"authorization": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Granting or denying access to resources",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"models": ["RBAC", "ABAC", "DAC", "MAC"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"principles": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"least_privilege": "Minimum necessary access",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"need_to_know": "Access based on business requirement",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"separation_of_duties": "No single person controls entire process"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"implementation": ["Role assignments", "Policy evaluation", "Access decisions"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"accountability": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"definition": "Tracking and auditing user activities",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"components": ["Audit logs", "Monitoring", "Reporting", "Forensics"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"requirements": ["Non-repudiation", "Tamper-proof logs", "Compliance reporting"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"benefits": ["Incident investigation", "Compliance proof", "Risk detection"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Identity Lifecycle</h3>
+        <p>Understand the complete lifecycle of digital identities from creation to deletion.</p>
+        <div class="concept-highlight">
+          Identity Lifecycle Stages:<br>
+          • Provisioning: Creating new identities and initial access<br>
+          • Management: Ongoing maintenance and updates<br>
+          • Monitoring: Continuous oversight and compliance<br>
+          • Modification: Changes in roles, permissions, attributes<br>
+          • Suspension: Temporary deactivation of access<br>
+          • De-provisioning: Permanent removal of identity and access
+        </div>
+        <div class="authentication-insight">
+          <strong>Lifecycle Automation:</strong><br>
+          Manual identity lifecycle management is error-prone and inefficient. Automated workflows triggered by HR systems, directory changes, or business events ensure consistent and timely identity management.
+        </div>
+        <div class="code-example">
+          # Identity Lifecycle Management<br>
+          identity_lifecycle = {<br>
+          &nbsp;&nbsp;"provisioning": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"triggers": ["New hire", "Role change", "System onboarding"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Create user account",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Assign initial roles and permissions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Set up authentication credentials",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Configure access to required systems"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"validation": ["Manager approval", "Security review", "Compliance check"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"management": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Password resets",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Profile updates",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Permission modifications",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Role assignments"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"governance": ["Access reviews", "Certification campaigns", "Policy compliance"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"deprovisioning": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"triggers": ["Termination", "Role change", "System retirement"],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"activities": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Disable accounts",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Revoke access permissions",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Transfer data ownership",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Archive identity records"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"timeline": "Immediate for security, grace period for data access"<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Access Control Models</h3>
+        <p>Explore different access control models and their appropriate use cases in organizations.</p>
+        <div class="authorization-tool">
+          <strong>Common Access Control Models:</strong><br>
+          • RBAC (Role-Based): Access based on organizational roles<br>
+          • ABAC (Attribute-Based): Access based on attributes and policies<br>
+          • DAC (Discretionary): Resource owners control access<br>
+          • MAC (Mandatory): System-enforced security classifications<br>
+          • PBAC (Policy-Based): Rule-driven access decisions
+        </div>
+        <div class="compliance-indicator">
+          <strong>Model Selection Criteria:</strong><br>
+          Choose access control models based on organizational structure, compliance requirements, security needs, and operational complexity. Many
