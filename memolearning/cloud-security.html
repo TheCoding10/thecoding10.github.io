@@ -1,0 +1,772 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Cloud Security</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 50%, #0ea5e9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(12, 74, 110, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '☁️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0c4a6e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0284c7;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(12, 74, 110, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .cloud-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0c4a6e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .aws-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .azure-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .gcp-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .security-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .compliance-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .container-showcase {
+      background: #f3e8ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #581c87;
+    }
+
+    .shared-responsibility {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .devops-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .governance-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>☁️ Cloud Security</h1>
+    <p>Master the security challenges and solutions in cloud computing environments</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to cybersecurity courses')">← Back to Cybersecurity Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Cloud Security Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Cloud Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~95</span>
+          <div class="stat-label">Security Controls</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <div class="stat-label">Major Platforms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Multi-Cloud</span>
+          <div class="stat-label">Strategy Focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Cloud Security Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the foundational concepts, models, and principles of cloud security.</p>
+        <ul class="topics-list">
+          <li>Cloud service models</li>
+          <li>Deployment models</li>
+          <li>Shared responsibility model</li>
+          <li>Cloud security challenges</li>
+          <li>Security frameworks</li>
+          <li>Compliance considerations</li>
+          <li>Risk assessment</li>
+          <li>Cloud adoption strategy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">AWS Security</h3>
+        </div>
+        <p class="unit-description">Master security services and best practices for Amazon Web Services.</p>
+        <ul class="topics-list">
+          <li>AWS IAM</li>
+          <li>VPC security</li>
+          <li>Security groups and NACLs</li>
+          <li>CloudTrail and logging</li>
+          <li>AWS Config</li>
+          <li>Security Hub</li>
+          <li>GuardDuty</li>
+          <li>AWS Well-Architected</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Azure Security</h3>
+        </div>
+        <p class="unit-description">Implement security controls and monitoring in Microsoft Azure environments.</p>
+        <ul class="topics-list">
+          <li>Azure Active Directory</li>
+          <li>Azure Security Center</li>
+          <li>Network security groups</li>
+          <li>Azure Key Vault</li>
+          <li>Azure Sentinel</li>
+          <li>Azure Policy</li>
+          <li>Conditional Access</li>
+          <li>Azure Firewall</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Google Cloud Security</h3>
+        </div>
+        <p class="unit-description">Secure Google Cloud Platform resources and implement GCP security services.</p>
+        <ul class="topics-list">
+          <li>Cloud IAM</li>
+          <li>VPC security</li>
+          <li>Cloud Security Command Center</li>
+          <li>Cloud KMS</li>
+          <li>Binary Authorization</li>
+          <li>Cloud Armor</li>
+          <li>Cloud Logging</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Cloud Identity and Access Management</h3>
+        </div>
+        <p class="unit-description">Implement robust identity and access controls across cloud environments.</p>
+        <ul class="topics-list">
+          <li>Cloud identity models</li>
+          <li>Multi-factor authentication</li>
+          <li>Single sign-on</li>
+          <li>Privileged access management</li>
+          <li>Identity federation</li>
+          <li>Role-based access control</li>
+          <li>Zero trust principles</li>
+          <li>Identity governance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Cloud Network Security</h3>
+        </div>
+        <p class="unit-description">Secure network communications and implement network controls in the cloud.</p>
+        <ul class="topics-list">
+          <li>Virtual network security</li>
+          <li>Micro-segmentation</li>
+          <li>Cloud firewalls</li>
+          <li>DDoS protection</li>
+          <li>VPN connectivity</li>
+          <li>Load balancer security</li>
+          <li>Network monitoring</li>
+          <li>Traffic analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cloud Data Protection</h3>
+        </div>
+        <p class="unit-description">Protect sensitive data stored and processed in cloud environments.</p>
+        <ul class="topics-list">
+          <li>Data classification</li>
+          <li>Encryption at rest</li>
+          <li>Encryption in transit</li>
+          <li>Key management</li>
+          <li>Data loss prevention</li>
+          <li>Database security</li>
+          <li>Backup and recovery</li>
+          <li>Privacy controls</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Container and Kubernetes Security</h3>
+        </div>
+        <p class="unit-description">Secure containerized applications and Kubernetes orchestration platforms.</p>
+        <ul class="topics-list">
+          <li>Container image security</li>
+          <li>Runtime security</li>
+          <li>Kubernetes RBAC</li>
+          <li>Pod security policies</li>
+          <li>Network policies</li>
+          <li>Secrets management</li>
+          <li>Security scanning</li>
+          <li>Service mesh security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Serverless Security</h3>
+        </div>
+        <p class="unit-description">Address security challenges in serverless and function-as-a-service architectures.</p>
+        <ul class="topics-list">
+          <li>Function security</li>
+          <li>Event-driven security</li>
+          <li>API Gateway security</li>
+          <li>Serverless monitoring</li>
+          <li>Cold start security</li>
+          <li>Dependency management</li>
+          <li>Execution environment</li>
+          <li>Serverless SIEM</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cloud Security Monitoring</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive monitoring and threat detection in cloud environments.</p>
+        <ul class="topics-list">
+          <li>Cloud SIEM</li>
+          <li>Log aggregation</li>
+          <li>Threat detection</li>
+          <li>Behavioral analytics</li>
+          <li>Incident response</li>
+          <li>Compliance monitoring</li>
+          <li>Automated alerting</li>
+          <li>Security dashboards</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">DevSecOps and Cloud Security</h3>
+        </div>
+        <p class="unit-description">Integrate security into DevOps pipelines and cloud-native development.</p>
+        <ul class="topics-list">
+          <li>Security as code</li>
+          <li>CI/CD security</li>
+          <li>Infrastructure as code security</li>
+          <li>Shift-left security</li>
+          <li>Container scanning</li>
+          <li>Security testing automation</li>
+          <li>Vulnerability management</li>
+          <li>Security gates</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Multi-Cloud Security</h3>
+        </div>
+        <p class="unit-description">Manage security across multiple cloud providers and hybrid environments.</p>
+        <ul class="topics-list">
+          <li>Multi-cloud strategy</li>
+          <li>Cross-cloud identity</li>
+          <li>Unified security policies</li>
+          <li>Cloud security posture</li>
+          <li>Workload protection</li>
+          <li>Hybrid connectivity</li>
+          <li>Vendor lock-in mitigation</li>
+          <li>Centralized monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Cloud Compliance and Governance</h3>
+        </div>
+        <p class="unit-description">Ensure regulatory compliance and implement governance frameworks in the cloud.</p>
+        <ul class="topics-list">
+          <li>Regulatory frameworks</li>
+          <li>Compliance automation</li>
+          <li>Audit preparation</li>
+          <li>Policy enforcement</li>
+          <li>Risk management</li>
+          <li>Data sovereignty</li>
+          <li>Cloud governance</li>
+          <li>Continuous compliance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Cloud Security Architecture</h3>
+        </div>
+        <p class="unit-description">Design secure cloud architectures and implement security by design principles.</p>
+        <ul class="topics-list">
+          <li>Security architecture patterns</li>
+          <li>Zero trust architecture</li>
+          <li>Defense in depth</li>
+          <li>Security reference models</li>
+          <li>Cloud security frameworks</li>
+          <li>Threat modeling</li>
+          <li>Architecture reviews</li>
+          <li>Security blueprints</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Cloud Security Fundamentals</h1>
+      <p>Learn the foundational concepts, models, and principles of cloud security.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cloud Service Models</h3>
+        <p>Understand the different cloud service models and their security implications.</p>
+        <span class="cloud-badge">IaaS</span>
+        <span class="cloud-badge">PaaS</span>
+        <span class="cloud-badge">SaaS</span>
+        <span class="cloud-badge">FaaS</span>
+        <div class="shared-responsibility">
+          Each cloud service model shifts different security responsibilities between the cloud provider and customer. Understanding these boundaries is crucial for implementing effective security controls.
+        </div>
+        <div class="code-example">
+          # Cloud Service Models Security Matrix<br>
+          service_models = {<br>
+          &nbsp;&nbsp;"iaas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Physical security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Infrastructure security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Hypervisor security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Network controls"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Operating system security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Application security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data encryption",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Identity and access management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Network configuration",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Firewall settings"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["AWS EC2", "Azure VMs", "Google Compute Engine"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"paas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Runtime security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Operating system patches",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Platform updates",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Infrastructure security"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Application code security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data protection",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"User access controls",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Application configuration"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["AWS Lambda", "Azure App Service", "Google App Engine"]<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;"saas": {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"provider_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Application security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data center security",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Platform maintenance",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Infrastructure protection"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"customer_responsibility": [<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"User account management",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Data classification",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Access policies",<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Usage monitoring"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;],<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;"examples": ["Office 365", "Salesforce", "Google Workspace"]<br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-
