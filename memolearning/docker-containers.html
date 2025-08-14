@@ -1,0 +1,902 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Docker & Containers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🐳';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .docker-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #2563eb;
+      overflow-x: auto;
+    }
+
+    .docker-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #2563eb;
+    }
+
+    .dockerfile-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .compose-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .registry-showcase {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .orchestration-note {
+      background: #fffbeb;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .security-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .container-lifecycle {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .lifecycle-stage {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .build-stage {
+      background: #2563eb;
+      font-size: 18px;
+    }
+
+    .run-stage {
+      background: #3b82f6;
+      font-size: 16px;
+    }
+
+    .deploy-stage {
+      background: #60a5fa;
+      font-size: 14px;
+    }
+
+    .docker-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #2563eb;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #2563eb;
+    }
+
+    .container-results {
+      background: #2563eb;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #2563eb;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .container-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .running {
+      color: #16a34a;
+    }
+
+    .stopped {
+      color: #dc2626;
+    }
+
+    .building {
+      color: #eab308;
+    }
+
+    .resource-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .resource-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .resource-fill {
+      background: #2563eb;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .resource-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .command-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .command-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .command-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+
+    .command-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .layer-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .layer-structure {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .container-state {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .state-created {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .state-running {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .state-exited {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .volume-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .volume-type {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1d4ed8;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Container simulation
+    function simulateContainer() {
+      const results = document.getElementById('container-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="container-status">
+            <span class="running">✅ Running</span> | 
+            <span class="building">🐳 3 containers</span> | 
+            <span class="stopped">❌ 0 failed</span>
+          </div>
+          <div>Docker: my-app:latest - Port 3000:3000 - 45MB RAM</div>
+        `;
+      }
+    }
+
+    // Resource usage simulation
+    function updateResources() {
+      const bars = document.querySelectorAll('.resource-fill');
+      const resources = [45, 23, 67, 12];
+      
+      bars.forEach((bar, index) => {
+        if (resources[index]) {
+          bar.style.width = resources[index] + '%';
+        }
+      });
+    }
+
+    // Volume type animation
+    function animateVolumeTypes() {
+      const types = document.querySelectorAll('.volume-type');
+      types.forEach((type, index) => {
+        setTimeout(() => {
+          type.style.background = '#dcfce7';
+          type.style.borderColor = '#bbf7d0';
+          type.style.color = '#166534';
+          setTimeout(() => {
+            type.style.background = '#eff6ff';
+            type.style.borderColor = '#bfdbfe';
+            type.style.color = '#1d4ed8';
+          }, 400);
+        }, index * 250);
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateResources();
+      setInterval(animateVolumeTypes, 4000);
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🐳 Docker & Containers</h1>
+    <p>Master containerization, Docker fundamentals, and container orchestration</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to DevOps courses')">← Back to DevOps Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Docker & Containers Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Container Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">Docker Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Docker Commands</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">K8s/Swarm</span>
+          <div class="stat-label">Orchestration</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Containerization Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core concepts of containerization and why containers revolutionize software deployment.</p>
+        <ul class="topics-list">
+          <li>What are containers?</li>
+          <li>Containers vs Virtual Machines</li>
+          <li>Benefits of containerization</li>
+          <li>Container architecture</li>
+          <li>Namespaces and cgroups</li>
+          <li>Container runtimes</li>
+          <li>Microservices and containers</li>
+          <li>Container ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Docker Installation & Setup</h3>
+        </div>
+        <p class="unit-description">Install Docker and set up your development environment for containerization.</p>
+        <ul class="topics-list">
+          <li>Docker installation</li>
+          <li>Docker Desktop setup</li>
+          <li>Command line interface</li>
+          <li>Docker daemon</li>
+          <li>System requirements</li>
+          <li>Post-installation setup</li>
+          <li>Troubleshooting installation</li>
+          <li>Docker versions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Docker Images & Containers</h3>
+        </div>
+        <p class="unit-description">Master Docker images, containers, and the container lifecycle.</p>
+        <ul class="topics-list">
+          <li>Images vs containers</li>
+          <li>Pulling images</li>
+          <li>Running containers</li>
+          <li>Container lifecycle</li>
+          <li>Image layers</li>
+          <li>Container states</li>
+          <li>Managing containers</li>
+          <li>Resource limits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Dockerfile & Image Building</h3>
+        </div>
+        <p class="unit-description">Create custom Docker images using Dockerfiles and best practices.</p>
+        <ul class="topics-list">
+          <li>Dockerfile syntax</li>
+          <li>Base images</li>
+          <li>Layer optimization</li>
+          <li>Multi-stage builds</li>
+          <li>Build context</li>
+          <li>Image tagging</li>
+          <li>Build arguments</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Container Networking</h3>
+        </div>
+        <p class="unit-description">Configure container networking, ports, and communication between containers.</p>
+        <ul class="topics-list">
+          <li>Container networking basics</li>
+          <li>Port mapping</li>
+          <li>Network drivers</li>
+          <li>Bridge networks</li>
+          <li>Host networking</li>
+          <li>Custom networks</li>
+          <li>Container communication</li>
+          <li>Network security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Management & Volumes</h3>
+        </div>
+        <p class="unit-description">Manage persistent data using Docker volumes and bind mounts.</p>
+        <ul class="topics-list">
+          <li>Data persistence</li>
+          <li>Docker volumes</li>
+          <li>Bind mounts</li>
+          <li>tmpfs mounts</li>
+          <li>Volume drivers</li>
+          <li>Backup strategies</li>
+          <li>Data sharing</li>
+          <li>Storage optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Docker Compose</h3>
+        </div>
+        <p class="unit-description">Orchestrate multi-container applications using Docker Compose.</p>
+        <ul class="topics-list">
+          <li>Docker Compose overview</li>
+          <li>YAML configuration</li>
+          <li>Service definition</li>
+          <li>Multi-container apps</li>
+          <li>Environment variables</li>
+          <li>Service dependencies</li>
+          <li>Scaling services</li>
+          <li>Production considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Container Registries</h3>
+        </div>
+        <p class="unit-description">Work with Docker registries to store, share, and distribute container images.</p>
+        <ul class="topics-list">
+          <li>Docker Hub</li>
+          <li>Private registries</li>
+          <li>Image pushing/pulling</li>
+          <li>Registry authentication</li>
+          <li>Image versioning</li>
+          <li>Registry security</li>
+          <li>Harbor registry</li>
+          <li>Cloud registries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Container Security</h3>
+        </div>
+        <p class="unit-description">Implement security best practices for containers and images.</p>
+        <ul class="topics-list">
+          <li>Container security model</li>
+          <li>Image vulnerability scanning</li>
+          <li>Least privilege principle</li>
+          <li>Secrets management</li>
+          <li>Network security</li>
+          <li>Runtime security</li>
+          <li>Security policies</li>
+          <li>Compliance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Monitoring & Logging</h3>
+        </div>
+        <p class="unit-description">Monitor container performance and collect logs for debugging and analysis.</p>
+        <ul class="topics-list">
+          <li>Container monitoring</li>
+          <li>Resource usage tracking</li>
+          <li>Log collection</li>
+          <li>Centralized logging</li>
+          <li>Performance metrics</li>
+          <li>Health checks</li>
+          <li>Monitoring tools</li>
+          <li>Alerting systems</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Container Orchestration</h3>
+        </div>
+        <p class="unit-description">Scale and manage containers at production level using orchestration platforms.</p>
+        <ul class="topics-list">
+          <li>Orchestration concepts</li>
+          <li>Docker Swarm</li>
+          <li>Kubernetes basics</li>
+          <li>Service discovery</li>
+          <li>Load balancing</li>
+          <li>Rolling updates</li>
+          <li>High availability</li>
+          <li>Cluster management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Production Best Practices</h3>
+        </div>
+        <p class="unit-description">Deploy containers to production with reliability, scalability, and maintainability.</p>
+        <ul class="topics-list">
+          <li>Production deployment</li>
+          <li>Container optimization</li>
+          <li>Resource management</li>
+          <li>Backup strategies</li>
+          <li>Disaster recovery</li>
+          <li>Performance tuning</li>
+          <li>Maintenance procedures</li>
+          <li>DevOps integration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages
