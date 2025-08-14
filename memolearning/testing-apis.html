@@ -1,0 +1,881 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Testing APIs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧪';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c3aed;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #a855f7;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .api-example {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #7c3aed;
+      overflow-x: auto;
+    }
+
+    .test-badge {
+      display: inline-block;
+      background: #e9d5ff;
+      color: #6b21a8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .postman-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .jest-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .supertest-showcase {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .performance-note {
+      background: #fffbeb;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .security-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .api-testing-pyramid {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .pyramid-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .unit-level {
+      background: #7c3aed;
+      font-size: 18px;
+    }
+
+    .integration-level {
+      background: #a855f7;
+      font-size: 16px;
+    }
+
+    .e2e-level {
+      background: #c084fc;
+      font-size: 14px;
+    }
+
+    .test-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #7c3aed;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #7c3aed;
+    }
+
+    .test-results {
+      background: #7c3aed;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #7c3aed;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .test-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .passed {
+      color: #16a34a;
+    }
+
+    .failed {
+      color: #dc2626;
+    }
+
+    .pending {
+      color: #eab308;
+    }
+
+    .coverage-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .coverage-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .coverage-fill {
+      background: #7c3aed;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .coverage-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .tool-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .tool-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .tool-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .tool-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .mock-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .mock-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .http-status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .status-200 {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-400 {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-500 {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // API test simulation
+    function runAPITests() {
+      const results = document.getElementById('api-test-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="test-status">
+            <span class="passed">✅ 24 passed</span> | 
+            <span class="failed">❌ 2 failed</span> | 
+            <span class="pending">⏳ 1 pending</span>
+          </div>
+          <div>API Test Suite: /api/v1/users endpoints</div>
+        `;
+      }
+    }
+
+    // Coverage simulation
+    function updateCoverage() {
+      const bars = document.querySelectorAll('.coverage-fill');
+      const coverages = [88, 94, 76, 92];
+      
+      bars.forEach((bar, index) => {
+        if (coverages[index]) {
+          bar.style.width = coverages[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateCoverage();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧪 Testing APIs</h1>
+    <p>Master API testing strategies, tools, and automation for reliable backend services</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to testing courses')">← Back to Testing Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Testing APIs Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Testing Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~40</span>
+          <div class="stat-label">Testing Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Testing Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">REST/GraphQL</span>
+          <div class="stat-label">API Types</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">API Testing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core principles and importance of API testing in modern applications.</p>
+        <ul class="topics-list">
+          <li>What is API testing?</li>
+          <li>Types of API testing</li>
+          <li>API testing vs UI testing</li>
+          <li>Testing pyramid for APIs</li>
+          <li>REST API concepts</li>
+          <li>HTTP methods and status codes</li>
+          <li>API documentation testing</li>
+          <li>Testing strategy planning</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Manual API Testing</h3>
+        </div>
+        <p class="unit-description">Master manual API testing techniques using various tools and methods.</p>
+        <ul class="topics-list">
+          <li>Postman fundamentals</li>
+          <li>Creating API requests</li>
+          <li>Request headers and body</li>
+          <li>Response validation</li>
+          <li>Environment variables</li>
+          <li>Collections and folders</li>
+          <li>Pre-request scripts</li>
+          <li>Test scripts in Postman</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Automated API Testing</h3>
+        </div>
+        <p class="unit-description">Implement automated API tests using popular testing frameworks and tools.</p>
+        <ul class="topics-list">
+          <li>Test automation benefits</li>
+          <li>Choosing testing frameworks</li>
+          <li>Jest for API testing</li>
+          <li>Supertest library</li>
+          <li>Axios for HTTP requests</li>
+          <li>Test structure and organization</li>
+          <li>Assertion libraries</li>
+          <li>Test data management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Testing REST APIs</h3>
+        </div>
+        <p class="unit-description">Deep dive into testing RESTful APIs with comprehensive test scenarios.</p>
+        <ul class="topics-list">
+          <li>REST principles testing</li>
+          <li>CRUD operations testing</li>
+          <li>HTTP status code validation</li>
+          <li>Request/response validation</li>
+          <li>Content-Type testing</li>
+          <li>API versioning tests</li>
+          <li>Resource relationship testing</li>
+          <li>Error handling validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Authentication & Authorization Testing</h3>
+        </div>
+        <p class="unit-description">Test API security, authentication mechanisms, and authorization flows.</p>
+        <ul class="topics-list">
+          <li>Authentication testing strategies</li>
+          <li>JWT token validation</li>
+          <li>OAuth 2.0 testing</li>
+          <li>API key authentication</li>
+          <li>Session-based auth testing</li>
+          <li>Role-based access testing</li>
+          <li>Security vulnerability testing</li>
+          <li>Rate limiting validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Data Validation & Schema Testing</h3>
+        </div>
+        <p class="unit-description">Validate API data structures, schemas, and response formats.</p>
+        <ul class="topics-list">
+          <li>JSON schema validation</li>
+          <li>Response structure testing</li>
+          <li>Data type validation</li>
+          <li>Required field testing</li>
+          <li>Format validation</li>
+          <li>Boundary value testing</li>
+          <li>Invalid data handling</li>
+          <li>Schema evolution testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Performance Testing</h3>
+        </div>
+        <p class="unit-description">Test API performance, load handling, and response times.</p>
+        <ul class="topics-list">
+          <li>Performance testing types</li>
+          <li>Load testing strategies</li>
+          <li>Stress testing</li>
+          <li>Response time validation</li>
+          <li>Throughput testing</li>
+          <li>Concurrent user simulation</li>
+          <li>Performance monitoring</li>
+          <li>Bottleneck identification</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Mocking & Test Doubles</h3>
+        </div>
+        <p class="unit-description">Use mocks, stubs, and test doubles for isolated API testing.</p>
+        <ul class="topics-list">
+          <li>Mocking concepts</li>
+          <li>Mock servers</li>
+          <li>Stub implementations</li>
+          <li>Test doubles patterns</li>
+          <li>Dependency mocking</li>
+          <li>External service mocking</li>
+          <li>Mock data generation</li>
+          <li>Contract testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">GraphQL API Testing</h3>
+        </div>
+        <p class="unit-description">Test GraphQL APIs with queries, mutations, and schema validation.</p>
+        <ul class="topics-list">
+          <li>GraphQL fundamentals</li>
+          <li>Query testing</li>
+          <li>Mutation testing</li>
+          <li>Subscription testing</li>
+          <li>Schema validation</li>
+          <li>Resolver testing</li>
+          <li>Error handling</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Integration Testing</h3>
+        </div>
+        <p class="unit-description">Test API integrations with databases, external services, and systems.</p>
+        <ul class="topics-list">
+          <li>Integration testing strategies</li>
+          <li>Database integration testing</li>
+          <li>External API integration</li>
+          <li>Microservices testing</li>
+          <li>End-to-end workflows</li>
+          <li>Data consistency testing</li>
+          <li>Transaction testing</li>
+          <li>Service communication</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Test Automation & CI/CD</h3>
+        </div>
+        <p class="unit-description">Integrate API tests into continuous integration and deployment pipelines.</p>
+        <ul class="topics-list">
+          <li>CI/CD integration</li>
+          <li>Automated test execution</li>
+          <li>Test reporting</li>
+          <li>Pipeline configuration</li>
+          <li>Environment management</li>
+          <li>Test data setup</li>
+          <li>Parallel test execution</li>
+          <li>Deployment testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Testing Techniques</h3>
+        </div>
+        <p class="unit-description">Master advanced API testing patterns and best practices.</p>
+        <ul class="topics-list">
+          <li>Property-based testing</li>
+          <li>Fuzzing techniques</li>
+          <li>Chaos engineering</li>
+          <li>Security testing</li>
+          <li>API monitoring</li>
+          <li>Test optimization</li>
+          <li>Maintenance strategies</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: API Testing Fundamentals</h1>
+      <p>Learn the core principles and importance of API testing in modern applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is API Testing?</h3>
+        <p>Understand the fundamentals of API testing and its role in software quality assurance.</p>
+        <span class="test-badge">Validation</span>
+        <span class="test-badge">Reliability</span>
+        <span class="test-badge">Performance</span>
+        <span class="test-badge">Security</span>
+        <div class="concept-box">
+          API testing is a type of software testing that validates Application Programming Interfaces (APIs). It focuses on testing the data exchange between different software systems,
