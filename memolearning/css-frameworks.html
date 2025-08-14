@@ -1,0 +1,797 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning CSS Frameworks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧩';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .framework-example {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #14532d;
+      overflow-x: auto;
+    }
+
+    .framework-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .bootstrap-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .tailwind-highlight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .bulma-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .foundation-showcase {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .semantic-note {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .custom-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .demo-bootstrap {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: 600;
+    }
+
+    .demo-tailwind {
+      background: #06b6d4;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: 600;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .grid-item {
+      background: #10b981;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .utility-demo {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .utility-item {
+      background: #34d399;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧩 CSS Frameworks</h1>
+    <p>Master popular CSS frameworks to accelerate development and create professional designs</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">CSS Frameworks Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">10</span>
+          <div class="stat-label">Framework Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6+</span>
+          <div class="stat-label">Major Frameworks</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Practical Projects</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Modern</span>
+          <div class="stat-label">Development Approach</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Framework Fundamentals</h3>
+        </div>
+        <p class="unit-description">Understand what CSS frameworks are and how they accelerate development.</p>
+        <ul class="topics-list">
+          <li>What are CSS frameworks?</li>
+          <li>Benefits and drawbacks</li>
+          <li>Framework comparison</li>
+          <li>Choosing the right framework</li>
+          <li>Setup and installation</li>
+          <li>Framework architecture</li>
+          <li>Best practices</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Bootstrap Basics</h3>
+        </div>
+        <p class="unit-description">Learn Bootstrap, the world's most popular CSS framework.</p>
+        <ul class="topics-list">
+          <li>Bootstrap introduction</li>
+          <li>Grid system</li>
+          <li>Container and rows</li>
+          <li>Responsive columns</li>
+          <li>Typography classes</li>
+          <li>Spacing utilities</li>
+          <li>Color system</li>
+          <li>Basic components</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Bootstrap Components</h3>
+        </div>
+        <p class="unit-description">Master Bootstrap's pre-built components for rapid UI development.</p>
+        <ul class="topics-list">
+          <li>Navigation bars</li>
+          <li>Cards and panels</li>
+          <li>Buttons and forms</li>
+          <li>Modals and alerts</li>
+          <li>Carousels</li>
+          <li>Dropdown menus</li>
+          <li>Progress bars</li>
+          <li>Tables and lists</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Tailwind CSS Introduction</h3>
+        </div>
+        <p class="unit-description">Explore the utility-first approach with Tailwind CSS.</p>
+        <ul class="topics-list">
+          <li>Utility-first philosophy</li>
+          <li>Installation and setup</li>
+          <li>Configuration file</li>
+          <li>Core concepts</li>
+          <li>Spacing system</li>
+          <li>Typography utilities</li>
+          <li>Color palette</li>
+          <li>Responsive design</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Tailwind Advanced Features</h3>
+        </div>
+        <p class="unit-description">Master advanced Tailwind concepts and customization.</p>
+        <ul class="topics-list">
+          <li>Custom utilities</li>
+          <li>Component extraction</li>
+          <li>Pseudo-class variants</li>
+          <li>Dark mode support</li>
+          <li>Custom themes</li>
+          <li>Plugin system</li>
+          <li>JIT compilation</li>
+          <li>Production optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Bulma Framework</h3>
+        </div>
+        <p class="unit-description">Build modern interfaces with Bulma's flexbox-based framework.</p>
+        <ul class="topics-list">
+          <li>Bulma introduction</li>
+          <li>Flexbox approach</li>
+          <li>Modular system</li>
+          <li>Column layouts</li>
+          <li>Element styling</li>
+          <li>Component library</li>
+          <li>Modifier classes</li>
+          <li>Customization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Foundation Framework</h3>
+        </div>
+        <p class="unit-description">Create responsive sites with Foundation's professional-grade framework.</p>
+        <ul class="topics-list">
+          <li>Foundation overview</li>
+          <li>XY Grid system</li>
+          <li>Responsive utilities</li>
+          <li>Component library</li>
+          <li>JavaScript plugins</li>
+          <li>Sass integration</li>
+          <li>Customization options</li>
+          <li>Email framework</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Semantic UI</h3>
+        </div>
+        <p class="unit-description">Build beautiful, semantic interfaces with Semantic UI.</p>
+        <ul class="topics-list">
+          <li>Semantic approach</li>
+          <li>Natural language classes</li>
+          <li>UI elements</li>
+          <li>Collections</li>
+          <li>Views and modules</li>
+          <li>Behaviors</li>
+          <li>Theming system</li>
+          <li>React integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Framework Customization</h3>
+        </div>
+        <p class="unit-description">Learn to customize frameworks to match your design requirements.</p>
+        <ul class="topics-list">
+          <li>Custom variables</li>
+          <li>Sass/SCSS integration</li>
+          <li>Theme creation</li>
+          <li>Component overrides</li>
+          <li>Build processes</li>
+          <li>Selective imports</li>
+          <li>Performance optimization</li>
+          <li>Brand consistency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Framework Migration and Best Practices</h3>
+        </div>
+        <p class="unit-description">Master migration strategies and framework best practices.</p>
+        <ul class="topics-list">
+          <li>Migration strategies</li>
+          <li>Version updates</li>
+          <li>Legacy support</li>
+          <li>Performance monitoring</li>
+          <li>Team collaboration</li>
+          <li>Documentation</li>
+          <li>Testing approaches</li>
+          <li>Future considerations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Framework Fundamentals</h1>
+      <p>Understand what CSS frameworks are and how they accelerate development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are CSS Frameworks?</h3>
+        <p>Learn the definition and purpose of CSS frameworks in modern web development.</p>
+        <span class="framework-badge">Pre-built Styles</span>
+        <span class="framework-badge">Components</span>
+        <span class="framework-badge">Grid Systems</span>
+        <span class="framework-badge">Utilities</span>
+        <div class="bootstrap-box">
+          CSS frameworks are pre-written CSS libraries that provide a foundation for building websites quickly. They include grid systems, typography, components, and utilities to speed up development and ensure consistency.
+        </div>
+        <div class="framework-example">
+&lt;!-- Without Framework --&gt;<br>
+&lt;div class="custom-button"&gt;Click Me&lt;/div&gt;<br>
+&lt;style&gt;<br>
+.custom-button {<br>
+&nbsp;&nbsp;background: #007bff;<br>
+&nbsp;&nbsp;color: white;<br>
+&nbsp;&nbsp;padding: 8px 16px;<br>
+&nbsp;&nbsp;border: none;<br>
+&nbsp;&nbsp;border-radius: 4px;<br>
+&nbsp;&nbsp;cursor: pointer;<br>
+}<br>
+&lt;/style&gt;<br>
+<br>
+&lt;!-- With Bootstrap Framework --&gt;<br>
+&lt;button class="btn btn-primary"&gt;Click Me&lt;/button&gt;
+        </div>
+        <div class="demo-bootstrap">
+          Bootstrap Button Example
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Benefits and Drawbacks</h3>
+        <p>Understand the advantages and potential disadvantages of using CSS frameworks.</p>
+        <div class="tailwind-highlight">
+          <strong>Benefits:</strong><br>
+          • Faster development with pre-built components<br>
+          • Consistent design patterns and spacing<br>
+          • Cross-browser compatibility built-in<br>
+          • Responsive design out of the box<br>
+          • Large community and documentation<br>
+          • Easier team collaboration
+        </div>
+        <div class="custom-warning">
+          <strong>Potential Drawbacks:</strong><br>
+          • Learning curve for framework-specific classes<br>
+          • File size overhead for unused components<br>
+          • Design limitations and "framework look"<br>
+          • Dependency on external library updates<br>
+          • Customization complexity for unique designs
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Framework Comparison</h3>
+        <p>Compare popular CSS frameworks to choose the best fit for your projects.</p>
+        <div class="bulma-insight">
+          <strong>Popular Frameworks:</strong><br>
+          • Bootstrap: Component-focused, jQuery integration<br>
+          • Tailwind CSS: Utility-first, highly customizable<br>
+          • Bulma: Modern flexbox, no JavaScript required<br>
+          • Foundation: Professional, mobile-first approach<br>
+          • Semantic UI: Human-friendly HTML, rich themes
+        </div>
+        <div class="framework-example">
+/* Bootstrap Approach */<br>
+&lt;div class="container"&gt;<br>
+&nbsp;&nbsp;&lt;div class="row"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="col-md-6"&gt;Content&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/div&gt;<br>
+<br>
+/* Tailwind Approach */<br>
+&lt;div class="max-w-6xl mx-auto"&gt;<br>
+&nbsp;&nbsp;&lt;div class="grid grid-cols-1 md:grid-cols-2"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="p-4"&gt;Content&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/div&gt;
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Bootstrap Basics</h1>
+      <p>Learn Bootstrap, the world's most popular CSS framework.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bootstrap Grid System</h3>
+        <p>Master Bootstrap's 12-column grid system for responsive layouts.</p>
+        <span class="framework-badge">12 Columns</span>
+        <span class="framework-badge">Containers</span>
+        <span class="framework-badge">Rows</span>
+        <span class="framework-badge">Breakpoints</span>
+        <div class="bootstrap-box">
+          Bootstrap's grid system uses containers, rows, and columns to layout and align content. It's built with flexbox and is fully responsive with five default breakpoints.
+        </div>
+        <div class="framework-example">
+&lt;!-- Bootstrap Grid Example --&gt;<br>
+&lt;div class="container"&gt;<br>
+&nbsp;&nbsp;&lt;div class="row"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="col-12 col-md-8"&gt;Main Content&lt;/div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="col-12 col-md-4"&gt;Sidebar&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/div&gt;<br>
+<br>
+&lt;!-- Responsive Columns --&gt;<br>
+&lt;div class="row"&gt;<br>
+&nbsp;&nbsp;&lt;div class="col-sm-6 col-lg-4"&gt;Item 1&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;div class="col-sm-6 col-lg-4"&gt;Item 2&lt;/div&gt;<br>
+&nbsp;&nbsp;&lt;div class="col-sm-12 col-lg-4"&gt;Item 3&lt;/div&gt;<br>
+&lt;/div&gt;
+        </div>
+        <div class="demo-grid">
+          <div class="grid-item">Column 1</div>
+          <div class="grid-item">Column 2</div>
+          <div class="grid-item">Column 3</div>
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Bootstrap Typography</h3>
+        <p>Style text content using Bootstrap's typography classes and utilities.</p>
+        <div class="foundation-showcase">
+          <strong>Typography Classes:</strong><br>
+          • Display headings: .display-1 to .display-4<br>
+          •
