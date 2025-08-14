@@ -1,0 +1,833 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Version Control and Git</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(31, 41, 55, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📋';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #1f2937;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1f2937, #374151);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(31, 41, 55, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .git-example {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #374151;
+      overflow-x: auto;
+    }
+
+    .git-badge {
+      display: inline-block;
+      background: #f3f4f6;
+      color: #374151;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .command-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .workflow-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .branch-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .collaboration-note {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .workflow-diagram {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+      font-family: monospace;
+    }
+
+    .git-states {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .git-state {
+      background: #374151;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .commit-history {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .commit-item {
+      margin: 8px 0;
+      padding: 8px;
+      background: white;
+      border-radius: 4px;
+      border-left: 4px solid #374151;
+    }
+
+    .branch-visual {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .branch-line {
+      display: inline-block;
+      width: 100px;
+      height: 3px;
+      background: #374151;
+      margin: 10px 5px;
+      position: relative;
+    }
+
+    .branch-point {
+      width: 12px;
+      height: 12px;
+      background: #374151;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 5px;
+    }
+
+    .terminal-demo {
+      background: #1f2937;
+      color: #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .terminal-prompt {
+      color: #10b981;
+    }
+
+    .terminal-command {
+      color: #60a5fa;
+    }
+
+    .terminal-output {
+      color: #f3f4f6;
+      margin-left: 20px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📋 Version Control & Git</h1>
+    <p>Master Git version control for tracking changes and collaborating on code projects</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Version Control & Git Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">Git Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">Git Commands</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Workflows</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Team</span>
+          <div class="stat-label">Collaboration</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Version Control Basics</h3>
+        </div>
+        <p class="unit-description">Learn what version control is and why it's essential for development.</p>
+        <ul class="topics-list">
+          <li>What is version control?</li>
+          <li>Benefits of version control</li>
+          <li>Types of VCS</li>
+          <li>Centralized vs distributed</li>
+          <li>Git vs other systems</li>
+          <li>History and evolution</li>
+          <li>Use cases</li>
+          <li>Getting started</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Git Installation and Setup</h3>
+        </div>
+        <p class="unit-description">Install Git and configure your development environment.</p>
+        <ul class="topics-list">
+          <li>Installing Git</li>
+          <li>Initial configuration</li>
+          <li>User identity setup</li>
+          <li>Editor configuration</li>
+          <li>SSH key setup</li>
+          <li>Git aliases</li>
+          <li>Global settings</li>
+          <li>Verification and testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Git Fundamentals</h3>
+        </div>
+        <p class="unit-description">Master the core concepts and basic commands of Git.</p>
+        <ul class="topics-list">
+          <li>Git repository</li>
+          <li>Working directory</li>
+          <li>Staging area</li>
+          <li>Git workflow</li>
+          <li>File states</li>
+          <li>Basic commands</li>
+          <li>Git status</li>
+          <li>Help system</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Creating and Managing Repositories</h3>
+        </div>
+        <p class="unit-description">Learn to create, initialize, and manage Git repositories.</p>
+        <ul class="topics-list">
+          <li>git init</li>
+          <li>git clone</li>
+          <li>Repository structure</li>
+          <li>.git directory</li>
+          <li>Remote repositories</li>
+          <li>Local repositories</li>
+          <li>Repository configuration</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Tracking Changes</h3>
+        </div>
+        <p class="unit-description">Track file changes, stage modifications, and create commits.</p>
+        <ul class="topics-list">
+          <li>git add</li>
+          <li>git commit</li>
+          <li>Staging files</li>
+          <li>Commit messages</li>
+          <li>git diff</li>
+          <li>git log</li>
+          <li>Viewing history</li>
+          <li>Undoing changes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Branching and Merging</h3>
+        </div>
+        <p class="unit-description">Create branches for parallel development and merge changes back.</p>
+        <ul class="topics-list">
+          <li>Branch concept</li>
+          <li>Creating branches</li>
+          <li>Switching branches</li>
+          <li>Branch management</li>
+          <li>Merging branches</li>
+          <li>Merge conflicts</li>
+          <li>Fast-forward merges</li>
+          <li>Branch strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Remote Repositories</h3>
+        </div>
+        <p class="unit-description">Work with remote repositories for collaboration and backup.</p>
+        <ul class="topics-list">
+          <li>Remote concepts</li>
+          <li>Adding remotes</li>
+          <li>git push</li>
+          <li>git pull</li>
+          <li>git fetch</li>
+          <li>Upstream tracking</li>
+          <li>Multiple remotes</li>
+          <li>Remote management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">GitHub and GitLab</h3>
+        </div>
+        <p class="unit-description">Use GitHub and GitLab for hosting and collaborating on projects.</p>
+        <ul class="topics-list">
+          <li>GitHub overview</li>
+          <li>Creating repositories</li>
+          <li>Pull requests</li>
+          <li>Issues and projects</li>
+          <li>GitHub Actions</li>
+          <li>GitLab features</li>
+          <li>Web interface</li>
+          <li>Social coding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Advanced Git Commands</h3>
+        </div>
+        <p class="unit-description">Master advanced Git commands for complex scenarios.</p>
+        <ul class="topics-list">
+          <li>git rebase</li>
+          <li>git cherry-pick</li>
+          <li>git stash</li>
+          <li>git reset</li>
+          <li>git revert</li>
+          <li>git reflog</li>
+          <li>Interactive rebase</li>
+          <li>Advanced merging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Git Workflows</h3>
+        </div>
+        <p class="unit-description">Learn popular Git workflows for team collaboration.</p>
+        <ul class="topics-list">
+          <li>Git Flow</li>
+          <li>GitHub Flow</li>
+          <li>Feature branch workflow</li>
+          <li>Forking workflow</li>
+          <li>Centralized workflow</li>
+          <li>Release strategies</li>
+          <li>Hotfix workflows</li>
+          <li>Team coordination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Git Best Practices</h3>
+        </div>
+        <p class="unit-description">Apply best practices for effective Git usage and collaboration.</p>
+        <ul class="topics-list">
+          <li>Commit best practices</li>
+          <li>Branch naming</li>
+          <li>Code reviews</li>
+          <li>Security practices</li>
+          <li>Performance optimization</li>
+          <li>Troubleshooting</li>
+          <li>Team guidelines</li>
+          <li>Continuous integration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Version Control Basics</h1>
+      <p>Learn what version control is and why it's essential for development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Version Control?</h3>
+        <p>Understand the fundamental concept of version control systems.</p>
+        <span class="git-badge">Tracking</span>
+        <span class="git-badge">History</span>
+        <span class="git-badge">Collaboration</span>
+        <span class="git-badge">Backup</span>
+        <div class="concept-box">
+          Version control is a system that records changes to files over time so you can recall specific versions later. It allows multiple people to work on the same project without conflicts and provides a complete history of all changes.
+        </div>
+        <div class="workflow-diagram">
+          Version 1 → Version 2 → Version 3 → Current<br>
+          <small>Each version is saved with timestamp and description</small>
+        </div>
+        <div class="git-example">
+# Without version control:<br>
+project_final.doc<br>
+project_final_v2.doc<br>
+project_final_FINAL.doc<br>
+project_final_FINAL_FIXED.doc<br>
+<br>
+# With version control:<br>
+project.doc (with complete history)
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Benefits of Version Control</h3>
+        <p>Discover why version control is crucial for any development project.</p>
+        <div class="command-highlight">
+          <strong>Key Benefits:</strong><br>
+          • Track every change with who, what, when, and why<br>
+          • Easily revert to previous versions when bugs occur<br>
+          • Enable multiple developers to work simultaneously<br>
+          • Maintain backup copies automatically<br>
+          • Branch for experimental features safely<br>
+          • Merge changes from different contributors
+        </div>
+        <div class="workflow-insight">
+          <strong>Real-world Impact:</strong><br>
+          Version control eliminates the fear of breaking code, enables confident experimentation, and provides accountability for all changes. It's essential for any serious development work.
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Centralized vs Distributed</h3>
+        <p>Learn the difference between centralized and distributed version control systems.</p>
+        <div class="branch-showcase">
+          <strong>Centralized VCS:</strong><br>
+          • Single central server stores all versions<br>
+          • Developers check out files from central location<br>
+          • Examples: SVN, CVS, Perforce<br>
+          • Requires network connection for most operations
+        </div>
+        <div class="collaboration-note">
+          <strong>Distributed VCS:</strong><br>
+          • Every developer has complete project history<br>
+          • Can work offline and sync later<br>
+          • Examples: Git, Mercurial, Bazaar<br>
+          • More flexible branching and merging
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Git Installation and Setup</h1>
+      <p>Install Git and configure your development environment.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Installing Git</h3>
+        <p>Get Git installed on your operating system.</p>
+        <span class="git-badge">Windows</span>
+        <span class="git-badge">macOS</span>
+        <span class="git-badge">Linux</span>
+        <div class="concept-box">
+          Git is available for all major operating systems. The installation process varies by platform, but the end result is the same - a powerful command-line tool for version control.
+        </div>
+        <div class="terminal-demo">
+          <div class="terminal-prompt">$ </div><span class="terminal-command">git --version</span><br>
+          <div class="terminal-output">git version 2.40.1</div>
+        </div>
+        <div class="best-practice-warning">
+          <strong>Installation Options:</strong><br>
+          • Windows: Download from git-scm.com or use package managers<br>
+          • macOS: Xcode Command Line Tools or Homebrew<br>
+          • Linux: Use your distribution's package manager<br>
+          • Always verify installation with git --version
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Initial Configuration</h3>
+        <p>Configure Git with your identity and preferences.</p>
+        <div class="command-highlight">
+          <strong>Essential Configuration:</strong><br>
+          Set your name and email address that will be associated with your commits. This information is included in every commit you make.
+        </div>
+        <div class="git-example">
+# Set your identity<br>
+git config --global user.name "Your Name"<br>
+git config
