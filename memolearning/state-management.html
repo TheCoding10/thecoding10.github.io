@@ -1,0 +1,843 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning State Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔄';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #7c3aed;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #8b5cf6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .state-example {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #7c3aed;
+      overflow-x: auto;
+    }
+
+    .state-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #7c3aed;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .pattern-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .hook-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .redux-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .context-note {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .performance-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .state-flow-demo {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .state-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .state-box {
+      background: #8b5cf6;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .state-arrow {
+      font-size: 24px;
+      color: #6b7280;
+    }
+
+    .interactive-counter {
+      background: #8b5cf6;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .counter-display {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .counter-button {
+      background: white;
+      color: #8b5cf6;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+    }
+
+    .counter-button:hover {
+      background: #f3e8ff;
+    }
+
+    .redux-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .flow-step {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -25px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: #8b5cf6;
+    }
+
+    .step-title {
+      font-weight: 600;
+      color: #8b5cf6;
+      margin-bottom: 8px;
+    }
+
+    .step-description {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      .state-diagram {
+        flex-direction: column;
+      }
+      
+      .state-arrow {
+        transform: rotate(90deg);
+      }
+      
+      .flow-step::after {
+        content: '↓';
+        right: 50%;
+        top: 100%;
+        transform: translateX(50%);
+      }
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Simple state management demo
+    let globalCounter = 0;
+    
+    function updateGlobalCounter(change) {
+      globalCounter += change;
+      const displays = document.querySelectorAll('.global-counter-display');
+      displays.forEach(display => {
+        display.textContent = globalCounter;
+      });
+    }
+    
+    function resetGlobalCounter() {
+      globalCounter = 0;
+      const displays = document.querySelectorAll('.global-counter-display');
+      displays.forEach(display => {
+        display.textContent = globalCounter;
+      });
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔄 State Management</h1>
+    <p>Master state management patterns and tools for complex React applications</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">State Management Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">11</span>
+          <div class="stat-label">State Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">Patterns & Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Real Projects</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Modern</span>
+          <div class="stat-label">Solutions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">State Management Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core concepts and importance of state management in applications.</p>
+        <ul class="topics-list">
+          <li>What is state?</li>
+          <li>Local vs global state</li>
+          <li>State complexity</li>
+          <li>State management patterns</li>
+          <li>Unidirectional data flow</li>
+          <li>State mutations</li>
+          <li>State normalization</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">useState and useReducer</h3>
+        </div>
+        <p class="unit-description">Master React's built-in state management hooks for local component state.</p>
+        <ul class="topics-list">
+          <li>useState hook deep dive</li>
+          <li>State updates and batching</li>
+          <li>useReducer hook</li>
+          <li>Reducer pattern</li>
+          <li>Complex state logic</li>
+          <li>State initialization</li>
+          <li>Functional updates</li>
+          <li>When to use each</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Context API</h3>
+        </div>
+        <p class="unit-description">Share state across components without prop drilling using React Context.</p>
+        <ul class="topics-list">
+          <li>Context concept</li>
+          <li>Creating contexts</li>
+          <li>Provider pattern</li>
+          <li>Consuming context</li>
+          <li>useContext hook</li>
+          <li>Multiple contexts</li>
+          <li>Context composition</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Redux Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn Redux for predictable state management in large applications.</p>
+        <ul class="topics-list">
+          <li>Redux principles</li>
+          <li>Actions and action creators</li>
+          <li>Reducers</li>
+          <li>Store</li>
+          <li>Dispatching actions</li>
+          <li>Subscribing to state</li>
+          <li>Middleware</li>
+          <li>DevTools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">React Redux</h3>
+        </div>
+        <p class="unit-description">Connect Redux to React components using the official React Redux library.</p>
+        <ul class="topics-list">
+          <li>Provider component</li>
+          <li>useSelector hook</li>
+          <li>useDispatch hook</li>
+          <li>connect function</li>
+          <li>mapStateToProps</li>
+          <li>mapDispatchToProps</li>
+          <li>Container components</li>
+          <li>Reselect library</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Redux Toolkit</h3>
+        </div>
+        <p class="unit-description">Use Redux Toolkit for efficient and modern Redux development.</p>
+        <ul class="topics-list">
+          <li>Redux Toolkit overview</li>
+          <li>configureStore</li>
+          <li>createSlice</li>
+          <li>createAsyncThunk</li>
+          <li>Immer integration</li>
+          <li>RTK Query</li>
+          <li>createEntityAdapter</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Zustand</h3>
+        </div>
+        <p class="unit-description">Explore lightweight state management with Zustand.</p>
+        <ul class="topics-list">
+          <li>Zustand basics</li>
+          <li>Creating stores</li>
+          <li>State updates</li>
+          <li>Subscriptions</li>
+          <li>Async actions</li>
+          <li>Middleware</li>
+          <li>Persistence</li>
+          <li>TypeScript support</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Jotai and Atomic State</h3>
+        </div>
+        <p class="unit-description">Learn atomic state management with Jotai for flexible state composition.</p>
+        <ul class="topics-list">
+          <li>Atomic state concept</li>
+          <li>Creating atoms</li>
+          <li>useAtom hook</li>
+          <li>Derived atoms</li>
+          <li>Async atoms</li>
+          <li>Atom families</li>
+          <li>State composition</li>
+          <li>Performance benefits</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Server State Management</h3>
+        </div>
+        <p class="unit-description">Handle server state with specialized tools like React Query and SWR.</p>
+        <ul class="topics-list">
+          <li>Client vs server state</li>
+          <li>React Query (TanStack)</li>
+          <li>SWR library</li>
+          <li>Caching strategies</li>
+          <li>Background updates</li>
+          <li>Optimistic updates</li>
+          <li>Error handling</li>
+          <li>Infinite queries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">State Architecture Patterns</h3>
+        </div>
+        <p class="unit-description">Design scalable state architecture for large applications.</p>
+        <ul class="topics-list">
+          <li>Feature-based organization</li>
+          <li>Domain-driven design</li>
+          <li>State machines</li>
+          <li>Event sourcing</li>
+          <li>CQRS pattern</li>
+          <li>State normalization</li>
+          <li>Micro-frontends state</li>
+          <li>Testing strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Performance Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize state management for better application performance.</p>
+        <ul class="topics-list">
+          <li>Render optimization</li>
+          <li>Memoization techniques</li>
+          <li>State slicing</li>
+          <li>Lazy loading state</li>
+          <li>Bundle splitting</li>
+          <li>Memory management</li>
+          <li>Debugging tools</li>
+          <li>Performance monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: State Management Fundamentals</h1>
+      <p>Learn the core concepts and importance of state management in applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is State?</h3>
+        <p>Understand the fundamental concept of state in web applications.</p>
+        <span class="state-badge">Data</span>
+        <span class="state-badge">UI State</span>
+        <span class="state-badge">Server State</span>
+        <span class="state-badge">Form State</span>
+        <div class="concept-box">
+          State represents any data that changes over time in your application. It includes user interface state, server data, form inputs, loading states, and any other dynamic information that affects what users see and how they interact with your app.
+        </div>
+        <div class="state-example">
+// Examples of different types of state<br>
+const [count, setCount] = useState(0);           // UI state<br>
+const [user, setUser] = useState(null);          // Server state<br>
+const [isLoading, setLoading] = useState(false); // Loading state<br>
+const [theme, setTheme] = useState('light');     // Preference state<br>
+<br>
+// State affects what users see<br>
+return (<br>
+&nbsp;&nbsp;&lt;div className={theme}&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{isLoading ? 'Loading...' : `Count: ${count}`}<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+);
+        </div>
+        <div class="interactive-counter">
+          <div>Simple State Example:</div>
+          <div class="counter-display global-counter-display">0</div>
+          <button class="counter-button" onclick="updateGlobalCounter(1)">+1</button>
+          <button class="counter-button" onclick="updateGlobalCounter(-1)">-1</button>
+          <button class="counter-button" onclick="resetGlobalCounter()">Reset</button>
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Local vs Global State</h3>
+        <p>Learn when to use local component state versus global application state.</p>
+        <div class="pattern-highlight">
+          <strong>Local State:</strong><br>
+          • Used by a single component or small component tree<br>
+          • Form inputs, toggles, temporary UI state<br>
+          • Managed with useState or useReducer<br>
+          • Examples: modal open/closed, form field values
+        </div>
+        <div class="hook-insight">
+          <strong>Global State:</strong><br>
+          • Shared across multiple components<br>
+          • User authentication, theme preferences, shopping cart<br>
+          • Managed with Context, Redux, or other state libraries<br>
+          • Examples: current user, app settings, cached data
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Unidirectional Data Flow</h3>
+        <p>Understand the principle of unidirectional data flow in state management.</p>
+        <div class="redux-showcase">
+          <strong>Data Flow Principle:</strong><br>
+          Data flows in one direction through your application, making state changes predictable and easier to debug. Actions trigger state updates, which flow down to components.
+        </div>
+        <div class="state-diagram">
+          <div class="state-box">Action</div>
+          <div class="state-arrow">→</div>
+          <div class="state-box">State Update</div>
+          <div class="state-arrow">→</div>
+          <div class="state-box">UI Update</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">←
