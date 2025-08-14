@@ -1,0 +1,895 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Deployment Backend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🚀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0d9488;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #14b8a6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .deploy-example {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #0d9488;
+      overflow-x: auto;
+    }
+
+    .deploy-badge {
+      display: inline-block;
+      background: #ccfbf1;
+      color: #0f766e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0d9488;
+    }
+
+    .docker-highlight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .k8s-insight {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0284c7;
+    }
+
+    .cloud-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .cicd-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .monitoring-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .deployment-pipeline {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .pipeline-stage {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .development-stage {
+      background: #0d9488;
+      font-size: 18px;
+    }
+
+    .staging-stage {
+      background: #14b8a6;
+      font-size: 16px;
+    }
+
+    .production-stage {
+      background: #2dd4bf;
+      font-size: 14px;
+    }
+
+    .deploy-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #0d9488;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #0d9488;
+    }
+
+    .deploy-results {
+      background: #0d9488;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #0d9488;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .deploy-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .failed {
+      color: #dc2626;
+    }
+
+    .deploying {
+      color: #eab308;
+    }
+
+    .uptime-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .uptime-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .uptime-fill {
+      background: #0d9488;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .uptime-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .platform-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .platform-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .platform-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .platform-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .config-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .config-file {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .env-indicator {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .env-dev {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .env-staging {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .env-prod {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .health-check {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .health-metric {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0f766e;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Deployment simulation
+    function simulateDeployment() {
+      const results = document.getElementById('deploy-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="deploy-status">
+            <span class="success">✅ Deployed</span> | 
+            <span class="deploying">🚀 v2.1.3</span> | 
+            <span class="failed">❌ 0 failures</span>
+          </div>
+          <div>Production: 3 instances running - 99.9% uptime</div>
+        `;
+      }
+    }
+
+    // Uptime simulation
+    function updateUptime() {
+      const bars = document.querySelectorAll('.uptime-fill');
+      const uptimes = [99.9, 99.5, 98.8, 99.7];
+      
+      bars.forEach((bar, index) => {
+        if (uptimes[index]) {
+          bar.style.width = uptimes[index] + '%';
+        }
+      });
+    }
+
+    // Health check animation
+    function animateHealthChecks() {
+      const metrics = document.querySelectorAll('.health-metric');
+      metrics.forEach((metric, index) => {
+        setTimeout(() => {
+          metric.style.background = '#dcfce7';
+          metric.style.borderColor = '#bbf7d0';
+          metric.style.color = '#166534';
+          setTimeout(() => {
+            metric.style.background = '#f0fdfa';
+            metric.style.borderColor = '#a7f3d0';
+            metric.style.color = '#0f766e';
+          }, 500);
+        }, index * 300);
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateUptime();
+      setInterval(animateHealthChecks, 4000);
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Deployment Backend</h1>
+    <p>Master server deployment, containerization, orchestration, and production operations</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Deployment Backend Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Deployment Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~45</span>
+          <div class="stat-label">DevOps Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Deploy Platforms</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Docker/K8s</span>
+          <div class="stat-label">Technologies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Deployment Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core principles of application deployment and production environments.</p>
+        <ul class="topics-list">
+          <li>What is deployment?</li>
+          <li>Development vs production</li>
+          <li>Deployment strategies</li>
+          <li>Environment management</li>
+          <li>Configuration management</li>
+          <li>Deployment pipelines</li>
+          <li>Release management</li>
+          <li>Rollback strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Server Setup & Configuration</h3>
+        </div>
+        <p class="unit-description">Set up and configure servers for hosting backend applications.</p>
+        <ul class="topics-list">
+          <li>Linux server basics</li>
+          <li>User management</li>
+          <li>Security hardening</li>
+          <li>Firewall configuration</li>
+          <li>SSH setup</li>
+          <li>Package management</li>
+          <li>System monitoring</li>
+          <li>Log management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Web Servers & Reverse Proxies</h3>
+        </div>
+        <p class="unit-description">Configure web servers and reverse proxies for production deployments.</p>
+        <ul class="topics-list">
+          <li>Nginx configuration</li>
+          <li>Apache setup</li>
+          <li>Reverse proxy setup</li>
+          <li>Load balancing</li>
+          <li>SSL/TLS certificates</li>
+          <li>Gzip compression</li>
+          <li>Static file serving</li>
+          <li>Security headers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Process Management</h3>
+        </div>
+        <p class="unit-description">Manage application processes, auto-restart, and service management.</p>
+        <ul class="topics-list">
+          <li>Process managers</li>
+          <li>PM2 for Node.js</li>
+          <li>Systemd services</li>
+          <li>Auto-restart policies</li>
+          <li>Environment variables</li>
+          <li>Cluster mode</li>
+          <li>Log rotation</li>
+          <li>Health monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Containerization with Docker</h3>
+        </div>
+        <p class="unit-description">Package applications using Docker containers for consistent deployments.</p>
+        <ul class="topics-list">
+          <li>Docker fundamentals</li>
+          <li>Dockerfile creation</li>
+          <li>Image optimization</li>
+          <li>Container orchestration</li>
+          <li>Docker Compose</li>
+          <li>Volume management</li>
+          <li>Network configuration</li>
+          <li>Registry management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Container Orchestration</h3>
+        </div>
+        <p class="unit-description">Orchestrate containers at scale using Kubernetes and other tools.</p>
+        <ul class="topics-list">
+          <li>Kubernetes basics</li>
+          <li>Pods and services</li>
+          <li>Deployments</li>
+          <li>ConfigMaps and secrets</li>
+          <li>Ingress controllers</li>
+          <li>Scaling strategies</li>
+          <li>Rolling updates</li>
+          <li>Health checks</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cloud Platform Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy applications to cloud platforms like AWS, Azure, and GCP.</p>
+        <ul class="topics-list">
+          <li>Cloud deployment strategies</li>
+          <li>AWS deployment</li>
+          <li>Azure deployment</li>
+          <li>Google Cloud deployment</li>
+          <li>Platform-as-a-Service</li>
+          <li>Serverless deployment</li>
+          <li>CDN configuration</li>
+          <li>DNS management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">CI/CD Pipelines</h3>
+        </div>
+        <p class="unit-description">Automate deployment with continuous integration and delivery pipelines.</p>
+        <ul class="topics-list">
+          <li>CI/CD concepts</li>
+          <li>GitHub Actions</li>
+          <li>GitLab CI/CD</li>
+          <li>Jenkins setup</li>
+          <li>Pipeline configuration</li>
+          <li>Automated testing</li>
+          <li>Deployment automation</li>
+          <li>Pipeline security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Database Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy and manage databases in production environments.</p>
+        <ul class="topics-list">
+          <li>Database hosting options</li>
+          <li>Migration strategies</li>
+          <li>Backup and recovery</li>
+          <li>Connection pooling</li>
+          <li>Database monitoring</li>
+          <li>Replica configuration</li>
+          <li>Performance tuning</li>
+          <li>Security hardening</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Monitoring & Logging</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive monitoring and logging for production systems.</p>
+        <ul class="topics-list">
+          <li>Application monitoring</li>
+          <li>Performance metrics</li>
+          <li>Error tracking</li>
+          <li>Log aggregation</li>
+          <li>Alerting systems</li>
+          <li>Uptime monitoring</li>
+          <li>Analytics integration</li>
+          <li>Dashboard creation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Performance & Scaling</h3>
+        </div>
+        <p class="unit-description">Optimize performance and implement scaling strategies for high-traffic applications.</p>
+        <ul class="topics-list">
+          <li>Performance optimization</li>
+          <li>Horizontal scaling</li>
+          <li>Vertical scaling</li>
+          <li>Load balancing</li>
+          <li>Caching strategies</li>
+          <li>CDN implementation</li>
+          <li>Auto-scaling</li>
+          <li>Performance testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Security & Maintenance</h3>
+        </div>
+        <p class="unit-description">Secure production deployments and maintain systems effectively.</p>
+        <ul class="topics-list">
+          <li>Security best practices</li>
+          <li>SSL/TLS configuration</li>
+          <li>Vulnerability scanning</li>
+          <li>Security updates</li>
+          <li>Backup strategies</li>
+          <li>Disaster recovery</li>
+          <li>Maintenance windows</li>
+          <li>Compliance requirements
