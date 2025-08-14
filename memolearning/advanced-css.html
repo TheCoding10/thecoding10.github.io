@@ -1,0 +1,823 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Advanced CSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6b21a8 0%, #8b5cf6 50%, #a78bfa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #6b21a8, #8b5cf6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(107, 33, 168, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '✨';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #6b21a8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #8b5cf6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #6b21a8, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(107, 33, 168, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .css-example {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #6b21a8;
+      overflow-x: auto;
+    }
+
+    .advanced-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #6b21a8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .technique-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .animation-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .grid-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .performance-showcase {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .modern-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .browser-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .demo-animation {
+      background: linear-gradient(45deg, #8b5cf6, #a78bfa);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .grid-demo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .grid-item {
+      background: #8b5cf6;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .flexbox-demo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f3e8ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .flex-item {
+      background: #8b5cf6;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .transform-demo {
+      width: 100px;
+      height: 100px;
+      background: #8b5cf6;
+      margin: 20px auto;
+      border-radius: 8px;
+      transform: rotate(15deg) scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .transform-demo:hover {
+      transform: rotate(0deg) scale(1);
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>✨ Advanced CSS</h1>
+    <p>Master sophisticated CSS techniques and modern features for professional web development</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Advanced CSS Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Advanced Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Advanced Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">Complex Projects</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Modern</span>
+          <div class="stat-label">CSS Features</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Advanced Selectors</h3>
+        </div>
+        <p class="unit-description">Master complex selectors and pseudo-elements for precise targeting.</p>
+        <ul class="topics-list">
+          <li>Complex combinators</li>
+          <li>Advanced pseudo-classes</li>
+          <li>Structural pseudo-classes</li>
+          <li>Custom pseudo-elements</li>
+          <li>Attribute selector patterns</li>
+          <li>Negation selectors</li>
+          <li>Selector performance</li>
+          <li>Modern selector features</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">CSS Grid Mastery</h3>
+        </div>
+        <p class="unit-description">Create sophisticated layouts with advanced CSS Grid techniques.</p>
+        <ul class="topics-list">
+          <li>Grid template areas</li>
+          <li>Subgrid</li>
+          <li>Grid auto-placement</li>
+          <li>Dense grid packing</li>
+          <li>Responsive grid layouts</li>
+          <li>Grid and flexbox hybrid</li>
+          <li>Grid animation</li>
+          <li>Complex grid patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Advanced Flexbox</h3>
+        </div>
+        <p class="unit-description">Explore advanced flexbox patterns and complex layout scenarios.</p>
+        <ul class="topics-list">
+          <li>Flex algorithms deep dive</li>
+          <li>Flex shorthand mastery</li>
+          <li>Complex flex layouts</li>
+          <li>Flex and grid integration</li>
+          <li>Responsive flex patterns</li>
+          <li>Flex accessibility</li>
+          <li>Performance considerations</li>
+          <li>Advanced flex examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">CSS Transforms and 3D</h3>
+        </div>
+        <p class="unit-description">Create stunning 3D effects and advanced transformations.</p>
+        <ul class="topics-list">
+          <li>3D transforms</li>
+          <li>Perspective</li>
+          <li>Transform-style</li>
+          <li>Backface visibility</li>
+          <li>Complex 3D scenes</li>
+          <li>Transform origins</li>
+          <li>Matrix transformations</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Advanced Animations</h3>
+        </div>
+        <p class="unit-description">Build complex animations and micro-interactions.</p>
+        <ul class="topics-list">
+          <li>Keyframe animations</li>
+          <li>Animation timing functions</li>
+          <li>Complex animation sequences</li>
+          <li>Animation performance</li>
+          <li>WAAPI integration</li>
+          <li>Scroll-driven animations</li>
+          <li>Physics-based animations</li>
+          <li>Animation best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">CSS Custom Properties</h3>
+        </div>
+        <p class="unit-description">Leverage CSS variables for dynamic and maintainable styles.</p>
+        <ul class="topics-list">
+          <li>Advanced variable patterns</li>
+          <li>Computed variables</li>
+          <li>Variable inheritance</li>
+          <li>Dynamic theming</li>
+          <li>JavaScript integration</li>
+          <li>Variable performance</li>
+          <li>Fallback strategies</li>
+          <li>Variable debugging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">CSS Functions and Calculations</h3>
+        </div>
+        <p class="unit-description">Master CSS functions for dynamic and responsive designs.</p>
+        <ul class="topics-list">
+          <li>calc() advanced usage</li>
+          <li>min(), max(), clamp()</li>
+          <li>Color functions</li>
+          <li>Math functions</li>
+          <li>CSS counters</li>
+          <li>Attribute functions</li>
+          <li>Custom function patterns</li>
+          <li>Function composition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Advanced Typography</h3>
+        </div>
+        <p class="unit-description">Create sophisticated typography with modern CSS features.</p>
+        <ul class="topics-list">
+          <li>Variable fonts</li>
+          <li>Font feature settings</li>
+          <li>OpenType features</li>
+          <li>Text effects</li>
+          <li>Advanced text layout</li>
+          <li>Responsive typography</li>
+          <li>Typography performance</li>
+          <li>Accessibility considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">CSS Filters and Effects</h3>
+        </div>
+        <p class="unit-description">Apply advanced visual effects using CSS filters and blend modes.</p>
+        <ul class="topics-list">
+          <li>Filter functions</li>
+          <li>SVG filters</li>
+          <li>Backdrop filters</li>
+          <li>Blend modes</li>
+          <li>Masking and clipping</li>
+          <li>Filter animations</li>
+          <li>Performance impact</li>
+          <li>Creative effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Container Queries</h3>
+        </div>
+        <p class="unit-description">Build truly responsive components with container queries.</p>
+        <ul class="topics-list">
+          <li>Container query syntax</li>
+          <li>Containment contexts</li>
+          <li>Size queries</li>
+          <li>Style queries</li>
+          <li>Container units</li>
+          <li>Responsive components</li>
+          <li>Browser support</li>
+          <li>Polyfill strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">CSS Logical Properties</h3>
+        </div>
+        <p class="unit-description">Create internationalization-ready styles with logical properties.</p>
+        <ul class="topics-list">
+          <li>Logical vs physical</li>
+          <li>Writing modes</li>
+          <li>Direction support</li>
+          <li>Logical margins and padding</li>
+          <li>Logical borders</li>
+          <li>Logical positioning</li>
+          <li>RTL/LTR considerations</li>
+          <li>Migration strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">CSS Houdini and Custom Elements</h3>
+        </div>
+        <p class="unit-description">Extend CSS with Houdini APIs and custom styling approaches.</p>
+        <ul class="topics-list">
+          <li>Paint API</li>
+          <li>Properties and Values API</li>
+          <li>Layout API</li>
+          <li>Animation Worklet</li>
+          <li>Custom properties</li>
+          <li>Worklet registration</li>
+          <li>Browser support</li>
+          <li>Practical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Performance and Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize CSS for performance and efficient rendering.</p>
+        <ul class="topics-list">
+          <li>Critical CSS</li>
+          <li>CSS loading strategies</li>
+          <li>Selector performance</li>
+          <li>Animation performance</li>
+          <li>Paint and layout optimization</li>
+          <li>CSS containment</li>
+          <li>Bundle optimization</li>
+          <li>Measurement tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">CSS Architecture</h3>
+        </div>
+        <p class="unit-description">Structure and organize CSS for large-scale applications.</p>
+        <ul class="topics-list">
+          <li>CSS methodologies</li>
+          <li>Component architecture</li>
+          <li>CSS-in-JS patterns</li>
+          <li>Design systems</li>
+          <li>Naming conventions</li>
+          <li>Modular CSS</li>
+          <li>CSS preprocessing</li>
+          <li>Maintenance strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Advanced Selectors</h1>
+      <p>Master complex selectors and pseudo-elements for precise targeting.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Complex Combinators</h3>
+        <p>Use advanced combinator selectors for precise element targeting.</p>
+        <span class="advanced-badge">Descendant</span>
+        <span class="advanced-badge">Child</span>
+        <span class="advanced-badge">Sibling</span>
+        <span class="advanced-badge">Adjacent</span>
+        <div class="technique-box">
+          Advanced combinators allow you to select elements based on their relationship to other elements in the DOM tree, enabling precise targeting without adding extra classes.
+        </div>
+        <div class="css-example">
+/* Child combinator */<br>
+.nav > li { /* Direct children only */ }<br>
+<br>
+/* Adjacent sibling */<br>
+h2 + p { /* First paragraph after h2 */ }<br>
+<br>
+/* General sibling */<br>
+h2 ~ p { /* All paragraphs after h2 */ }<br>
+<br>
+/* Complex combinations */<br>
+.sidebar > .widget:first-child + .widget {<br>
+&nbsp;&nbsp;margin-top: 20px;<br>
+}
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structural Pseudo-classes</h3>
+        <p>Target elements based on their position and relationship in the document structure.</p>
+        <div class="animation-highlight">
+          <strong>Structural Selectors:</strong><br>
+          • :nth-child(n): Select based on position<br>
+          • :nth-of-type(n): Select by element type position<br>
+          • :first-child, :last-child: First/last children<br>
+          • :only-child: Elements with no siblings<br>
+          • :empty: Elements with no content
+        </div>
+        <div class="css-example">
+/* Advanced nth patterns */<br>
+tr:nth-child(even) { background: #f5f5f5; }<br>
+tr:nth-child(3n+1) { font-weight: bold; }<br>
+<br>
+/* Type-based selection */<br>
+p:nth-of-type(2) { font-size: 1.2em; }<br>
+<br>
+/* Empty state styling */<br>
+.content:empty::before {<br>
+&nbsp;&nbsp;content: "No content available";<br>
+&nbsp;&nbsp;color: #666;<br>
+}
+        </div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Custom Pseudo-elements</h3>
+        <p>Create virtual elements with ::before and ::after pseudo-elements.</p>
+        <div class="grid-insight">
+          <strong>Pseudo-element Applications:</strong><br>
+          • Decorative elements without extra HTML<br>
+          • Icons and symbols<br>
+          • Tooltip content<br>
+          • Overlay effects<br>
+          • Complex shapes and designs
+        </div>
+        <div class="css-example">
+/* Decorative quote marks */<br>
+blockquote::before {<br>
+&nbsp;&nbsp;content: "❝";<br>
+&nbsp;&nbsp;font-size: 2em;<br>
+&nbsp;&nbsp;color: #8b5cf6;<br>
+&nbsp;&nbsp;float: left;<br>
+}
