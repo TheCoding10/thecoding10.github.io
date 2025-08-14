@@ -1,0 +1,875 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Routing and Middleware</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #fb923c 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🟠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #c2410c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .routing-example {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #9a3412;
+      overflow-x: auto;
+    }
+
+    .routing-badge {
+      display: inline-block;
+      background: #ffedd5;
+      color: #9a3412;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .middleware-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .auth-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .params-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .guards-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .request-pipeline {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .pipeline-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .request-level {
+      background: #ea580c;
+      font-size: 18px;
+    }
+
+    .middleware-level {
+      background: #c2410c;
+      font-size: 16px;
+    }
+
+    .route-level {
+      background: #9a3412;
+      font-size: 14px;
+    }
+
+    .routing-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #ea580c;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #ea580c;
+    }
+
+    .routing-results {
+      background: #ea580c;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #ea580c;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .routing-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .matched {
+      color: #16a34a;
+    }
+
+    .not-found {
+      color: #dc2626;
+    }
+
+    .processing {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #ea580c;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .method-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .method-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .method-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .method-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .middleware-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .middleware-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Route matching simulation
+    function matchRoute() {
+      const results = document.getElementById('routing-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="routing-status">
+            <span class="matched">✅ Route matched</span> | 
+            <span class="processing">🟡 Middleware processing</span> | 
+            <span class="not-found">❌ 0 errors</span>
+          </div>
+          <div>Route: /api/users/:id → Handler executed</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [96, 88, 92, 85];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🟠 Routing and Middleware</h1>
+    <p>Master request routing, middleware patterns, and application flow control</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Routing and Middleware Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Core Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~35</span>
+          <div class="stat-label">Routing Patterns</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Middleware Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">RESTful</span>
+          <div class="stat-label">API Design</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Routing</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of web application routing and URL handling.</p>
+        <ul class="topics-list">
+          <li>What is routing?</li>
+          <li>URL patterns and matching</li>
+          <li>Route handlers</li>
+          <li>HTTP methods</li>
+          <li>Static vs dynamic routes</li>
+          <li>Route priority</li>
+          <li>Routing engines</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Route Parameters & Patterns</h3>
+        </div>
+        <p class="unit-description">Master route parameters, wildcards, and advanced pattern matching.</p>
+        <ul class="topics-list">
+          <li>Path parameters</li>
+          <li>Query parameters</li>
+          <li>Wildcard routes</li>
+          <li>Optional parameters</li>
+          <li>Parameter validation</li>
+          <li>Route constraints</li>
+          <li>Regex patterns</li>
+          <li>Parameter types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">HTTP Methods & RESTful Routes</h3>
+        </div>
+        <p class="unit-description">Implement RESTful routing patterns with proper HTTP method usage.</p>
+        <ul class="topics-list">
+          <li>GET, POST, PUT, DELETE</li>
+          <li>PATCH and OPTIONS</li>
+          <li>RESTful conventions</li>
+          <li>Resource-based routing</li>
+          <li>Nested resources</li>
+          <li>Collection vs member routes</li>
+          <li>API versioning</li>
+          <li>HTTP status codes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Route Groups & Namespaces</h3>
+        </div>
+        <p class="unit-description">Organize routes using groups, prefixes, and namespaces.</p>
+        <ul class="topics-list">
+          <li>Route grouping</li>
+          <li>URL prefixes</li>
+          <li>Namespace organization</li>
+          <li>Middleware application</li>
+          <li>Subdomain routing</li>
+          <li>API versioning strategies</li>
+          <li>Route inheritance</li>
+          <li>Modular routing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Introduction to Middleware</h3>
+        </div>
+        <p class="unit-description">Understand middleware concepts and the request/response pipeline.</p>
+        <ul class="topics-list">
+          <li>Middleware concept</li>
+          <li>Request pipeline</li>
+          <li>Middleware execution order</li>
+          <li>Pre and post processing</li>
+          <li>Middleware types</li>
+          <li>Built-in middleware</li>
+          <li>Custom middleware</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Authentication Middleware</h3>
+        </div>
+        <p class="unit-description">Implement authentication and authorization using middleware.</p>
+        <ul class="topics-list">
+          <li>Authentication strategies</li>
+          <li>Session-based auth</li>
+          <li>Token-based auth</li>
+          <li>JWT middleware</li>
+          <li>OAuth integration</li>
+          <li>Role-based access</li>
+          <li>Permission checking</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Logging & Monitoring Middleware</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive logging and monitoring solutions.</p>
+        <ul class="topics-list">
+          <li>Request logging</li>
+          <li>Response timing</li>
+          <li>Error tracking</li>
+          <li>Performance monitoring</li>
+          <li>Custom metrics</li>
+          <li>Log formatting</li>
+          <li>Structured logging</li>
+          <li>Monitoring integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">CORS & Security Middleware</h3>
+        </div>
+        <p class="unit-description">Secure applications with CORS, CSRF, and other security middleware.</p>
+        <ul class="topics-list">
+          <li>CORS configuration</li>
+          <li>CSRF protection</li>
+          <li>Security headers</li>
+          <li>Rate limiting</li>
+          <li>Input validation</li>
+          <li>XSS prevention</li>
+          <li>Content Security Policy</li>
+          <li>Helmet.js integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Caching Middleware</h3>
+        </div>
+        <p class="unit-description">Implement caching strategies to improve application performance.</p>
+        <ul class="topics-list">
+          <li>Cache strategies</li>
+          <li>HTTP caching</li>
+          <li>In-memory caching</li>
+          <li>Redis integration</li>
+          <li>Cache invalidation</li>
+          <li>ETags and headers</li>
+          <li>Cache middleware</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Error Handling & Recovery</h3>
+        </div>
+        <p class="unit-description">Build robust error handling and recovery mechanisms.</p>
+        <ul class="topics-list">
+          <li>Error middleware</li>
+          <li>Global error handlers</li>
+          <li>Custom error types</li>
+          <li>Error logging</li>
+          <li>Graceful degradation</li>
+          <li>Circuit breakers</li>
+          <li>Retry mechanisms</li>
+          <li>Error responses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Custom Middleware Development</h3>
+        </div>
+        <p class="unit-description">Create custom middleware for specific application needs.</p>
+        <ul class="topics-list">
+          <li>Middleware patterns</li>
+          <li>Middleware composition</li>
+          <li>Async middleware</li>
+          <li>Conditional middleware</li>
+          <li>Parameterized middleware</li>
+          <li>Testing middleware</li>
+          <li>Middleware libraries</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Routing Patterns</h3>
+        </div>
+        <p class="unit-description">Master advanced routing concepts and optimization techniques.</p>
+        <ul class="topics-list">
+          <li>Dynamic route generation</li>
+          <li>Route caching</li>
+          <li>Route compilation</li>
+          <li>Performance optimization</li>
+          <li>Route debugging</li>
+          <li>Testing strategies</li>
+          <li>Documentation</li>
+          <li>Migration patterns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Routing</h1>
+      <p>Learn the fundamentals of web application routing and URL handling.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Routing?</h3>
+        <p>Understand routing as the mechanism that determines how an application responds to client requests.</p>
+        <span class="routing-badge">URL Mapping</span>
+        <span class="routing-badge">Request Handling</span>
+        <span class="routing-badge">HTTP Methods</span>
+        <span class="routing-badge">Pattern Matching</span>
+        <div class="concept-box">
+          Routing determines how an application responds to a client request to a specific endpoint, which is defined by a URL path and a specific HTTP request method (GET, POST, etc.). Each route can have one or more handler functions, which are executed when the route is matched.
+        </div>
+        <div class="routing-results">
+          <div class="routing-status">
+            Routing Components
+          </div>
+          <div class="result-item">URL patterns</div>
+          <div class="result-item">HTTP methods</div>
+          <div class="result-item">Route handlers</div>
+          <div class="result-item">Parameters</div>
+          <div class="result-item">Middleware</div>
+        </div>
+        <div class="routing-example">
+// Basic routing example<br>
+app.get('/users', (req, res) => {<br>
+&nbsp;&nbsp;res.json({ users: [] });<br>
+});<br><br>
+app.post('/users', (req, res) => {<br>
+&nbsp;&nbsp;
