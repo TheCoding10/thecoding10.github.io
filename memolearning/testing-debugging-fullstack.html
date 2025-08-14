@@ -1,0 +1,948 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Testing & Debugging for Fullstack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(153, 27, 27, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔴';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(153, 27, 27, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .test-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #dc2626;
+      overflow-x: auto;
+    }
+
+    .debug-example {
+      background: #fff1f2;
+      border: 1px solid #fda4af;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #be123c;
+      overflow-x: auto;
+    }
+
+    .testing-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #dc2626;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .syntax-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #ef4444;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .jest-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .cypress-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .performance-note {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .testing-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .unit-level {
+      background: #ef4444;
+      font-size: 18px;
+    }
+
+    .integration-level {
+      background: #dc2626;
+      font-size: 16px;
+    }
+
+    .e2e-level {
+      background: #991b1b;
+      font-size: 14px;
+    }
+
+    .testing-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #dc2626;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #dc2626;
+    }
+
+    .testing-results {
+      background: #dc2626;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #dc2626;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .testing-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .passing {
+      color: #16a34a;
+    }
+
+    .failing {
+      color: #dc2626;
+    }
+
+    .coverage {
+      color: #3b82f6;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #dc2626;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .feature-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .feature-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .feature-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .syntax-demo {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .syntax-function {
+      background: #fff1f2;
+      border: 1px solid #fda4af;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .terminal-demo {
+      background: #1f2937;
+      color: #f87171;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .terminal-prompt {
+      color: #6b7280;
+      margin-right: 10px;
+    }
+
+    .test-structure {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .test-icon {
+      color: #dc2626;
+      margin-right: 5px;
+    }
+
+    .spec-icon {
+      color: #f59e0b;
+      margin-right: 5px;
+    }
+
+    .mock-icon {
+      color: #6b7280;
+      margin-right: 5px;
+    }
+
+    .test-type {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .unit-test {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .integration-test {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .e2e-test {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .snapshot-test {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .test-framework {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .framework-tool {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .debug-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .error-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .testing-tool {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 4px;
+    }
+
+    .jest-tool {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .cypress-tool {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .playwright-tool {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .coverage-showcase {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .mock-demo {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .assertion-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .tdd-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .ci-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Test suite status check simulation
+    function checkTestingStatus() {
+      const results = document.getElementById('testing-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="testing-status">
+            <span class="passing">✅ Tests Passing 95%</span> | 
+            <span class="coverage">🔵 Coverage 85%</span> | 
+            <span class="failing">❌ 2 Tests Failing</span>
+          </div>
+          <div>Comprehensive Testing - Quality Assured</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [95, 85, 92, 88];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Testing pipeline demo simulation
+    function simulateTesting() {
+      const terminal = document.getElementById('testing-output');
+      if (terminal) {
+        const steps = [
+          'npm test',
+          'Running test suites...',
+          'Tests: 42 passed, 2 failed',
+          'Coverage: 85% of statements'
+        ];
+        
+        steps.forEach((step, index) => {
+          setTimeout(() => {
+            terminal.innerHTML += `<div><span class="terminal-prompt">$</span>${step}</div>`;
+          }, index * 1200);
+        });
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+      checkTestingStatus();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔴 Testing & Debugging for Fullstack</h1>
+    <p>Master comprehensive testing strategies and debugging techniques for reliable applications</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Quality Assurance courses')">← Back to QA Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Testing & Debugging Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Testing Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~30</span>
+          <div class="stat-label">Testing Patterns</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">95%</span>
+          <div class="stat-label">Code Coverage</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Bug-Free</span>
+          <div class="stat-label">Applications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Testing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn core testing concepts and testing pyramid principles.</p>
+        <ul class="topics-list">
+          <li>Testing overview and importance</li>
+          <li>Testing pyramid concept</li>
+          <li>Unit vs Integration vs E2E tests</li>
+          <li>Test-driven development (TDD)</li>
+          <li>Behavior-driven development (BDD)</li>
+          <li>Testing terminology</li>
+          <li>Testing strategies</li>
+          <li>Quality assurance principles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Unit Testing with Jest</h3>
+        </div>
+        <p class="unit-description">Master unit testing with Jest framework for JavaScript code.</p>
+        <ul class="topics-list">
+          <li>Jest setup and configuration</li>
+          <li>Writing your first tests</li>
+          <li>Test structure and organization</li>
+          <li>Jest matchers and assertions</li>
+          <li>Testing async code</li>
+          <li>Mocking functions and modules</li>
+          <li>Test coverage reports</li>
+          <li>Jest best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">React Component Testing</h3>
+        </div>
+        <p class="unit-description">Test React components with React Testing Library and Jest.</p>
+        <ul class="topics-list">
+          <li>React Testing Library setup</li>
+          <li>Component rendering tests</li>
+          <li>User interaction testing</li>
+          <li>Props and state testing</li>
+          <li>Event handling tests</li>
+          <li>Snapshot testing</li>
+          <li>Testing hooks</li>
+          <li>Custom render utilities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Backend API Testing</h3>
+        </div>
+        <p class="unit-description">Test Express.js APIs and Node.js backend functionality.</p>
+        <ul class="topics-list">
+          <li>API testing strategies</li>
+          <li>Supertest for HTTP testing</li>
+          <li>Route testing</li>
+          <li>Middleware testing</li>
+          <li>Database testing setup</li>
+          <li>Authentication testing</li>
+          <li>Error handling tests</li>
+          <li>Test database management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Integration Testing</h3>
+        </div>
+        <p class="unit-description">Test component interactions and system integration points.</p>
+        <ul class="topics-list">
+          <li>Integration testing concepts</li>
+          <li>API integration tests</li>
+          <li>Database integration testing</li>
+          <li>Service integration tests</li>
+          <li>Third-party API testing</li>
+          <li>Contract testing</li>
+          <li>Test environment setup</li>
+          <li>Integration test patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">End-to-End Testing</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive E2E tests with Cypress and Playwright.</p>
+        <ul class="topics-list">
+          <li>E2E testing overview</li>
+          <li>Cypress setup and configuration</li>
+          <li>Writing E2E test scenarios</li>
+          <li>Page object patterns</li>
+          <li>User journey testing</li>
+          <li>Cross-browser testing</li>
+          <li>Visual regression testing</li>
+          <li>E2E test automation</li>
+        </ul>
+      </div>
