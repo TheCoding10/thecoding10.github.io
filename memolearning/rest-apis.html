@@ -1,0 +1,878 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning REST APIs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🟣';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #a855f7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .api-example {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #6b21a8;
+      overflow-x: auto;
+    }
+
+    .api-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #6b21a8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .resource-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .method-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .status-showcase {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .json-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .rest-principles {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .principle-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .stateless-level {
+      background: #a855f7;
+      font-size: 18px;
+    }
+
+    .resource-level {
+      background: #9333ea;
+      font-size: 16px;
+    }
+
+    .uniform-level {
+      background: #7c3aed;
+      font-size: 14px;
+    }
+
+    .api-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #a855f7;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #a855f7;
+    }
+
+    .api-results {
+      background: #a855f7;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #a855f7;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .api-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .pending {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #a855f7;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .method-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .method-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .method-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .method-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .endpoint-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .endpoint-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // API call simulation
+    function makeApiCall() {
+      const results = document.getElementById('api-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="api-status">
+            <span class="success">✅ 200 OK</span> | 
+            <span class="pending">🟡 Processing</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>GET /api/v1/users → JSON Response</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [94, 87, 96, 89];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🟣 REST APIs</h1>
+    <p>Master RESTful web services design, implementation, and best practices</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">REST APIs Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">API Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">REST Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6+</span>
+          <div class="stat-label">HTTP Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">JSON</span>
+          <div class="stat-label">Data Format</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to REST APIs</h3>
+        </div>
+        <p class="unit-description">Learn REST principles and understand why REST is the standard for web APIs.</p>
+        <ul class="topics-list">
+          <li>What is REST?</li>
+          <li>REST principles</li>
+          <li>API vs web service</li>
+          <li>REST constraints</li>
+          <li>Stateless communication</li>
+          <li>Resource-based design</li>
+          <li>REST vs SOAP</li>
+          <li>API ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">HTTP Methods & Status Codes</h3>
+        </div>
+        <p class="unit-description">Master HTTP methods and status codes for proper REST API communication.</p>
+        <ul class="topics-list">
+          <li>GET, POST, PUT, DELETE</li>
+          <li>PATCH and OPTIONS</li>
+          <li>Idempotency</li>
+          <li>Safe methods</li>
+          <li>HTTP status codes</li>
+          <li>2xx, 3xx, 4xx, 5xx responses</li>
+          <li>Custom status codes</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Resource Design & URLs</h3>
+        </div>
+        <p class="unit-description">Design clean, intuitive URLs and organize resources effectively.</p>
+        <ul class="topics-list">
+          <li>Resource identification</li>
+          <li>URL structure</li>
+          <li>Naming conventions</li>
+          <li>Nested resources</li>
+          <li>Query parameters</li>
+          <li>Path parameters</li>
+          <li>Resource relationships</li>
+          <li>URL best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">JSON & Data Formats</h3>
+        </div>
+        <p class="unit-description">Work with JSON and other data formats for API communication.</p>
+        <ul class="topics-list">
+          <li>JSON structure</li>
+          <li>Data serialization</li>
+          <li>Content-Type headers</li>
+          <li>Accept headers</li>
+          <li>XML alternatives</li>
+          <li>Data validation</li>
+          <li>Schema design</li>
+          <li>Nested objects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Request & Response Handling</h3>
+        </div>
+        <p class="unit-description">Handle HTTP requests and craft appropriate responses.</p>
+        <ul class="topics-list">
+          <li>Request parsing</li>
+          <li>Request validation</li>
+          <li>Response formatting</li>
+          <li>Headers management</li>
+          <li>CORS handling</li>
+          <li>Content negotiation</li>
+          <li>Compression</li>
+          <li>Response optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Authentication & Authorization</h3>
+        </div>
+        <p class="unit-description">Secure APIs with proper authentication and authorization mechanisms.</p>
+        <ul class="topics-list">
+          <li>API keys</li>
+          <li>Basic authentication</li>
+          <li>Bearer tokens</li>
+          <li>JWT tokens</li>
+          <li>OAuth 2.0</li>
+          <li>API security</li>
+          <li>Role-based access</li>
+          <li>Rate limiting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Error Handling & Validation</h3>
+        </div>
+        <p class="unit-description">Implement robust error handling and input validation.</p>
+        <ul class="topics-list">
+          <li>Error response format</li>
+          <li>Validation strategies</li>
+          <li>Input sanitization</li>
+          <li>Error codes</li>
+          <li>Error messages</li>
+          <li>Global error handlers</li>
+          <li>Validation libraries</li>
+          <li>Error logging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">API Versioning</h3>
+        </div>
+        <p class="unit-description">Manage API evolution with proper versioning strategies.</p>
+        <ul class="topics-list">
+          <li>Versioning strategies</li>
+          <li>URL versioning</li>
+          <li>Header versioning</li>
+          <li>Query parameter versioning</li>
+          <li>Backward compatibility</li>
+          <li>Deprecation policies</li>
+          <li>Migration strategies</li>
+          <li>Version documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Pagination & Filtering</h3>
+        </div>
+        <p class="unit-description">Handle large datasets with pagination, filtering, and sorting.</p>
+        <ul class="topics-list">
+          <li>Pagination strategies</li>
+          <li>Offset-based pagination</li>
+          <li>Cursor-based pagination</li>
+          <li>Query filtering</li>
+          <li>Sorting parameters</li>
+          <li>Search functionality</li>
+          <li>Response metadata</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">API Documentation</h3>
+        </div>
+        <p class="unit-description">Create comprehensive API documentation using modern tools.</p>
+        <ul class="topics-list">
+          <li>Documentation importance</li>
+          <li>OpenAPI/Swagger</li>
+          <li>API specifications</li>
+          <li>Interactive documentation</li>
+          <li>Code examples</li>
+          <li>Postman collections</li>
+          <li>Documentation tools</li>
+          <li>Maintenance strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Testing REST APIs</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive testing strategies for REST APIs.</p>
+        <ul class="topics-list">
+          <li>Testing strategies</li>
+          <li>Unit testing</li>
+          <li>Integration testing</li>
+          <li>API testing tools</li>
+          <li>Postman testing</li>
+          <li>Automated testing</li>
+          <li>Mock servers</li>
+          <li>Performance testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">API Performance & Monitoring</h3>
+        </div>
+        <p class="unit-description">Optimize API performance and implement monitoring solutions.</p>
+        <ul class="topics-list">
+          <li>Performance optimization</li>
+          <li>Caching strategies</li>
+          <li>Response compression</li>
+          <li>API monitoring</li>
+          <li>Analytics and metrics</li>
+          <li>Rate limiting</li>
+          <li>Load balancing</li>
+          <li>Scaling strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to REST APIs</h1>
+      <p>Learn REST principles and understand why REST is the standard for web APIs.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is REST?</h3>
+        <p>Understand REST as an architectural style for designing networked applications.</p>
+        <span class="api-badge">Architectural Style</span>
+        <span class="api-badge">Stateless</span>
+        <span class="api-badge">Resource-Based</span>
+        <span class="api-badge">HTTP</span>
+        <div class="concept-box">
+          REST (Representational State Transfer) is an architectural style for designing networked applications. It relies on a stateless, client-server communication protocol and treats server objects as resources that can be created, read, updated, or deleted.
+        </div>
+        <div class="api-results">
+          <div class="api-status">
+            REST Principles
+          </div>
+          <div class="result-item">Stateless</div>
+          <div class="result-item">Client-Server</div>
+          <div class="result-item">Cacheable</div>
+          <div class="result-item">Uniform Interface</div>
+          <div class="result-item">Layered System</div>
+        </div>
+        <div class="api-example">
+// Basic REST API endpoint<br>
+GET /api/users/123<br>
+Host: api.example.com<br>
+Accept: application/json<br><br>
+Response:<br>
+{<br>
+&nbsp;&nbsp;"id": 123,<br>
+&nbsp;&nbsp;"name": "John Doe",<br>
+&nbsp;&nbsp;"email": "
