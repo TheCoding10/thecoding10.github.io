@@ -1,0 +1,875 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Responsive Web Design for Full-Stack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #67e8f9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔵';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #06b6d4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0891b2;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .responsive-example {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #065f46;
+      overflow-x: auto;
+    }
+
+    .css-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .responsive-badge {
+      display: inline-block;
+      background: #cffafe;
+      color: #0f766e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdfa;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #065f46;
+    }
+
+    .mobile-highlight {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .breakpoint-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .flexbox-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .grid-note {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .best-practice-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .device-breakpoints {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .breakpoint-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .mobile-level {
+      background: #06b6d4;
+      font-size: 18px;
+    }
+
+    .tablet-level {
+      background: #0891b2;
+      font-size: 16px;
+    }
+
+    .desktop-level {
+      background: #0e7490;
+      font-size: 14px;
+    }
+
+    .responsive-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #06b6d4;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #06b6d4;
+    }
+
+    .responsive-results {
+      background: #06b6d4;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #06b6d4;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .responsive-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .adaptive {
+      color: #16a34a;
+    }
+
+    .fixed {
+      color: #dc2626;
+    }
+
+    .fluid {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #06b6d4;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .device-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .device-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .device-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .device-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .layout-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .layout-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Responsive check simulation
+    function checkResponsive() {
+      const results = document.getElementById('responsive-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="responsive-status">
+            <span class="adaptive">✅ Mobile-friendly</span> | 
+            <span class="fluid">🟡 Fluid layout</span> | 
+            <span class="fixed">❌ 0 issues</span>
+          </div>
+          <div>Responsive Design - All Devices Supported</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [96, 92, 89, 94];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔵 Responsive Web Design for Full-Stack</h1>
+    <p>Master responsive design principles for creating adaptive user experiences</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to full-stack courses')">← Back to Full-Stack Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Responsive Web Design Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Design Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~40</span>
+          <div class="stat-label">Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5+</span>
+          <div class="stat-label">Breakpoints</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Mobile-First</span>
+          <div class="stat-label">Approach</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Responsive Design Principles</h3>
+        </div>
+        <p class="unit-description">Learn the fundamental concepts and principles of responsive web design.</p>
+        <ul class="topics-list">
+          <li>What is responsive design?</li>
+          <li>Fixed vs fluid vs adaptive</li>
+          <li>Mobile-first approach</li>
+          <li>Progressive enhancement</li>
+          <li>Graceful degradation</li>
+          <li>Content strategy</li>
+          <li>Performance considerations</li>
+          <li>User experience principles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Viewport & Meta Tags</h3>
+        </div>
+        <p class="unit-description">Configure viewport settings for optimal mobile rendering.</p>
+        <ul class="topics-list">
+          <li>Viewport meta tag</li>
+          <li>Device pixel ratio</li>
+          <li>Viewport units (vw, vh)</li>
+          <li>Initial scale</li>
+          <li>User scalable</li>
+          <li>Viewport width</li>
+          <li>Mobile browser behavior</li>
+          <li>Viewport debugging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Media Queries</h3>
+        </div>
+        <p class="unit-description">Use CSS media queries to create adaptive layouts for different devices.</p>
+        <ul class="topics-list">
+          <li>Media query syntax</li>
+          <li>Breakpoint strategies</li>
+          <li>Min-width vs max-width</li>
+          <li>Device orientation</li>
+          <li>Resolution queries</li>
+          <li>Print media queries</li>
+          <li>Complex media queries</li>
+          <li>Media query organization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Flexible Grid Systems</h3>
+        </div>
+        <p class="unit-description">Create flexible layouts using CSS Grid and Flexbox.</p>
+        <ul class="topics-list">
+          <li>CSS Grid fundamentals</li>
+          <li>Grid template areas</li>
+          <li>Auto-fit and auto-fill</li>
+          <li>Flexbox basics</li>
+          <li>Flex wrap and direction</li>
+          <li>Grid vs flexbox</li>
+          <li>Container queries</li>
+          <li>Subgrid</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Responsive Images</h3>
+        </div>
+        <p class="unit-description">Optimize images for different screen sizes and resolutions.</p>
+        <ul class="topics-list">
+          <li>Responsive image techniques</li>
+          <li>Srcset attribute</li>
+          <li>Picture element</li>
+          <li>Art direction</li>
+          <li>Device pixel density</li>
+          <li>Image optimization</li>
+          <li>Lazy loading</li>
+          <li>WebP and modern formats</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Typography & Text</h3>
+        </div>
+        <p class="unit-description">Implement responsive typography that scales across devices.</p>
+        <ul class="topics-list">
+          <li>Responsive font sizes</li>
+          <li>Fluid typography</li>
+          <li>CSS clamp() function</li>
+          <li>Line height optimization</li>
+          <li>Reading experience</li>
+          <li>Web font loading</li>
+          <li>Font display strategies</li>
+          <li>Text accessibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Navigation Patterns</h3>
+        </div>
+        <p class="unit-description">Design responsive navigation systems for mobile and desktop.</p>
+        <ul class="topics-list">
+          <li>Mobile navigation patterns</li>
+          <li>Hamburger menus</li>
+          <li>Off-canvas navigation</li>
+          <li>Tab bars</li>
+          <li>Breadcrumb navigation</li>
+          <li>Mega menus</li>
+          <li>Sticky navigation</li>
+          <li>Navigation accessibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Touch & Interaction</h3>
+        </div>
+        <p class="unit-description">Optimize user interactions for touch devices and various input methods.</p>
+        <ul class="topics-list">
+          <li>Touch target sizing</li>
+          <li>Hover states</li>
+          <li>Touch gestures</li>
+          <li>Pointer events</li>
+          <li>Swipe interactions</li>
+          <li>Button design</li>
+          <li>Form interactions</li>
+          <li>Accessibility considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Performance Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize responsive websites for fast loading on all devices.</p>
+        <ul class="topics-list">
+          <li>Critical rendering path</li>
+          <li>Above-the-fold content</li>
+          <li>Resource prioritization</li>
+          <li>Mobile performance</li>
+          <li>Image optimization</li>
+          <li>CSS optimization</li>
+          <li>JavaScript loading</li>
+          <li>Core Web Vitals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Testing & Debugging</h3>
+        </div>
+        <p class="unit-description">Test and debug responsive designs across different devices and browsers.</p>
+        <ul class="topics-list">
+          <li>Browser developer tools</li>
+          <li>Device simulation</li>
+          <li>Real device testing</li>
+          <li>Cross-browser testing</li>
+          <li>Responsive testing tools</li>
+          <li>Performance testing</li>
+          <li>Accessibility testing</li>
+          <li>Automated testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">CSS Frameworks</h3>
+        </div>
+        <p class="unit-description">Leverage CSS frameworks for rapid responsive development.</p>
+        <ul class="topics-list">
+          <li>Bootstrap responsive grid</li>
+          <li>Tailwind CSS utilities</li>
+          <li>Foundation framework</li>
+          <li>Bulma CSS</li>
+          <li>Custom grid systems</li>
+          <li>Framework customization</li>
+          <li>Performance considerations</li>
+          <li>Framework comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Responsive Techniques</h3>
+        </div>
+        <p class="unit-description">Master advanced responsive design patterns and modern CSS features.</p>
+        <ul class="topics-list">
+          <li>Container queries</li>
+          <li>Intrinsic web design</li>
+          <li>CSS Grid advanced patterns</li>
+          <li>Aspect ratio control</li>
+          <li>Modern CSS functions</li>
+          <li>Progressive enhancement</li>
+          <li>Feature queries</li>
+          <li>Future-proof techniques</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Responsive Design Principles</h1>
+      <p>Learn the fundamental concepts and principles of responsive web design.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Responsive Design?</h3>
+        <p>Understand responsive design as an approach to web design that makes pages render well on all devices.</p>
+        <span class="responsive-badge">Adaptive</span>
+        <span class="responsive-badge">Flexible</span>
+        <span class="responsive-badge">Multi-device</span>
+        <span class="responsive-badge">User-centric</span>
+        <div class="concept-box">
+          Responsive web design is an approach to web design that makes web pages render well on a variety of devices and window or screen sizes. It uses flexible layouts, images, and cascading style sheet media queries.
+        </div>
+        <div class="responsive-results">
+          <div class="responsive-status">
+            Design Benefits
+          </div>
+          <div class="result-
