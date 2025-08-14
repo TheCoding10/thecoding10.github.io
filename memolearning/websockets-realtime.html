@@ -1,0 +1,892 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning WebSockets & Real-time</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .ws-example {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #0f172a;
+      overflow-x: auto;
+    }
+
+    .realtime-badge {
+      display: inline-block;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .socketio-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .protocol-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .broadcasting-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .scaling-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .performance-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .connection-flow {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .flow-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .client-level {
+      background: #0f172a;
+      font-size: 18px;
+    }
+
+    .websocket-level {
+      background: #1e293b;
+      font-size: 16px;
+    }
+
+    .server-level {
+      background: #334155;
+      font-size: 14px;
+    }
+
+    .message-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #0f172a;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    .connection-results {
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #0f172a;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .connection-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .connected {
+      color: #16a34a;
+    }
+
+    .disconnected {
+      color: #dc2626;
+    }
+
+    .latency {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #0f172a;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .tech-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .tech-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .tech-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .tech-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .event-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .event-handler {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .connection-state {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .state-connecting {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .state-open {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .state-closed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .message-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .message-type {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // WebSocket connection simulation
+    function simulateConnection() {
+      const results = document.getElementById('ws-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="connection-status">
+            <span class="connected">✅ Connected</span> | 
+            <span class="latency">⚡ 12ms latency</span> | 
+            <span class="disconnected">❌ 0 drops</span>
+          </div>
+          <div>WebSocket: wss://api.example.com/ws - 547 messages/sec</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [96, 89, 94, 87];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Message type animation
+    function animateMessages() {
+      const types = document.querySelectorAll('.message-type');
+      types.forEach((type, index) => {
+        setTimeout(() => {
+          type.style.background = '#dbeafe';
+          type.style.color = '#1e40af';
+          setTimeout(() => {
+            type.style.background = '#f1f5f9';
+            type.style.color = '#334155';
+          }, 300);
+        }, index * 200);
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+      setInterval(animateMessages, 3000);
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚡ WebSockets & Real-time</h1>
+    <p>Master real-time communication, WebSocket protocols, and live data streaming</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">WebSockets & Real-time Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Real-time Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~40</span>
+          <div class="stat-label">WebSocket Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Real-time Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Socket.IO</span>
+          <div class="stat-label">Framework</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Real-time Communication Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core concepts of real-time communication and WebSocket technology.</p>
+        <ul class="topics-list">
+          <li>What is real-time communication?</li>
+          <li>Traditional polling vs WebSockets</li>
+          <li>HTTP limitations</li>
+          <li>Real-time use cases</li>
+          <li>Latency and performance</li>
+          <li>Client-server architecture</li>
+          <li>Bidirectional communication</li>
+          <li>Event-driven messaging</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">WebSocket Protocol</h3>
+        </div>
+        <p class="unit-description">Understand the WebSocket protocol, handshake process, and message formats.</p>
+        <ul class="topics-list">
+          <li>WebSocket protocol overview</li>
+          <li>HTTP to WebSocket upgrade</li>
+          <li>Handshake process</li>
+          <li>Frame structure</li>
+          <li>Message types</li>
+          <li>Control frames</li>
+          <li>Connection states</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Native WebSocket API</h3>
+        </div>
+        <p class="unit-description">Master the native WebSocket API for both client and server implementations.</p>
+        <ul class="topics-list">
+          <li>WebSocket constructor</li>
+          <li>Connection events</li>
+          <li>Sending messages</li>
+          <li>Receiving messages</li>
+          <li>Connection management</li>
+          <li>Error handling</li>
+          <li>Close events</li>
+          <li>Ready states</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Socket.IO Framework</h3>
+        </div>
+        <p class="unit-description">Learn Socket.IO for robust real-time applications with fallbacks and features.</p>
+        <ul class="topics-list">
+          <li>Socket.IO introduction</li>
+          <li>Server setup</li>
+          <li>Client connection</li>
+          <li>Event emitters</li>
+          <li>Rooms and namespaces</li>
+          <li>Broadcasting</li>
+          <li>Acknowledgments</li>
+          <li>Middleware</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Real-time Chat Applications</h3>
+        </div>
+        <p class="unit-description">Build interactive chat applications with messaging, rooms, and user management.</p>
+        <ul class="topics-list">
+          <li>Chat architecture design</li>
+          <li>Message broadcasting</li>
+          <li>User authentication</li>
+          <li>Chat rooms</li>
+          <li>Private messaging</li>
+          <li>Message history</li>
+          <li>Online status</li>
+          <li>Typing indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Live Data Streaming</h3>
+        </div>
+        <p class="unit-description">Implement live data feeds, dashboards, and real-time analytics.</p>
+        <ul class="topics-list">
+          <li>Data streaming concepts</li>
+          <li>Live dashboards</li>
+          <li>Real-time analytics</li>
+          <li>Financial data feeds</li>
+          <li>IoT data streaming</li>
+          <li>Chart updates</li>
+          <li>Data throttling</li>
+          <li>Buffer management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Multiplayer Games & Collaboration</h3>
+        </div>
+        <p class="unit-description">Create real-time multiplayer games and collaborative applications.</p>
+        <ul class="topics-list">
+          <li>Game state synchronization</li>
+          <li>Player actions</li>
+          <li>Collision detection</li>
+          <li>Lag compensation</li>
+          <li>Collaborative editing</li>
+          <li>Operational transforms</li>
+          <li>Conflict resolution</li>
+          <li>Real-time cursors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Authentication & Security</h3>
+        </div>
+        <p class="unit-description">Secure WebSocket connections with authentication and authorization.</p>
+        <ul class="topics-list">
+          <li>WebSocket authentication</li>
+          <li>Token-based auth</li>
+          <li>Session management</li>
+          <li>Origin validation</li>
+          <li>Rate limiting</li>
+          <li>Message validation</li>
+          <li>CSRF protection</li>
+          <li>SSL/TLS encryption</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Connection Management</h3>
+        </div>
+        <p class="unit-description">Handle connection lifecycles, reconnections, and network reliability.</p>
+        <ul class="topics-list">
+          <li>Connection pooling</li>
+          <li>Automatic reconnection</li>
+          <li>Heartbeat/ping-pong</li>
+          <li>Connection timeouts</li>
+          <li>Network detection</li>
+          <li>Graceful degradation</li>
+          <li>Queue management</li>
+          <li>Offline handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Scaling Real-time Applications</h3>
+        </div>
+        <p class="unit-description">Scale WebSocket applications across multiple servers and handle high loads.</p>
+        <ul class="topics-list">
+          <li>Horizontal scaling</li>
+          <li>Load balancing</li>
+          <li>Sticky sessions</li>
+          <li>Redis adapter</li>
+          <li>Message queuing</li>
+          <li>Microservices patterns</li>
+          <li>Container orchestration</li>
+          <li>Performance monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Testing Real-time Applications</h3>
+        </div>
+        <p class="unit-description">Test WebSocket connections, message flows, and real-time functionality.</p>
+        <ul class="topics-list">
+          <li>WebSocket testing strategies</li>
+          <li>Unit testing</li>
+          <li>Integration testing</li>
+          <li>Load testing</li>
+          <li>Message mocking</li>
+          <li>Connection simulation</li>
+          <li>Performance testing</li>
+          <li>End-to-end testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Real-time Patterns</h3>
+        </div>
+        <p class="unit-description">Implement advanced patterns for complex real-time applications.</p>
+        <ul class="topics-list">
+          <li>Event sourcing</li>
+          <li>CQRS with real-time</li>
+          <li>Pub/Sub patterns</li>
+          <li>Message brokers</li>
+          <li>Stream processing</li>
+          <li>Real-time analytics</li>
+          <li>Edge computing</li>
