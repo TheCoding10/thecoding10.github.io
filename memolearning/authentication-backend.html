@@ -1,0 +1,874 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Authentication Backend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔐';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ef4444;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .auth-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #dc2626;
+      overflow-x: auto;
+    }
+
+    .security-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .jwt-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .session-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .oauth-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .encryption-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .security-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .auth-flow {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .flow-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .client-level {
+      background: #dc2626;
+      font-size: 18px;
+    }
+
+    .server-level {
+      background: #ef4444;
+      font-size: 16px;
+    }
+
+    .database-level {
+      background: #f87171;
+      font-size: 14px;
+    }
+
+    .auth-process {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .process-step {
+      background: #dc2626;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #dc2626;
+    }
+
+    .auth-results {
+      background: #dc2626;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #dc2626;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .auth-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .authenticated {
+      color: #16a34a;
+    }
+
+    .denied {
+      color: #dc2626;
+    }
+
+    .pending {
+      color: #eab308;
+    }
+
+    .security-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .security-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .security-fill {
+      background: #dc2626;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .security-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .method-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .method-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .method-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .method-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .token-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .token-structure {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Authentication simulation
+    function authenticate() {
+      const results = document.getElementById('auth-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="auth-status">
+            <span class="authenticated">✅ Authenticated</span> | 
+            <span class="pending">⏳ Token valid</span> | 
+            <span class="denied">❌ 0 breaches</span>
+          </div>
+          <div>JWT Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+        `;
+      }
+    }
+
+    // Security level simulation
+    function updateSecurity() {
+      const bars = document.querySelectorAll('.security-fill');
+      const levels = [90, 85, 95, 88];
+      
+      bars.forEach((bar, index) => {
+        if (levels[index]) {
+          bar.style.width = levels[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateSecurity();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔐 Authentication Backend</h1>
+    <p>Master secure authentication systems, JWT tokens, and user authorization strategies</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Authentication Backend Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Security Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~40</span>
+          <div class="stat-label">Auth Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Auth Methods</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">JWT/OAuth</span>
+          <div class="stat-label">Standards</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Authentication Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core principles of authentication and authorization in web applications.</p>
+        <ul class="topics-list">
+          <li>Authentication vs Authorization</li>
+          <li>Security principles</li>
+          <li>Common vulnerabilities</li>
+          <li>Identity management</li>
+          <li>Multi-factor authentication</li>
+          <li>Security best practices</li>
+          <li>Threat modeling</li>
+          <li>OWASP guidelines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Password Security</h3>
+        </div>
+        <p class="unit-description">Implement secure password handling with hashing and validation.</p>
+        <ul class="topics-list">
+          <li>Password hashing algorithms</li>
+          <li>Salt and bcrypt</li>
+          <li>Password strength validation</li>
+          <li>Password reset flows</li>
+          <li>Brute force protection</li>
+          <li>Rate limiting</li>
+          <li>Account lockout policies</li>
+          <li>Secure password storage</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Session Management</h3>
+        </div>
+        <p class="unit-description">Master server-side sessions, cookies, and session security.</p>
+        <ul class="topics-list">
+          <li>Session concepts</li>
+          <li>Cookie-based sessions</li>
+          <li>Session storage options</li>
+          <li>Session lifecycle</li>
+          <li>Session security</li>
+          <li>Cross-site scripting protection</li>
+          <li>Session hijacking prevention</li>
+          <li>Secure cookie attributes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">JWT (JSON Web Tokens)</h3>
+        </div>
+        <p class="unit-description">Implement stateless authentication using JSON Web Tokens.</p>
+        <ul class="topics-list">
+          <li>JWT structure and format</li>
+          <li>Token creation and signing</li>
+          <li>Token verification</li>
+          <li>Claims and payload</li>
+          <li>Access vs refresh tokens</li>
+          <li>Token expiration handling</li>
+          <li>JWT security considerations</li>
+          <li>Token storage strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">OAuth 2.0 & OpenID Connect</h3>
+        </div>
+        <p class="unit-description">Integrate third-party authentication using OAuth 2.0 and OpenID Connect.</p>
+        <ul class="topics-list">
+          <li>OAuth 2.0 flows</li>
+          <li>Authorization code flow</li>
+          <li>Client credentials flow</li>
+          <li>OpenID Connect basics</li>
+          <li>Social login integration</li>
+          <li>Google/Facebook OAuth</li>
+          <li>Scope and permissions</li>
+          <li>Provider configuration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">API Authentication</h3>
+        </div>
+        <p class="unit-description">Secure REST APIs with various authentication methods.</p>
+        <ul class="topics-list">
+          <li>API key authentication</li>
+          <li>Bearer token authentication</li>
+          <li>Basic authentication</li>
+          <li>API rate limiting</li>
+          <li>CORS configuration</li>
+          <li>Request signing</li>
+          <li>API versioning security</li>
+          <li>Documentation and testing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Role-Based Access Control</h3>
+        </div>
+        <p class="unit-description">Implement authorization with roles, permissions, and access control.</p>
+        <ul class="topics-list">
+          <li>RBAC concepts</li>
+          <li>User roles and permissions</li>
+          <li>Resource-based access</li>
+          <li>Hierarchical permissions</li>
+          <li>Dynamic authorization</li>
+          <li>Middleware implementation</li>
+          <li>Database design for RBAC</li>
+          <li>Admin panel integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Multi-Factor Authentication</h3>
+        </div>
+        <p class="unit-description">Add extra security layers with multi-factor authentication systems.</p>
+        <ul class="topics-list">
+          <li>MFA concepts and types</li>
+          <li>TOTP (Time-based OTP)</li>
+          <li>SMS verification</li>
+          <li>Email verification</li>
+          <li>Authenticator apps</li>
+          <li>Backup codes</li>
+          <li>Biometric authentication</li>
+          <li>Recovery mechanisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Security Headers & HTTPS</h3>
+        </div>
+        <p class="unit-description">Implement security headers and HTTPS for secure communication.</p>
+        <ul class="topics-list">
+          <li>HTTPS implementation</li>
+          <li>SSL/TLS certificates</li>
+          <li>Security headers overview</li>
+          <li>HSTS (HTTP Strict Transport Security)</li>
+          <li>Content Security Policy</li>
+          <li>X-Frame-Options</li>
+          <li>X-Content-Type-Options</li>
+          <li>Security scanning tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Database Security</h3>
+        </div>
+        <p class="unit-description">Secure user data storage and prevent database vulnerabilities.</p>
+        <ul class="topics-list">
+          <li>SQL injection prevention</li>
+          <li>Parameterized queries</li>
+          <li>Database encryption</li>
+          <li>User data protection</li>
+          <li>GDPR compliance</li>
+          <li>Data anonymization</li>
+          <li>Audit logging</li>
+          <li>Backup security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Security Testing</h3>
+        </div>
+        <p class="unit-description">Test authentication systems and identify security vulnerabilities.</p>
+        <ul class="topics-list">
+          <li>Security testing principles</li>
+          <li>Penetration testing basics</li>
+          <li>Vulnerability scanning</li>
+          <li>Authentication testing</li>
+          <li>Authorization testing</li>
+          <li>Session management testing</li>
+          <li>Security automation</li>
+          <li>Bug bounty preparation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Security Patterns</h3>
+        </div>
+        <p class="unit-description">Implement advanced security patterns and monitoring systems.</p>
+        <ul class="topics-list">
+          <li>Zero-trust architecture</li>
+          <li>Microservices security</li>
+          <li>API gateways</li>
+          <li>Security monitoring</li>
+          <li>Incident response</li>
+          <li>Threat detection</li>
+          <li>Security metrics</li>
+          <li>Compliance frameworks</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Authentication Fundamentals</h1>
+      <p>Learn the core principles of authentication and authorization in web applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Authentication vs Authorization</h3>
+        <p>Understand the fundamental difference between authentication and authorization.</p>
+        <span class="security-badge">Identity</span>
+        <span class="security-badge">Permissions</span>
+        <span class="security-badge">Access Control</span>
+        <span class="security-badge">Security</span>
+        <div class="concept-box">
+          Authentication verifies "who you are" while authorization determines "what you can do". Authentication confirms identity, authorization grants or denies access to resources based on that identity and associated permissions.
+        </div>
+        <div class="auth-results">
+          <div class="auth-status">
+            Security Principles
+          </div>
+          <div class="result-item">Identity verification</div>
+          <div class="result-item">Access control</div>
+          <div class="result-item">Least privilege</div>
+          <div class="result-item">Defense in depth</div>
+          <div class="result-item">Fail securely</div>
+        </div>
+        <div class="auth-example">
+// Authentication: Who are you?<br>
+const user = await verifyCredentials(email, password);<br><br>
+// Authorization: What can you do?<br>
+if (user.role === 'admin') {<br>
+&nbsp;&
