@@ -1,0 +1,879 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Build Tools & Deployment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚙️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #4f46e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .build-example {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #0369a1;
+      overflow-x: auto;
+    }
+
+    .tool-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0369a1;
+    }
+
+    .deployment-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .performance-insight {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #c2410c;
+    }
+
+    .workflow-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .config-note {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .best-practice-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .build-process {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .process-step {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .development-step {
+      background: #4f46e5;
+      font-size: 18px;
+    }
+
+    .build-step {
+      background: #7c3aed;
+      font-size: 16px;
+    }
+
+    .deploy-step {
+      background: #a855f7;
+      font-size: 14px;
+    }
+
+    .build-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #4f46e5;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #4f46e5;
+    }
+
+    .build-results {
+      background: #4f46e5;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #4f46e5;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .build-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .warning {
+      color: #eab308;
+    }
+
+    .bundle-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .bundle-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .bundle-fill {
+      background: #4f46e5;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .bundle-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .tool-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .tool-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .tool-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .tool-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .config-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .config-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Build simulation
+    function runBuild() {
+      const results = document.getElementById('build-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="build-status">
+            <span class="success">✅ Build successful</span> | 
+            <span class="warning">⚠️ 2 warnings</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>Bundle: main.js (245 KB)</div>
+        `;
+      }
+    }
+
+    // Bundle size simulation
+    function updateBundleSize() {
+      const bars = document.querySelectorAll('.bundle-fill');
+      const sizes = [75, 45, 90, 60];
+      
+      bars.forEach((bar, index) => {
+        if (sizes[index]) {
+          bar.style.width = sizes[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateBundleSize();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🚀 Build Tools & Deployment</h1>
+    <p>Master modern build tools, optimization techniques, and deployment strategies</p>
+    <a class="back-link" href="index.html">← Back to Front-End Track</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Build Tools & Deployment Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Build Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~35</span>
+          <div class="stat-label">Build Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8+</span>
+          <div class="stat-label">Build Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">CI/CD</span>
+          <div class="stat-label">Deployment</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Build Tools</h3>
+        </div>
+        <p class="unit-description">Understand why build tools are essential in modern web development.</p>
+        <ul class="topics-list">
+          <li>What are build tools?</li>
+          <li>Modern development workflow</li>
+          <li>Module systems overview</li>
+          <li>Task runners vs bundlers</li>
+          <li>Build tool ecosystem</li>
+          <li>Development vs production</li>
+          <li>Performance benefits</li>
+          <li>Tool selection criteria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Getting Started with Vite</h3>
+        </div>
+        <p class="unit-description">Set up Vite for lightning-fast development and hot module replacement.</p>
+        <ul class="topics-list">
+          <li>Vite installation and setup</li>
+          <li>Project initialization</li>
+          <li>Development server</li>
+          <li>Hot module replacement</li>
+          <li>TypeScript support</li>
+          <li>CSS preprocessing</li>
+          <li>Asset handling</li>
+          <li>Plugin ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Webpack Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn Webpack's core concepts: entry points, loaders, and plugins.</p>
+        <ul class="topics-list">
+          <li>Webpack configuration</li>
+          <li>Entry and output</li>
+          <li>Loaders concept</li>
+          <li>Plugin system</li>
+          <li>Mode configuration</li>
+          <li>Module resolution</li>
+          <li>Dependency graph</li>
+          <li>Basic optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Advanced Webpack Configuration</h3>
+        </div>
+        <p class="unit-description">Configure Webpack for production builds and code splitting.</p>
+        <ul class="topics-list">
+          <li>Production configuration</li>
+          <li>Code splitting strategies</li>
+          <li>Dynamic imports</li>
+          <li>Chunk optimization</li>
+          <li>Source maps</li>
+          <li>Performance budgets</li>
+          <li>Tree shaking</li>
+          <li>Bundle analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Asset Processing & Optimization</h3>
+        </div>
+        <p class="unit-description">Process and optimize CSS, images, and fonts for better performance.</p>
+        <ul class="topics-list">
+          <li>CSS processing and minification</li>
+          <li>Image optimization</li>
+          <li>Font optimization</li>
+          <li>Asset compression</li>
+          <li>Critical CSS</li>
+          <li>Lazy loading assets</li>
+          <li>CDN integration</li>
+          <li>Cache optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Bundle Analysis & Tree Shaking</h3>
+        </div>
+        <p class="unit-description">Analyze bundle sizes and eliminate dead code from your applications.</p>
+        <ul class="topics-list">
+          <li>Bundle analyzer tools</li>
+          <li>Tree shaking concepts</li>
+          <li>Dead code elimination</li>
+          <li>Import analysis</li>
+          <li>Library optimization</li>
+          <li>Polyfill management</li>
+          <li>Size monitoring</li>
+          <li>Performance metrics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Environment Variables & Configuration</h3>
+        </div>
+        <p class="unit-description">Manage different environments with environment-specific configurations.</p>
+        <ul class="topics-list">
+          <li>Environment variables</li>
+          <li>Configuration files</li>
+          <li>Development vs production</li>
+          <li>Staging environments</li>
+          <li>Secrets management</li>
+          <li>Feature flags</li>
+          <li>API endpoints</li>
+          <li>Build variants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Package.json Scripts & NPM</h3>
+        </div>
+        <p class="unit-description">Create efficient build scripts and automate common development tasks.</p>
+        <ul class="topics-list">
+          <li>NPM scripts setup</li>
+          <li>Script composition</li>
+          <li>Cross-platform scripts</li>
+          <li>Task automation</li>
+          <li>Pre and post hooks</li>
+          <li>Package management</li>
+          <li>Dependency auditing</li>
+          <li>Script optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">GitHub Pages Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy static sites and React applications to GitHub Pages.</p>
+        <ul class="topics-list">
+          <li>GitHub Pages setup</li>
+          <li>Static site deployment</li>
+          <li>Custom domains</li>
+          <li>GitHub Actions workflow</li>
+          <li>Build automation</li>
+          <li>Route configuration</li>
+          <li>HTTPS setup</li>
+          <li>Deployment strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Netlify Deployment & Features</h3>
+        </div>
+        <p class="unit-description">Leverage Netlify's features including forms and serverless functions.</p>
+        <ul class="topics-list">
+          <li>Netlify platform overview</li>
+          <li>Continuous deployment</li>
+          <li>Form handling</li>
+          <li>Serverless functions</li>
+          <li>Edge functions</li>
+          <li>Analytics integration</li>
+          <li>A/B testing</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">CI/CD with GitHub Actions</h3>
+        </div>
+        <p class="unit-description">Set up continuous integration and deployment pipelines.</p>
+        <ul class="topics-list">
+          <li>GitHub Actions basics</li>
+          <li>Workflow automation</li>
+          <li>Build pipelines</li>
+          <li>Testing integration</li>
+          <li>Deployment automation</li>
+          <li>Environment management</li>
+          <li>Security scanning</li>
+          <li>Monitoring and alerts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Performance Monitoring & Optimization</h3>
+        </div>
+        <p class="unit-description">Monitor deployed applications and implement optimization strategies.</p>
+        <ul class="topics-list">
+          <li>Performance monitoring</li>
+          <li>Core Web Vitals</li>
+          <li>Error tracking</li>
+          <li>User analytics</li>
+          <li>Performance budgets</li>
+          <li>Optimization strategies</li>
+          <li>Caching strategies</li>
+          <li>CDN optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Build Tools</h1>
+      <p>Understand why build tools are essential in modern web development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What are Build Tools?</h3>
+        <p>Understand the role and importance of build tools in modern web development.</p>
+        <span class="tool-badge">Automation</span>
+        <span class="tool-badge">Optimization</span>
+        <span class="tool-badge">Development</span>
+        <span class="tool-badge">Production</span>
+        <div class="concept-box">
+          Build tools automate repetitive tasks like compilation, minification, and bundling. They transform your source code into optimized production-ready assets, improving performance and developer experience.
+        </div>
+        <div class="build-results">
+          <div class="build-status">
+            Build Tool Benefits
+          </div>
+          <div class="result-item">Code transformation</div>
+          <div class="result-item">Asset optimization</div>
+          <div class="result-item">Development server</div>
+          <div class="result-item">Hot reload</div>
+          <div class="result-item">Production builds</div>
+        </div>
+        <div class="build-example">
+// Without build tools<br>
+&lt;script src="jquery.js">&lt;/script><br>
+&lt;script src="lodash.js">&lt;/script><br>
+&lt;script src="app.js">&lt;/script><br><br>
+// With build tools<br>
+&lt;script src="bundle.min.js">&lt;/script> // All optimized!
+        </div>
+      </div>
+
+      <div class="subtopic-card">
