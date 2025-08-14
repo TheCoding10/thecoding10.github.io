@@ -1,0 +1,869 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Node.js Basics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🟢';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .node-example {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #059669;
+      overflow-x: auto;
+    }
+
+    .node-badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #059669;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #059669;
+    }
+
+    .server-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .async-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .npm-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .api-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .runtime-env {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .env-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .browser-level {
+      background: #10b981;
+      font-size: 18px;
+    }
+
+    .server-level {
+      background: #059669;
+      font-size: 16px;
+    }
+
+    .system-level {
+      background: #047857;
+      font-size: 14px;
+    }
+
+    .node-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #10b981;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #10b981;
+    }
+
+    .execution-results {
+      background: #10b981;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #10b981;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .exec-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .success {
+      color: #10b981;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .running {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #10b981;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .module-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .module-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .module-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .module-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .middleware-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .middleware-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Node execution simulation
+    function runNode() {
+      const results = document.getElementById('node-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="exec-status">
+            <span class="success">✅ Server running</span> | 
+            <span class="running">🟡 Port 3000</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>Node.js v18.17.0 - HTTP Server Active</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [95, 88, 92, 85];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🟢 Node.js Basics</h1>
+    <p>Master server-side JavaScript development with Node.js runtime environment</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Node.js Basics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Node.js Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~45</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Built-in Modules</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">NPM</span>
+          <div class="stat-label">Package Manager</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Node.js</h3>
+        </div>
+        <p class="unit-description">Learn what Node.js is and why it's revolutionizing server-side development.</p>
+        <ul class="topics-list">
+          <li>What is Node.js?</li>
+          <li>JavaScript outside the browser</li>
+          <li>V8 JavaScript engine</li>
+          <li>Event-driven architecture</li>
+          <li>Non-blocking I/O</li>
+          <li>Node.js vs traditional servers</li>
+          <li>Installation and setup</li>
+          <li>Node.js ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Node.js Runtime Environment</h3>
+        </div>
+        <p class="unit-description">Understand the Node.js runtime, global objects, and execution environment.</p>
+        <ul class="topics-list">
+          <li>Node.js architecture</li>
+          <li>Event loop explained</li>
+          <li>Global objects</li>
+          <li>Process object</li>
+          <li>__dirname and __filename</li>
+          <li>Command line arguments</li>
+          <li>Environment variables</li>
+          <li>Exit codes and signals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Core Modules</h3>
+        </div>
+        <p class="unit-description">Explore Node.js built-in modules for file system, HTTP, and more.</p>
+        <ul class="topics-list">
+          <li>require() function</li>
+          <li>File System (fs) module</li>
+          <li>Path module</li>
+          <li>OS module</li>
+          <li>URL module</li>
+          <li>QueryString module</li>
+          <li>Crypto module</li>
+          <li>Util module</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">File System Operations</h3>
+        </div>
+        <p class="unit-description">Master file and directory operations using Node.js File System module.</p>
+        <ul class="topics-list">
+          <li>Reading files (sync/async)</li>
+          <li>Writing files</li>
+          <li>File metadata</li>
+          <li>Directory operations</li>
+          <li>File watching</li>
+          <li>Streams for large files</li>
+          <li>File permissions</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">HTTP Module & Web Servers</h3>
+        </div>
+        <p class="unit-description">Build HTTP servers and handle web requests using Node.js HTTP module.</p>
+        <ul class="topics-list">
+          <li>HTTP module basics</li>
+          <li>Creating HTTP servers</li>
+          <li>Request and response objects</li>
+          <li>Routing basics</li>
+          <li>Handling different HTTP methods</li>
+          <li>Static file serving</li>
+          <li>HTTP status codes</li>
+          <li>Headers manipulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">NPM & Package Management</h3>
+        </div>
+        <p class="unit-description">Learn to use NPM for package management and dependency handling.</p>
+        <ul class="topics-list">
+          <li>NPM introduction</li>
+          <li>package.json file</li>
+          <li>Installing packages</li>
+          <li>Dependencies vs devDependencies</li>
+          <li>NPM scripts</li>
+          <li>Semantic versioning</li>
+          <li>Publishing packages</li>
+          <li>NPM security</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Asynchronous Programming</h3>
+        </div>
+        <p class="unit-description">Master callbacks, promises, and async/await in Node.js applications.</p>
+        <ul class="topics-list">
+          <li>Callback patterns</li>
+          <li>Callback hell problem</li>
+          <li>Promises in Node.js</li>
+          <li>Promise chaining</li>
+          <li>Async/await syntax</li>
+          <li>Error handling strategies</li>
+          <li>Promisifying callbacks</li>
+          <li>Concurrent operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Events & Event Emitters</h3>
+        </div>
+        <p class="unit-description">Understand the event-driven nature of Node.js and create custom events.</p>
+        <ul class="topics-list">
+          <li>Event-driven programming</li>
+          <li>EventEmitter class</li>
+          <li>Creating custom events</li>
+          <li>Event listeners</li>
+          <li>Once vs on methods</li>
+          <li>Removing listeners</li>
+          <li>Error events</li>
+          <li>Event emitter patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Streams & Buffers</h3>
+        </div>
+        <p class="unit-description">Handle large data efficiently using Node.js streams and buffers.</p>
+        <ul class="topics-list">
+          <li>Buffer basics</li>
+          <li>Stream concepts</li>
+          <li>Readable streams</li>
+          <li>Writable streams</li>
+          <li>Transform streams</li>
+          <li>Duplex streams</li>
+          <li>Piping streams</li>
+          <li>Stream performance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Express.js Fundamentals</h3>
+        </div>
+        <p class="unit-description">Build robust web applications using the Express.js framework.</p>
+        <ul class="topics-list">
+          <li>Express.js introduction</li>
+          <li>Setting up Express</li>
+          <li>Middleware concept</li>
+          <li>Routing in Express</li>
+          <li>Request and response handling</li>
+          <li>Template engines</li>
+          <li>Static files</li>
+          <li>Error handling middleware</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Working with APIs</h3>
+        </div>
+        <p class="unit-description">Create and consume REST APIs using Node.js and Express.</p>
+        <ul class="topics-list">
+          <li>REST API principles</li>
+          <li>Creating API endpoints</li>
+          <li>HTTP methods (GET, POST, PUT, DELETE)</li>
+          <li>Request validation</li>
+          <li>JSON handling</li>
+          <li>CORS configuration</li>
+          <li>API authentication</li>
+          <li>API documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Debugging & Testing</h3>
+        </div>
+        <p class="unit-description">Debug Node.js applications and implement testing strategies.</p>
+        <ul class="topics-list">
+          <li>Debugging techniques</li>
+          <li>Node.js debugger</li>
+          <li>Console debugging</li>
+          <li>Profiling applications</li>
+          <li>Unit testing with Jest</li>
+          <li>Integration testing</li>
+          <li>Test-driven development</li>
+          <li>Performance monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Node.js</h1>
+      <p>Learn what Node.js is and why it's revolutionizing server-side development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Node.js?</h3>
+        <p>Understand Node.js as a JavaScript runtime built on Chrome's V8 engine.</p>
+        <span class="node-badge">Runtime</span>
+        <span class="node-badge">Server-side</span>
+        <span class="node-badge">JavaScript</span>
+        <span class="node-badge">V8 Engine</span>
+        <div class="concept-box">
+          Node.js is a JavaScript runtime environment that allows you to run JavaScript code outside of a web browser. It's built on Chrome's V8 JavaScript engine and provides an event-driven, non-blocking I/O model.
+        </div>
+        <div class="execution-results">
+          <div class="exec-status">
+            Node.js Key Features
+          </div>
+          <div class="result-item">Server-side JS</div>
+          <div class="result-item">Fast execution</div>
+          <div class="result-item">Non-blocking I/O</div>
+          <div class="result-item">Event-driven</div>
+          <div class="result-item">Cross-platform</div>
+        </div>
+        <div class="node-
