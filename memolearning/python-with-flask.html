@@ -1,0 +1,877 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Python with Flask</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔵';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .flask-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .flask-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .blueprint-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .jinja-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .database-showcase {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .security-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .flask-pipeline {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .pipeline-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .request-level {
+      background: #3b82f6;
+      font-size: 18px;
+    }
+
+    .route-level {
+      background: #2563eb;
+      font-size: 16px;
+    }
+
+    .template-level {
+      background: #1e40af;
+      font-size: 14px;
+    }
+
+    .flask-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #3b82f6;
+    }
+
+    .flask-results {
+      background: #3b82f6;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #3b82f6;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .flask-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .running {
+      color: #16a34a;
+    }
+
+    .stopped {
+      color: #dc2626;
+    }
+
+    .debug {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #3b82f6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .method-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .method-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .method-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .method-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .route-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .route-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Flask server simulation
+    function startFlask() {
+      const results = document.getElementById('flask-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="flask-status">
+            <span class="running">✅ Flask server running</span> | 
+            <span class="debug">🟡 Debug mode</span> | 
+            <span class="stopped">❌ 0 errors</span>
+          </div>
+          <div>Flask v2.3.0 - Development Server Active</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [88, 92, 85, 90];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔵 Python with Flask</h1>
+    <p>Master web development with Flask - the micro web framework for Python</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to backend courses')">← Back to Backend Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Python with Flask Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Flask Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~45</span>
+          <div class="stat-label">Core Features</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">15+</span>
+          <div class="stat-label">Extensions</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Jinja2</span>
+          <div class="stat-label">Template Engine</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Flask</h3>
+        </div>
+        <p class="unit-description">Learn what Flask is and why it's the perfect micro web framework for Python.</p>
+        <ul class="topics-list">
+          <li>What is Flask?</li>
+          <li>Flask philosophy</li>
+          <li>Micro framework concept</li>
+          <li>Flask vs Django</li>
+          <li>Installation and setup</li>
+          <li>Virtual environments</li>
+          <li>First Flask application</li>
+          <li>Flask ecosystem</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Flask Application Structure</h3>
+        </div>
+        <p class="unit-description">Understand Flask application structure and organization patterns.</p>
+        <ul class="topics-list">
+          <li>Application factory pattern</li>
+          <li>Project structure</li>
+          <li>Configuration management</li>
+          <li>Environment variables</li>
+          <li>Development vs production</li>
+          <li>Package organization</li>
+          <li>Module imports</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Routing & URL Building</h3>
+        </div>
+        <p class="unit-description">Master Flask routing system and URL generation techniques.</p>
+        <ul class="topics-list">
+          <li>Route decorators</li>
+          <li>Variable rules</li>
+          <li>HTTP methods</li>
+          <li>Route parameters</li>
+          <li>URL building</li>
+          <li>URL converters</li>
+          <li>Route ordering</li>
+          <li>Dynamic routes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Request & Response Handling</h3>
+        </div>
+        <p class="unit-description">Learn to handle HTTP requests and generate appropriate responses.</p>
+        <ul class="topics-list">
+          <li>Request object</li>
+          <li>Form data handling</li>
+          <li>Query parameters</li>
+          <li>File uploads</li>
+          <li>JSON requests</li>
+          <li>Response objects</li>
+          <li>Status codes</li>
+          <li>Headers manipulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Templates with Jinja2</h3>
+        </div>
+        <p class="unit-description">Create dynamic HTML templates using Flask's Jinja2 template engine.</p>
+        <ul class="topics-list">
+          <li>Jinja2 syntax</li>
+          <li>Template rendering</li>
+          <li>Variable substitution</li>
+          <li>Control structures</li>
+          <li>Template inheritance</li>
+          <li>Macros and includes</li>
+          <li>Custom filters</li>
+          <li>Template context</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Static Files & Assets</h3>
+        </div>
+        <p class="unit-description">Manage static files like CSS, JavaScript, images, and other assets.</p>
+        <ul class="topics-list">
+          <li>Static file serving</li>
+          <li>Asset organization</li>
+          <li>URL generation for assets</li>
+          <li>Static folder configuration</li>
+          <li>Cache control</li>
+          <li>Asset bundling</li>
+          <li>CDN integration</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Forms & Validation</h3>
+        </div>
+        <p class="unit-description">Handle web forms and implement robust validation using WTForms.</p>
+        <ul class="topics-list">
+          <li>HTML forms</li>
+          <li>WTForms integration</li>
+          <li>Form classes</li>
+          <li>Field types</li>
+          <li>Validation rules</li>
+          <li>CSRF protection</li>
+          <li>Form rendering</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Database Integration</h3>
+        </div>
+        <p class="unit-description">Integrate databases using SQLAlchemy and Flask-SQLAlchemy.</p>
+        <ul class="topics-list">
+          <li>Flask-SQLAlchemy</li>
+          <li>Database models</li>
+          <li>Relationships</li>
+          <li>Migrations</li>
+          <li>Query operations</li>
+          <li>Database sessions</li>
+          <li>Connection pooling</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">User Authentication</h3>
+        </div>
+        <p class="unit-description">Implement user authentication and session management.</p>
+        <ul class="topics-list">
+          <li>User registration</li>
+          <li>Login/logout</li>
+          <li>Password hashing</li>
+          <li>Session management</li>
+          <li>Flask-Login</li>
+          <li>User roles</li>
+          <li>Access control</li>
+          <li>Security best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Building REST APIs</h3>
+        </div>
+        <p class="unit-description">Create RESTful APIs using Flask and Flask-RESTful.</p>
+        <ul class="topics-list">
+          <li>REST principles</li>
+          <li>Flask-RESTful</li>
+          <li>Resource classes</li>
+          <li>API endpoints</li>
+          <li>JSON serialization</li>
+          <li>Request parsing</li>
+          <li>API versioning</li>
+          <li>Documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Blueprints & Application Scaling</h3>
+        </div>
+        <p class="unit-description">Organize large applications using Flask Blueprints.</p>
+        <ul class="topics-list">
+          <li>Blueprint concept</li>
+          <li>Creating blueprints</li>
+          <li>Blueprint registration</li>
+          <li>Modular design</li>
+          <li>URL prefixes</li>
+          <li>Blueprint templates</li>
+          <li>Large app organization</li>
+          <li>Code reusability</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Testing & Deployment</h3>
+        </div>
+        <p class="unit-description">Test Flask applications and deploy them to production environments.</p>
+        <ul class="topics-list">
+          <li>Testing strategies</li>
+          <li>Unit testing</li>
+          <li>Test client</li>
+          <li>Test databases</li>
+          <li>Mocking</li>
+          <li>Production deployment</li>
+          <li>WSGI servers</li>
+          <li>Performance monitoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Flask</h1>
+      <p>Learn what Flask is and why it's the perfect micro web framework for Python.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Flask?</h3>
+        <p>Understand Flask as a lightweight, flexible micro web framework for Python.</p>
+        <span class="flask-badge">Micro Framework</span>
+        <span class="flask-badge">Python</span>
+        <span class="flask-badge">WSGI</span>
+        <span class="flask-badge">Jinja2</span>
+        <div class="concept-box">
+          Flask is a micro web framework written in Python. It's classified as a microframework because it doesn't require particular tools or libraries. It has no database abstraction layer, form validation, or other components where pre-existing third-party libraries provide common functions.
+        </div>
+        <div class="flask-results">
+          <div class="flask-status">
+            Flask Key Features
+          </div>
+          <div class="result-item">Lightweight</div>
+          <div class="result-item">Flexible</div>
+          <div class="result-item">Easy to learn</div>
+          <div class="result-item">Extensible</div>
+          <div class="result-item">Pythonic</div>
+        </div>
+        <div class="flask-example">
+# Basic Flask application<br>
+from flask import Flask<br><br>
+app = Flask(__name__)<br><br>
+@app.route('/')<br>
+def hello_world():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return 'Hello, World!'<br><br>
+if __name__ == '__main__':<br>
+&nbsp
