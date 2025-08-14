@@ -1,0 +1,873 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Testing in Frontend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '✅';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #16a34a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #22c55e;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .test-example {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #16a34a;
+      overflow-x: auto;
+    }
+
+    .test-badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #16a34a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #16a34a;
+    }
+
+    .pyramid-highlight {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .unit-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .integration-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .e2e-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .test-pyramid {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .pyramid-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .unit-level {
+      background: #22c55e;
+      font-size: 18px;
+    }
+
+    .integration-level {
+      background: #3b82f6;
+      font-size: 16px;
+    }
+
+    .e2e-level {
+      background: #ef4444;
+      font-size: 14px;
+    }
+
+    .test-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #22c55e;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #22c55e;
+    }
+
+    .test-results {
+      background: #22c55e;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #22c55e;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .test-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .passed {
+      color: #22c55e;
+    }
+
+    .failed {
+      color: #dc2626;
+    }
+
+    .pending {
+      color: #eab308;
+    }
+
+    .coverage-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .coverage-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .coverage-fill {
+      background: #22c55e;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .coverage-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .tool-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .tool-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .tool-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .tool-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .mocking-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .mock-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Test execution simulation
+    function runTests() {
+      const results = document.getElementById('test-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="test-status">
+            <span class="passed">✅ 12 passed</span> | 
+            <span class="failed">❌ 1 failed</span> | 
+            <span class="pending">⏳ 2 pending</span>
+          </div>
+          <div>Test Suite: Frontend Components</div>
+        `;
+      }
+    }
+
+    // Coverage simulation
+    function updateCoverage() {
+      const bars = document.querySelectorAll('.coverage-fill');
+      const coverages = [85, 92, 78, 95];
+      
+      bars.forEach((bar, index) => {
+        if (coverages[index]) {
+          bar.style.width = coverages[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updateCoverage();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>✅ Testing in Frontend</h1>
+    <p>Master frontend testing strategies, tools, and best practices for reliable applications</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Testing in Frontend Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Testing Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~40</span>
+          <div class="stat-label">Testing Techniques</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <div class="stat-label">Testing Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">TDD/BDD</span>
+          <div class="stat-label">Methodologies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Testing Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the core principles and importance of testing in frontend development.</p>
+        <ul class="topics-list">
+          <li>Why test frontend code?</li>
+          <li>Types of testing</li>
+          <li>Testing pyramid</li>
+          <li>Test-driven development</li>
+          <li>Behavior-driven development</li>
+          <li>Testing philosophy</li>
+          <li>Cost of bugs</li>
+          <li>Testing mindset</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Unit Testing</h3>
+        </div>
+        <p class="unit-description">Master unit testing for individual functions, components, and modules.</p>
+        <ul class="topics-list">
+          <li>Unit testing concepts</li>
+          <li>Arrange, Act, Assert</li>
+          <li>Test isolation</li>
+          <li>Mocking dependencies</li>
+          <li>Test coverage</li>
+          <li>Edge cases</li>
+          <li>Unit test best practices</li>
+          <li>Red-Green-Refactor</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Jest Framework</h3>
+        </div>
+        <p class="unit-description">Learn Jest, the popular JavaScript testing framework for comprehensive testing.</p>
+        <ul class="topics-list">
+          <li>Jest setup and configuration</li>
+          <li>Writing test suites</li>
+          <li>Matchers and assertions</li>
+          <li>Mocking with Jest</li>
+          <li>Snapshot testing</li>
+          <li>Async testing</li>
+          <li>Jest CLI and watch mode</li>
+          <li>Custom matchers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">React Testing Library</h3>
+        </div>
+        <p class="unit-description">Test React components effectively with React Testing Library.</p>
+        <ul class="topics-list">
+          <li>Testing Library philosophy</li>
+          <li>Rendering components</li>
+          <li>Querying elements</li>
+          <li>User interactions</li>
+          <li>Async testing</li>
+          <li>Custom render functions</li>
+          <li>Testing hooks</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Integration Testing</h3>
+        </div>
+        <p class="unit-description">Test how different parts of your application work together.</p>
+        <ul class="topics-list">
+          <li>Integration testing concepts</li>
+          <li>Component integration</li>
+          <li>API integration</li>
+          <li>Testing with real data</li>
+          <li>Database integration</li>
+          <li>Service integration</li>
+          <li>Contract testing</li>
+          <li>Integration strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">End-to-End Testing</h3>
+        </div>
+        <p class="unit-description">Implement comprehensive end-to-end testing for complete user workflows.</p>
+        <ul class="topics-list">
+          <li>E2E testing concepts</li>
+          <li>User journey testing</li>
+          <li>Browser automation</li>
+          <li>Cross-browser testing</li>
+          <li>Visual regression testing</li>
+          <li>Performance testing</li>
+          <li>E2E best practices</li>
+          <li>Test maintenance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Cypress Testing</h3>
+        </div>
+        <p class="unit-description">Master Cypress for modern end-to-end testing with excellent developer experience.</p>
+        <ul class="topics-list">
+          <li>Cypress setup</li>
+          <li>Writing Cypress tests</li>
+          <li>Cypress commands</li>
+          <li>Custom commands</li>
+          <li>Fixtures and aliases</li>
+          <li>Network stubbing</li>
+          <li>Visual testing</li>
+          <li>CI/CD integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Playwright Testing</h3>
+        </div>
+        <p class="unit-description">Explore Playwright for reliable end-to-end testing across browsers.</p>
+        <ul class="topics-list">
+          <li>Playwright overview</li>
+          <li>Cross-browser testing</li>
+          <li>Page object model</li>
+          <li>Playwright Test runner</li>
+          <li>Visual comparisons</li>
+          <li>Network interception</li>
+          <li>Mobile testing</li>
+          <li>Debugging tests</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Mocking and Stubbing</h3>
+        </div>
+        <p class="unit-description">Learn to mock dependencies and external services for isolated testing.</p>
+        <ul class="topics-list">
+          <li>Mocking concepts</li>
+          <li>Jest mocks</li>
+          <li>API mocking</li>
+          <li>Module mocking</li>
+          <li>Timer mocking</li>
+          <li>MSW (Mock Service Worker)</li>
+          <li>Stub vs mock vs spy</li>
+          <li>Mocking strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Test Coverage and Quality</h3>
+        </div>
+        <p class="unit-description">Measure and improve test coverage and overall test quality.</p>
+        <ul class="topics-list">
+          <li>Code coverage metrics</li>
+          <li>Coverage reports</li>
+          <li>Coverage thresholds</li>
+          <li>Mutation testing</li>
+          <li>Test quality metrics</li>
+          <li>Flaky test detection</li>
+          <li>Test performance</li>
+          <li>Coverage tools</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Testing in CI/CD</h3>
+        </div>
+        <p class="unit-description">Integrate testing into continuous integration and deployment pipelines.</p>
+        <ul class="topics-list">
+          <li>CI/CD testing strategy</li>
+          <li>Automated test execution</li>
+          <li>Parallel test execution</li>
+          <li>Test reporting</li>
+          <li>Failure notifications</li>
+          <li>Test artifacts</li>
+          <li>Environment management</li>
+          <li>Pipeline optimization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Testing Patterns</h3>
+        </div>
+        <p class="unit-description">Master advanced testing patterns and strategies for complex applications.</p>
+        <ul class="topics-list">
+          <li>Test patterns</li>
+          <li>Page Object Model</li>
+          <li>Test data builders</li>
+          <li>Parameterized tests</li>
+          <li>Property-based testing</li>
+          <li>Contract testing</li>
+          <li>Accessibility testing</li>
+          <li>Performance testing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Testing Fundamentals</h1>
+      <p>Learn the core principles and importance of testing in frontend development.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Why Test Frontend Code?</h3>
+        <p>Understand the importance and benefits of testing in frontend development.</p>
+        <span class="test-badge">Quality Assurance</span>
+        <span class="test-badge">Bug Prevention</span>
+        <span class="test-badge">Refactoring Safety</span>
+        <span class="test-badge">Documentation</span>
+        <div class="concept-box">
+          Frontend testing ensures your user interfaces work correctly, prevents regressions, improves code quality, and provides confidence when making changes. Tests serve as living documentation and enable safe refactoring.
+        </div>
+        <div class="test-results">
+          <div class="test-status">
+            Benefits of Frontend Testing
+          </div>
+          <div class="result-item">Catch bugs early</div>
+          <div class="result-item">Prevent regressions</div>
+          <div class="result-item">Enable refactoring</div>
+          <div class="result-item">Improve design</div>
+          <div class="result-item">Document behavior</div>
+        </div>
+        <div class="test-example">
+// Example: Testing prevents this regression<br>
+function calculateTotal(items) {<br>
+&nbsp;&nbsp;return items.reduce((sum, item) => sum + item.price, 0);<br>
+}<br
