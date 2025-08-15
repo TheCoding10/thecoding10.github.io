@@ -1,0 +1,834 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Anatomy and Physiology</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(153, 27, 27, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🫀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #991b1b;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #991b1b, #dc2626);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(153, 27, 27, 0.3);
+    }
+
+    .anatomy-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #991b1b;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #991b1b;
+    }
+
+    .anatomy-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #991b1b;
+      overflow-x: auto;
+    }
+
+    .system-example {
+      background: #f0f9ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .physiology-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .organ-showcase {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .clinical-note {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .body-hierarchy {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .hierarchy-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .cell-level {
+      background: #ef4444;
+      font-size: 18px;
+    }
+
+    .tissue-level {
+      background: #dc2626;
+      font-size: 16px;
+    }
+
+    .organ-level {
+      background: #991b1b;
+      font-size: 14px;
+    }
+
+    .mathematical-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .problem-solving {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .solution-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .dissection-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .lab-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .homeostasis-note {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .disease-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .anatomy-diagram {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🫀 Anatomy and Physiology</h1>
+    <p>Explore the structure and function of the human body</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Biology courses')">← Back to Biology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Anatomy and Physiology Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Body System Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~65</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Homeostasis</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">11 Systems</span>
+          <div class="stat-label">Body Systems</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Anatomy and Physiology</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental concepts and organization of the human body.</p>
+        <ul class="topics-list">
+          <li>Anatomy vs physiology</li>
+          <li>Levels of organization</li>
+          <li>Body systems overview</li>
+          <li>Anatomical position</li>
+          <li>Directional terms</li>
+          <li>Body planes and sections</li>
+          <li>Body cavities</li>
+          <li>Homeostasis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Chemical Basis of Life</h3>
+        </div>
+        <p class="unit-description">Study the chemical foundations underlying human physiology.</p>
+        <ul class="topics-list">
+          <li>Atomic structure</li>
+          <li>Chemical bonds</li>
+          <li>Water properties</li>
+          <li>pH and buffers</li>
+          <li>Organic molecules</li>
+          <li>Carbohydrates</li>
+          <li>Lipids</li>
+          <li>Proteins and enzymes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Cell Structure and Function</h3>
+        </div>
+        <p class="unit-description">Learn about the basic unit of life and cellular processes.</p>
+        <ul class="topics-list">
+          <li>Cell membrane</li>
+          <li>Nucleus and DNA</li>
+          <li>Organelles</li>
+          <li>Cytoskeleton</li>
+          <li>Membrane transport</li>
+          <li>Cell metabolism</li>
+          <li>Cell division</li>
+          <li>Cell death</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Tissues</h3>
+        </div>
+        <p class="unit-description">Study the four basic tissue types and their functions.</p>
+        <ul class="topics-list">
+          <li>Epithelial tissue</li>
+          <li>Connective tissue</li>
+          <li>Muscle tissue</li>
+          <li>Nervous tissue</li>
+          <li>Tissue repair</li>
+          <li>Tissue membranes</li>
+          <li>Aging and tissues</li>
+          <li>Tissue engineering</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Integumentary System</h3>
+        </div>
+        <p class="unit-description">Explore the skin and its accessory structures.</p>
+        <ul class="topics-list">
+          <li>Skin structure</li>
+          <li>Epidermis layers</li>
+          <li>Dermis and hypodermis</li>
+          <li>Hair and nails</li>
+          <li>Glands</li>
+          <li>Skin functions</li>
+          <li>Wound healing</li>
+          <li>Skin disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Skeletal System</h3>
+        </div>
+        <p class="unit-description">Study bones, joints, and the framework of the body.</p>
+        <ul class="topics-list">
+          <li>Bone structure</li>
+          <li>Bone development</li>
+          <li>Bone remodeling</li>
+          <li>Axial skeleton</li>
+          <li>Appendicular skeleton</li>
+          <li>Joint classification</li>
+          <li>Joint movements</li>
+          <li>Bone disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Muscular System</h3>
+        </div>
+        <p class="unit-description">Learn about muscle types and the mechanics of movement.</p>
+        <ul class="topics-list">
+          <li>Muscle types</li>
+          <li>Skeletal muscle structure</li>
+          <li>Muscle contraction</li>
+          <li>Muscle metabolism</li>
+          <li>Major muscle groups</li>
+          <li>Muscle actions</li>
+          <li>Exercise physiology</li>
+          <li>Muscle disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Nervous System</h3>
+        </div>
+        <p class="unit-description">Explore the body's control and communication system.</p>
+        <ul class="topics-list">
+          <li>Neuron structure</li>
+          <li>Action potentials</li>
+          <li>Synapses</li>
+          <li>Central nervous system</li>
+          <li>Peripheral nervous system</li>
+          <li>Autonomic nervous system</li>
+          <li>Reflexes</li>
+          <li>Neurological disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Sensory Systems</h3>
+        </div>
+        <p class="unit-description">Study how we perceive and interpret our environment.</p>
+        <ul class="topics-list">
+          <li>Sensory receptors</li>
+          <li>Vision</li>
+          <li>Hearing and balance</li>
+          <li>Taste</li>
+          <li>Smell</li>
+          <li>Touch and pain</li>
+          <li>Proprioception</li>
+          <li>Sensory disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Endocrine System</h3>
+        </div>
+        <p class="unit-description">Learn about hormones and chemical communication.</p>
+        <ul class="topics-list">
+          <li>Hormone types</li>
+          <li>Hormone action</li>
+          <li>Hypothalamus and pituitary</li>
+          <li>Thyroid and parathyroid</li>
+          <li>Adrenal glands</li>
+          <li>Pancreas</li>
+          <li>Reproductive hormones</li>
+          <li>Endocrine disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Cardiovascular System</h3>
+        </div>
+        <p class="unit-description">Study the heart, blood vessels, and circulation.</p>
+        <ul class="topics-list">
+          <li>Heart anatomy</li>
+          <li>Cardiac cycle</li>
+          <li>Blood vessels</li>
+          <li>Blood pressure</li>
+          <li>Circulation pathways</li>
+          <li>Blood composition</li>
+          <li>Hemostasis</li>
+          <li>Cardiovascular disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Lymphatic and Immune Systems</h3>
+        </div>
+        <p class="unit-description">Explore the body's defense mechanisms and fluid balance.</p>
+        <ul class="topics-list">
+          <li>Lymphatic vessels</li>
+          <li>Lymphoid organs</li>
+          <li>Innate immunity</li>
+          <li>Adaptive immunity</li>
+          <li>Antibodies</li>
+          <li>Cell-mediated immunity</li>
+          <li>Vaccines</li>
+          <li>Immune disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Respiratory System</h3>
+        </div>
+        <p class="unit-description">Study breathing and gas exchange mechanisms.</p>
+        <ul class="topics-list">
+          <li>Respiratory anatomy</li>
+          <li>Ventilation mechanics</li>
+          <li>Gas exchange</li>
+          <li>Gas transport</li>
+          <li>Respiratory control</li>
+          <li>Lung volumes</li>
+          <li>Acid-base balance</li>
+          <li>Respiratory disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Digestive System</h3>
+        </div>
+        <p class="unit-description">Learn about nutrient processing and absorption.</p>
+        <ul class="topics-list">
+          <li>Digestive tract anatomy</li>
+          <li>Digestive processes</li>
+          <li>Enzymes and digestion</li>
+          <li>Absorption mechanisms</li>
+          <li>Liver functions</li>
+          <li>Metabolism</li>
+          <li>Nutrition</li>
+          <li>Digestive disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Urinary System</h3>
+        </div>
+        <p class="unit-description">Study waste removal and fluid-electrolyte balance.</p>
+        <ul class="topics-list">
+          <li>Kidney anatomy</li>
+          <li>Nephron function</li>
+          <li>Urine formation</li>
+          <li>Glomerular filtration</li>
+          <li>Tubular reabsorption</li>
+          <li>Acid-base regulation</li>
+          <li>Water balance</li>
+          <li>Kidney disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Reproductive Systems</h3>
+        </div>
+        <p class="unit-description">Explore reproduction, development, and sexual physiology.</p>
+        <ul class="topics-list">
+          <li>Male reproductive anatomy</li>
+          <li>Female reproductive anatomy</li>
+          <li>Gametogenesis</li>
+          <li>Menstrual cycle</li>
+          <li>Fertilization</li>
+          <li>Pregnancy and development</li>
+          <li>Birth process</li>
+          <li>Reproductive disorders</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Anatomy and Physiology</h1>
+      <p>Explore the fundamental concepts and organization of the human body.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Anatomy vs Physiology</h3>
+        <p>Understand the difference between structure and function.</p>
+        <span class="anatomy-badge">Structure</span>
+        <span class="anatomy-badge">Function</span>
+        <span class="anatomy-badge">Relationship</span>
+        <div class="concept-box">
+          Anatomy is the study of body structures, while physiology is the study of how those structures function. Structure and function are closely related - the shape of a structure determines its function.
+        </div>
+        <div class="anatomy-example">
+          Example: The heart's muscular walls (anatomy) enable it to pump blood (physiology)
+        </div>
+      </div>
+
+      <div class="subtopic-card">
