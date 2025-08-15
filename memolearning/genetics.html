@@ -1,0 +1,824 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Genetics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #be123c, #e11d48);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(190, 18, 60, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧬';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #e11d48;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be123c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #be123c, #e11d48);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(190, 18, 60, 0.3);
+    }
+
+    .genetics-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #be123c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be123c;
+    }
+
+    .genetics-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #be123c;
+      overflow-x: auto;
+    }
+
+    .dna-example {
+      background: #f0f9ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .mendel-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .inheritance-showcase {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .mutation-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .genetic-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .classical-level {
+      background: #f43f5e;
+      font-size: 18px;
+    }
+
+    .molecular-level {
+      background: #e11d48;
+      font-size: 16px;
+    }
+
+    .genomic-level {
+      background: #be123c;
+      font-size: 14px;
+    }
+
+    .mathematical-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .problem-solving {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .solution-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .punnett-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .lab-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .chromosome-note {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .gene-expression-note {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .pedigree-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧬 Genetics</h1>
+    <p>Explore the molecular basis of heredity and genetic variation</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Biology courses')">← Back to Biology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Genetics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Genetics Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Mendel</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">DNA</span>
+          <div class="stat-label">Molecule of Life</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Genetics</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental principles of heredity and genetic variation.</p>
+        <ul class="topics-list">
+          <li>What is genetics</li>
+          <li>Historical perspective</li>
+          <li>Types of genetics</li>
+          <li>Genetic terminology</li>
+          <li>Model organisms</li>
+          <li>Genetic tools and techniques</li>
+          <li>Ethics in genetics</li>
+          <li>Applications of genetics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Mendelian Genetics</h3>
+        </div>
+        <p class="unit-description">Study the fundamental laws of inheritance discovered by Gregor Mendel.</p>
+        <ul class="topics-list">
+          <li>Mendel's experiments</li>
+          <li>Law of segregation</li>
+          <li>Law of independent assortment</li>
+          <li>Dominant and recessive alleles</li>
+          <li>Monohybrid crosses</li>
+          <li>Dihybrid crosses</li>
+          <li>Test crosses</li>
+          <li>Punnett squares</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Extensions to Mendelian Genetics</h3>
+        </div>
+        <p class="unit-description">Learn about inheritance patterns that extend beyond simple Mendelian genetics.</p>
+        <ul class="topics-list">
+          <li>Incomplete dominance</li>
+          <li>Codominance</li>
+          <li>Multiple alleles</li>
+          <li>Lethal alleles</li>
+          <li>Penetrance and expressivity</li>
+          <li>Epistasis</li>
+          <li>Pleiotropy</li>
+          <li>Environmental effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Chromosome Structure and Function</h3>
+        </div>
+        <p class="unit-description">Understand the structure and organization of chromosomes.</p>
+        <ul class="topics-list">
+          <li>Chromosome anatomy</li>
+          <li>Chromatin structure</li>
+          <li>Histone proteins</li>
+          <li>Chromosome condensation</li>
+          <li>Centromeres and telomeres</li>
+          <li>Chromosome number</li>
+          <li>Karyotypes</li>
+          <li>Chromosome aberrations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Sex Determination and Sex-Linked Inheritance</h3>
+        </div>
+        <p class="unit-description">Study how sex is determined and inheritance patterns of sex-linked genes.</p>
+        <ul class="topics-list">
+          <li>Sex determination systems</li>
+          <li>X and Y chromosomes</li>
+          <li>Sex-linked inheritance</li>
+          <li>X-linked recessive traits</li>
+          <li>X-linked dominant traits</li>
+          <li>Y-linked inheritance</li>
+          <li>Sex-influenced traits</li>
+          <li>Dosage compensation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Linkage and Chromosome Mapping</h3>
+        </div>
+        <p class="unit-description">Learn how genes on the same chromosome are inherited together.</p>
+        <ul class="topics-list">
+          <li>Genetic linkage</li>
+          <li>Recombination frequency</li>
+          <li>Genetic mapping</li>
+          <li>Map units</li>
+          <li>Three-factor crosses</li>
+          <li>Chromosome mapping</li>
+          <li>Physical vs genetic maps</li>
+          <li>Recombination hotspots</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">DNA Structure and Replication</h3>
+        </div>
+        <p class="unit-description">Explore the molecular structure of DNA and how it replicates.</p>
+        <ul class="topics-list">
+          <li>DNA structure</li>
+          <li>Watson-Crick model</li>
+          <li>Base pairing</li>
+          <li>DNA replication</li>
+          <li>Semiconservative replication</li>
+          <li>DNA polymerases</li>
+          <li>Leading and lagging strands</li>
+          <li>Proofreading and repair</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Gene Expression</h3>
+        </div>
+        <p class="unit-description">Study how genetic information is expressed as proteins.</p>
+        <ul class="topics-list">
+          <li>Central dogma</li>
+          <li>Transcription</li>
+          <li>RNA processing</li>
+          <li>Translation</li>
+          <li>Genetic code</li>
+          <li>Ribosomes and tRNAs</li>
+          <li>Post-translational modifications</li>
+          <li>Gene regulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Gene Regulation</h3>
+        </div>
+        <p class="unit-description">Learn how gene expression is controlled in prokaryotes and eukaryotes.</p>
+        <ul class="topics-list">
+          <li>Transcriptional regulation</li>
+          <li>Lac operon</li>
+          <li>Trp operon</li>
+          <li>Eukaryotic gene regulation</li>
+          <li>Enhancers and silencers</li>
+          <li>Chromatin remodeling</li>
+          <li>Epigenetic regulation</li>
+          <li>MicroRNAs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Mutations and DNA Repair</h3>
+        </div>
+        <p class="unit-description">Understand different types of mutations and cellular repair mechanisms.</p>
+        <ul class="topics-list">
+          <li>Types of mutations</li>
+          <li>Point mutations</li>
+          <li>Chromosomal mutations</li>
+          <li>Spontaneous mutations</li>
+          <li>Induced mutations</li>
+          <li>DNA repair mechanisms</li>
+          <li>Mutation rates</li>
+          <li>Mutagenesis and cancer</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Recombinant DNA Technology</h3>
+        </div>
+        <p class="unit-description">Explore the tools and techniques used to manipulate DNA.</p>
+        <ul class="topics-list">
+          <li>Restriction enzymes</li>
+          <li>DNA cloning</li>
+          <li>Vectors</li>
+          <li>PCR</li>
+          <li>DNA sequencing</li>
+          <li>Gene libraries</li>
+          <li>Transformation</li>
+          <li>Applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Genomics and Bioinformatics</h3>
+        </div>
+        <p class="unit-description">Study genome-wide analysis and computational biology approaches.</p>
+        <ul class="topics-list">
+          <li>Genome projects</li>
+          <li>Genome sequencing</li>
+          <li>Comparative genomics</li>
+          <li>Functional genomics</li>
+          <li>Bioinformatics tools</li>
+          <li>Database analysis</li>
+          <li>Genome annotation</li>
+          <li>Systems biology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Population Genetics</h3>
+        </div>
+        <p class="unit-description">Learn about genetic variation and evolution in populations.</p>
+        <ul class="topics-list">
+          <li>Hardy-Weinberg equilibrium</li>
+          <li>Allele frequencies</li>
+          <li>Population structure</li>
+          <li>Natural selection</li>
+          <li>Genetic drift</li>
+          <li>Migration</li>
+          <li>Inbreeding</li>
+          <li>Molecular evolution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Human Genetics</h3>
+        </div>
+        <p class="unit-description">Study genetic principles as they apply to human inheritance and disease.</p>
+        <ul class="topics-list">
+          <li>Human inheritance patterns</li>
+          <li>Pedigree analysis</li>
+          <li>Genetic disorders</li>
+          <li>Chromosomal abnormalities</li>
+          <li>Genetic counseling</li>
+          <li>Genetic testing</li>
+          <li>Gene therapy</li>
+          <li>Pharmacogenomics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Applied Genetics and Biotechnology</h3>
+        </div>
+        <p class="unit-description">Explore practical applications of genetics in medicine, agriculture, and industry.</p>
+        <ul class="topics-list">
+          <li>Genetic engineering</li>
+          <li>Transgenic organisms</li>
+          <li>Gene editing (CRISPR)</li>
+          <li>Agricultural genetics</li>
+          <li>Medical genetics</li>
+          <li>Forensic genetics</li>
+          <li>Ethical considerations</li>
+          <li>Future directions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Genetics</h1>
+      <p>Explore the fundamental principles of heredity and genetic variation.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Genetics</h3>
+        <p>Understand the science of heredity and genetic variation.</p>
+        <span class="genetics-badge">Heredity</span>
+        <span class="genetics-badge">Variation</span>
+        <span class="genetics-badge">Genes</span>
+        <div class="concept-box">
+          Genetics is the study of genes, genetic variation, and heredity in organisms. It explains how traits are passed from parents to offspring and how genetic variation arises.
+        </div>
+        <div class="genetics-example">
+          Key concepts: genes, alleles, chromosomes, inheritance, mutation
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Perspective</h3>
+        <p>Learn about the development of genetics as a science.</p>
+        <span class="genetics-badge">History</span>
+        <span class="genetics-badge">Discovery</span>
+        <span class="genetics-badge">Scientists</span>
+        <div class="genetic-evolution">
+          <div class="classical-level">Classical Genetics (Mendel, 1860s)</div>
+          <div class="molecular-level">Molecular Genetics (DNA structure, 1950s)</div
