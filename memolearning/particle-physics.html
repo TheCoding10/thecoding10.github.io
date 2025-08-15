@@ -1,0 +1,957 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Particle Physics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚛️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .physics-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .particle-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .standard-model-example {
+      background: #f0f9ff;
+      border: 1px solid #7dd3fc;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #0284c7;
+      overflow-x: auto;
+    }
+
+    .quantum-insight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .feynman-showcase {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .symmetry-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .particle-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .classical-level {
+      background: #60a5fa;
+      font-size: 18px;
+    }
+
+    .quantum-level {
+      background: #3b82f6;
+      font-size: 16px;
+    }
+
+    .field-level {
+      background: #1e40af;
+      font-size: 14px;
+    }
+
+    .mathematical-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .problem-solving {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .solution-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .accelerator-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .detector-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .beyond-sm {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .higgs-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .conservation-law {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚛️ Particle Physics</h1>
+    <p>Explore the fundamental constituents of matter and their interactions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Physics courses')">← Back to Physics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Particle Physics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Physics Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~70</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Standard Model</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Quarks & Leptons</span>
+          <div class="stat-label">Building Blocks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Particle Physics</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental nature of matter and the particles that compose it.</p>
+        <ul class="topics-list">
+          <li>What is particle physics</li>
+          <li>Historical development</li>
+          <li>Fundamental particles overview</li>
+          <li>Natural units and scales</li>
+          <li>Particle accelerators introduction</li>
+          <li>Detection methods</li>
+          <li>Conservation laws</li>
+          <li>Mathematical prerequisites</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Special Relativity in Particle Physics</h3>
+        </div>
+        <p class="unit-description">Master relativistic mechanics essential for high-energy particle physics.</p>
+        <ul class="topics-list">
+          <li>Lorentz transformations</li>
+          <li>Four-vectors</li>
+          <li>Energy-momentum relation</li>
+          <li>Relativistic kinematics</li>
+          <li>Invariant mass</li>
+          <li>Center of mass frame</li>
+          <li>Collision dynamics</li>
+          <li>Threshold calculations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Quantum Mechanics Review</h3>
+        </div>
+        <p class="unit-description">Review quantum mechanics concepts crucial for particle physics.</p>
+        <ul class="topics-list">
+          <li>Wave functions and operators</li>
+          <li>Schrödinger equation</li>
+          <li>Angular momentum</li>
+          <li>Spin and intrinsic properties</li>
+          <li>Identical particles</li>
+          <li>Perturbation theory</li>
+          <li>Scattering theory</li>
+          <li>Cross sections</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">The Standard Model Overview</h3>
+        </div>
+        <p class="unit-description">Understand the theoretical framework describing fundamental particles.</p>
+        <ul class="topics-list">
+          <li>Standard Model structure</li>
+          <li>Particle classification</li>
+          <li>Fundamental forces</li>
+          <li>Gauge symmetries</li>
+          <li>Matter particles (fermions)</li>
+          <li>Force carriers (bosons)</li>
+          <li>Higgs mechanism</li>
+          <li>Model limitations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Leptons and Lepton Interactions</h3>
+        </div>
+        <p class="unit-description">Study the fundamental fermions that don't participate in strong interactions.</p>
+        <ul class="topics-list">
+          <li>Electron, muon, tau</li>
+          <li>Neutrinos</li>
+          <li>Lepton families</li>
+          <li>Electromagnetic interactions</li>
+          <li>Weak interactions</li>
+          <li>Lepton number conservation</li>
+          <li>Neutrino oscillations</li>
+          <li>Experimental discoveries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Quarks and Hadrons</h3>
+        </div>
+        <p class="unit-description">Explore the building blocks of protons, neutrons, and other hadrons.</p>
+        <ul class="topics-list">
+          <li>Quark model</li>
+          <li>Six quark flavors</li>
+          <li>Color charge</li>
+          <li>Baryons and mesons</li>
+          <li>Quark confinement</li>
+          <li>Hadron spectroscopy</li>
+          <li>Quark masses</li>
+          <li>QCD introduction</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Electromagnetic Interactions</h3>
+        </div>
+        <p class="unit-description">Study electromagnetic forces and quantum electrodynamics (QED).</p>
+        <ul class="topics-list">
+          <li>Classical electromagnetism</li>
+          <li>Quantum electrodynamics</li>
+          <li>Photon properties</li>
+          <li>Electron-photon interactions</li>
+          <li>Feynman diagrams</li>
+          <li>QED calculations</li>
+          <li>Radiative corrections</li>
+          <li>Experimental tests</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Weak Interactions</h3>
+        </div>
+        <p class="unit-description">Understand the weak nuclear force and its unique properties.</p>
+        <ul class="topics-list">
+          <li>Beta decay</li>
+          <li>W and Z bosons</li>
+          <li>Parity violation</li>
+          <li>CP violation</li>
+          <li>Neutrino interactions</li>
+          <li>Electroweak unification</li>
+          <li>Weak mixing angle</li>
+          <li>Neutral currents</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Strong Interactions and QCD</h3>
+        </div>
+        <p class="unit-description">Explore quantum chromodynamics and the strong nuclear force.</p>
+        <ul class="topics-list">
+          <li>Color force</li>
+          <li>Gluons</li>
+          <li>QCD Lagrangian</li>
+          <li>Asymptotic freedom</li>
+          <li>Confinement</li>
+          <li>Running coupling</li>
+          <li>Lattice QCD</li>
+          <li>Hadronization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Symmetries and Conservation Laws</h3>
+        </div>
+        <p class="unit-description">Study fundamental symmetries and their consequences in particle physics.</p>
+        <ul class="topics-list">
+          <li>Noether's theorem</li>
+          <li>Space-time symmetries</li>
+          <li>Internal symmetries</li>
+          <li>Gauge invariance</li>
+          <li>Discrete symmetries</li>
+          <li>Spontaneous symmetry breaking</li>
+          <li>Conservation laws</li>
+          <li>Selection rules</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">The Higgs Mechanism</h3>
+        </div>
+        <p class="unit-description">Understand how particles acquire mass through the Higgs field.</p>
+        <ul class="topics-list">
+          <li>Spontaneous symmetry breaking</li>
+          <li>Higgs field</li>
+          <li>Mass generation mechanism</li>
+          <li>Higgs boson properties</li>
+          <li>Electroweak symmetry breaking</li>
+          <li>Yukawa couplings</li>
+          <li>Higgs discovery</li>
+          <li>Beyond Standard Model Higgs</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Feynman Diagrams and Calculations</h3>
+        </div>
+        <p class="unit-description">Learn to calculate particle interaction probabilities using Feynman diagrams.</p>
+        <ul class="topics-list">
+          <li>Feynman rules</li>
+          <li>Vertex factors</li>
+          <li>Propagators</li>
+          <li>Loop diagrams</li>
+          <li>Cross section calculations</li>
+          <li>Decay rates</li>
+          <li>Renormalization</li>
+          <li>Computational techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Particle Accelerators</h3>
+        </div>
+        <p class="unit-description">Explore the machines that probe the fundamental structure of matter.</p>
+        <ul class="topics-list">
+          <li>Linear accelerators</li>
+          <li>Circular accelerators</li>
+          <li>Synchrotrons</li>
+          <li>Colliding beam experiments</li>
+          <li>LHC and other facilities</li>
+          <li>Beam dynamics</li>
+          <li>Luminosity</li>
+          <li>Future accelerators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Particle Detection</h3>
+        </div>
+        <p class="unit-description">Study methods for detecting and measuring fundamental particles.</p>
+        <ul class="topics-list">
+          <li>Detector principles</li>
+          <li>Tracking detectors</li>
+          <li>Calorimeters</li>
+          <li>Muon systems</li>
+          <li>Trigger systems</li>
+          <li>Data acquisition</li>
+          <li>Particle identification</li>
+          <li>Modern detector technologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Neutrino Physics</h3>
+        </div>
+        <p class="unit-description">Explore the elusive neutrinos and their unique properties.</p>
+        <ul class="topics-list">
+          <li>Neutrino discovery</li>
+          <li>Neutrino flavors</li>
+          <li>Neutrino oscillations</li>
+          <li>Mass and mixing</li>
+          <li>Solar neutrinos</li>
+          <li>Atmospheric neutrinos</li>
+          <li>Reactor experiments</li>
+          <li>Sterile neutrinos</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">CP Violation and Time Reversal</h3>
+        </div>
+        <p class="unit-description">Study the violation of fundamental symmetries in particle interactions.</p>
+        <ul class="topics-list">
+          <li>Discrete symmetries</li>
+          <li>CP violation discovery</li>
+          <li>Kaon system</li>
+          <li>B meson physics</li>
+          <li>CKM matrix</li>
+          <li>Matter-antimatter asymmetry</li>
+          <li>Time reversal violation</li>
+          <li>Experimental measurements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Beyond the Standard Model</h3>
+        </div>
+        <p class="unit-description">Explore theoretical extensions and alternatives to the Standard Model.</p>
+        <ul class="topics-list">
+          <li>Standard Model limitations</li>
+          <li>Supersymmetry</li>
+          <li>Extra dimensions</li>
+          <li>Grand unified theories</li>
+          <li>Dark matter candidates</li>
+          <li>Neutrino mass models</li>
+          <li>String theory connections</li>
+          <li>Experimental searches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Cosmology and Particle Physics</h3>
+        </div>
+        <p class="unit-description">Connect particle physics with the evolution and structure of the universe.</p>
+        <ul class="topics-list">
+          <li>Big Bang nucleosynthesis</li>
+          <li>Dark matter</li>
+          <li>Dark energy</li>
+          <li>Cosmic microwave background</li>
+          <li>Inflation</li>
+          <li>Baryogenesis</li>
+          <li>Cosmic rays</li>
+          <li>Future of the universe</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Particle Physics</h1>
+      <p>Explore the fundamental nature of matter and the particles that compose it.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Particle Physics</h3>
+        <p>Understand the quest to discover the fundamental building blocks of matter.</p>
+        <span class="physics-badge">Fundamentals</span>
+        <span class="physics-badge">Matter</span>
+        <span class="physics-badge">Forces</span>
+        <div class="concept-box">
+          Particle physics seeks to understand the most basic constituents of matter and the forces that govern their interactions, from quarks and leptons to the Higgs boson.
+        </div>
+        <div class="particle-example">
+          The journey: Atoms → Nuclei → Protons/Neutrons → Quarks and Leptons
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Historical Development</h3>
+        <p>Learn about the evolution of our understanding of fundamental particles.</p>
+        <span class="physics-badge">History</span>
+        <span class="physics-badge">Discovery</span>
+        <span class="physics-badge">Evolution</span>
+        <div class="particle-evolution">
+          <div class="classical-level">Classical Physics (1800s)</div>
+          <div class="quantum-level">Quantum Revolution (1900s)</div>
+          <div class="field-level">Standard Model (1970s)</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Natural Units and Scales</h3>
+        <p>Master the unit systems used in high-energy physics.</p>
+        <span class="physics-badge">Units</span>
+        <span class="physics-badge">Energy Scales</span>
+        <div class="mathematical-demo">
+          Natural units: ℏ = c = 1<br>
+          Energy, mass, momentum all in GeV<br>
+          Length in GeV⁻¹, Time in GeV⁻¹
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conservation Laws</h3>
+        <p>Understand the fundamental conservation principles in particle interactions.</p>
+        <span class="physics-badge">Conservation</span>
+        <span class="physics-badge">Symmetry</span>
+        <div class="conservation-law">
+          Energy, momentum, angular momentum<br>
+          Electric charge, baryon number<br>
+          Lepton number, color charge
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-18">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 18: Cosmology and Particle Physics</h1>
+      <p>Connect particle physics with the evolution and structure of the universe.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Big Bang Nucleosynthesis</h3>
+        <p>Understand how the first elements formed in the early universe.</p>
+        <span class="physics-badge">Nucleosynthesis</span>
+        <span class="physics-badge">Big Bang</span>
+        <div class="concept-box">
+          The observed abundances of light elements (H, He, Li) provide strong evidence for the Big Bang and constrain particle physics.
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Dark Matter</h3>
+        <p>Explore the mysterious matter that makes up 85% of all matter.</p>
+        <span class="physics-badge">Dark Matter</span>
+        <span class="physics-badge">WIMPs</span>
+        <div class="beyond-sm">
+          Dark matter requires physics beyond the Standard Model. Leading candidates include WIMPs, axions, and sterile neutrinos.
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cosmic Rays</h3>
+        <p>Study high-energy particles from space and their interactions.</p>
+        <span class="physics-badge">Cosmic Rays</span>
+        <span class="physics-badge">Ultra-High Energy</span>
+        <div class="particle-example">
+          Cosmic rays reach energies up to 10²⁰ eV, far beyond any terrestrial accelerator, providing a natural laboratory for particle physics.
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inflation and Early Universe</h3>
+        <p>Learn how particle physics explains the universe's rapid early expansion.</p>
+        <span class="physics-badge">Inflation</span>
+        <span class="physics-badge">Scalar Fields</span>
+        <div class="quantum-insight">
+          Inflation theory uses quantum field theory to explain the universe's flatness, homogeneity, and the origin of cosmic structure.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
