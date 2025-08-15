@@ -1,0 +1,940 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Electricity & Magnetism</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #f97316 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .electric-example {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #ea580c;
+      overflow-x: auto;
+    }
+
+    .magnetic-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #dc2626;
+      overflow-x: auto;
+    }
+
+    .electromagnetic-badge {
+      display: inline-block;
+      background: #fed7aa;
+      color: #ea580c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .syntax-highlight {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f97316;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .coulomb-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .faraday-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .maxwell-note {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .electromagnetic-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .coulomb-level {
+      background: #f97316;
+      font-size: 18px;
+    }
+
+    .faraday-level {
+      background: #ea580c;
+      font-size: 16px;
+    }
+
+    .maxwell-level {
+      background: #7c2d12;
+      font-size: 14px;
+    }
+
+    .electromagnetic-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #ea580c;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #ea580c;
+    }
+
+    .electromagnetic-results {
+      background: #ea580c;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #ea580c;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .electromagnetic-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .electric {
+      color: #3b82f6;
+    }
+
+    .magnetic {
+      color: #dc2626;
+    }
+
+    .electromagnetic {
+      color: #16a34a;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #ea580c;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .feature-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .feature-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .feature-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .syntax-demo {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .syntax-function {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .terminal-demo {
+      background: #1f2937;
+      color: #fb923c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .terminal-prompt {
+      color: #6b7280;
+      margin-right: 10px;
+    }
+
+    .equation-structure {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .electric-icon {
+      color: #ea580c;
+      margin-right: 5px;
+    }
+
+    .magnetic-icon {
+      color: #dc2626;
+      margin-right: 5px;
+    }
+
+    .field-icon {
+      color: #6b7280;
+      margin-right: 5px;
+    }
+
+    .electromagnetic-phenomenon {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .electrostatics {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .magnetostatics {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .electromagnetic-induction {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .electromagnetic-waves {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .field-types {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .field-type {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .gauss-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .circuit-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .law-type {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 4px;
+    }
+
+    .coulomb-law {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .gauss-law {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .faraday-law {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .ampere-law {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .induction-showcase {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .wave-demo {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .field-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .energy-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .capacitor-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Electromagnetic analysis check simulation
+    function checkElectromagneticStatus() {
+      const results = document.getElementById('electromagnetic-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="electromagnetic-status">
+            <span class="electric">⚡ Electric Fields</span> | 
+            <span class="magnetic">🧲 Magnetic Fields</span> | 
+            <span class="electromagnetic">📡 EM Waves</span>
+          </div>
+          <div>Electromagnetic Theory - Maxwell's Equations</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [93, 96, 89, 95];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Electromagnetic calculation demo simulation
+    function simulateElectromagneticCalc() {
+      const terminal = document.getElementById('electromagnetic-output');
+      if (terminal) {
+        const calculations = [
+          'F = kq₁q₂/r²',
+          'Given: q₁ = 2μC, q₂ = 3μC, r = 0.1m',
+          'F = 9×10⁹ × 2×10⁻⁶ × 3×10⁻⁶ / (0.1)²',
+          'F = 5.4 N (repulsive force)'
+        ];
+        
+        calculations.forEach((calc, index) => {
+          setTimeout(() => {
+            terminal.innerHTML += `<div><span class="terminal-prompt">⚡</span>${calc}</div>`;
+          }, index * 1200);
+        });
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+      checkElectromagneticStatus();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚡ Electricity & Magnetism</h1>
+    <p>Master electromagnetic fields, forces, and the fundamental laws governing electric and magnetic phenomena</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Physics courses')">← Back to Physics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Electricity & Magnetism Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">EM Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Phenomena</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Maxwell</span>
+          <div class="stat-label">Equations</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Field</span>
+          <div class="stat-label">Theory</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Electric Charge and Coulomb's Law</h3>
+        </div>
+        <p class="unit-description">Study the fundamental properties of electric charge and electrostatic forces.</p>
+        <ul class="topics-list">
+          <li>Properties of electric charge</li>
+          <li>Conservation of charge</li>
+          <li>Coulomb's law</li>
+          <li>Superposition principle</li>
+          <li>Point charges and distributions</li>
+          <li>Electric force in matter</li>
+          <li>Quantization of charge</li>
+          <li>Conductors and insulators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Electric Fields</h3>
+        </div>
+        <p class="unit-description">Understand electric field concepts and field mapping techniques.</p>
+        <ul class="topics-list">
+          <li>Electric field definition</li>
+          <li>Electric field lines</li>
+          <li>Field due to point charges</li>
+          <li>Field due to continuous distributions</li>
+          <li>Electric dipoles</li>
+          <li>Field in conductors</li>
+          <li>Shielding and cages</li>
+          <li>Field mapping techniques</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Gauss's Law</h3>
+        </div>
+        <p class="unit-description">Master Gauss's law and its applications to electric field calculations.</p>
+        <ul class="topics-list">
+          <li>Electric flux concept</li>
+          <li>Gauss's law statement</li>
+          <li>Gaussian surfaces</li>
+          <li>Spherical symmetry</li>
+          <li>Cylindrical symmetry</li>
+          <li>Planar symmetry</li>
+          <li>Applications and examples</li>
+          <li>Gauss's law in conductors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Electric Potential</h3>
+        </div>
+        <p class="unit-description">Study electric potential energy and electric potential.</p>
+        <ul class="topics-list">
+          <li>Electric potential energy</li>
+          <li>Electric potential</li>
+          <li>Potential difference</li>
+          <li>Equipotential surfaces</li>
+          <li>Potential due to point charges</li>
+          <li>Potential due to distributions</li>
+          <li>Relationship to electric field</li>
+          <li>Energy in electric fields</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Capacitance and Dielectrics</h3>
+        </div>
+        <p class="unit-description">Understand capacitors, capacitance, and dielectric materials.</p>
+        <ul class="topics-list">
+          <li>Capacitor fundamentals</li>
+          <li>Capacitance definition</li>
+          <li>Parallel plate capacitors</li>
+          <li>Capacitors in series and parallel</li>
+          <li>Energy stored in capacitors</li>
+          <li>Dielectric materials</li>
+          <li>Dielectric constant</li>
+          <li>Polarization effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div
