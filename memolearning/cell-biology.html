@@ -1,0 +1,830 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Cell Biology</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #047857 0%, #059669 50%, #10b981 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #047857, #059669);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(4, 120, 87, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧪';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #047857;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #047857, #059669);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(4, 120, 87, 0.3);
+    }
+
+    .biology-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #047857;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .cell-example {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #047857;
+      overflow-x: auto;
+    }
+
+    .organelle-example {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #065f46;
+      overflow-x: auto;
+    }
+
+    .membrane-insight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .protein-showcase {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .dna-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .cell-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .prokaryote-level {
+      background: #10b981;
+      font-size: 18px;
+    }
+
+    .eukaryote-level {
+      background: #059669;
+      font-size: 16px;
+    }
+
+    .complex-level {
+      background: #047857;
+      font-size: 14px;
+    }
+
+    .mathematical-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .problem-solving {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .solution-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .microscope-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .experiment-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .metabolism-note {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .transport-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .cycle-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧪 Cell Biology</h1>
+    <p>Explore the structure, function, and processes of the basic unit of life</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Biology courses')">← Back to Biology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Cell Biology Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Biology Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Cell Theory</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Organelles</span>
+          <div class="stat-label">Building Blocks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Cells</h3>
+        </div>
+        <p class="unit-description">Discover the fundamental unit of life and cell theory.</p>
+        <ul class="topics-list">
+          <li>Cell theory</li>
+          <li>History of cell discovery</li>
+          <li>Types of cells</li>
+          <li>Cell size and shape</li>
+          <li>Prokaryotes vs eukaryotes</li>
+          <li>Model organisms</li>
+          <li>Microscopy techniques</li>
+          <li>Cell diversity</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Cell Membrane Structure</h3>
+        </div>
+        <p class="unit-description">Study the structure and composition of cellular membranes.</p>
+        <ul class="topics-list">
+          <li>Fluid mosaic model</li>
+          <li>Phospholipid bilayer</li>
+          <li>Membrane proteins</li>
+          <li>Cholesterol</li>
+          <li>Membrane asymmetry</li>
+          <li>Lipid rafts</li>
+          <li>Membrane synthesis</li>
+          <li>Membrane dynamics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Membrane Transport</h3>
+        </div>
+        <p class="unit-description">Learn how substances cross cellular membranes.</p>
+        <ul class="topics-list">
+          <li>Passive transport</li>
+          <li>Simple diffusion</li>
+          <li>Facilitated diffusion</li>
+          <li>Osmosis</li>
+          <li>Active transport</li>
+          <li>Sodium-potassium pump</li>
+          <li>Cotransport</li>
+          <li>Ion channels</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Endocytosis and Exocytosis</h3>
+        </div>
+        <p class="unit-description">Explore bulk transport mechanisms in cells.</p>
+        <ul class="topics-list">
+          <li>Endocytosis types</li>
+          <li>Phagocytosis</li>
+          <li>Pinocytosis</li>
+          <li>Receptor-mediated endocytosis</li>
+          <li>Exocytosis mechanisms</li>
+          <li>Vesicle formation</li>
+          <li>Membrane recycling</li>
+          <li>Clinical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Nucleus and Gene Expression</h3>
+        </div>
+        <p class="unit-description">Study the control center of eukaryotic cells.</p>
+        <ul class="topics-list">
+          <li>Nuclear structure</li>
+          <li>Nuclear envelope</li>
+          <li>Nuclear pores</li>
+          <li>Chromatin organization</li>
+          <li>Nucleolus</li>
+          <li>DNA packaging</li>
+          <li>Transcription</li>
+          <li>RNA processing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Endomembrane System</h3>
+        </div>
+        <p class="unit-description">Explore the interconnected membrane organelles.</p>
+        <ul class="topics-list">
+          <li>Endoplasmic reticulum</li>
+          <li>Rough ER</li>
+          <li>Smooth ER</li>
+          <li>Golgi apparatus</li>
+          <li>Protein trafficking</li>
+          <li>Lysosomes</li>
+          <li>Vacuoles</li>
+          <li>Peroxisomes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Mitochondria and Energy</h3>
+        </div>
+        <p class="unit-description">Study the powerhouses of the cell.</p>
+        <ul class="topics-list">
+          <li>Mitochondrial structure</li>
+          <li>Cellular respiration</li>
+          <li>Electron transport chain</li>
+          <li>ATP synthesis</li>
+          <li>Mitochondrial DNA</li>
+          <li>Endosymbiotic theory</li>
+          <li>Metabolic diseases</li>
+          <li>Apoptosis role</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Chloroplasts and Photosynthesis</h3>
+        </div>
+        <p class="unit-description">Learn about plant cell energy conversion.</p>
+        <ul class="topics-list">
+          <li>Chloroplast structure</li>
+          <li>Thylakoid system</li>
+          <li>Light reactions</li>
+          <li>Calvin cycle</li>
+          <li>Photosynthetic pigments</li>
+          <li>Chloroplast DNA</li>
+          <li>C3, C4, and CAM plants</li>
+          <li>Photorespiration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Cytoskeleton</h3>
+        </div>
+        <p class="unit-description">Explore the structural framework of cells.</p>
+        <ul class="topics-list">
+          <li>Microfilaments</li>
+          <li>Intermediate filaments</li>
+          <li>Microtubules</li>
+          <li>Motor proteins</li>
+          <li>Cell shape</li>
+          <li>Cell movement</li>
+          <li>Cilia and flagella</li>
+          <li>Cytoskeletal dynamics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Cell Division</h3>
+        </div>
+        <p class="unit-description">Understand how cells reproduce and divide.</p>
+        <ul class="topics-list">
+          <li>Cell cycle phases</li>
+          <li>Mitosis stages</li>
+          <li>Cytokinesis</li>
+          <li>Cell cycle checkpoints</li>
+          <li>Cyclins and CDKs</li>
+          <li>Meiosis</li>
+          <li>Chromosome structure</li>
+          <li>Cell cycle disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Cell Signaling</h3>
+        </div>
+        <p class="unit-description">Study how cells communicate and respond to signals.</p>
+        <ul class="topics-list">
+          <li>Signal transduction</li>
+          <li>Receptors</li>
+          <li>Second messengers</li>
+          <li>Protein kinases</li>
+          <li>G-protein signaling</li>
+          <li>Hormone signaling</li>
+          <li>Cell-cell communication</li>
+          <li>Signal integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Cell Adhesion and Junctions</h3>
+        </div>
+        <p class="unit-description">Learn how cells connect and interact with each other.</p>
+        <ul class="topics-list">
+          <li>Cell adhesion molecules</li>
+          <li>Tight junctions</li>
+          <li>Adherens junctions</li>
+          <li>Desmosomes</li>
+          <li>Gap junctions</li>
+          <li>Extracellular matrix</li>
+          <li>Integrins</li>
+          <li>Tissue organization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Protein Synthesis and Trafficking</h3>
+        </div>
+        <p class="unit-description">Explore how proteins are made and transported in cells.</p>
+        <ul class="topics-list">
+          <li>Translation</li>
+          <li>Ribosomes</li>
+          <li>tRNA and amino acids</li>
+          <li>Protein folding</li>
+          <li>Signal sequences</li>
+          <li>Protein targeting</li>
+          <li>Quality control</li>
+          <li>Protein degradation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Cell Death and Aging</h3>
+        </div>
+        <p class="unit-description">Study programmed cell death and cellular aging processes.</p>
+        <ul class="topics-list">
+          <li>Apoptosis</li>
+          <li>Necrosis</li>
+          <li>Autophagy</li>
+          <li>Caspases</li>
+          <li>p53 pathway</li>
+          <li>Cellular senescence</li>
+          <li>Telomeres</li>
+          <li>Aging mechanisms</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Cancer Cell Biology</h3>
+        </div>
+        <p class="unit-description">Understand the cellular basis of cancer development.</p>
+        <ul class="topics-list">
+          <li>Oncogenes</li>
+          <li>Tumor suppressor genes</li>
+          <li>Cell cycle dysregulation</li>
+          <li>DNA repair defects</li>
+          <li>Metastasis</li>
+          <li>Angiogenesis</li>
+          <li>Cancer stem cells</li>
+          <li>Therapeutic targets</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Stem Cells and Development</h3>
+        </div>
+        <p class="unit-description">Explore cellular differentiation and developmental biology.</p>
+        <ul class="topics-list">
+          <li>Stem cell types</li>
+          <li>Pluripotency</li>
+          <li>Cell differentiation</li>
+          <li>Transcription factors</li>
+          <li>Epigenetic regulation</li>
+          <li>Regenerative medicine</li>
+          <li>Induced pluripotent stems</li>
+          <li>Therapeutic applications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Cells</h1>
+      <p>Discover the fundamental unit of life and cell theory.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cell Theory</h3>
+        <p>Understand the three fundamental principles of cell theory.</p>
+        <span class="biology-badge">Theory</span>
+        <span class="biology-badge">Principles</span>
+        <span class="biology-badge">Foundation</span>
+        <div class="concept-box">
+          Cell theory states: 1) All living things are made of cells, 2) Cells are the basic unit of life, 3) All cells come from pre-existing cells.
+        </div>
+        <div class="cell-example">
+          Historical contributions: Hooke (1665),
