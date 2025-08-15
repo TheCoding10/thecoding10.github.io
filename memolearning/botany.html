@@ -1,0 +1,837 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Botany</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #14532d 0%, #15803d 50%, #16a34a 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #14532d, #15803d);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(20, 83, 45, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌿';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #15803d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #14532d;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #14532d, #15803d);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 83, 45, 0.3);
+    }
+
+    .botany-badge {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #14532d;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #14532d;
+    }
+
+    .botany-example {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #14532d;
+      overflow-x: auto;
+    }
+
+    .plant-example {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #047857;
+      overflow-x: auto;
+    }
+
+    .photosynthesis-insight {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ca8a04;
+    }
+
+    .taxonomy-showcase {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .ecology-note {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .plant-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .algae-level {
+      background: #16a34a;
+      font-size: 18px;
+    }
+
+    .bryophyte-level {
+      background: #15803d;
+      font-size: 16px;
+    }
+
+    .vascular-level {
+      background: #14532d;
+      font-size: 14px;
+    }
+
+    .mathematical-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .problem-solving {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .solution-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .microscopy-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .field-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .physiology-note {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #c2410c;
+    }
+
+    .reproduction-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .classification-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌿 Botany</h1>
+    <p>Explore the science of plant life and the plant kingdom</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Biology courses')">← Back to Biology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Botany Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Botany Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~60</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Photosynthesis</span>
+          <div class="stat-label">Core Process</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Plant Kingdom</span>
+          <div class="stat-label">Diversity</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Botany</h3>
+        </div>
+        <p class="unit-description">Explore the scientific study of plants and their importance.</p>
+        <ul class="topics-list">
+          <li>What is botany</li>
+          <li>History of botanical science</li>
+          <li>Plant importance</li>
+          <li>Branches of botany</li>
+          <li>Plant vs animal characteristics</li>
+          <li>Plant diversity overview</li>
+          <li>Botanical methodology</li>
+          <li>Career opportunities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Plant Cell Structure</h3>
+        </div>
+        <p class="unit-description">Study the unique features of plant cells and their functions.</p>
+        <ul class="topics-list">
+          <li>Cell wall composition</li>
+          <li>Plastids and chloroplasts</li>
+          <li>Vacuoles</li>
+          <li>Plasmodesmata</li>
+          <li>Cell types</li>
+          <li>Meristematic tissues</li>
+          <li>Permanent tissues</li>
+          <li>Cell division</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Plant Anatomy</h3>
+        </div>
+        <p class="unit-description">Learn about the internal structure and organization of plants.</p>
+        <ul class="topics-list">
+          <li>Root anatomy</li>
+          <li>Stem anatomy</li>
+          <li>Leaf anatomy</li>
+          <li>Vascular tissues</li>
+          <li>Dermal tissues</li>
+          <li>Ground tissues</li>
+          <li>Secondary growth</li>
+          <li>Wood formation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Plant Morphology</h3>
+        </div>
+        <p class="unit-description">Explore the external form and structure of plants.</p>
+        <ul class="topics-list">
+          <li>Root systems</li>
+          <li>Shoot systems</li>
+          <li>Leaf shapes and arrangements</li>
+          <li>Flower structure</li>
+          <li>Fruit and seed morphology</li>
+          <li>Plant symmetry</li>
+          <li>Adaptive morphology</li>
+          <li>Developmental patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Photosynthesis</h3>
+        </div>
+        <p class="unit-description">Study the process by which plants convert light energy into chemical energy.</p>
+        <ul class="topics-list">
+          <li>Light reactions</li>
+          <li>Calvin cycle</li>
+          <li>Chlorophyll and pigments</li>
+          <li>Factors affecting photosynthesis</li>
+          <li>C3, C4, and CAM plants</li>
+          <li>Photorespiration</li>
+          <li>Photosynthetic efficiency</li>
+          <li>Evolutionary aspects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Plant Physiology</h3>
+        </div>
+        <p class="unit-description">Learn about the functional processes in plants.</p>
+        <ul class="topics-list">
+          <li>Water relations</li>
+          <li>Mineral nutrition</li>
+          <li>Transport systems</li>
+          <li>Respiration</li>
+          <li>Growth and development</li>
+          <li>Plant hormones</li>
+          <li>Tropisms</li>
+          <li>Stress physiology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Plant Reproduction</h3>
+        </div>
+        <p class="unit-description">Explore the various methods of plant reproduction.</p>
+        <ul class="topics-list">
+          <li>Sexual reproduction</li>
+          <li>Asexual reproduction</li>
+          <li>Flower development</li>
+          <li>Pollination mechanisms</li>
+          <li>Fertilization</li>
+          <li>Seed development</li>
+          <li>Fruit formation</li>
+          <li>Vegetative propagation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Plant Taxonomy and Classification</h3>
+        </div>
+        <p class="unit-description">Study the naming and classification of plants.</p>
+        <ul class="topics-list">
+          <li>Taxonomic hierarchy</li>
+          <li>Binomial nomenclature</li>
+          <li>Plant families</li>
+          <li>Identification keys</li>
+          <li>Herbarium techniques</li>
+          <li>Phylogenetic classification</li>
+          <li>Molecular systematics</li>
+          <li>Species concepts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Algae and Lower Plants</h3>
+        </div>
+        <p class="unit-description">Learn about algae, bryophytes, and other primitive plants.</p>
+        <ul class="topics-list">
+          <li>Green algae</li>
+          <li>Brown algae</li>
+          <li>Red algae</li>
+          <li>Mosses</li>
+          <li>Liverworts</li>
+          <li>Hornworts</li>
+          <li>Life cycles</li>
+          <li>Ecological roles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Ferns and Allies</h3>
+        </div>
+        <p class="unit-description">Study the seedless vascular plants.</p>
+        <ul class="topics-list">
+          <li>Fern structure</li>
+          <li>Spore production</li>
+          <li>Gametophyte generation</li>
+          <li>Sporophyte generation</li>
+          <li>Fern allies</li>
+          <li>Fossil history</li>
+          <li>Economic importance</li>
+          <li>Conservation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Gymnosperms</h3>
+        </div>
+        <p class="unit-description">Explore the cone-bearing seed plants.</p>
+        <ul class="topics-list">
+          <li>Gymnosperm diversity</li>
+          <li>Conifer anatomy</li>
+          <li>Cone structure</li>
+          <li>Life cycle</li>
+          <li>Adaptations</li>
+          <li>Economic importance</li>
+          <li>Forest ecology</li>
+          <li>Evolution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Angiosperms - Flowering Plants</h3>
+        </div>
+        <p class="unit-description">Study the most diverse group of plants.</p>
+        <ul class="topics-list">
+          <li>Flower evolution</li>
+          <li>Angiosperm diversity</li>
+          <li>Double fertilization</li>
+          <li>Fruit types</li>
+          <li>Monocots vs dicots</li>
+          <li>Major families</li>
+          <li>Coevolution with animals</li>
+          <li>Success factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Plant Ecology</h3>
+        </div>
+        <p class="unit-description">Learn about plant interactions with their environment.</p>
+        <ul class="topics-list">
+          <li>Plant communities</li>
+          <li>Succession</li>
+          <li>Competition</li>
+          <li>Symbiosis</li>
+          <li>Pollination ecology</li>
+          <li>Seed dispersal</li>
+          <li>Plant defenses</li>
+          <li>Climate adaptations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Plant Evolution</h3>
+        </div>
+        <p class="unit-description">Explore the evolutionary history of plants.</p>
+        <ul class="topics-list">
+          <li>Origin of land plants</li>
+          <li>Fossil record</li>
+          <li>Major evolutionary innovations</li>
+          <li>Molecular phylogeny</li>
+          <li>Adaptive radiations</li>
+          <li>Extinction events</li>
+          <li>Coevolution</li>
+          <li>Modern evolution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Economic Botany</h3>
+        </div>
+        <p class="unit-description">Study the practical applications and uses of plants.</p>
+        <ul class="topics-list">
+          <li>Food crops</li>
+          <li>Medicinal plants</li>
+          <li>Fiber plants</li>
+          <li>Timber</li>
+          <li>Ornamental plants</li>
+          <li>Industrial plants</li>
+          <li>Plant breeding</li>
+          <li>Biotechnology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Plant Conservation and Future</h3>
+        </div>
+        <p class="unit-description">Explore plant conservation and emerging botanical research.</p>
+        <ul class="topics-list">
+          <li>Biodiversity conservation</li>
+          <li>Endangered species</li>
+          <li>Habitat preservation</li>
+          <li>Ex-situ conservation</li>
+          <li>Climate change impacts</li>
+          <li>Restoration ecology</li>
+          <li>Genetic resources</li>
+          <li>Future challenges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Botany</h1>
+      <p>Explore the scientific study of plants and their importance.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Botany</h3>
+        <p>Understand the science of plant life and its significance.</p>
+        <span class="botany-badge">Plants</span>
+        <span class="botany-badge">Science</span>
+        <span class="botany-badge">Life</span>
+        <div class="concept-box">
+          Botany is the scientific study of plant life, including their structure, growth, reproduction, metabolism, development, diseases, chemical properties, and evolutionary relationships.
+        </div>
+        <div class="botany-example">
+          Key areas: plant anatomy, physiology, ecology, taxonomy, evolution, genetics
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Plant Importance</h3>
+        <p>Learn why plants are essential for life on Earth.</p>
+        <span class="botany-badge">Oxygen
