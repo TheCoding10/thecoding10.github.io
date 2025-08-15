@@ -1,0 +1,916 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Modern Physics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚛️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e40af;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .quantum-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1e40af;
+      overflow-x: auto;
+    }
+
+    .relativity-example {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #0284c7;
+      overflow-x: auto;
+    }
+
+    .modern-physics-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .syntax-highlight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .relativity-insight {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-left: 4px solid #14b8a6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f766e;
+    }
+
+    .quantum-showcase {
+      background: #fdf4ff;
+      border: 1px solid #f5d0fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #a21caf;
+    }
+
+    .nuclear-note {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #c2410c;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .physics-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .evolution-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .classical-level {
+      background: #3b82f6;
+      font-size: 18px;
+    }
+
+    .quantum-level {
+      background: #1e40af;
+      font-size: 16px;
+    }
+
+    .relativistic-level {
+      background: #0f172a;
+      font-size: 14px;
+    }
+
+    .physics-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #3b82f6;
+    }
+
+    .physics-results {
+      background: #3b82f6;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #3b82f6;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .physics-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .quantum {
+      color: #a21caf;
+    }
+
+    .relativity {
+      color: #0f766e;
+    }
+
+    .particle {
+      color: #b91c1c;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #3b82f6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .feature-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .feature-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .feature-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .terminal-demo {
+      background: #1f2937;
+      color: #60a5fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .terminal-prompt {
+      color: #6b7280;
+      margin-right: 10px;
+    }
+
+    .equation-structure {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .quantum-icon {
+      color: #a21caf;
+      margin-right: 5px;
+    }
+
+    .relativity-icon {
+      color: #0f766e;
+      margin-right: 5px;
+    }
+
+    .particle-icon {
+      color: #b91c1c;
+      margin-right: 5px;
+    }
+
+    .physics-phenomenon {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .quantum-phenomenon {
+      background: #fdf4ff;
+      color: #a21caf;
+    }
+
+    .relativity-phenomenon {
+      background: #f0fdfa;
+      color: #0f766e;
+    }
+
+    .nuclear-phenomenon {
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .particle-phenomenon {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .quantum-properties {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .quantum-property {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .wave-demo {
+      background: #fdf4ff;
+      border: 1px solid #f5d0fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #a21caf;
+    }
+
+    .probability-demo {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #0f766e;
+    }
+
+    .physics-concept {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 4px;
+    }
+
+    .wave-concept {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .particle-concept {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .spacetime-concept {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .uncertainty-showcase {
+      background: #fdf2f8;
+      border: 1px solid #fbcfe8;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #db2777;
+    }
+
+    .duality-demo {
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .theory-warning {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .energy-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .decay-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Physics analysis check simulation
+    function checkPhysicsStatus() {
+      const results = document.getElementById('physics-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="physics-status">
+            <span class="quantum">⚛️ Quantum Mechanics</span> | 
+            <span class="relativity">🌠 Relativity</span> | 
+            <span class="particle">🔬 Particle Physics</span>
+          </div>
+          <div>Modern Physics - Frontiers of Understanding</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [91, 94, 89, 96];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Physics calculation demo simulation
+    function simulatePhysicsCalc() {
+      const terminal = document.getElementById('physics-output');
+      if (terminal) {
+        const calculations = [
+          'E = mc²',
+          'Given: m = 1 kg',
+          'E = 1 × (3×10⁸)²',
+          'E = 9×10¹⁶ J (energy equivalent)'
+        ];
+        
+        calculations.forEach((calc, index) => {
+          setTimeout(() => {
+            terminal.innerHTML += `<div><span class="terminal-prompt">⚛️</span>${calc}</div>`;
+          }, index * 1200);
+        });
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+      checkPhysicsStatus();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚛️ Modern Physics</h1>
+    <p>Explore the revolutionary theories and phenomena that transformed our understanding of nature in the 20th century</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Physics courses')">← Back to Physics Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Modern Physics Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <div class="stat-label">Modern Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~50</span>
+          <div class="stat-label">Phenomena</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Quantum</span>
+          <div class="stat-label">Theory</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Relativity</span>
+          <div class="stat-label">Principles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <!-- Unit 1 -->
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Special Relativity</h3>
+        </div>
+        <p class="unit-description">Explore Einstein's revolutionary theory of space, time, and motion at high velocities.</p>
+        <ul class="topics-list">
+          <li>Principles of relativity</li>
+          <li>Simultaneity</li>
+          <li>Time dilation</li>
+          <li>Length contraction</li>
+          <li>Lorentz transformations</li>
+          <li>Relativistic momentum</li>
+          <li>Mass-energy equivalence</li>
+          <li>Space-time diagrams</li>
+        </ul>
+      </div>
+
+      <!-- Unit 2 -->
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Quantum Mechanics Foundations</h3>
+        </div>
+        <p class="unit-description">Study the fundamental concepts and mathematical framework of quantum theory.</p>
+        <ul class="topics-list">
+          <li>Wave-particle duality</li>
+          <li>Double-slit experiment</li>
+          <li>Quantum states</li>
+          <li>Wave functions</li>
+          <li>Superposition principle</li>
+          <li>Schrödinger equation</li>
+          <li>Probability interpretation</li>
+          <li>Quantum measurement</li>
+        </ul>
+      </div>
+
+      <!-- Unit 3 -->
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Atomic Physics</h3>
+        </div>
+        <p class="unit-description">Understand atomic structure and behavior through quantum mechanics.</p>
+        <ul class="topics-list">
+          <li>Bohr model</li>
+          <li>Spectral lines</li>
+          <li>Quantum numbers</li>
+          <li>Electron configurations</li>
+          <li>Pauli exclusion principle</li>
+          <li>Atomic orbitals</li>
+          <li>Selection rules</li>
+          <li>Atomic spectra</li>
+        </ul>
+      </div>
+
+      <!-- Unit 4 -->
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Quantum Mechanics Applications</h3>
+        </div>
+        <p class="unit-description">Apply quantum principles to real-world systems and scenarios.</p>
+        <ul class="topics-list">
+          <li>Particle in a box</li>
+          <li>Harmonic oscillator</li>
+          <li>Potential barriers</li>
+          <li>Tunneling effects</li>
+          <li>Quantum wells</li>
+          <li>Angular momentum</li>
+          <li>Hydrogen atom solutions</li>
+          <li>Quantum paradoxes</li>
+        </ul>
+      </div>
+
+      <!-- Unit 5 -->
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Nuclear Physics</h3>
+        </div>
+        <p class="unit-description">Explore the structure, properties, and behavior of atomic nuclei.</p>
+        <ul class="topics-list">
+          <li>Nuclear structure</li>
+          <li>Binding energy</li>
+          <li>Nuclear forces</li>
+          <li>Radioactive decay</li>
+          <li>Half-life</li>
+          <li>Nuclear reactions</li>
+          <li>Fission and fusion</li>
+          <li>Nuclear
