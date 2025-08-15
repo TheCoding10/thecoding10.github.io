@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 50%, #7dd3fc 100%);
+      background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 50%, #0ea5e9 100%);
       color: #111827;
       margin: 0;
       padding: 0;
@@ -111,7 +111,7 @@
     }
     
     .unit-number {
-      background: linear-gradient(135deg, #0369a1, #0ea5e9);
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
       color: white;
       width: 40px;
       height: 40px;
@@ -121,7 +121,7 @@
       justify-content: center;
       font-weight: 800;
       margin-right: 15px;
-      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.4);
+      box-shadow: 0 4px 15px rgba(12, 74, 110, 0.4);
     }
     
     .unit-title {
@@ -241,7 +241,7 @@
     }
 
     .subtopic-card:hover {
-      border-color: #0ea5e9;
+      border-color: #0284c7;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
@@ -249,12 +249,12 @@
     .subtopic-title {
       font-size: 18px;
       font-weight: 600;
-      color: #0ea5e9;
+      color: #0284c7;
       margin-bottom: 10px;
     }
 
     .back-to-overview {
-      background: linear-gradient(135deg, #0369a1, #0ea5e9);
+      background: linear-gradient(135deg, #0c4a6e, #0284c7);
       color: white;
       border: none;
       padding: 12px 24px;
@@ -267,7 +267,7 @@
 
     .back-to-overview:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+      box-shadow: 0 8px 20px rgba(12, 74, 110, 0.3);
     }
 
     .code-example {
@@ -283,33 +283,33 @@
     }
 
     .wave-example {
-      background: #e0f2fe;
-      border: 1px solid #7dd3fc;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
       border-radius: 8px;
       padding: 15px;
       margin: 10px 0;
       font-family: 'Times New Roman', serif;
       font-size: 14px;
-      color: #0369a1;
+      color: #0284c7;
       overflow-x: auto;
     }
 
     .oscillation-example {
-      background: #dbeafe;
-      border: 1px solid #93c5fd;
+      background: #ecfccb;
+      border: 1px solid #d9f99d;
       border-radius: 8px;
       padding: 15px;
       margin: 10px 0;
       font-family: 'Times New Roman', serif;
       font-size: 14px;
-      color: #1e40af;
+      color: #65a30d;
       overflow-x: auto;
     }
 
-    .physics-badge {
+    .wave-badge {
       display: inline-block;
-      background: #bae6fd;
-      color: #0c4a6e;
+      background: #dbeafe;
+      color: #0284c7;
       padding: 4px 8px;
       border-radius: 12px;
       font-size: 12px;
@@ -318,40 +318,30 @@
     }
 
     .concept-box {
-      background: #e0f2fe;
-      border: 1px solid #7dd3fc;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
       border-radius: 8px;
       padding: 15px;
       margin: 10px 0;
       font-size: 14px;
-      color: #0369a1;
+      color: #0284c7;
     }
 
     .syntax-highlight {
-      background: #e0f2fe;
-      border: 1px solid #7dd3fc;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
       border-left: 4px solid #0ea5e9;
       border-radius: 8px;
       padding: 15px;
       margin: 10px 0;
       font-size: 14px;
-      color: #0369a1;
+      color: #0284c7;
     }
 
-    .wave-insight {
-      background: #dbeafe;
-      border: 1px solid #93c5fd;
-      border-left: 4px solid #3b82f6;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #1e40af;
-    }
-
-    .oscillation-showcase {
+    .frequency-insight {
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
       border-radius: 8px;
       padding: 15px;
       margin: 10px 0;
@@ -359,7 +349,17 @@
       color: #15803d;
     }
 
-    .harmonics-note {
+    .amplitude-showcase {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .phase-note {
       background: #fef3c7;
       border: 1px solid #fed7aa;
       border-radius: 8px;
@@ -380,7 +380,7 @@
       color: #713f12;
     }
 
-    .physics-evolution {
+    .wave-evolution {
       background: #f8fafc;
       border: 2px dashed #cbd5e1;
       border-radius: 8px;
@@ -402,17 +402,17 @@
       font-size: 18px;
     }
 
-    .coupled-level {
+    .damped-level {
       background: #0284c7;
       font-size: 16px;
     }
 
-    .complex-level {
-      background: #0369a1;
+    .forced-level {
+      background: #0c4a6e;
       font-size: 14px;
     }
 
-    .physics-flow {
+    .wave-flow {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -422,7 +422,7 @@
     }
 
     .flow-step {
-      background: #0ea5e9;
+      background: #0284c7;
       color: white;
       padding: 15px;
       border-radius: 8px;
@@ -433,11 +433,11 @@
 
     .arrow {
       font-size: 24px;
-      color: #0ea5e9;
+      color: #0284c7;
     }
 
-    .physics-results {
-      background: #0ea5e9;
+    .wave-results {
+      background: #0284c7;
       color: white;
       padding: 20px;
       border-radius: 12px;
@@ -448,27 +448,27 @@
     .result-item {
       display: inline-block;
       background: white;
-      color: #0ea5e9;
+      color: #0284c7;
       padding: 10px 15px;
       border-radius: 6px;
       margin: 5px;
       font-weight: 600;
     }
 
-    .physics-status {
+    .wave-status {
       font-size: 24px;
       margin: 10px 0;
     }
 
-    .fundamental {
+    .propagating {
       color: #16a34a;
     }
 
-    .classical {
-      color: #3b82f6;
+    .standing {
+      color: #dc2626;
     }
 
-    .advanced {
+    .resonant {
       color: #eab308;
     }
 
@@ -489,7 +489,7 @@
     }
 
     .perf-fill {
-      background: #0ea5e9;
+      background: #0284c7;
       height: 100%;
       transition: width 0.3s ease;
     }
@@ -526,16 +526,16 @@
     }
 
     .syntax-demo {
-      background: #e0f2fe;
-      border: 1px solid #7dd3fc;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
     }
 
     .syntax-function {
-      background: #dbeafe;
-      border: 1px solid #93c5fd;
+      background: #ecfccb;
+      border: 1px solid #d9f99d;
       border-radius: 4px;
       padding: 10px;
       margin: 5px 0;
@@ -558,18 +558,19 @@
       margin-right: 10px;
     }
 
-    .wave-structure {
+    .equation-structure {
       background: #f9fafb;
       border: 1px solid #e5e7eb;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'Times New Roman', serif;
       font-size: 14px;
+      text-align: center;
     }
 
     .wave-icon {
-      color: #0ea5e9;
+      color: #0284c7;
       margin-right: 5px;
     }
 
@@ -583,7 +584,7 @@
       margin-right: 5px;
     }
 
-    .physics-principle {
+    .wave-type {
       display: inline-block;
       padding: 4px 8px;
       border-radius: 4px;
@@ -592,27 +593,27 @@
       margin: 2px;
     }
 
-    .wave-principle {
+    .mechanical-wave {
       background: #dcfce7;
       color: #166534;
     }
 
-    .oscillation-principle {
+    .electromagnetic-wave {
       background: #dbeafe;
       color: #1e40af;
     }
 
-    .superposition-principle {
+    .sound-wave {
       background: #fef3c7;
       color: #92400e;
     }
 
-    .resonance-principle {
+    .water-wave {
       background: #fee2e2;
       color: #b91c1c;
     }
 
-    .problem-solving {
+    .oscillation-types {
       background: #f0f9ff;
       border: 1px solid #bae6fd;
       border-radius: 8px;
@@ -620,7 +621,7 @@
       margin: 15px 0;
     }
 
-    .solution-step {
+    .oscillation-type {
       display: inline-block;
       background: #0284c7;
       color: white;
@@ -630,29 +631,29 @@
       font-size: 12px;
     }
 
-    .equation-demo {
-      background: #dbeafe;
-      border: 1px solid #93c5fd;
+    .harmonic-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'Times New Roman', serif;
       font-size: 14px;
-      color: #1e40af;
+      color: #6b21a8;
     }
 
-    .experiment-demo {
+    .interference-demo {
       background: #ecfdf5;
       border: 1px solid #a7f3d0;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'Times New Roman', serif;
       font-size: 14px;
       color: #047857;
     }
 
-    .physics-law {
+    .motion-type {
       display: inline-block;
       padding: 6px 12px;
       border-radius: 6px;
@@ -661,22 +662,22 @@
       margin: 4px;
     }
 
-    .wave-law {
+    .simple-harmonic {
       background: #dbeafe;
       color: #1e40af;
     }
 
-    .conservation-law {
+    .damped-motion {
       background: #dcfce7;
       color: #166534;
     }
 
-    .propagation-law {
+    .forced-oscillation {
       background: #fef3c7;
       color: #92400e;
     }
 
-    .application-showcase {
+    .resonance-showcase {
       background: #fef2f2;
       border: 1px solid #fecaca;
       border-radius: 8px;
@@ -686,18 +687,18 @@
       color: #b91c1c;
     }
 
-    .derivation-demo {
+    .doppler-demo {
       background: #fff7ed;
       border: 1px solid #fed7aa;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'Times New Roman', serif;
       font-size: 14px;
       color: #9a3412;
     }
 
-    .assumption-warning {
+    .superposition-warning {
       background: #fef2f2;
       border: 1px solid #fecaca;
       border-left: 4px solid #dc2626;
@@ -708,7 +709,7 @@
       color: #b91c1c;
     }
 
-    .theory-note {
+    .energy-note {
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
       border-left: 4px solid #16a34a;
@@ -719,13 +720,13 @@
       color: #15803d;
     }
 
-    .mathematical-demo {
+    .pendulum-demo {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'Times New Roman', serif;
       font-size: 14px;
       color: #475569;
     }
@@ -755,17 +756,17 @@
       document.getElementById('overview').style.display = 'block';
     }
 
-    // Wave understanding check simulation
+    // Wave analysis check simulation
     function checkWaveStatus() {
       const results = document.getElementById('wave-results');
       if (results) {
         results.innerHTML = `
-          <div class="physics-status">
-            <span class="fundamental">✅ Simple Harmonic Motion</span> | 
-            <span class="classical">🔵 Wave Propagation</span> | 
-            <span class="advanced">🟡 Advanced Applications</span>
+          <div class="wave-status">
+            <span class="propagating">✅ Wave Propagation</span> | 
+            <span class="resonant">🟡 Resonance Effects</span> | 
+            <span class="standing">❌ Standing Waves</span>
           </div>
-          <div>Waves & Oscillations - Foundation Complete</div>
+          <div>Wave Physics - Oscillation Mastery</div>
         `;
       }
     }
@@ -773,7 +774,7 @@
     // Performance simulation
     function updatePerformance() {
       const bars = document.querySelectorAll('.perf-fill');
-      const performances = [95, 87, 92, 90];
+      const performances = [94, 97, 91, 96];
       
       bars.forEach((bar, index) => {
         if (performances[index]) {
@@ -783,62 +784,21 @@
     }
 
     // Wave calculation demo simulation
-    function simulateCalculation() {
-      const terminal = document.getElementById('calculation-output');
+    function simulateWaveCalc() {
+      const terminal = document.getElementById('wave-output');
       if (terminal) {
         const calculations = [
-          'f = 1/T',
-          'Given: T = 0.5s',
-          'f = 1 ÷ 0.5 = 2Hz',
-          'Frequency calculated successfully!'
+          'v = fλ',
+          'Given: f = 440Hz, λ = 0.77m',
+          'v = 440 × 0.77 = 339 m/s',
+          'Wave velocity calculated!'
         ];
         
         calculations.forEach((calc, index) => {
           setTimeout(() => {
-            terminal.innerHTML += `<div><span class="terminal-prompt">λ</span>${calc}</div>`;
+            terminal.innerHTML += `<div><span class="terminal-prompt">∿</span>${calc}</div>`;
           }, index * 1200);
         });
-      }
-    }
-
-    // Wave animation demo
-    function animateWave() {
-      const canvas = document.getElementById('wave-canvas');
-      if (canvas && canvas.getContext) {
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-        let phase = 0;
-        
-        function draw() {
-          ctx.clearRect(0, 0, width, height);
-          
-          // Draw horizontal line
-          ctx.beginPath();
-          ctx.moveTo(0, height/2);
-          ctx.lineTo(width, height/2);
-          ctx.strokeStyle = '#e5e7eb';
-          ctx.stroke();
-          
-          // Draw sine wave
-          ctx.beginPath();
-          ctx.moveTo(0, height/2);
-          
-          for (let x = 0; x < width; x++) {
-            const y = Math.sin((x * 0.05) + phase) * (height/3) + (height/2);
-            ctx.lineTo(x, y);
-          }
-          
-          ctx.strokeStyle = '#0ea5e9';
-          ctx.lineWidth = 3;
-          ctx.stroke();
-          
-          // Update phase
-          phase += 0.05;
-          requestAnimationFrame(draw);
-        }
-        
-        draw();
       }
     }
 
@@ -846,14 +806,13 @@
     window.addEventListener('load', () => {
       updatePerformance();
       checkWaveStatus();
-      animateWave();
     });
   </script>
 </head>
 <body>
   <header>
     <h1>🌊 Waves & Oscillations</h1>
-    <p>Master the fundamental principles of periodic motion, wave propagation, and vibrational systems</p>
+    <p>Master the physics of oscillatory motion, wave propagation, and harmonic phenomena</p>
     <a class="back-link" href="#" onclick="alert('This would navigate back to Physics courses')">← Back to Physics Courses</a>
   </header>
 
@@ -862,20 +821,20 @@
       <h2 style="margin: 0 0 20px 0; font-size: 28px;">Waves & Oscillations Curriculum</h2>
       <div class="stats-grid">
         <div class="stat-item">
-          <span class="stat-number">10</span>
-          <div class="stat-label">Physics Units</div>
+          <span class="stat-number">12</span>
+          <div class="stat-label">Wave Units</div>
         </div>
         <div class="stat-item">
           <span class="stat-number">~45</span>
-          <div class="stat-label">Key Concepts</div>
+          <div class="stat-label">Wave Phenomena</div>
         </div>
         <div class="stat-item">
           <span class="stat-number">SHM</span>
           <div class="stat-label">Foundation</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">Universal</span>
-          <div class="stat-label">Phenomena</div>
+          <span class="stat-number">Harmonic</span>
+          <div class="stat-label">Analysis</div>
         </div>
       </div>
     </div>
@@ -884,36 +843,36 @@
       <div class="unit-card" onclick="showUnitDetail(1)">
         <div class="unit-header">
           <div class="unit-number">1</div>
-          <h3 class="unit-title">Introduction to Oscillations</h3>
+          <h3 class="unit-title">Simple Harmonic Motion</h3>
         </div>
-        <p class="unit-description">Explore the foundations of oscillatory motion and periodic systems.</p>
+        <p class="unit-description">Study the fundamentals of oscillatory motion and simple harmonic motion.</p>
         <ul class="topics-list">
           <li>Periodic motion concepts</li>
-          <li>Oscillatory systems</li>
-          <li>Mathematical foundations</li>
-          <li>Historical development</li>
-          <li>Simple harmonic motion</li>
-          <li>Angular frequency</li>
-          <li>Phase and amplitude</li>
-          <li>Energy in oscillations</li>
+          <li>Simple harmonic motion definition</li>
+          <li>Displacement, velocity, acceleration</li>
+          <li>SHM equations</li>
+          <li>Amplitude and frequency</li>
+          <li>Period and angular frequency</li>
+          <li>Phase and phase constant</li>
+          <li>Energy in SHM</li>
         </ul>
       </div>
 
       <div class="unit-card" onclick="showUnitDetail(2)">
         <div class="unit-header">
           <div class="unit-number">2</div>
-          <h3 class="unit-title">Simple Harmonic Motion</h3>
+          <h3 class="unit-title">Springs and Pendulums</h3>
         </div>
-        <p class="unit-description">Study the mathematics and physics of simple harmonic oscillators.</p>
+        <p class="unit-description">Analyze oscillatory systems including springs and pendulum motion.</p>
         <ul class="topics-list">
-          <li>SHM differential equation</li>
-          <li>Spring-mass systems</li>
-          <li>Pendulum motion</li>
-          <li>Velocity and acceleration</li>
-          <li>Energy in SHM</li>
-          <li>Phase relationships</li>
-          <li>Period and frequency</li>
-          <li>Applications of SHM</li>
+          <li>Hooke's law and springs</li>
+          <li>Mass-spring systems</li>
+          <li>Simple pendulum</li>
+          <li>Physical pendulum</li>
+          <li>Restoring forces</li>
+          <li>Period calculations</li>
+          <li>Small angle approximations</li>
+          <li>Gravitational effects</li>
         </ul>
       </div>
 
@@ -922,16 +881,16 @@
           <div class="unit-number">3</div>
           <h3 class="unit-title">Damped Oscillations</h3>
         </div>
-        <p class="unit-description">Understand how energy dissipation affects oscillatory systems.</p>
+        <p class="unit-description">Understand oscillations with energy loss and damping effects.</p>
         <ul class="topics-list">
           <li>Damping mechanisms</li>
-          <li>Damped harmonic oscillator</li>
-          <li>Underdamped systems</li>
+          <li>Damped harmonic motion</li>
+          <li>Underdamped motion</li>
           <li>Critically damped systems</li>
-          <li>Overdamped systems</li>
-          <li>Logarithmic decrement</li>
-          <li>Energy dissipation</li>
-          <li>Applications of damping</li>
+          <li>Overdamped motion</li>
+          <li>Quality factor (Q)</li>
+          <li>Energy decay</li>
+          <li>Damping coefficients</li>
         </ul>
       </div>
 
@@ -940,17 +899,483 @@
           <div class="unit-number">4</div>
           <h3 class="unit-title">Forced Oscillations & Resonance</h3>
         </div>
-        <p class="unit-description">Explore driven oscillators and the phenomenon of resonance.</p>
+        <p class="unit-description">Explore driven oscillations and resonance phenomena.</p>
         <ul class="topics-list">
-          <li>Driving forces</li>
-          <li>Forced oscillator equation</li>
-          <li>Transient and steady states</li>
-          <li>Resonance phenomena</li>
+          <li>External driving forces</li>
+          <li>Forced oscillation equations</li>
+          <li>Steady-state solutions</li>
           <li>Resonance frequency</li>
-          <li>Amplitude response curves</li>
-          <li>Quality factor (Q)</li>
-          <li>Resonance applications</li>
+          <li>Amplitude response</li>
+          <li>Phase response</li>
+          <li>Resonance width</li>
+          <li>Practical resonance examples</li>
         </ul>
       </div>
 
-      <div class="unit-
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Wave Motion Fundamentals</h3>
+        </div>
+        <p class="unit-description">Learn the basic principles of wave propagation and wave equations.</p>
+        <ul class="topics-list">
+          <li>Wave definition and types</li>
+          <li>Wave equation derivation</li>
+          <li>Traveling waves</li>
+          <li>Wave speed</li>
+          <li>Wavelength and frequency</li>
+          <li>Wave amplitude</li>
+          <li>Sinusoidal waves</li>
+          <li>Wave energy and power</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Wave Properties</h3>
+        </div>
+        <p class="unit-description">Study fundamental wave properties and characteristics.</p>
+        <ul class="topics-list">
+          <li>Reflection and transmission</li>
+          <li>Refraction and dispersion</li>
+          <li>Absorption and scattering</li>
+          <li>Polarization</li>
+          <li>Impedance and boundaries</li>
+          <li>Wave intensity</li>
+          <li>Inverse square law</li>
+          <li>Wave attenuation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Superposition and Interference</h3>
+        </div>
+        <p class="unit-description">Analyze wave superposition principles and interference patterns.</p>
+        <ul class="topics-list">
+          <li>Principle of superposition</li>
+          <li>Constructive interference</li>
+          <li>Destructive interference</li>
+          <li>Phase difference effects</li>
+          <li>Coherent and incoherent waves</li>
+          <li>Path difference</li>
+          <li>Young's double slit</li>
+          <li>Interference patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Standing Waves</h3>
+        </div>
+        <p class="unit-description">Understand standing wave formation and boundary conditions.</p>
+        <ul class="topics-list">
+          <li>Standing wave formation</li>
+          <li>Nodes and antinodes</li>
+          <li>Boundary conditions</li>
+          <li>Fixed and free ends</li>
+          <li>Standing wave patterns</li>
+          <li>Normal modes</li>
+          <li>Harmonics and overtones</li>
+          <li>Wavelength in standing waves</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Sound Waves</h3>
+        </div>
+        <p class="unit-description">Study acoustic waves and sound propagation phenomena.</p>
+        <ul class="topics-list">
+          <li>Sound wave properties</li>
+          <li>Longitudinal waves</li>
+          <li>Sound speed in media</li>
+          <li>Frequency and pitch</li>
+          <li>Intensity and loudness</li>
+          <li>Decibel scale</li>
+          <li>Sound reflection and echo</li>
+          <li>Acoustic impedance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Doppler Effect</h3>
+        </div>
+        <p class="unit-description">Analyze frequency shifts due to relative motion between source and observer.</p>
+        <ul class="topics-list">
+          <li>Doppler effect principles</li>
+          <li>Moving source scenarios</li>
+          <li>Moving observer cases</li>
+          <li>Both source and observer moving</li>
+          <li>Relativistic Doppler effect</li>
+          <li>Doppler shift calculations</li>
+          <li>Applications in astronomy</li>
+          <li>Radar and sonar</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Wave Optics</h3>
+        </div>
+        <p class="unit-description">Explore electromagnetic waves and optical phenomena.</p>
+        <ul class="topics-list">
+          <li>Electromagnetic spectrum</li>
+          <li>Light as electromagnetic wave</li>
+          <li>Diffraction phenomena</li>
+          <li>Single slit diffraction</li>
+          <li>Diffraction gratings</li>
+          <li>Polarization of light</li>
+          <li>Optical interference</li>
+          <li>Thin film interference</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Wave Topics</h3>
+        </div>
+        <p class="unit-description">Study advanced wave phenomena and modern applications.</p>
+        <ul class="topics-list">
+          <li>Dispersion relations</li>
+          <li>Group and phase velocity</li>
+          <li>Wave packets</li>
+          <li>Fourier analysis</li>
+          <li>Nonlinear waves</li>
+          <li>Solitons</li>
+          <li>Shock waves</li>
+          <li>Modern wave applications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Simple Harmonic Motion</h1>
+      <p>Study the fundamentals of oscillatory motion and simple harmonic motion.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Periodic Motion Concepts</h3>
+        <p>Understand the basic principles of periodic and oscillatory motion.</p>
+        <span class="wave-badge">Periodic</span>
+        <span class="wave-badge">Oscillation</span>
+        <span class="wave-badge">Cycle</span>
+        <div class="concept-box">
+          Periodic motion is motion that repeats itself at regular intervals. The time for one complete cycle is called the period (T), and the number of cycles per unit time is the frequency (f = 1/T).
+        </div>
+        <div class="wave-example">
+          T = 2π/ω, where ω is the angular frequency
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SHM Definition</h3>
+        <p>Learn the mathematical definition of simple harmonic motion.</p>
+        <span class="wave-badge">SHM</span>
+        <span class="wave-badge">Restoring Force</span>
+        <div class="syntax-highlight">
+          Simple harmonic motion occurs when the restoring force is directly proportional to displacement: F = -kx
+        </div>
+        <div class="wave-example">
+          x(t) = A cos(ωt + φ)
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">SHM Equations</h3>
+        <p>Master the fundamental equations describing simple harmonic motion.</p>
+        <span class="wave-badge">Displacement</span>
+        <span class="wave-badge">Velocity</span>
+        <span class="wave-badge">Acceleration</span>
+        <div class="oscillation-example">
+          Position: x = A cos(ωt + φ)<br>
+          Velocity: v = -Aω sin(ωt + φ)<br>
+          Acceleration: a = -Aω² cos(ωt + φ)
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Energy in SHM</h3>
+        <p>Analyze kinetic and potential energy in oscillatory systems.</p>
+        <span class="wave-badge">Kinetic Energy</span>
+        <span class="wave-badge">Potential Energy</span>
+        <div class="energy-note">
+          Total energy E = ½kA² remains constant throughout the motion, continuously converting between kinetic and potential forms.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 2: Springs and Pendulums</h1>
+      <p>Analyze oscillatory systems including springs and pendulum motion.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mass-Spring Systems</h3>
+        <p>Study oscillations in mass-spring configurations.</p>
+        <span class="wave-badge">Hooke's Law</span>
+        <span class="wave-badge">Spring Constant</span>
+        <div class="pendulum-demo">
+          For a mass m attached to a spring with constant k:<br>
+          Period: T = 2π√(m/k)<br>
+          Frequency: f = (1/2π)√(k/m)
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Simple Pendulum</h3>
+        <p>Analyze the motion of a simple pendulum under gravity.</p>
+        <span class="wave-badge">Pendulum</span>
+        <span class="wave-badge">Small Angles</span>
+        <div class="oscillation-example">
+          For small angles: T = 2π√(L/g)<br>
+          where L is length and g is gravitational acceleration
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Physical Pendulum</h3>
+        <p>Study oscillations of extended rigid bodies.</p>
+        <span class="wave-badge">Rigid Body</span>
+        <span class="wave-badge">Moment of Inertia</span>
+        <div class="concept-box">
+          A physical pendulum considers the moment of inertia of the entire oscillating body, not just a point mass.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 3: Damped Oscillations</h1>
+      <p>Understand oscillations with energy loss and damping effects.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Damping Mechanisms</h3>
+        <p>Learn about different types of damping in oscillatory systems.</p>
+        <span class="wave-badge">Friction</span>
+        <span class="wave-badge">Air Resistance</span>
+        <span class="wave-badge">Viscous Damping</span>
+        <div class="concept-box">
+          Damping removes energy from oscillating systems, causing amplitude to decrease over time.
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Damping</h3>
+        <p>Distinguish between underdamped, critically damped, and overdamped motion.</p>
+        <span class="wave-badge">Underdamped</span>
+        <span class="wave-badge">Critical</span>
+        <span class="wave-badge">Overdamped</span>
+        <div class="oscillation-example">
+          Underdamped: ζ < 1 (oscillatory)<br>
+          Critical: ζ = 1 (no oscillation)<br>
+          Overdamped: ζ > 1 (exponential decay)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 4: Forced Oscillations & Resonance</h1>
+      <p>Explore driven oscillations and resonance phenomena.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Resonance Phenomenon</h3>
+        <p>Understand resonance and its practical implications.</p>
+        <span class="wave-badge">Natural Frequency</span>
+        <span class="wave-badge">Driving Force</span>
+        <div class="resonance-showcase">
+          Resonance occurs when the driving frequency matches the natural frequency, leading to large amplitude oscillations.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 5: Wave Motion Fundamentals</h1>
+      <p>Learn the basic principles of wave propagation and wave equations.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Equation</h3>
+        <p>Derive and understand the fundamental wave equation.</p>
+        <span class="wave-badge">Wave Speed</span>
+        <span class="wave-badge">Wavelength</span>
+        <div class="wave-example">
+          v = fλ = ω/k<br>
+          Wave equation: ∂²y/∂t² = v²∂²y/∂x²
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 6: Wave Properties</h1>
+      <p>Study fundamental wave properties and characteristics.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reflection and Transmission</h3>
+        <p>Analyze wave behavior at boundaries and interfaces.</p>
+        <span class="wave-badge">Reflection</span>
+        <span class="wave-badge">Transmission</span>
+        <div class="concept-box">
+          When waves encounter boundaries, part of the wave energy is reflected and part is transmitted.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 7: Superposition and Interference</h1>
+      <p>Analyze wave superposition principles and interference patterns.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interference Patterns</h3>
+        <p>Study constructive and destructive interference.</p>
+        <span class="wave-badge">Constructive</span>
+        <span class="wave-badge">Destructive</span>
+        <div class="interference-demo">
+          Constructive: waves in phase (Δφ = 2πn)<br>
+          Destructive: waves out of phase (Δφ = π + 2πn)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 8: Standing Waves</h1>
+      <p>Understand standing wave formation and boundary conditions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Nodes and Antinodes</h3>
+        <p>Identify locations of zero and maximum amplitude in standing waves.</p>
+        <span class="wave-badge">Nodes</span>
+        <span class="wave-badge">Antinodes</span>
+        <div class="concept-box">
+          Nodes are points of zero amplitude, while antinodes are points of maximum amplitude in standing wave patterns.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 9: Sound Waves</h1>
+      <p>Study acoustic waves and sound propagation phenomena.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Sound Properties</h3>
+        <p>Understand the characteristics of acoustic waves.</p>
+        <span class="wave-badge">Frequency</span>
+        <span class="wave-badge">Amplitude</span>
+        <span class="wave-badge">Speed</span>
+        <div class="concept-box">
+          Sound waves are longitudinal pressure waves that propagate through elastic media.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 10: Doppler Effect</h1>
+      <p>Analyze frequency shifts due to relative motion between source and observer.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Doppler Shift</h3>
+        <p>Calculate frequency changes due to relative motion.</p>
+        <span class="wave-badge">Moving Source</span>
+        <span class="wave-badge">Moving Observer</span>
+        <div class="doppler-demo">
+          f' = f(v ± vo)/(v ± vs)<br>
+          where v is wave speed, vo is observer speed, vs is source speed
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 11: Wave Optics</h1>
+      <p>Explore electromagnetic waves and optical phenomena.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Light as Wave</h3>
+        <p>Understand the wave nature of electromagnetic radiation.</p>
+        <span class="wave-badge">Electromagnetic</span>
+        <span class="wave-badge">Frequency</span>
+        <span class="wave-badge">Wavelength</span>
+        <div class="concept-box">
+          Light exhibits wave properties including interference, diffraction, and polarization.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-12">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 12: Advanced Wave Topics</h1>
+      <p>Study advanced wave phenomena and modern applications.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wave Packets</h3>
+        <p>Analyze localized wave phenomena and group velocity.</p>
+        <span class="wave-badge">Wave Packet</span>
+        <span class="wave-badge">Group Velocity</span>
+        <span class="wave-badge">Phase Velocity</span>
+        <div class="concept-box">
+          Wave packets represent localized disturbances that can carry information and energy.
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Fourier Analysis</h3>
+        <p>Decompose complex waves into simple harmonic components.</p>
+        <span class="wave-badge">Fourier Series</span>
+        <span class="wave-badge">Frequency Domain</span>
+        <div class="wave-example">
+          Any periodic function can be expressed as a sum of sine and cosine waves with different frequencies and amplitudes.
+        </div>
+      </div>
+    </div>
+  </div>
