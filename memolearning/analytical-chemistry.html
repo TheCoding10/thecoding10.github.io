@@ -1,0 +1,752 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Analytical Chemistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚗️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #10b981;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .subtopic-description {
+      color: #6b7280;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚗️ Analytical Chemistry</h1>
+    <p>Master the methods and techniques for chemical analysis</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to courses')">← Back to Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Analytical Chemistry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Analysis Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Precision</span>
+          <div class="stat-label">Core Principle</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Instruments</span>
+          <div class="stat-label">Modern Tools</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Quantitative</span>
+          <div class="stat-label">Analysis Focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Analytical Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental principles of chemical analysis.</p>
+        <ul class="topics-list">
+          <li>What is analytical chemistry</li>
+          <li>Qualitative vs quantitative analysis</li>
+          <li>Accuracy and precision</li>
+          <li>Significant figures</li>
+          <li>Units and conversions</li>
+          <li>Laboratory safety</li>
+          <li>Quality assurance</li>
+          <li>Analytical process overview</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Statistical Analysis and Error Treatment</h3>
+        </div>
+        <p class="unit-description">Learn statistical methods for data analysis and error evaluation.</p>
+        <ul class="topics-list">
+          <li>Types of errors</li>
+          <li>Random vs systematic errors</li>
+          <li>Statistical distributions</li>
+          <li>Confidence intervals</li>
+          <li>Hypothesis testing</li>
+          <li>Regression analysis</li>
+          <li>Outlier detection</li>
+          <li>Method validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Chemical Equilibrium and Activity</h3>
+        </div>
+        <p class="unit-description">Study equilibrium principles in analytical chemistry.</p>
+        <ul class="topics-list">
+          <li>Equilibrium constants</li>
+          <li>Activity and activity coefficients</li>
+          <li>Ionic strength</li>
+          <li>Le Chatelier's principle</li>
+          <li>Common ion effect</li>
+          <li>Buffer systems</li>
+          <li>Solubility equilibria</li>
+          <li>Complex formation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Acid-Base Chemistry</h3>
+        </div>
+        <p class="unit-description">Master acid-base equilibria and pH calculations.</p>
+        <ul class="topics-list">
+          <li>Bronsted-Lowry theory</li>
+          <li>pH and pOH</li>
+          <li>Weak acid calculations</li>
+          <li>Polyprotic acids</li>
+          <li>Buffer calculations</li>
+          <li>Titration curves</li>
+          <li>Indicators</li>
+          <li>Amino acid chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Acid-Base Titrations</h3>
+        </div>
+        <p class="unit-description">Learn titration techniques and endpoint determination.</p>
+        <ul class="topics-list">
+          <li>Strong acid-strong base</li>
+          <li>Weak acid-strong base</li>
+          <li>Weak base-strong acid</li>
+          <li>Polyprotic acid titrations</li>
+          <li>Mixture analysis</li>
+          <li>Gran plots</li>
+          <li>Potentiometric titrations</li>
+          <li>Automatic titrators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Complexometric Titrations</h3>
+        </div>
+        <p class="unit-description">Study metal-ligand complexes in quantitative analysis.</p>
+        <ul class="topics-list">
+          <li>Complex formation constants</li>
+          <li>EDTA chemistry</li>
+          <li>Conditional formation constants</li>
+          <li>Metal indicators</li>
+          <li>Masking and demasking</li>
+          <li>Water hardness</li>
+          <li>Selectivity enhancement</li>
+          <li>Applications in analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Redox Chemistry and Titrations</h3>
+        </div>
+        <p class="unit-description">Explore oxidation-reduction reactions in analysis.</p>
+        <ul class="topics-list">
+          <li>Redox equilibria</li>
+          <li>Electrode potentials</li>
+          <li>Nernst equation</li>
+          <li>Redox titrations</li>
+          <li>Permanganate titrations</li>
+          <li>Dichromate titrations</li>
+          <li>Iodometric methods</li>
+          <li>Redox indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Gravimetric Analysis</h3>
+        </div>
+        <p class="unit-description">Learn quantitative analysis by mass measurement.</p>
+        <ul class="topics-list">
+          <li>Precipitation gravimetry</li>
+          <li>Coprecipitation</li>
+          <li>Particle size effects</li>
+          <li>Washing and filtering</li>
+          <li>Thermogravimetric analysis</li>
+          <li>Organic precipitants</li>
+          <li>Volatilization methods</li>
+          <li>Calculations and applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Electrochemical Methods</h3>
+        </div>
+        <p class="unit-description">Study electrochemical techniques for analysis.</p>
+        <ul class="topics-list">
+          <li>Electrochemical cells</li>
+          <li>Reference electrodes</li>
+          <li>Ion-selective electrodes</li>
+          <li>Potentiometry</li>
+          <li>Voltammetry</li>
+          <li>Amperometry</li>
+          <li>Coulometry</li>
+          <li>Electrochemical sensors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Spectrophotometry</h3>
+        </div>
+        <p class="unit-description">Master molecular absorption spectroscopy.</p>
+        <ul class="topics-list">
+          <li>Beer's law</li>
+          <li>UV-Visible spectroscopy</li>
+          <li>Molecular electronic transitions</li>
+          <li>Instrument components</li>
+          <li>Single vs double beam</li>
+          <li>Quantitative applications</li>
+          <li>Multi-component analysis</li>
+          <li>Colorimetric methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Atomic Spectroscopy</h3>
+        </div>
+        <p class="unit-description">Learn atomic absorption and emission techniques.</p>
+        <ul class="topics-list">
+          <li>Flame atomic absorption</li>
+          <li>Graphite furnace AAS</li>
+          <li>Atomic emission spectroscopy</li>
+          <li>ICP-AES</li>
+          <li>Interferences</li>
+          <li>Standard addition method</li>
+          <li>Matrix effects</li>
+          <li>Applications in analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Mass Spectrometry</h3>
+        </div>
+        <p class="unit-description">Study mass spectrometric techniques for analysis.</p>
+        <ul class="topics-list">
+          <li>Ionization methods</li>
+          <li>Mass analyzers</li>
+          <li>Quadrupole MS</li>
+          <li>Time-of-flight MS</li>
+          <li>Fragmentation patterns</li>
+          <li>Quantitative MS</li>
+          <li>GC-MS and LC-MS</li>
+          <li>Isotope ratio MS</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Chromatographic Theory</h3>
+        </div>
+        <p class="unit-description">Understand the fundamentals of chromatographic separations.</p>
+        <ul class="topics-list">
+          <li>Retention mechanisms</li>
+          <li>Plate theory</li>
+          <li>Rate theory</li>
+          <li>Resolution</li>
+          <li>Capacity factor</li>
+          <li>Selectivity</li>
+          <li>Peak shapes</li>
+          <li>Optimization strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Gas Chromatography</h3>
+        </div>
+        <p class="unit-description">Learn gas chromatographic separation techniques.</p>
+        <ul class="topics-list">
+          <li>GC instrumentation</li>
+          <li>Stationary phases</li>
+          <li>Temperature programming</li>
+          <li>Detectors (FID, ECD, MS)</li>
+          <li>Sample injection</li>
+          <li>Derivatization</li>
+          <li>Quantitative analysis</li>
+          <li>Method development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Liquid Chromatography</h3>
+        </div>
+        <p class="unit-description">Master high-performance liquid chromatography.</p>
+        <ul class="topics-list">
+          <li>HPLC instrumentation</li>
+          <li>Mobile phase selection</li>
+          <li>Reversed-phase LC</li>
+          <li>Normal-phase LC</li>
+          <li>Ion-exchange LC</li>
+          <li>Size-exclusion LC</li>
+          <li>Gradient elution</li>
+          <li>LC-MS coupling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Sample Preparation</h3>
+        </div>
+        <p class="unit-description">Learn techniques for sample treatment and preparation.</p>
+        <ul class="topics-list">
+          <li>Sample collection</li>
+          <li>Sample preservation</li>
+          <li>Extraction techniques</li>
+          <li>Liquid-liquid extraction</li>
+          <li>Solid-phase extraction</li>
+          <li>Microextraction methods</li>
+          <li>Digestion procedures</li>
+          <li>Clean-up procedures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Quality Assurance</h3>
+        </div>
+        <p class="unit-description">Study quality control and method validation.</p>
+        <ul class="topics-list">
+          <li>Method validation</li>
+          <li>Calibration procedures</li>
+          <li>Control charts</li>
+          <li>Proficiency testing</li>
+          <li>Traceability</li>
+          <li>Measurement uncertainty</li>
+          <li>Laboratory accreditation</li>
+          <li>Good laboratory practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Environmental and Forensic Analysis</h3>
+        </div>
+        <p class="unit-description">Apply analytical chemistry to real-world problems.</p>
+        <ul class="topics-list">
+          <li>Environmental monitoring</li>
+          <li>Water quality analysis</li>
+          <li>Air pollution analysis</li>
+          <li>Soil contamination</li>
+          <li>Forensic chemistry</li>
+          <li>Drug analysis</li>
+          <li>Trace evidence</li>
+          <li>Legal considerations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: Introduction to Analytical Chemistry</h2>
+      <p>Explore the fundamental principles of chemical analysis and measurement.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Analytical Chemistry</h3>
+        <p class="subtopic-description">Definition, scope, and role of analytical chemistry in science and industry.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Qualitative vs Quantitative Analysis</h3>
+        <p class="subtopic-description">Distinguishing between identification and measurement of chemical species.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Accuracy and Precision</h3>
+        <p class="subtopic-description">Understanding the difference and importance of both concepts in analysis.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Significant Figures</h3>
+        <p class="subtopic-description">Rules for determining and using significant figures in calculations.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Units and Conversions</h3>
+        <p class="subtopic-description">SI units, dimensional analysis, and unit conversions in analytical work.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Laboratory Safety</h3>
+        <p class="subtopic-description">Safety protocols, hazard identification, and emergency procedures.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Statistical Analysis and Error Treatment</h2>
+      <p>Learn statistical methods for data analysis and error evaluation in analytical chemistry.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Types of Errors</h3>
+        <p class="subtopic-description">Gross errors, systematic errors, and random errors in analytical measurements.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Statistical Distributions</h3>
+        <p class="subtopic-description">Normal distribution, t-distribution, and their applications in analytical data.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Confidence Intervals</h3>
+        <p class="subtopic-description">Calculating and interpreting confidence intervals for analytical results.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Hypothesis Testing</h3>
+        <p class="subtopic-description">t-tests, F-tests, and other statistical tests for method comparison.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regression Analysis</h3>
+        <p class="subtopic-description">Linear regression, correlation coefficients, and calibration curves.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Outlier Detection</h3>
+        <p class="subtopic-description">Q-test, Grubbs test, and other methods for identifying outliers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Chemical Equilibrium and Activity</h2>
+      <p>Study equilibrium principles and their applications in analytical chemistry.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Equilibrium Constants</h3>
+        <p class="subtopic-description">Thermodynamic and concentration equilibrium constants.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Activity and Activity Coefficients</h3>
+        <p class="subtopic-description">Understanding activity in real solutions and its calculation.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ionic Strength</h3>
+        <p class="subtopic-description">Calculation and effects of ionic strength on equilibria.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Common Ion Effect</h3>
+        <p class="subtopic-description">How common ions affect equilibrium positions in analytical systems.</p>
