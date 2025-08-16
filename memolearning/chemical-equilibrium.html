@@ -1,0 +1,825 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Chemical Equilibrium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #c2410c 50%, #ea580c 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #c2410c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #c2410c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c2d12;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #c2410c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .equilibrium-badge {
+      display: inline-block;
+      background: #fed7aa;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fed7aa;
+      border: 1px solid #fdba74;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .equilibrium-demo {
+      background: #fed7aa;
+      border: 1px solid #fdba74;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #7c2d12;
+      overflow-x: auto;
+    }
+
+    .constant-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .lechatelier-principle {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .equilibrium-shift {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .calculation-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .equilibrium-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .equilibrium-type {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .homogeneous {
+      background: #ea580c;
+      font-size: 18px;
+    }
+
+    .heterogeneous {
+      background: #c2410c;
+      font-size: 16px;
+    }
+
+    .ionic {
+      background: #7c2d12;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .stress-factor {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .ice-table-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .buffer-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .reaction-quotient {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .solubility-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .expression-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ Chemical Equilibrium</h1>
+    <p>Explore the dynamic balance in reversible chemical reactions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Chemical Equilibrium Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Equilibrium Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">K</span>
+          <div class="stat-label">Equilibrium Constant</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Dynamic Balance</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Le Chatelier</span>
+          <div class="stat-label">Central Principle</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Chemical Equilibrium</h3>
+        </div>
+        <p class="unit-description">Explore the concept of dynamic equilibrium in chemical systems.</p>
+        <ul class="topics-list">
+          <li>What is chemical equilibrium</li>
+          <li>Reversible reactions</li>
+          <li>Dynamic nature</li>
+          <li>Forward and reverse rates</li>
+          <li>Equilibrium position</li>
+          <li>Macroscopic observations</li>
+          <li>Microscopic processes</li>
+          <li>Examples in nature</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">The Equilibrium Constant</h3>
+        </div>
+        <p class="unit-description">Study the mathematical expression that describes equilibrium.</p>
+        <ul class="topics-list">
+          <li>Equilibrium constant expression</li>
+          <li>Kc for concentrations</li>
+          <li>Kp for pressures</li>
+          <li>Relationship between Kc and Kp</li>
+          <li>Magnitude and meaning</li>
+          <li>Temperature dependence</li>
+          <li>Units of K</li>
+          <li>Calculating K values</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Writing Equilibrium Expressions</h3>
+        </div>
+        <p class="unit-description">Learn to write correct equilibrium constant expressions.</p>
+        <ul class="topics-list">
+          <li>General form of expressions</li>
+          <li>Products over reactants</li>
+          <li>Stoichiometric coefficients</li>
+          <li>Pure liquids and solids</li>
+          <li>Gaseous equilibria</li>
+          <li>Aqueous equilibria</li>
+          <li>Multiple equilibria</li>
+          <li>Common mistakes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Calculating Equilibrium Concentrations</h3>
+        </div>
+        <p class="unit-description">Study methods for determining equilibrium compositions.</p>
+        <ul class="topics-list">
+          <li>ICE tables</li>
+          <li>Initial concentrations</li>
+          <li>Change in concentrations</li>
+          <li>Equilibrium concentrations</li>
+          <li>Quadratic equations</li>
+          <li>Approximation methods</li>
+          <li>Checking solutions</li>
+          <li>Problem-solving strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Le Chatelier's Principle</h3>
+        </div>
+        <p class="unit-description">Learn how equilibrium systems respond to disturbances.</p>
+        <ul class="topics-list">
+          <li>Principle statement</li>
+          <li>Stress and response</li>
+          <li>Concentration changes</li>
+          <li>Temperature changes</li>
+          <li>Pressure changes</li>
+          <li>Volume changes</li>
+          <li>Addition of inert gas</li>
+          <li>Catalysts and equilibrium</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Reaction Quotient</h3>
+        </div>
+        <p class="unit-description">Study how to predict the direction of reaction approach to equilibrium.</p>
+        <ul class="topics-list">
+          <li>Reaction quotient Q</li>
+          <li>Q vs K comparison</li>
+          <li>Predicting reaction direction</li>
+          <li>Q < K conditions</li>
+          <li>Q > K conditions</li>
+          <li>Q = K conditions</li>
+          <li>Calculating Q values</li>
+          <li>Practical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Gaseous Equilibria</h3>
+        </div>
+        <p class="unit-description">Explore equilibrium in gas-phase reactions.</p>
+        <ul class="topics-list">
+          <li>Gas-phase reactions</li>
+          <li>Partial pressures</li>
+          <li>Kp expressions</li>
+          <li>Ideal gas law applications</li>
+          <li>Pressure and volume effects</li>
+          <li>Mole fraction relationships</li>
+          <li>Industrial gas reactions</li>
+          <li>Haber process example</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Heterogeneous Equilibria</h3>
+        </div>
+        <p class="unit-description">Study equilibrium involving multiple phases.</p>
+        <ul class="topics-list">
+          <li>Multiple phase systems</li>
+          <li>Pure solid and liquid phases</li>
+          <li>Activity coefficients</li>
+          <li>Simplified expressions</li>
+          <li>Decomposition reactions</li>
+          <li>Precipitation equilibria</li>
+          <li>Gas-solid equilibria</li>
+          <li>Practical examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Acid-Base Equilibria</h3>
+        </div>
+        <p class="unit-description">Learn about equilibrium in acid-base reactions.</p>
+        <ul class="topics-list">
+          <li>Acid dissociation constant</li>
+          <li>Base dissociation constant</li>
+          <li>Water autoionization</li>
+          <li>pH and pOH relationships</li>
+          <li>Weak acid equilibria</li>
+          <li>Weak base equilibria</li>
+          <li>Polyprotic acids</li>
+          <li>Salt hydrolysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Buffer Systems</h3>
+        </div>
+        <p class="unit-description">Study equilibrium in buffer solutions.</p>
+        <ul class="topics-list">
+          <li>Buffer definition</li>
+          <li>Henderson-Hasselbalch equation</li>
+          <li>Buffer capacity</li>
+          <li>Buffer range</li>
+          <li>Preparing buffers</li>
+          <li>Buffer calculations</li>
+          <li>Biological buffers</li>
+          <li>Buffer selection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Solubility Equilibria</h3>
+        </div>
+        <p class="unit-description">Explore equilibrium between dissolved and undissolved substances.</p>
+        <ul class="topics-list">
+          <li>Solubility product constant</li>
+          <li>Ksp expressions</li>
+          <li>Molar solubility</li>
+          <li>Common ion effect</li>
+          <li>Precipitation reactions</li>
+          <li>Selective precipitation</li>
+          <li>Complex ion formation</li>
+          <li>pH effects on solubility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Complex Ion Equilibria</h3>
+        </div>
+        <p class="unit-description">Study equilibrium involving complex ion formation.</p>
+        <ul class="topics-list">
+          <li>Complex ion formation</li>
+          <li>Formation constants</li>
+          <li>Stepwise formation</li>
+          <li>Overall formation constants</li>
+          <li>Ligand exchange</li>
+          <li>Competing equilibria</li>
+          <li>Stability of complexes</li>
+          <li>Analytical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Thermodynamics and Equilibrium</h3>
+        </div>
+        <p class="unit-description">Learn the relationship between thermodynamics and equilibrium.</p>
+        <ul class="topics-list">
+          <li>Gibbs free energy</li>
+          <li>ΔG° and equilibrium constant</li>
+          <li>Van't Hoff equation</li>
+          <li>Temperature dependence of K</li>
+          <li>Enthalpy and entropy effects</li>
+          <li>Spontaneity prediction</li>
+          <li>Equilibrium constant calculation</li>
+          <li>Thermodynamic cycles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Coupled Equilibria</h3>
+        </div>
+        <p class="unit-description">Study systems with multiple simultaneous equilibria.</p>
+        <ul class="topics-list">
+          <li>Multiple equilibrium systems</li>
+          <li>Simultaneous reactions</li>
+          <li>Competing reactions</li>
+          <li>Distribution equilibria</li>
+          <li>Extraction processes</li>
+          <li>Chromatography principles</li>
+          <li>Biological systems</li>
+          <li>Environmental applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Industrial Applications</h3>
+        </div>
+        <p class="unit-description">Explore practical applications of equilibrium principles.</p>
+        <ul class="topics-list">
+          <li>Chemical process optimization</li>
+          <li>Reaction conditions</li>
+          <li>Yield maximization</li>
+          <li>Separation processes</li>
+          <li>Purification methods</li>
+          <li>Economic considerations</li>
+          <li>Environmental factors</li>
+          <li>Process control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Advanced Equilibrium Topics</h3>
+        </div>
+        <p class="unit-description">Study specialized equilibrium concepts and applications.</p>
+        <ul class="topics-list">
+          <li>Non-ideal solutions</li>
+          <li>Activity coefficients</li>
+          <li>Ionic strength effects</li>
+          <li>Temperature programming</li>
+          <li>Pressure programming</li>
+          <li>Membrane equilibria</li>
+          <li>Electrochemical equilibria</li>
+          <li>Future developments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Chemical Equilibrium</h1>
+      <p>Explore the concept of dynamic equilibrium in chemical systems.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Chemical Equilibrium</h3>
+        <p>Understand the state of balance in reversible chemical reactions.</p>
+        <span class="equilibrium-badge">Balance</span>
+        <span class="equilibrium-badge">Dynamic
