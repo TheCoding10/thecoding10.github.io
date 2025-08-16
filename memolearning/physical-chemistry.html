@@ -1,0 +1,879 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Physical Chemistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '📊';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .physical-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #6366f1;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6366f1;
+    }
+
+    .physical-demo {
+      background: #e0e7ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #6366f1;
+      overflow-x: auto;
+    }
+
+    .equation-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .thermodynamic-law {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .quantum-mechanics {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .kinetic-theory {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .physics-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .physics-branch {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .thermodynamics {
+      background: #a855f7;
+      font-size: 18px;
+    }
+
+    .quantum {
+      background: #8b5cf6;
+      font-size: 16px;
+    }
+
+    .statistical {
+      background: #6366f1;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .mathematical-tool {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .spectroscopy-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .statistical-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .phase-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .surface-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .calculation-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>📊 Physical Chemistry</h1>
+    <p>Explore the physical properties and behavior of chemical systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Physical Chemistry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">20</span>
+          <div class="stat-label">Physical Chemistry Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <div class="stat-label">Thermodynamic Laws</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Quantum Theory</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Mathematics</span>
+          <div class="stat-label">Central Tool</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Physical Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore the mathematical and physical foundations of chemistry.</p>
+        <ul class="topics-list">
+          <li>What is physical chemistry</li>
+          <li>Mathematical foundations</li>
+          <li>Units and dimensions</li>
+          <li>Experimental methods</li>
+          <li>Data analysis</li>
+          <li>Error analysis</li>
+          <li>Scientific computing</li>
+          <li>Historical development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Thermodynamics I: Laws and Functions</h3>
+        </div>
+        <p class="unit-description">Study the fundamental laws governing energy changes.</p>
+        <ul class="topics-list">
+          <li>Zeroth law</li>
+          <li>First law</li>
+          <li>Internal energy</li>
+          <li>Enthalpy</li>
+          <li>Heat capacity</li>
+          <li>Adiabatic processes</li>
+          <li>Thermochemistry</li>
+          <li>Calorimetry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Thermodynamics II: Entropy and Free Energy</h3>
+        </div>
+        <p class="unit-description">Learn about spontaneity and equilibrium.</p>
+        <ul class="topics-list">
+          <li>Second law</li>
+          <li>Entropy</li>
+          <li>Carnot cycle</li>
+          <li>Third law</li>
+          <li>Gibbs free energy</li>
+          <li>Helmholtz free energy</li>
+          <li>Maxwell relations</li>
+          <li>Thermodynamic cycles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Chemical Equilibrium</h3>
+        </div>
+        <p class="unit-description">Study thermodynamic approaches to equilibrium.</p>
+        <ul class="topics-list">
+          <li>Equilibrium constant</li>
+          <li>Activity and fugacity</li>
+          <li>Standard states</li>
+          <li>Temperature dependence</li>
+          <li>Pressure dependence</li>
+          <li>Le Chatelier's principle</li>
+          <li>Coupled reactions</li>
+          <li>Biochemical equilibria</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Phase Equilibria</h3>
+        </div>
+        <p class="unit-description">Explore transitions between different phases of matter.</p>
+        <ul class="topics-list">
+          <li>Phase diagrams</li>
+          <li>Clausius-Clapeyron equation</li>
+          <li>Critical phenomena</li>
+          <li>Triple point</li>
+          <li>Vapor pressure</li>
+          <li>Solutions</li>
+          <li>Colligative properties</li>
+          <li>Partial molar quantities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Solutions and Mixtures</h3>
+        </div>
+        <p class="unit-description">Study the thermodynamics of multicomponent systems.</p>
+        <ul class="topics-list">
+          <li>Ideal solutions</li>
+          <li>Raoult's law</li>
+          <li>Henry's law</li>
+          <li>Activity coefficients</li>
+          <li>Excess functions</li>
+          <li>Regular solutions</li>
+          <li>Electrolyte solutions</li>
+          <li>Debye-Hückel theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Chemical Kinetics</h3>
+        </div>
+        <p class="unit-description">Learn about reaction rates and mechanisms.</p>
+        <ul class="topics-list">
+          <li>Rate laws</li>
+          <li>Integrated rate equations</li>
+          <li>Temperature dependence</li>
+          <li>Collision theory</li>
+          <li>Transition state theory</li>
+          <li>Catalysis</li>
+          <li>Chain reactions</li>
+          <li>Enzyme kinetics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Quantum Mechanics I: Foundations</h3>
+        </div>
+        <p class="unit-description">Study the quantum mechanical description of matter.</p>
+        <ul class="topics-list">
+          <li>Wave-particle duality</li>
+          <li>Schrödinger equation</li>
+          <li>Wavefunctions</li>
+          <li>Operators</li>
+          <li>Eigenvalues</li>
+          <li>Particle in a box</li>
+          <li>Harmonic oscillator</li>
+          <li>Rigid rotor</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Quantum Mechanics II: Atoms</h3>
+        </div>
+        <p class="unit-description">Explore the quantum mechanics of atomic systems.</p>
+        <ul class="topics-list">
+          <li>Hydrogen atom</li>
+          <li>Atomic orbitals</li>
+          <li>Quantum numbers</li>
+          <li>Spin</li>
+          <li>Many-electron atoms</li>
+          <li>Electron configurations</li>
+          <li>Periodic trends</li>
+          <li>Spectroscopic notation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Molecular Quantum Mechanics</h3>
+        </div>
+        <p class="unit-description">Study quantum mechanics applied to molecules.</p>
+        <ul class="topics-list">
+          <li>Born-Oppenheimer approximation</li>
+          <li>Molecular orbitals</li>
+          <li>LCAO method</li>
+          <li>Valence bond theory</li>
+          <li>Hybridization</li>
+          <li>Molecular symmetry</li>
+          <li>Group theory</li>
+          <li>Crystal field theory</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Spectroscopy I: Rotational and Vibrational</h3>
+        </div>
+        <p class="unit-description">Learn about molecular spectroscopy fundamentals.</p>
+        <ul class="topics-list">
+          <li>Electromagnetic radiation</li>
+          <li>Selection rules</li>
+          <li>Rotational spectroscopy</li>
+          <li>Vibrational spectroscopy</li>
+          <li>IR spectroscopy</li>
+          <li>Raman spectroscopy</li>
+          <li>Microwave spectroscopy</li>
+          <li>Molecular constants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Spectroscopy II: Electronic</h3>
+        </div>
+        <p class="unit-description">Study electronic transitions and spectra.</p>
+        <ul class="topics-list">
+          <li>Electronic states</li>
+          <li>UV-Visible spectroscopy</li>
+          <li>Franck-Condon principle</li>
+          <li>Fluorescence</li>
+          <li>Phosphorescence</li>
+          <li>Photoelectron spectroscopy</li>
+          <li>X-ray spectroscopy</li>
+          <li>Laser spectroscopy</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Nuclear Magnetic Resonance</h3>
+        </div>
+        <p class="unit-description">Explore NMR spectroscopy and its applications.</p>
+        <ul class="topics-list">
+          <li>Nuclear spin</li>
+          <li>Magnetic resonance</li>
+          <li>Chemical shift</li>
+          <li>Coupling constants</li>
+          <li>Relaxation processes</li>
+          <li>2D NMR</li>
+          <li>Solid-state NMR</li>
+          <li>MRI principles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Statistical Mechanics</h3>
+        </div>
+        <p class="unit-description">Study the molecular basis of thermodynamics.</p>
+        <ul class="topics-list">
+          <li>Boltzmann distribution</li>
+          <li>Partition functions</li>
+          <li>Ensemble theory</li>
+          <li>Translational partition function</li>
+          <li>Rotational partition function</li>
+          <li>Vibrational partition function</li>
+          <li>Electronic partition function</li>
+          <li>Thermodynamic functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Transport Phenomena</h3>
+        </div>
+        <p class="unit-description">Learn about molecular motion and transport properties.</p>
+        <ul class="topics-list">
+          <li>Kinetic theory</li>
+          <li>Mean free path</li>
+          <li>Diffusion</li>
+          <li>Thermal conductivity</li>
+          <li>Viscosity</li>
+          <li>Electrical conductivity</li>
+          <li>Membrane transport</li>
+          <li>Sedimentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Surface Chemistry</h3>
+        </div>
+        <p class="unit-description">Study phenomena at interfaces and surfaces.</p>
+        <ul class="topics-list">
+          <li>Surface tension</li>
+          <li>Adsorption isotherms</li>
+          <li>Langmuir model</li>
+          <li>BET model</li>
+          <li>Catalysis</li>
+          <li>Colloids</li>
+          <li>Micelles</li>
+          <li>Surface analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Electrochemistry</h3>
+        </div>
+        <p class="unit-description">Explore the relationship between electricity and chemistry.</p>
+        <ul class="topics-list">
+          <li>Electrode potentials</li>
+          <li>Nernst equation</li>
+          <li>Electrochemical cells</li>
+          <li>Activity coefficients</li>
+          <li>Electrode kinetics</li>
+          <li>Polarization</li>
+          <li>Corrosion</li>
+          <li>Batteries and fuel cells</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Macromolecules and Polymers</h3>
+        </div>
+        <p class="unit-description">Study the physical chemistry of large molecules.</p>
+        <ul class="topics-list">
+          <li>Polymer structure</li>
+          <li>Molecular weight distribution</li>
+          <li>Chain conformations</li>
+          <li>Glass transition</li>
+          <li>Crystallinity</li>
+          <li>Viscoelasticity</li>
+          <li>Solution properties</li>
+          <li>Phase behavior</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(19)">
+        <div class="unit-header">
+          <div class="unit-number">19</div>
+          <h3 class="unit-title">Computational Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore theoretical and computational approaches.</p>
+        <ul class="topics-list">
+          <li>Molecular modeling</li>
+          <li>Quantum chemical calculations</li>
+          <li>Density functional theory</li>
+          <li>Molecular dynamics</li>
+          <li>Monte Carlo methods</li>
+          <li>Force fields</li>
+          <li>Optimization algorithms</li>
+          <li>Software packages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(20)">
+        <div class="unit-header">
+          <div class="unit-number">20</div>
+          <h3 class="unit-title">Advanced Topics and Applications</h3>
+        </div>
+        <p class="unit-description">Study cutting-edge developments in physical chemistry.</p>
+        <ul class="topics-list">
+          <li>Single molecule spectroscopy</li>
+          <li>Ultrafast dynamics</li>
+          <li>Nanoscale phenomena</li>
+          <li>Quantum information</li>
+          <li>Atmospheric chemistry</li>
+          <li>Astrochemistry</li>
+          <li>Green chemistry</li>
+          <li>Future directions</li>
