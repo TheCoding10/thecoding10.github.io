@@ -1,0 +1,836 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Neurobiology</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧠';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #a855f7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .neuro-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #7c3aed;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .neuron-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #7c3aed;
+      overflow-x: auto;
+    }
+
+    .brain-anatomy {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #92400e;
+      overflow-x: auto;
+    }
+
+    .pathway-trace {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .synaptic-activity {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .clinical-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .neural-circuit {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .complexity-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .molecular-level {
+      background: #c084fc;
+      font-size: 18px;
+    }
+
+    .cellular-level {
+      background: #a855f7;
+      font-size: 16px;
+    }
+
+    .systems-level {
+      background: #7c3aed;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .behavior-study {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .research-method {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .imaging-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .electrophysiology-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .plasticity-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .disorder-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .molecular-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧠 Neurobiology</h1>
+    <p>Explore the structure, function, and behavior of the nervous system</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Biology courses')">← Back to Biology Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Neurobiology Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Neurobiology Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~75</span>
+          <div class="stat-label">Key Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Brain & Behavior</span>
+          <div class="stat-label">Integration</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Neural Networks</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Neurobiology</h3>
+        </div>
+        <p class="unit-description">Explore the scientific study of the nervous system and behavior.</p>
+        <ul class="topics-list">
+          <li>What is neurobiology</li>
+          <li>History of neuroscience</li>
+          <li>Nervous system overview</li>
+          <li>Neural communication</li>
+          <li>Brain-behavior relationships</li>
+          <li>Research methods</li>
+          <li>Model organisms</li>
+          <li>Clinical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Neuronal Structure and Function</h3>
+        </div>
+        <p class="unit-description">Study the anatomy and physiology of neurons.</p>
+        <ul class="topics-list">
+          <li>Neuron anatomy</li>
+          <li>Cell membrane properties</li>
+          <li>Ion channels</li>
+          <li>Resting potential</li>
+          <li>Action potentials</li>
+          <li>Signal propagation</li>
+          <li>Myelination</li>
+          <li>Neuron types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Synaptic Transmission</h3>
+        </div>
+        <p class="unit-description">Learn about communication between neurons.</p>
+        <ul class="topics-list">
+          <li>Synaptic structure</li>
+          <li>Neurotransmitter release</li>
+          <li>Receptor types</li>
+          <li>Postsynaptic potentials</li>
+          <li>Integration</li>
+          <li>Modulation</li>
+          <li>Plasticity</li>
+          <li>Synaptic disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Neurotransmitters and Receptors</h3>
+        </div>
+        <p class="unit-description">Study the chemical messengers of the nervous system.</p>
+        <ul class="topics-list">
+          <li>Neurotransmitter types</li>
+          <li>Synthesis and storage</li>
+          <li>Release mechanisms</li>
+          <li>Receptor families</li>
+          <li>Signal transduction</li>
+          <li>Termination</li>
+          <li>Pharmacology</li>
+          <li>Disease implications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Central Nervous System</h3>
+        </div>
+        <p class="unit-description">Explore the brain and spinal cord organization.</p>
+        <ul class="topics-list">
+          <li>Brain anatomy</li>
+          <li>Spinal cord structure</li>
+          <li>Functional regions</li>
+          <li>White and gray matter</li>
+          <li>Ventricular system</li>
+          <li>Blood-brain barrier</li>
+          <li>Development</li>
+          <li>Evolution</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Peripheral Nervous System</h3>
+        </div>
+        <p class="unit-description">Study nerves outside the brain and spinal cord.</p>
+        <ul class="topics-list">
+          <li>Cranial nerves</li>
+          <li>Spinal nerves</li>
+          <li>Autonomic system</li>
+          <li>Sympathetic division</li>
+          <li>Parasympathetic division</li>
+          <li>Enteric system</li>
+          <li>Reflexes</li>
+          <li>Disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Sensory Systems</h3>
+        </div>
+        <p class="unit-description">Learn how the nervous system processes sensory information.</p>
+        <ul class="topics-list">
+          <li>Sensory transduction</li>
+          <li>Visual system</li>
+          <li>Auditory system</li>
+          <li>Somatosensory system</li>
+          <li>Chemical senses</li>
+          <li>Vestibular system</li>
+          <li>Processing pathways</li>
+          <li>Adaptation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Motor Systems</h3>
+        </div>
+        <p class="unit-description">Study how the nervous system controls movement.</p>
+        <ul class="topics-list">
+          <li>Motor units</li>
+          <li>Spinal circuits</li>
+          <li>Motor cortex</li>
+          <li>Cerebellum</li>
+          <li>Basal ganglia</li>
+          <li>Motor learning</li>
+          <li>Movement disorders</li>
+          <li>Rehabilitation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Neural Development</h3>
+        </div>
+        <p class="unit-description">Explore how the nervous system develops.</p>
+        <ul class="topics-list">
+          <li>Neural induction</li>
+          <li>Neurogenesis</li>
+          <li>Migration</li>
+          <li>Differentiation</li>
+          <li>Axon guidance</li>
+          <li>Synaptogenesis</li>
+          <li>Critical periods</li>
+          <li>Developmental disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Learning and Memory</h3>
+        </div>
+        <p class="unit-description">Study the neural basis of learning and memory.</p>
+        <ul class="topics-list">
+          <li>Memory types</li>
+          <li>Hippocampus</li>
+          <li>Long-term potentiation</li>
+          <li>Synaptic plasticity</li>
+          <li>Molecular mechanisms</li>
+          <li>Memory consolidation</li>
+          <li>Forgetting</li>
+          <li>Memory disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Emotion and Motivation</h3>
+        </div>
+        <p class="unit-description">Learn about the neural circuits of emotion and motivation.</p>
+        <ul class="topics-list">
+          <li>Limbic system</li>
+          <li>Amygdala</li>
+          <li>Reward circuits</li>
+          <li>Stress response</li>
+          <li>Hormonal influences</li>
+          <li>Social behavior</li>
+          <li>Addiction</li>
+          <li>Mood disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Cognitive Neuroscience</h3>
+        </div>
+        <p class="unit-description">Explore the neural basis of higher cognitive functions.</p>
+        <ul class="topics-list">
+          <li>Attention</li>
+          <li>Executive function</li>
+          <li>Language</li>
+          <li>Decision making</li>
+          <li>Consciousness</li>
+          <li>Brain imaging</li>
+          <li>Neural networks</li>
+          <li>Cognitive disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Sleep and Circadian Rhythms</h3>
+        </div>
+        <p class="unit-description">Study the neural control of sleep and biological clocks.</p>
+        <ul class="topics-list">
+          <li>Sleep stages</li>
+          <li>Sleep circuits</li>
+          <li>Circadian clocks</li>
+          <li>Melatonin</li>
+          <li>Sleep disorders</li>
+          <li>Dream research</li>
+          <li>Chronobiology</li>
+          <li>Jet lag</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Neurological Disorders</h3>
+        </div>
+        <p class="unit-description">Learn about diseases affecting the nervous system.</p>
+        <ul class="topics-list">
+          <li>Neurodegenerative diseases</li>
+          <li>Stroke</li>
+          <li>Epilepsy</li>
+          <li>Multiple sclerosis</li>
+          <li>Traumatic brain injury</li>
+          <li>Genetic disorders</li>
+          <li>Diagnosis</li>
+          <li>Treatment approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Psychiatric Disorders</h3>
+        </div>
+        <p class="unit-description">Study the neural basis of mental health disorders.</p>
+        <ul class="topics-list">
+          <li>Depression</li>
+          <li>Anxiety disorders</li>
+          <li>Schizophrenia</li>
+          <li>Bipolar disorder</li>
+          <li>Autism spectrum</li>
+          <li>ADHD</li>
+          <li>Psychopharmacology</li>
+          <li>Therapeutic approaches</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Computational Neuroscience</h3>
+        </div>
+        <p class="unit-description">Explore mathematical models of neural systems.</p>
+        <ul class="topics-list">
+          <li>Neural modeling</li>
+          <li>Network dynamics</li>
+          <li>Information processing</li>
+          <li>Machine learning</li>
+          <li>Artificial neural networks</li>
+          <li>Brain simulation</li>
+          <li>Data analysis</li>
+          <li>Predictive models</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Neuroethics and Society</h3>
+        </div>
+        <p class="unit-description">Study ethical implications of neuroscience research.</p>
+        <ul class="topics-list">
+          <li>Research ethics</li>
+          <li>Enhancement technologies</li>
+          <li>Privacy concerns</li>
+          <li>Free will</li>
+          <li>Legal implications</li>
+          <li>Informed consent</li>
+          <li>Public understanding</li>
+          <li>Future challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Emerging Technologies</h3>
+        </div>
+        <p class="unit-description">Explore cutting-edge tools and techniques in neuroscience.</p>
+        <ul class="topics-list">
+          <li>Optogenetics</li>
+          <li>Brain-computer interfaces
