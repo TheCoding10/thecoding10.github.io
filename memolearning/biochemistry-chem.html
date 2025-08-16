@@ -1,0 +1,831 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Biochemistry (Chemistry)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧬';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #10b981;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .biochem-badge {
+      display: inline-block;
+      background: #d1fae5;
+      color: #059669;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #d1fae5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #059669;
+    }
+
+    .biochem-demo {
+      background: #d1fae5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #059669;
+      overflow-x: auto;
+    }
+
+    .molecule-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .pathway-flow {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .enzyme-activity {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .metabolic-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .biochem-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .molecule-type {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .proteins {
+      background: #34d399;
+      font-size: 18px;
+    }
+
+    .carbohydrates {
+      background: #10b981;
+      font-size: 16px;
+    }
+
+    .lipids {
+      background: #059669;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .process-step {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .dna-rna-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .energy-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .regulation-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .disease-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .structure-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧬 Biochemistry (Chemistry)</h1>
+    <p>Explore the chemical processes within living organisms</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Biochemistry (Chemistry) Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Biochemistry Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <div class="stat-label">Major Biomolecules</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Life Chemistry</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Metabolism</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Biochemistry</h3>
+        </div>
+        <p class="unit-description">Explore the chemical basis of life and biological processes.</p>
+        <ul class="topics-list">
+          <li>What is biochemistry</li>
+          <li>Chemistry meets biology</li>
+          <li>Biomolecules overview</li>
+          <li>Cell structure</li>
+          <li>Chemical bonds in biology</li>
+          <li>Water and life</li>
+          <li>pH and buffers</li>
+          <li>Thermodynamics of life</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Water and pH</h3>
+        </div>
+        <p class="unit-description">Study the fundamental role of water in biological systems.</p>
+        <ul class="topics-list">
+          <li>Properties of water</li>
+          <li>Hydrogen bonding</li>
+          <li>Hydrophobic interactions</li>
+          <li>Ionization of water</li>
+          <li>Acids and bases</li>
+          <li>pH scale</li>
+          <li>Buffer systems</li>
+          <li>Physiological pH</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Amino Acids and Proteins</h3>
+        </div>
+        <p class="unit-description">Learn about the building blocks and structure of proteins.</p>
+        <ul class="topics-list">
+          <li>Amino acid structure</li>
+          <li>Amino acid classification</li>
+          <li>Peptide bonds</li>
+          <li>Primary structure</li>
+          <li>Secondary structure</li>
+          <li>Tertiary structure</li>
+          <li>Quaternary structure</li>
+          <li>Protein folding</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Protein Function</h3>
+        </div>
+        <p class="unit-description">Study how protein structure relates to function.</p>
+        <ul class="topics-list">
+          <li>Structure-function relationships</li>
+          <li>Protein domains</li>
+          <li>Binding sites</li>
+          <li>Conformational changes</li>
+          <li>Allosteric regulation</li>
+          <li>Protein-protein interactions</li>
+          <li>Post-translational modifications</li>
+          <li>Protein degradation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Enzymes</h3>
+        </div>
+        <p class="unit-description">Explore the catalysts of biological reactions.</p>
+        <ul class="topics-list">
+          <li>Enzyme classification</li>
+          <li>Active sites</li>
+          <li>Enzyme kinetics</li>
+          <li>Michaelis-Menten equation</li>
+          <li>Enzyme inhibition</li>
+          <li>Allosteric enzymes</li>
+          <li>Enzyme regulation</li>
+          <li>Cofactors and coenzymes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Carbohydrates</h3>
+        </div>
+        <p class="unit-description">Study the structure and function of sugars and polysaccharides.</p>
+        <ul class="topics-list">
+          <li>Monosaccharide structure</li>
+          <li>Stereochemistry</li>
+          <li>Ring formation</li>
+          <li>Disaccharides</li>
+          <li>Polysaccharides</li>
+          <li>Glycoproteins</li>
+          <li>Glycolipids</li>
+          <li>Carbohydrate recognition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Lipids and Membranes</h3>
+        </div>
+        <p class="unit-description">Learn about fats, oils, and biological membranes.</p>
+        <ul class="topics-list">
+          <li>Fatty acid structure</li>
+          <li>Triacylglycerols</li>
+          <li>Phospholipids</li>
+          <li>Membrane structure</li>
+          <li>Membrane proteins</li>
+          <li>Membrane transport</li>
+          <li>Signal transduction</li>
+          <li>Cholesterol and steroids</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Nucleic Acids</h3>
+        </div>
+        <p class="unit-description">Study the structure and function of DNA and RNA.</p>
+        <ul class="topics-list">
+          <li>Nucleotide structure</li>
+          <li>DNA double helix</li>
+          <li>RNA structure</li>
+          <li>Base pairing</li>
+          <li>DNA supercoiling</li>
+          <li>RNA types</li>
+          <li>Nucleic acid interactions</li>
+          <li>Chemical modifications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">DNA Replication and Repair</h3>
+        </div>
+        <p class="unit-description">Explore how genetic information is copied and maintained.</p>
+        <ul class="topics-list">
+          <li>Replication machinery</li>
+          <li>DNA polymerases</li>
+          <li>Leading and lagging strands</li>
+          <li>Proofreading</li>
+          <li>DNA repair mechanisms</li>
+          <li>Mismatch repair</li>
+          <li>Excision repair</li>
+          <li>Telomeres</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Transcription</h3>
+        </div>
+        <p class="unit-description">Study the synthesis of RNA from DNA templates.</p>
+        <ul class="topics-list">
+          <li>RNA polymerases</li>
+          <li>Promoter sequences</li>
+          <li>Transcription factors</li>
+          <li>Initiation</li>
+          <li>Elongation</li>
+          <li>Termination</li>
+          <li>RNA processing</li>
+          <li>Gene regulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Translation</h3>
+        </div>
+        <p class="unit-description">Learn how proteins are synthesized from mRNA.</p>
+        <ul class="topics-list">
+          <li>Genetic code</li>
+          <li>Ribosome structure</li>
+          <li>tRNA structure</li>
+          <li>Aminoacyl-tRNA synthetases</li>
+          <li>Translation initiation</li>
+          <li>Elongation</li>
+          <li>Termination</li>
+          <li>Protein targeting</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Metabolism Overview</h3>
+        </div>
+        <p class="unit-description">Study the chemical reactions that sustain life.</p>
+        <ul class="topics-list">
+          <li>Catabolism vs anabolism</li>
+          <li>Energy currency</li>
+          <li>ATP structure</li>
+          <li>Coupled reactions</li>
+          <li>Metabolic pathways</li>
+          <li>Regulation</li>
+          <li>Compartmentalization</li>
+          <li>Metabolic integration</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Glycolysis</h3>
+        </div>
+        <p class="unit-description">Explore the breakdown of glucose for energy.</p>
+        <ul class="topics-list">
+          <li>Glucose structure</li>
+          <li>Glycolytic pathway</li>
+          <li>Key enzymes</li>
+          <li>Energy yield</li>
+          <li>Regulation</li>
+          <li>Alternative fates</li>
+          <li>Fermentation</li>
+          <li>Clinical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Citric Acid Cycle</h3>
+        </div>
+        <p class="unit-description">Study the central hub of cellular metabolism.</p>
+        <ul class="topics-list">
+          <li>Cycle overview</li>
+          <li>Acetyl-CoA entry</li>
+          <li>Key reactions</li>
+          <li>Energy production</li>
+          <li>Regulation</li>
+          <li>Anaplerotic reactions</li>
+          <li>Integration with other pathways</li>
+          <li>Metabolic disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Electron Transport and ATP Synthesis</h3>
+        </div>
+        <p class="unit-description">Learn how cells generate most of their ATP.</p>
+        <ul class="topics-list">
+          <li>Electron transport chain</li>
+          <li>Complex structures</li>
+          <li>Proton pumping</li>
+          <li>Chemiosmotic theory</li>
+          <li>ATP synthase</li>
+          <li>P/O ratios</li>
+          <li>Uncoupling</li>
+          <li>Inhibitors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Fatty Acid Metabolism</h3>
+        </div>
+        <p class="unit-description">Study the breakdown and synthesis of fats.</p>
+        <ul class="topics-list">
+          <li>Fatty acid oxidation</li>
+          <li>Beta-oxidation</li>
+          <li>Ketone bodies</li>
+          <li>Fatty acid synthesis</li>
+          <li>Acetyl-CoA carboxylase</li>
+          <li>Regulation</li>
+          <li>Unsaturated fatty acids</li>
+          <li>Clinical aspects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Amino Acid Metabolism</h3>
+        </div>
+        <p class="unit-description">Explore the metabolism of proteins and amino acids.</p>
+        <ul class="topics-list">
+          <li>Protein degradation</li>
+          <li>Amino acid catabolism</li>
+          <li>Transamination</li>
+          <li>Deamination</li>
+          <li>Urea cycle</li>
+          <li>Amino acid synthesis</li>
+          <li>Essential amino acids</li>
+          <li>Metabolic disorders</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18
