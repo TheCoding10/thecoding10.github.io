@@ -1,0 +1,828 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Electrochemistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(15, 118, 110, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚡';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0d9488;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f766e;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
+    }
+
+    .electro-badge {
+      display: inline-block;
+      background: #ccfbf1;
+      color: #0f766e;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #ccfbf1;
+      border: 1px solid #5eead4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0f766e;
+    }
+
+    .electro-demo {
+      background: #ccfbf1;
+      border: 1px solid #5eead4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #0f766e;
+      overflow-x: auto;
+    }
+
+    .potential-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .cell-diagram {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .redox-reaction {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .electrolysis-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .cell-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .cell-type {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .galvanic {
+      background: #14b8a6;
+      font-size: 18px;
+    }
+
+    .electrolytic {
+      background: #0d9488;
+      font-size: 16px;
+    }
+
+    .fuel-cell {
+      background: #0f766e;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .electrode-process {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .nernst-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .battery-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .corrosion-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .faraday-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .calculation-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚡ Electrochemistry</h1>
+    <p>Explore the relationship between electricity and chemical reactions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Electrochemistry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">16</span>
+          <div class="stat-label">Electrochemistry Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">2</span>
+          <div class="stat-label">Main Cell Types</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Electron Transfer</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Redox Reactions</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Electrochemistry</h3>
+        </div>
+        <p class="unit-description">Explore the relationship between electricity and chemical reactions.</p>
+        <ul class="topics-list">
+          <li>What is electrochemistry</li>
+          <li>Historical development</li>
+          <li>Redox reactions</li>
+          <li>Electron transfer</li>
+          <li>Oxidation and reduction</li>
+          <li>Electric current</li>
+          <li>Applications overview</li>
+          <li>Importance in technology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Oxidation-Reduction Reactions</h3>
+        </div>
+        <p class="unit-description">Study the fundamentals of redox chemistry.</p>
+        <ul class="topics-list">
+          <li>Oxidation definition</li>
+          <li>Reduction definition</li>
+          <li>Oxidation numbers</li>
+          <li>Identifying redox reactions</li>
+          <li>Balancing redox equations</li>
+          <li>Half-reaction method</li>
+          <li>Oxidation number method</li>
+          <li>Common oxidizing agents</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Electrochemical Cells</h3>
+        </div>
+        <p class="unit-description">Learn about devices that convert chemical energy to electrical energy.</p>
+        <ul class="topics-list">
+          <li>Cell components</li>
+          <li>Electrodes</li>
+          <li>Electrolytes</li>
+          <li>Anode and cathode</li>
+          <li>Salt bridge</li>
+          <li>Cell notation</li>
+          <li>Electron flow</li>
+          <li>Ion movement</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Galvanic Cells</h3>
+        </div>
+        <p class="unit-description">Study spontaneous electrochemical cells that generate electricity.</p>
+        <ul class="topics-list">
+          <li>Spontaneous reactions</li>
+          <li>Cell construction</li>
+          <li>Daniell cell</li>
+          <li>Half-cell reactions</li>
+          <li>Cell potential</li>
+          <li>Current generation</li>
+          <li>Cell discharge</li>
+          <li>Practical examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Standard Electrode Potentials</h3>
+        </div>
+        <p class="unit-description">Learn about the driving force for redox reactions.</p>
+        <ul class="topics-list">
+          <li>Standard conditions</li>
+          <li>Standard hydrogen electrode</li>
+          <li>Reduction potentials</li>
+          <li>Electrochemical series</li>
+          <li>Predicting spontaneity</li>
+          <li>Calculating cell potential</li>
+          <li>Relative strength</li>
+          <li>Tables and data</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Cell Potential and Thermodynamics</h3>
+        </div>
+        <p class="unit-description">Study the relationship between cell potential and energy changes.</p>
+        <ul class="topics-list">
+          <li>Gibbs free energy</li>
+          <li>ΔG and cell potential</li>
+          <li>Faraday constant</li>
+          <li>Work and voltage</li>
+          <li>Equilibrium constant</li>
+          <li>Spontaneity prediction</li>
+          <li>Energy calculations</li>
+          <li>Thermodynamic cycles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Nernst Equation</h3>
+        </div>
+        <p class="unit-description">Learn how concentration affects cell potential.</p>
+        <ul class="topics-list">
+          <li>Concentration dependence</li>
+          <li>Nernst equation derivation</li>
+          <li>Standard vs actual potential</li>
+          <li>Logarithmic relationships</li>
+          <li>Temperature effects</li>
+          <li>pH effects</li>
+          <li>Concentration cells</li>
+          <li>Practical calculations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Batteries and Fuel Cells</h3>
+        </div>
+        <p class="unit-description">Study practical applications of galvanic cells.</p>
+        <ul class="topics-list">
+          <li>Primary batteries</li>
+          <li>Secondary batteries</li>
+          <li>Lead-acid battery</li>
+          <li>Lithium-ion battery</li>
+          <li>Alkaline battery</li>
+          <li>Fuel cell principles</li>
+          <li>Hydrogen fuel cells</li>
+          <li>Future technologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Electrolysis</h3>
+        </div>
+        <p class="unit-description">Learn about non-spontaneous electrochemical processes.</p>
+        <ul class="topics-list">
+          <li>Electrolytic cells</li>
+          <li>External power source</li>
+          <li>Water electrolysis</li>
+          <li>Molten salt electrolysis</li>
+          <li>Aqueous solution electrolysis</li>
+          <li>Electrode reactions</li>
+          <li>Product prediction</li>
+          <li>Competing reactions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Faraday's Laws</h3>
+        </div>
+        <p class="unit-description">Study quantitative relationships in electrolysis.</p>
+        <ul class="topics-list">
+          <li>First law of electrolysis</li>
+          <li>Second law of electrolysis</li>
+          <li>Faraday constant</li>
+          <li>Molar mass relationships</li>
+          <li>Current and time</li>
+          <li>Charge calculations</li>
+          <li>Mass calculations</li>
+          <li>Efficiency factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Industrial Electrolysis</h3>
+        </div>
+        <p class="unit-description">Explore commercial applications of electrolytic processes.</p>
+        <ul class="topics-list">
+          <li>Metal extraction</li>
+          <li>Aluminum production</li>
+          <li>Copper refining</li>
+          <li>Chlorine production</li>
+          <li>Sodium hydroxide production</li>
+          <li>Electroplating</li>
+          <li>Water treatment</li>
+          <li>Economic considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Corrosion</h3>
+        </div>
+        <p class="unit-description">Study the electrochemical degradation of metals.</p>
+        <ul class="topics-list">
+          <li>Corrosion mechanisms</li>
+          <li>Rusting of iron</li>
+          <li>Galvanic corrosion</li>
+          <li>Environmental factors</li>
+          <li>Corrosion prevention</li>
+          <li>Protective coatings</li>
+          <li>Cathodic protection</li>
+          <li>Sacrificial anodes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Electroplating and Electroforming</h3>
+        </div>
+        <p class="unit-description">Learn about depositing metals using electrolysis.</p>
+        <ul class="topics-list">
+          <li>Electroplating principles</li>
+          <li>Solution preparation</li>
+          <li>Current density</li>
+          <li>Deposition rate</li>
+          <li>Coating quality</li>
+          <li>Common metals</li>
+          <li>Industrial processes</li>
+          <li>Quality control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Electroanalytical Chemistry</h3>
+        </div>
+        <p class="unit-description">Study analytical techniques based on electrochemical principles.</p>
+        <ul class="topics-list">
+          <li>Potentiometry</li>
+          <li>pH measurement</li>
+          <li>Ion-selective electrodes</li>
+          <li>Voltammetry</li>
+          <li>Amperometry</li>
+          <li>Coulometry</li>
+          <li>Conductometry</li>
+          <li>Sensor applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Biological Electrochemistry</h3>
+        </div>
+        <p class="unit-description">Explore electrochemical processes in living systems.</p>
+        <ul class="topics-list">
+          <li>Nerve conduction</li>
+          <li>Membrane potentials</li>
+          <li>Ion channels</li>
+          <li>Bioelectricity</li>
+          <li>Enzyme electrodes</li>
+          <li>Biosensors</li>
+          <li>Medical devices</li>
+          <li>Biocompatibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Advanced Topics and Future Directions</h3>
+        </div>
+        <p class="unit-description">Study cutting-edge developments in electrochemistry.</p>
+        <ul class="topics-list">
+          <li>Nanotechnology</li>
+          <li>Supercapacitors</li>
+          <li>Photoelectrochemistry</li>
+          <li>Molecular electronics</li>
+          <li>Green electrochemistry</li>
+          <li>Energy storage</li>
+          <li>Smart materials</li>
+          <li>Future innovations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Electrochemistry</h1>
+      <p>Explore the relationship between electricity and chemical reactions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Electrochemistry</h3>
+        <p>Understand the science of electron transfer in chemical reactions.</p>
+        <span class="electro-badge">Electrons</span>
+        <span class="electro-badge">Current</span>
+        <span class="electro-badge">Reactions</span>
+        <div class="concept-box">
+          Electro
