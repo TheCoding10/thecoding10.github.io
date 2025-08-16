@@ -1,0 +1,835 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Periodic Table and Elements</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c2d12 0%, #ea580c 50%, #fb923c 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 45, 18, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧪';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c2d12;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c2d12, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 45, 18, 0.3);
+    }
+
+    .element-badge {
+      display: inline-block;
+      background: #fed7aa;
+      color: #7c2d12;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fed7aa;
+      border: 1px solid #fdba74;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c2d12;
+    }
+
+    .element-demo {
+      background: #fed7aa;
+      border: 1px solid #fdba74;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #7c2d12;
+      overflow-x: auto;
+    }
+
+    .periodic-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .property-trend {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .electron-config {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .chemical-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .element-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .period-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .s-block {
+      background: #fb923c;
+      font-size: 18px;
+    }
+
+    .p-block {
+      background: #ea580c;
+      font-size: 16px;
+    }
+
+    .d-block {
+      background: #7c2d12;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .trend-arrow {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .orbital-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .reactivity-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .discovery-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .isotope-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .synthesis-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧪 Periodic Table and Elements</h1>
+    <p>Explore the organization, properties, and trends of chemical elements</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Periodic Table and Elements Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Element Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">118</span>
+          <div class="stat-label">Known Elements</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Periodic Law</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Trends</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">History of the Periodic Table</h3>
+        </div>
+        <p class="unit-description">Explore the development and evolution of the periodic table.</p>
+        <ul class="topics-list">
+          <li>Early classification attempts</li>
+          <li>Mendeleev's contribution</li>
+          <li>Modern periodic law</li>
+          <li>Key discoveries</li>
+          <li>Table evolution</li>
+          <li>Predicted elements</li>
+          <li>Nobel Prize contributions</li>
+          <li>Future developments</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Periodic Table Organization</h3>
+        </div>
+        <p class="unit-description">Study the structure and organization of the modern periodic table.</p>
+        <ul class="topics-list">
+          <li>Periods and groups</li>
+          <li>Element arrangement</li>
+          <li>Atomic number ordering</li>
+          <li>Block classification</li>
+          <li>Metal-nonmetal division</li>
+          <li>Metalloids</li>
+          <li>Special regions</li>
+          <li>IUPAC nomenclature</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Periodic Trends</h3>
+        </div>
+        <p class="unit-description">Learn about the predictable patterns in element properties.</p>
+        <ul class="topics-list">
+          <li>Atomic radius trends</li>
+          <li>Ionization energy</li>
+          <li>Electron affinity</li>
+          <li>Electronegativity</li>
+          <li>Metallic character</li>
+          <li>Nuclear charge effects</li>
+          <li>Shielding effects</li>
+          <li>Exception explanations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Group 1: Alkali Metals</h3>
+        </div>
+        <p class="unit-description">Study the properties and chemistry of alkali metals.</p>
+        <ul class="topics-list">
+          <li>Physical properties</li>
+          <li>Chemical reactivity</li>
+          <li>Electron configuration</li>
+          <li>Flame tests</li>
+          <li>Reactions with water</li>
+          <li>Ionic compounds</li>
+          <li>Industrial uses</li>
+          <li>Biological roles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Group 2: Alkaline Earth Metals</h3>
+        </div>
+        <p class="unit-description">Explore the alkaline earth metals and their compounds.</p>
+        <ul class="topics-list">
+          <li>Physical characteristics</li>
+          <li>Chemical behavior</li>
+          <li>Oxide formation</li>
+          <li>Hydroxide properties</li>
+          <li>Carbonate compounds</li>
+          <li>Hardness of water</li>
+          <li>Commercial applications</li>
+          <li>Environmental impact</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Groups 3-12: Transition Metals</h3>
+        </div>
+        <p class="unit-description">Study the diverse properties of transition elements.</p>
+        <ul class="topics-list">
+          <li>d-orbital filling</li>
+          <li>Variable oxidation states</li>
+          <li>Colored compounds</li>
+          <li>Catalytic properties</li>
+          <li>Magnetic behavior</li>
+          <li>Complex ion formation</li>
+          <li>Alloy formation</li>
+          <li>Industrial importance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Group 13: Boron Group</h3>
+        </div>
+        <p class="unit-description">Learn about boron and aluminum group elements.</p>
+        <ul class="topics-list">
+          <li>Boron properties</li>
+          <li>Aluminum characteristics</li>
+          <li>Amphoteric behavior</li>
+          <li>Electron deficiency</li>
+          <li>Bonding patterns</li>
+          <li>Industrial production</li>
+          <li>Commercial uses</li>
+          <li>Environmental aspects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Group 14: Carbon Group</h3>
+        </div>
+        <p class="unit-description">Explore carbon, silicon, and related elements.</p>
+        <ul class="topics-list">
+          <li>Carbon allotropes</li>
+          <li>Silicon properties</li>
+          <li>Covalent bonding</li>
+          <li>Network structures</li>
+          <li>Semiconductor behavior</li>
+          <li>Organic chemistry basis</li>
+          <li>Technology applications</li>
+          <li>Materials science</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Group 15: Nitrogen Group</h3>
+        </div>
+        <p class="unit-description">Study nitrogen, phosphorus, and pnictogens.</p>
+        <ul class="topics-list">
+          <li>Nitrogen chemistry</li>
+          <li>Phosphorus allotropes</li>
+          <li>Multiple bonding</li>
+          <li>Oxoacids formation</li>
+          <li>Biological importance</li>
+          <li>Fertilizer chemistry</li>
+          <li>Explosive compounds</li>
+          <li>Environmental cycles</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Group 16: Oxygen Group</h3>
+        </div>
+        <p class="unit-description">Learn about oxygen, sulfur, and chalcogens.</p>
+        <ul class="topics-list">
+          <li>Oxygen properties</li>
+          <li>Sulfur chemistry</li>
+          <li>Oxide formation</li>
+          <li>Acid rain chemistry</li>
+          <li>Biological roles</li>
+          <li>Industrial processes</li>
+          <li>Environmental impact</li>
+          <li>Atmospheric chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Group 17: Halogens</h3>
+        </div>
+        <p class="unit-description">Study the highly reactive halogen elements.</p>
+        <ul class="topics-list">
+          <li>Physical properties</li>
+          <li>Chemical reactivity</li>
+          <li>Electronegativity trends</li>
+          <li>Halide formation</li>
+          <li>Interhalogen compounds</li>
+          <li>Oxidizing ability</li>
+          <li>Industrial uses</li>
+          <li>Health and safety</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Group 18: Noble Gases</h3>
+        </div>
+        <p class="unit-description">Explore the inert gases and their unique properties.</p>
+        <ul class="topics-list">
+          <li>Electron configuration</li>
+          <li>Chemical inertness</li>
+          <li>Physical properties</li>
+          <li>Noble gas compounds</li>
+          <li>Industrial applications</li>
+          <li>Atmospheric abundance</li>
+          <li>Lighting applications</li>
+          <li>Medical uses</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Lanthanides and Actinides</h3>
+        </div>
+        <p class="unit-description">Study the inner transition metals and their properties.</p>
+        <ul class="topics-list">
+          <li>f-orbital filling</li>
+          <li>Lanthanide contraction</li>
+          <li>Magnetic properties</li>
+          <li>Radioactivity</li>
+          <li>Separation techniques</li>
+          <li>Industrial applications</li>
+          <li>Nuclear chemistry</li>
+          <li>Environmental concerns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Superheavy Elements</h3>
+        </div>
+        <p class="unit-description">Learn about artificially created superheavy elements.</p>
+        <ul class="topics-list">
+          <li>Synthesis methods</li>
+          <li>Nuclear stability</li>
+          <li>Half-life considerations</li>
+          <li>Detection techniques</li>
+          <li>Island of stability</li>
+          <li>Naming conventions</li>
+          <li>Research challenges</li>
+          <li>Future predictions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Chemical Bonding and Periodicity</h3>
+        </div>
+        <p class="unit-description">Study how periodic trends relate to chemical bonding.</p>
+        <ul class="topics-list">
+          <li>Ionic bonding trends</li>
+          <li>Covalent bonding patterns</li>
+          <li>Metallic bonding</li>
+          <li>Bond strength trends</li>
+          <li>Molecular geometry</li>
+          <li>Hybridization</li>
+          <li>Polarity trends</li>
+          <li>Intermolecular forces</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Industrial and Commercial Uses</h3>
+        </div>
+        <p class="unit-description">Explore the practical applications of elements.</p>
+        <ul class="topics-list">
+          <li>Metal extraction</li>
+          <li>Semiconductor industry</li>
+          <li>Catalysis applications</li>
+          <li>Energy storage</li>
+          <li>Medical applications</li>
+          <li>Construction materials</li>
+          <li>Electronics industry</li>
+          <li>Emerging technologies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Environmental Chemistry of Elements</h3>
+        </div>
+        <p class="unit-description">Study environmental impacts and cycling of elements.</p>
+        <ul class="topics-list">
+          <li>Biogeochemical cycles</li>
+          <li>Pollution sources</li>
+          <li>Toxic elements</li>
+          <li>Remediation strategies</li>
+          <li>Atmospheric chemistry</li>
+          <li>Water chemistry</li>
+          <li>Soil chemistry</li>
+          <li>Sustainability issues</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Future of the Periodic Table</h3>
+        </div>
+        <p class="unit-description">Explore future developments and extensions of the periodic table.</p>
+        <ul
