@@ -1,0 +1,821 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Stoichiometry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #155e75 0%, #0891b2 50%, #06b6d4 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #155e75, #0891b2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(21, 94, 117, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '⚖️';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #155e75;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #155e75, #0891b2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(21, 94, 117, 0.3);
+    }
+
+    .stoich-badge {
+      display: inline-block;
+      background: #cffafe;
+      color: #155e75;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #cffafe;
+      border: 1px solid #67e8f9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #155e75;
+    }
+
+    .stoich-demo {
+      background: #cffafe;
+      border: 1px solid #67e8f9;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #155e75;
+      overflow-x: auto;
+    }
+
+    .calculation-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .mole-ratio {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .problem-solving {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .error-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .calculation-flow {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .calc-step {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .step-given {
+      background: #06b6d4;
+      font-size: 18px;
+    }
+
+    .step-convert {
+      background: #0891b2;
+      font-size: 16px;
+    }
+
+    .step-answer {
+      background: #155e75;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .conversion-factor {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .formula-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .yield-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .efficiency-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .limiting-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .method-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>⚖️ Stoichiometry</h1>
+    <p>Master quantitative relationships in chemical reactions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Stoichiometry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">14</span>
+          <div class="stat-label">Stoichiometry Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">6.022×10²³</span>
+          <div class="stat-label">Avogadro's Number</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Mole Concept</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Calculations</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Stoichiometry</h3>
+        </div>
+        <p class="unit-description">Explore the quantitative aspects of chemical reactions.</p>
+        <ul class="topics-list">
+          <li>What is stoichiometry</li>
+          <li>Conservation of mass</li>
+          <li>Balanced equations</li>
+          <li>Mole ratios</li>
+          <li>Quantitative analysis</li>
+          <li>Problem-solving steps</li>
+          <li>Unit conversions</li>
+          <li>Dimensional analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">The Mole Concept</h3>
+        </div>
+        <p class="unit-description">Study the fundamental unit for counting atoms and molecules.</p>
+        <ul class="topics-list">
+          <li>Definition of the mole</li>
+          <li>Avogadro's number</li>
+          <li>Molar mass</li>
+          <li>Moles to grams conversion</li>
+          <li>Particles to moles</li>
+          <li>Molar volume of gases</li>
+          <li>Concentration units</li>
+          <li>Practice calculations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Chemical Formulas and Composition</h3>
+        </div>
+        <p class="unit-description">Learn to determine chemical composition from formulas.</p>
+        <ul class="topics-list">
+          <li>Empirical formulas</li>
+          <li>Molecular formulas</li>
+          <li>Percent composition</li>
+          <li>Formula mass calculation</li>
+          <li>Determining empirical formulas</li>
+          <li>Molecular formula from empirical</li>
+          <li>Hydrate formulas</li>
+          <li>Combustion analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Balancing Chemical Equations</h3>
+        </div>
+        <p class="unit-description">Master the art of balancing chemical equations.</p>
+        <ul class="topics-list">
+          <li>Law of conservation of mass</li>
+          <li>Balancing by inspection</li>
+          <li>Systematic approaches</li>
+          <li>Complex equations</li>
+          <li>Polyatomic ions</li>
+          <li>Combustion reactions</li>
+          <li>Redox equations</li>
+          <li>Common mistakes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Mole-to-Mole Calculations</h3>
+        </div>
+        <p class="unit-description">Study basic stoichiometric relationships between reactants and products.</p>
+        <ul class="topics-list">
+          <li>Mole ratios from equations</li>
+          <li>Stoichiometric coefficients</li>
+          <li>Mole-to-mole conversions</li>
+          <li>Reading chemical equations</li>
+          <li>Proportional relationships</li>
+          <li>Multi-step problems</li>
+          <li>Practice problems</li>
+          <li>Real-world applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Mass-to-Mass Calculations</h3>
+        </div>
+        <p class="unit-description">Learn to convert between masses of reactants and products.</p>
+        <ul class="topics-list">
+          <li>Mass-to-mass conversions</li>
+          <li>Using molar mass</li>
+          <li>Three-step process</li>
+          <li>Grams to moles to grams</li>
+          <li>Complex calculations</li>
+          <li>Multiple reactants</li>
+          <li>Industrial applications</li>
+          <li>Laboratory examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Limiting and Excess Reagents</h3>
+        </div>
+        <p class="unit-description">Study how to identify limiting reagents in reactions.</p>
+        <ul class="topics-list">
+          <li>Limiting reagent concept</li>
+          <li>Excess reagent identification</li>
+          <li>Determining limiting reagent</li>
+          <li>Calculating theoretical yield</li>
+          <li>Amount of excess remaining</li>
+          <li>Real-world analogies</li>
+          <li>Multiple reagent problems</li>
+          <li>Economic considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Percent Yield</h3>
+        </div>
+        <p class="unit-description">Learn about reaction efficiency and actual yields.</p>
+        <ul class="topics-list">
+          <li>Theoretical yield</li>
+          <li>Actual yield</li>
+          <li>Percent yield calculation</li>
+          <li>Factors affecting yield</li>
+          <li>Side reactions</li>
+          <li>Incomplete reactions</li>
+          <li>Purification losses</li>
+          <li>Industrial efficiency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Solution Stoichiometry</h3>
+        </div>
+        <p class="unit-description">Study stoichiometry involving solutions and concentrations.</p>
+        <ul class="topics-list">
+          <li>Molarity calculations</li>
+          <li>Solution preparation</li>
+          <li>Dilution problems</li>
+          <li>Titration calculations</li>
+          <li>Acid-base stoichiometry</li>
+          <li>Precipitation reactions</li>
+          <li>Ionic equations</li>
+          <li>Analytical applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Gas Stoichiometry</h3>
+        </div>
+        <p class="unit-description">Explore stoichiometric calculations involving gases.</p>
+        <ul class="topics-list">
+          <li>Gas laws in stoichiometry</li>
+          <li>STP conditions</li>
+          <li>Molar volume at STP</li>
+          <li>Gas-gas reactions</li>
+          <li>Gas-solid reactions</li>
+          <li>Pressure and temperature effects</li>
+          <li>Real gas considerations</li>
+          <li>Industrial gas reactions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Energy in Chemical Reactions</h3>
+        </div>
+        <p class="unit-description">Study the relationship between stoichiometry and energy changes.</p>
+        <ul class="topics-list">
+          <li>Enthalpy changes</li>
+          <li>Heat of reaction</li>
+          <li>Thermochemical equations</li>
+          <li>Energy per mole</li>
+          <li>Calorimetry calculations</li>
+          <li>Hess's law applications</li>
+          <li>Bond energy calculations</li>
+          <li>Energy efficiency</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Multi-Step Stoichiometry</h3>
+        </div>
+        <p class="unit-description">Learn to solve complex multi-step stoichiometric problems.</p>
+        <ul class="topics-list">
+          <li>Sequential reactions</li>
+          <li>Multi-step synthesis</li>
+          <li>Overall yield calculations</li>
+          <li>Intermediate products</li>
+          <li>Process optimization</li>
+          <li>Industrial processes</li>
+          <li>Economic analysis</li>
+          <li>Problem-solving strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Advanced Stoichiometry Applications</h3>
+        </div>
+        <p class="unit-description">Explore specialized applications of stoichiometric principles.</p>
+        <ul class="topics-list">
+          <li>Biochemical stoichiometry</li>
+          <li>Environmental calculations</li>
+          <li>Material balance</li>
+          <li>Process engineering</li>
+          <li>Quality control</li>
+          <li>Pharmaceutical applications</li>
+          <li>Food chemistry</li>
+          <li>Green chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Problem-Solving Strategies</h3>
+        </div>
+        <p class="unit-description">Master systematic approaches to stoichiometry problems.</p>
+        <ul class="topics-list">
+          <li>Problem analysis</li>
+          <li>Strategy selection</li>
+          <li>Common error patterns</li>
+          <li>Checking answers</li>
+          <li>Estimation techniques</li>
+          <li>Units and dimensions</li>
+          <li>Conceptual understanding</li>
+          <li>Practice methodologies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h1 class="unit-detail-title">Unit 1: Introduction to Stoichiometry</h1>
+      <p>Explore the quantitative aspects of chemical reactions.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Stoichiometry</h3>
+        <p>Understand the calculation of quantities in chemical reactions.</p>
+        <span class="stoich-badge">Quantities</span>
+        <span class="stoich-badge">Ratios</span>
+        <span class="stoich-badge">Mass</span>
+        <div class="concept-box">
+          Stoichiometry is the calculation of quantities in chemical reactions based on the balanced chemical equation and the mole concept.
+        </div>
+        <div class="stoich-demo">
+          Key principles: conservation of mass, balanced equations, mole ratios
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conservation of Mass</h3>
+        <p>Learn how mass is conserved in chemical reactions.</p>
+        <span class="stoich-badge">Mass</span>
+        <span class="stoich-badge">Balance</span>
+        <span class="stoich-badge">Atoms</span>
+        <div class="calculation-flow">
+          <div class="step-given">Mass of Reactants</div>
+          <div class="step-convert">Chemical Reaction</div>
+          <div class="step-answer">Mass of Products</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Problem-Solving Steps</h3>
+        <p>Master the systematic approach to stoichiometry problems.</p>
+        <span class="stoich-badge">Method</span>
+        <span class="stoich-badge">Steps</span>
+        <span class="stoich-badge">Strategy</span>
+        <div class="problem-solving">
+          1. Balance equation → 2. Convert to moles → 3. Use mole ratios → 4. Convert to desired units
+        </div>
+      </div>
