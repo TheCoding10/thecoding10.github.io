@@ -1,0 +1,829 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Organic Chemistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧪';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .organic-badge {
+      display: inline-block;
+      background: #f3e8ff;
+      color: #7c3aed;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7c3aed;
+    }
+
+    .organic-demo {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #7c3aed;
+      overflow-x: auto;
+    }
+
+    .structure-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .mechanism-pathway {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .reaction-type {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .functional-group {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .compound-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .compound-type {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .alkanes {
+      background: #a78bfa;
+      font-size: 18px;
+    }
+
+    .alkenes {
+      background: #8b5cf6;
+      font-size: 16px;
+    }
+
+    .aromatics {
+      background: #7c3aed;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .naming-rule {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .synthesis-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .spectroscopy-demo {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .stereochemistry-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .polymer-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .iupac-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧪 Organic Chemistry</h1>
+    <p>Explore the chemistry of carbon compounds and their reactions</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Organic Chemistry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">20</span>
+          <div class="stat-label">Organic Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">C</span>
+          <div class="stat-label">Carbon Element</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Molecules</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Synthesis</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Organic Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore the chemistry of carbon-based compounds.</p>
+        <ul class="topics-list">
+          <li>What is organic chemistry</li>
+          <li>Carbon's unique properties</li>
+          <li>Covalent bonding</li>
+          <li>Hybridization</li>
+          <li>Molecular shapes</li>
+          <li>Functional groups</li>
+          <li>Importance in life</li>
+          <li>Historical development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Structure and Bonding</h3>
+        </div>
+        <p class="unit-description">Study the structural foundations of organic molecules.</p>
+        <ul class="topics-list">
+          <li>Lewis structures</li>
+          <li>Formal charge</li>
+          <li>Resonance structures</li>
+          <li>Hybridization theory</li>
+          <li>Molecular orbital theory</li>
+          <li>Bond angles</li>
+          <li>Bond lengths</li>
+          <li>Molecular geometry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Alkanes and Cycloalkanes</h3>
+        </div>
+        <p class="unit-description">Learn about saturated hydrocarbons and their properties.</p>
+        <ul class="topics-list">
+          <li>Structure of alkanes</li>
+          <li>IUPAC nomenclature</li>
+          <li>Isomerism</li>
+          <li>Conformational analysis</li>
+          <li>Cycloalkanes</li>
+          <li>Ring strain</li>
+          <li>Physical properties</li>
+          <li>Chemical reactions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Stereochemistry</h3>
+        </div>
+        <p class="unit-description">Study the three-dimensional aspects of organic molecules.</p>
+        <ul class="topics-list">
+          <li>Chirality</li>
+          <li>Enantiomers</li>
+          <li>Optical activity</li>
+          <li>Diastereomers</li>
+          <li>R and S configuration</li>
+          <li>Fischer projections</li>
+          <li>Optical resolution</li>
+          <li>Biological significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Alkenes and Alkynes</h3>
+        </div>
+        <p class="unit-description">Explore unsaturated hydrocarbons and their reactivity.</p>
+        <ul class="topics-list">
+          <li>Structure and bonding</li>
+          <li>Nomenclature</li>
+          <li>Geometric isomerism</li>
+          <li>Stability</li>
+          <li>Preparation methods</li>
+          <li>Addition reactions</li>
+          <li>Alkyne chemistry</li>
+          <li>Industrial applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Reaction Mechanisms</h3>
+        </div>
+        <p class="unit-description">Study how organic reactions occur at the molecular level.</p>
+        <ul class="topics-list">
+          <li>Nucleophiles and electrophiles</li>
+          <li>Carbocations</li>
+          <li>Carbanions</li>
+          <li>Free radicals</li>
+          <li>Substitution mechanisms</li>
+          <li>Elimination mechanisms</li>
+          <li>Addition mechanisms</li>
+          <li>Reaction kinetics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Aromatic Compounds</h3>
+        </div>
+        <p class="unit-description">Learn about benzene and aromatic chemistry.</p>
+        <ul class="topics-list">
+          <li>Benzene structure</li>
+          <li>Aromaticity</li>
+          <li>Hückel's rule</li>
+          <li>Electrophilic substitution</li>
+          <li>Substituent effects</li>
+          <li>Polycyclic aromatics</li>
+          <li>Heterocyclic compounds</li>
+          <li>Phenols and anilines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Alcohols and Ethers</h3>
+        </div>
+        <p class="unit-description">Study oxygen-containing organic compounds.</p>
+        <ul class="topics-list">
+          <li>Structure and nomenclature</li>
+          <li>Physical properties</li>
+          <li>Hydrogen bonding</li>
+          <li>Preparation methods</li>
+          <li>Alcohol reactions</li>
+          <li>Ether synthesis</li>
+          <li>Epoxides</li>
+          <li>Biological alcohols</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Aldehydes and Ketones</h3>
+        </div>
+        <p class="unit-description">Explore carbonyl compounds and their reactions.</p>
+        <ul class="topics-list">
+          <li>Carbonyl structure</li>
+          <li>Nomenclature</li>
+          <li>Physical properties</li>
+          <li>Nucleophilic addition</li>
+          <li>Aldol reactions</li>
+          <li>Oxidation and reduction</li>
+          <li>Protecting groups</li>
+          <li>Biological importance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Carboxylic Acids and Derivatives</h3>
+        </div>
+        <p class="unit-description">Study acids, esters, amides, and related compounds.</p>
+        <ul class="topics-list">
+          <li>Carboxylic acid structure</li>
+          <li>Acidity</li>
+          <li>Preparation methods</li>
+          <li>Ester formation</li>
+          <li>Amide synthesis</li>
+          <li>Acid chlorides</li>
+          <li>Anhydrides</li>
+          <li>Biological acids</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Amines</h3>
+        </div>
+        <p class="unit-description">Learn about nitrogen-containing organic compounds.</p>
+        <ul class="topics-list">
+          <li>Amine classification</li>
+          <li>Nomenclature</li>
+          <li>Basicity</li>
+          <li>Preparation methods</li>
+          <li>Reactions with acids</li>
+          <li>Alkylation reactions</li>
+          <li>Aromatic amines</li>
+          <li>Biological amines</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Organometallic Chemistry</h3>
+        </div>
+        <p class="unit-description">Study compounds with carbon-metal bonds.</p>
+        <ul class="topics-list">
+          <li>Grignard reagents</li>
+          <li>Organolithium compounds</li>
+          <li>Organocuprates</li>
+          <li>Preparation methods</li>
+          <li>Nucleophilic addition</li>
+          <li>Cross-coupling reactions</li>
+          <li>Catalysis</li>
+          <li>Industrial applications</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Spectroscopy</h3>
+        </div>
+        <p class="unit-description">Learn techniques for structure determination.</p>
+        <ul class="topics-list">
+          <li>IR spectroscopy</li>
+          <li>NMR spectroscopy</li>
+          <li>Mass spectrometry</li>
+          <li>UV-Vis spectroscopy</li>
+          <li>Spectral interpretation</li>
+          <li>Structure elucidation</li>
+          <li>2D NMR techniques</li>
+          <li>Modern methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Organic Synthesis</h3>
+        </div>
+        <p class="unit-description">Study strategies for building complex molecules.</p>
+        <ul class="topics-list">
+          <li>Retrosynthetic analysis</li>
+          <li>Synthetic equivalents</li>
+          <li>Protecting groups</li>
+          <li>Functional group interconversions</li>
+          <li>Carbon-carbon bond formation</li>
+          <li>Selectivity</li>
+          <li>Total synthesis</li>
+          <li>Green chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Polymers</h3>
+        </div>
+        <p class="unit-description">Explore large molecules and their properties.</p>
+        <ul class="topics-list">
+          <li>Polymer classification</li>
+          <li>Addition polymerization</li>
+          <li>Condensation polymerization</li>
+          <li>Polymer structure</li>
+          <li>Molecular weight</li>
+          <li>Physical properties</li>
+          <li>Commercial polymers</li>
+          <li>Biodegradable polymers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Carbohydrates</h3>
+        </div>
+        <p class="unit-description">Study the chemistry of sugars and polysaccharides.</p>
+        <ul class="topics-list">
+          <li>Monosaccharide structure</li>
+          <li>Anomers</li>
+          <li>Glycosidic bonds</li>
+          <li>Disaccharides</li>
+          <li>Polysaccharides</li>
+          <li>Reactions of sugars</li>
+          <li>Carbohydrate analysis</li>
+          <li>Biological functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Amino Acids and Proteins</h3>
+        </div>
+        <p class="unit-description">Learn about the building blocks of proteins.</p>
+        <ul class="topics-list">
+          <li>Amino acid structure</li>
+          <li>Zwitterions</li>
+          <li>Peptide bonds</li>
+          <li>Protein structure</li>
+          <li>Enzyme catalysis</li>
+          <li>Protein synthesis</li>
+          <li>Denaturation</li>
+          <li>Protein analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail
