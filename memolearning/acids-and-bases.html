@@ -1,0 +1,833 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Acids and Bases</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #be123c, #e11d48);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(190, 18, 60, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🧪';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #e11d48;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #be123c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #be123c, #e11d48);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(190, 18, 60, 0.3);
+    }
+
+    .acid-base-badge {
+      display: inline-block;
+      background: #fce7f3;
+      color: #be123c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fce7f3;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #be123c;
+    }
+
+    .acid-base-demo {
+      background: #fce7f3;
+      border: 1px solid #f9a8d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #be123c;
+      overflow-x: auto;
+    }
+
+    .ph-display {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .titration-curve {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .buffer-system {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .indicator-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .acid-base-evolution {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .theory-type {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .arrhenius {
+      background: #f43f5e;
+      font-size: 18px;
+    }
+
+    .bronsted-lowry {
+      background: #e11d48;
+      font-size: 16px;
+    }
+
+    .lewis {
+      background: #be123c;
+      font-size: 14px;
+    }
+
+    .experimental-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .application-note {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .strength-factor {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 4px;
+      font-size: 12px;
+    }
+
+    .ka-kb-demo {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .salt-hydrolysis {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #047857;
+    }
+
+    .polyprotic-note {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .equivalence-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .calculation-demo {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #475569;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🧪 Acids and Bases</h1>
+    <p>Explore the properties, reactions, and applications of acids and bases</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to Chemistry courses')">← Back to Chemistry Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Acids and Bases Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">17</span>
+          <div class="stat-label">Acid-Base Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <div class="stat-label">Major Theories</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">pH Scale</span>
+          <div class="stat-label">Foundation</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Proton Transfer</span>
+          <div class="stat-label">Central Theme</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Acids and Bases</h3>
+        </div>
+        <p class="unit-description">Explore the fundamental concepts of acids and bases.</p>
+        <ul class="topics-list">
+          <li>Historical perspectives</li>
+          <li>Common acids and bases</li>
+          <li>Properties of acids</li>
+          <li>Properties of bases</li>
+          <li>Acid-base reactions</li>
+          <li>Neutralization</li>
+          <li>Everyday examples</li>
+          <li>Safety considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Arrhenius Theory</h3>
+        </div>
+        <p class="unit-description">Study the first systematic definition of acids and bases.</p>
+        <ul class="topics-list">
+          <li>Arrhenius definitions</li>
+          <li>Hydrogen ion production</li>
+          <li>Hydroxide ion production</li>
+          <li>Aqueous solutions</li>
+          <li>Ionization in water</li>
+          <li>Neutralization reactions</li>
+          <li>Limitations of theory</li>
+          <li>Historical significance</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Brønsted-Lowry Theory</h3>
+        </div>
+        <p class="unit-description">Learn about proton donors and acceptors.</p>
+        <ul class="topics-list">
+          <li>Proton donor definition</li>
+          <li>Proton acceptor definition</li>
+          <li>Conjugate acid-base pairs</li>
+          <li>Amphiprotic substances</li>
+          <li>Non-aqueous systems</li>
+          <li>Relative strengths</li>
+          <li>Reaction direction</li>
+          <li>Theory advantages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Lewis Theory</h3>
+        </div>
+        <p class="unit-description">Study electron pair donors and acceptors.</p>
+        <ul class="topics-list">
+          <li>Electron pair donation</li>
+          <li>Electron pair acceptance</li>
+          <li>Coordinate covalent bonds</li>
+          <li>Lewis structures</li>
+          <li>Metal complexes</li>
+          <li>Organic reactions</li>
+          <li>Broader applications</li>
+          <li>Theory comparison</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Water and pH</h3>
+        </div>
+        <p class="unit-description">Explore the autoionization of water and pH scale.</p>
+        <ul class="topics-list">
+          <li>Water autoionization</li>
+          <li>Ion product constant</li>
+          <li>pH definition</li>
+          <li>pOH definition</li>
+          <li>pH + pOH = 14</li>
+          <li>pH calculations</li>
+          <li>pH scale interpretation</li>
+          <li>Temperature effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Strong Acids and Bases</h3>
+        </div>
+        <p class="unit-description">Study completely ionizing acids and bases.</p>
+        <ul class="topics-list">
+          <li>Complete ionization</li>
+          <li>Common strong acids</li>
+          <li>Common strong bases</li>
+          <li>pH calculations</li>
+          <li>Concentration relationships</li>
+          <li>Dilution effects</li>
+          <li>Conductivity</li>
+          <li>Safety considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Weak Acids and Bases</h3>
+        </div>
+        <p class="unit-description">Learn about partially ionizing acids and bases.</p>
+        <ul class="topics-list">
+          <li>Partial ionization</li>
+          <li>Equilibrium expressions</li>
+          <li>Acid dissociation constant</li>
+          <li>Base dissociation constant</li>
+          <li>Percent ionization</li>
+          <li>ICE table calculations</li>
+          <li>Common weak acids</li>
+          <li>Common weak bases</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Acid and Base Strength</h3>
+        </div>
+        <p class="unit-description">Study factors determining acid and base strength.</p>
+        <ul class="topics-list">
+          <li>Ka and Kb values</li>
+          <li>pKa and pKb</li>
+          <li>Conjugate relationships</li>
+          <li>Ka × Kb = Kw</li>
+          <li>Molecular structure effects</li>
+          <li>Electronegativity</li>
+          <li>Bond polarity</li>
+          <li>Stability factors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Polyprotic Acids</h3>
+        </div>
+        <p class="unit-description">Explore acids with multiple ionizable protons.</p>
+        <ul class="topics-list">
+          <li>Multiple ionization steps</li>
+          <li>Stepwise dissociation</li>
+          <li>Ka1, Ka2, Ka3 values</li>
+          <li>Species distribution</li>
+          <li>pH calculations</li>
+          <li>Titration curves</li>
+          <li>Buffer regions</li>
+          <li>Biological examples</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Salt Hydrolysis</h3>
+        </div>
+        <p class="unit-description">Study the acid-base properties of salt solutions.</p>
+        <ul class="topics-list">
+          <li>Salt formation</li>
+          <li>Hydrolysis reactions</li>
+          <li>Strong acid-strong base salts</li>
+          <li>Weak acid-strong base salts</li>
+          <li>Strong acid-weak base salts</li>
+          <li>Weak acid-weak base salts</li>
+          <li>pH calculations</li>
+          <li>Hydrolysis constants</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Buffer Solutions</h3>
+        </div>
+        <p class="unit-description">Learn about solutions that resist pH changes.</p>
+        <ul class="topics-list">
+          <li>Buffer definition</li>
+          <li>Buffer components</li>
+          <li>Henderson-Hasselbalch equation</li>
+          <li>Buffer capacity</li>
+          <li>Buffer range</li>
+          <li>Buffer preparation</li>
+          <li>Biological buffers</li>
+          <li>Environmental buffers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Acid-Base Titrations</h3>
+        </div>
+        <p class="unit-description">Study quantitative analysis using acid-base reactions.</p>
+        <ul class="topics-list">
+          <li>Titration principles</li>
+          <li>Equivalence point</li>
+          <li>End point</li>
+          <li>Titration curves</li>
+          <li>Strong acid-strong base</li>
+          <li>Weak acid-strong base</li>
+          <li>Strong acid-weak base</li>
+          <li>Polyprotic titrations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Indicators</h3>
+        </div>
+        <p class="unit-description">Learn about substances that signal pH changes.</p>
+        <ul class="topics-list">
+          <li>Indicator theory</li>
+          <li>Color changes</li>
+          <li>Transition range</li>
+          <li>Indicator selection</li>
+          <li>Common indicators</li>
+          <li>Universal indicator</li>
+          <li>pH meters vs indicators</li>
+          <li>Natural indicators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Molecular Structure and Acidity</h3>
+        </div>
+        <p class="unit-description">Study how molecular structure affects acid-base properties.</p>
+        <ul class="topics-list">
+          <li>Bond strength effects</li>
+          <li>Electronegativity trends</li>
+          <li>Resonance stabilization</li>
+          <li>Inductive effects</li>
+          <li>Steric effects</li>
+          <li>Hybridization effects</li>
+          <li>Solvent effects</li>
+          <li>Periodic trends</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Biological Acid-Base Systems</h3>
+        </div>
+        <p class="unit-description">Explore acid-base chemistry in living systems.</p>
+        <ul class="topics-list">
+          <li>Blood pH regulation</li>
+          <li>Bicarbonate buffer system</li>
+          <li>Phosphate buffer system</li>
+          <li>Protein buffers</li>
+          <li>Respiratory regulation</li>
+          <li>Kidney function</li>
+          <li>Acid-base disorders</li>
+          <li>Enzyme pH effects</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Environmental Acid-Base Chemistry</h3>
+        </div>
+        <p class="unit-description">Study acid-base processes in the environment.</p>
+        <ul class="topics-list">
+          <li>Acid rain formation</li>
+          <li>Ocean acidification</li>
+          <li>Soil pH effects</li>
+          <li>Water treatment</li>
+          <li>Atmospheric chemistry</li>
+          <li>Pollution control</li>
+          <li>Geological processes</li>
+          <li>Climate impacts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Industrial Applications</h3>
+        </div>
+        <p class="unit-description">Explore practical uses of acids and bases in industry.</p>
+        <ul class="topics-list">
+          <li>Chemical manufacturing</li>
+          <li>Metal processing</li>
+          <li>Pharmaceutical production</li>
+          <li>Food industry</li>
+          <li>Cleaning products</li>
+          <li>Battery technology</li>
+          <li>Quality control</li>
+          <li>Future developments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick
