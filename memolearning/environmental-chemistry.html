@@ -1,0 +1,762 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Environmental Chemistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #0ea5e9 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🌍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0369a1;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+    }
+
+    .subtopic-description {
+      color: #6b7280;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🌍 Environmental Chemistry</h1>
+    <p>Study chemical processes in air, water, and soil systems</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to courses')">← Back to Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Environmental Chemistry Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">19</span>
+          <div class="stat-label">Environmental Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Systems</span>
+          <div class="stat-label">Earth Spheres</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Cycles</span>
+          <div class="stat-label">Biogeochemical</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Pollution</span>
+          <div class="stat-label">Control Focus</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Introduction to Environmental Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore the chemical processes in environmental systems.</p>
+        <ul class="topics-list">
+          <li>What is environmental chemistry</li>
+          <li>Earth system science</li>
+          <li>Chemical equilibria in nature</li>
+          <li>Environmental compartments</li>
+          <li>Mass balance approaches</li>
+          <li>Environmental fate</li>
+          <li>Chemical transport</li>
+          <li>Global challenges</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Atmospheric Chemistry</h3>
+        </div>
+        <p class="unit-description">Study chemical processes in the Earth's atmosphere.</p>
+        <ul class="topics-list">
+          <li>Atmospheric structure</li>
+          <li>Gas-phase reactions</li>
+          <li>Photochemical processes</li>
+          <li>Radical chemistry</li>
+          <li>Ozone chemistry</li>
+          <li>Aerosol formation</li>
+          <li>Atmospheric transport</li>
+          <li>Climate chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Stratospheric Ozone</h3>
+        </div>
+        <p class="unit-description">Learn about ozone layer chemistry and depletion.</p>
+        <ul class="topics-list">
+          <li>Ozone formation</li>
+          <li>Chapman cycle</li>
+          <li>Catalytic ozone destruction</li>
+          <li>Chlorofluorocarbons</li>
+          <li>Ozone hole mechanism</li>
+          <li>Polar stratospheric clouds</li>
+          <li>Montreal Protocol</li>
+          <li>Ozone recovery</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Tropospheric Air Pollution</h3>
+        </div>
+        <p class="unit-description">Study air pollution chemistry and smog formation.</p>
+        <ul class="topics-list">
+          <li>Primary pollutants</li>
+          <li>Secondary pollutants</li>
+          <li>Photochemical smog</li>
+          <li>NOx chemistry</li>
+          <li>Volatile organic compounds</li>
+          <li>Particulate matter</li>
+          <li>Urban air quality</li>
+          <li>Emission control</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Greenhouse Gases and Climate</h3>
+        </div>
+        <p class="unit-description">Explore the chemistry of climate change.</p>
+        <ul class="topics-list">
+          <li>Radiative forcing</li>
+          <li>Carbon dioxide chemistry</li>
+          <li>Methane chemistry</li>
+          <li>Nitrous oxide</li>
+          <li>Fluorinated gases</li>
+          <li>Carbon cycle</li>
+          <li>Climate feedbacks</li>
+          <li>Mitigation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Aquatic Chemistry</h3>
+        </div>
+        <p class="unit-description">Study chemical processes in natural waters.</p>
+        <ul class="topics-list">
+          <li>Water structure</li>
+          <li>Acid-base equilibria</li>
+          <li>Carbonate system</li>
+          <li>Dissolved oxygen</li>
+          <li>Redox processes</li>
+          <li>Metal speciation</li>
+          <li>Complexation</li>
+          <li>Water quality parameters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Water Pollution Chemistry</h3>
+        </div>
+        <p class="unit-description">Learn about contaminants in water systems.</p>
+        <ul class="topics-list">
+          <li>Point vs non-point sources</li>
+          <li>Organic pollutants</li>
+          <li>Heavy metals</li>
+          <li>Nutrient pollution</li>
+          <li>Eutrophication</li>
+          <li>Emerging contaminants</li>
+          <li>Pharmaceuticals</li>
+          <li>Endocrine disruptors</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Marine Chemistry</h3>
+        </div>
+        <p class="unit-description">Study chemical processes in ocean systems.</p>
+        <ul class="topics-list">
+          <li>Seawater composition</li>
+          <li>Ocean acidification</li>
+          <li>Marine carbonate system</li>
+          <li>Dissolved gases</li>
+          <li>Marine biogeochemistry</li>
+          <li>Ocean circulation</li>
+          <li>Marine pollution</li>
+          <li>Coral reef chemistry</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Soil Chemistry</h3>
+        </div>
+        <p class="unit-description">Explore chemical processes in soil systems.</p>
+        <ul class="topics-list">
+          <li>Soil formation</li>
+          <li>Soil minerals</li>
+          <li>Organic matter</li>
+          <li>Ion exchange</li>
+          <li>Soil pH</li>
+          <li>Nutrient cycling</li>
+          <li>Soil-plant interactions</li>
+          <li>Soil contamination</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Biogeochemical Cycles</h3>
+        </div>
+        <p class="unit-description">Study the cycling of elements in the environment.</p>
+        <ul class="topics-list">
+          <li>Carbon cycle</li>
+          <li>Nitrogen cycle</li>
+          <li>Phosphorus cycle</li>
+          <li>Sulfur cycle</li>
+          <li>Water cycle</li>
+          <li>Oxygen cycle</li>
+          <li>Trace element cycles</li>
+          <li>Human impacts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Environmental Organic Chemistry</h3>
+        </div>
+        <p class="unit-description">Learn about organic compounds in the environment.</p>
+        <ul class="topics-list">
+          <li>Partition coefficients</li>
+          <li>Solubility</li>
+          <li>Volatility</li>
+          <li>Sorption processes</li>
+          <li>Biodegradation</li>
+          <li>Photodegradation</li>
+          <li>Persistent organic pollutants</li>
+          <li>Fate modeling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Toxic Metals and Metalloids</h3>
+        </div>
+        <p class="unit-description">Study the environmental chemistry of toxic elements.</p>
+        <ul class="topics-list">
+          <li>Lead chemistry</li>
+          <li>Mercury speciation</li>
+          <li>Cadmium toxicity</li>
+          <li>Arsenic chemistry</li>
+          <li>Chromium oxidation states</li>
+          <li>Metal bioavailability</li>
+          <li>Bioaccumulation</li>
+          <li>Remediation strategies</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Pesticides and Herbicides</h3>
+        </div>
+        <p class="unit-description">Explore the environmental fate of agricultural chemicals.</p>
+        <ul class="topics-list">
+          <li>Pesticide classes</li>
+          <li>Mode of action</li>
+          <li>Environmental fate</li>
+          <li>Degradation pathways</li>
+          <li>Persistence</li>
+          <li>Bioaccumulation</li>
+          <li>Non-target effects</li>
+          <li>Integrated pest management</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Environmental Analytical Methods</h3>
+        </div>
+        <p class="unit-description">Learn analytical techniques for environmental samples.</p>
+        <ul class="topics-list">
+          <li>Sample collection</li>
+          <li>Sample preservation</li>
+          <li>Extraction methods</li>
+          <li>Chromatographic analysis</li>
+          <li>Spectroscopic methods</li>
+          <li>Bioassays</li>
+          <li>Quality assurance</li>
+          <li>Field monitoring</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Environmental Remediation</h3>
+        </div>
+        <p class="unit-description">Study methods for environmental cleanup and restoration.</p>
+        <ul class="topics-list">
+          <li>Remediation technologies</li>
+          <li>Bioremediation</li>
+          <li>Phytoremediation</li>
+          <li>Chemical treatment</li>
+          <li>Physical separation</li>
+          <li>In-situ treatment</li>
+          <li>Ex-situ treatment</li>
+          <li>Cost-benefit analysis</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Green Chemistry</h3>
+        </div>
+        <p class="unit-description">Learn principles of sustainable chemical design.</p>
+        <ul class="topics-list">
+          <li>12 principles of green chemistry</li>
+          <li>Atom economy</li>
+          <li>Renewable feedstocks</li>
+          <li>Catalysis</li>
+          <li>Safer chemicals</li>
+          <li>Energy efficiency</li>
+          <li>Waste prevention</li>
+          <li>Life cycle assessment</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Environmental Risk Assessment</h3>
+        </div>
+        <p class="unit-description">Study methods for evaluating environmental hazards.</p>
+        <ul class="topics-list">
+          <li>Risk assessment framework</li>
+          <li>Hazard identification</li>
+          <li>Dose-response assessment</li>
+          <li>Exposure assessment</li>
+          <li>Risk characterization</li>
+          <li>Uncertainty analysis</li>
+          <li>Risk management</li>
+          <li>Environmental epidemiology</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Environmental Policy and Regulation</h3>
+        </div>
+        <p class="unit-description">Explore the intersection of chemistry and environmental law.</p>
+        <ul class="topics-list">
+          <li>Environmental legislation</li>
+          <li>Clean Air Act</li>
+          <li>Clean Water Act</li>
+          <li>RCRA and Superfund</li>
+          <li>TSCA</li>
+          <li>International agreements</li>
+          <li>Environmental justice</li>
+          <li>Science-policy interface</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(19)">
+        <div class="unit-header">
+          <div class="unit-number">19</div>
+          <h3 class="unit-title">Emerging Environmental Issues</h3>
+        </div>
+        <p class="unit-description">Study current and future environmental challenges.</p>
+        <ul class="topics-list">
+          <li>Microplastics</li>
+          <li>Nanomaterials</li>
+          <li>PFAS compounds</li>
+          <li>Antimicrobial resistance</li>
+          <li>Electronic waste</li>
+          <li>Space debris</li>
+          <li>Environmental genomics</li>
+          <li>Future challenges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: Introduction to Environmental Chemistry</h2>
+      <p>Explore the chemical processes that occur in environmental systems and their impact on Earth.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Environmental Chemistry</h3>
+        <p class="subtopic-description">Definition, scope, and interdisciplinary nature of environmental chemistry.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Earth System Science</h3>
+        <p class="subtopic-description">Understanding Earth as an integrated system with interconnected spheres.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chemical Equilibria in Nature</h3>
+        <p class="subtopic-description">How chemical equilibrium principles apply to natural systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Environmental Compartments</h3>
+        <p class="subtopic-description">Atmosphere, hydrosphere, lithosphere, and biosphere as chemical systems.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mass Balance Approaches</h3>
+        <p class="subtopic-description">Using mass balance equations to understand environmental processes.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Environmental Fate</h3>
+        <p class="subtopic-description">How chemicals move and transform in the environment.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Atmospheric Chemistry</h2>
+      <p>Study the chemical processes that occur in Earth's atmosphere from surface to stratosphere.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Atmospheric Structure</h3>
+        <p class="subtopic-description">Layers of the atmosphere and their chemical characteristics.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Gas-phase Reactions</h3>
+        <p class="subtopic-description">Kinetics and mechanisms of reactions in the gas phase.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Photochemical Processes</h3>
+        <p class="subtopic-description">Light-driven chemical reactions in the atmosphere.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Radical Chemistry</h3>
+        <p class="subtopic-description">Formation and reactions of atmospheric radicals like OH and HO2.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ozone Chemistry</h3>
+        <p class="subtopic-description">Formation and destruction of ozone in different atmospheric layers.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Aerosol Formation</h3>
+        <p class="subtopic-description">Chemical processes leading to atmospheric particle formation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Stratospheric Ozone</h2>
+      <p>Learn about the chemistry of the ozone layer, its depletion, and recovery.</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ozone Formation</h3>
+        <p class="subtopic-description">Photochemical formation of ozone from oxygen molecules.</p>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Chapman Cycle</h3>
+        <p class
