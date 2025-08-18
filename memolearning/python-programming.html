@@ -1,0 +1,881 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Python Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🐍';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .python-example {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #1e3a8a;
+      overflow-x: auto;
+    }
+
+    .interactive-example {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #3b82f6;
+      overflow-x: auto;
+    }
+
+    .python-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e3a8a;
+    }
+
+    .syntax-highlight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .data-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .library-showcase {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #9a3412;
+    }
+
+    .oop-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .python-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .application-level {
+      background: #3b82f6;
+      font-size: 18px;
+    }
+
+    .interpreter-level {
+      background: #2563eb;
+      font-size: 16px;
+    }
+
+    .os-level {
+      background: #1d4ed8;
+      font-size: 14px;
+    }
+
+    .python-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #3b82f6;
+    }
+
+    .python-results {
+      background: #3b82f6;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #3b82f6;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .python-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .running {
+      color: #2563eb;
+    }
+
+    .stopped {
+      color: #dc2626;
+    }
+
+    .starting {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #3b82f6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .module-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .module-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .module-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .module-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .app-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .app-function {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Python script simulation
+    function runPythonScript() {
+      const results = document.getElementById('python-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="python-status">
+            <span class="running">✅ Script executed</span> | 
+            <span class="starting">🐍 Python 3.11</span> | 
+            <span class="stopped">❌ 0 errors</span>
+          </div>
+          <div>Python 3.11.0 - Script completed successfully</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [95, 92, 98, 94];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🐍 Python Programming Fundamentals</h1>
+    <p>Master the most versatile programming language from basics to advanced concepts</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Python Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">15</span>
+          <div class="stat-label">Python Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~80</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">200+</span>
+          <div class="stat-label">Built-in Functions</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Multi-Purpose</span>
+          <div class="stat-label">Language</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Python Introduction</h3>
+        </div>
+        <p class="unit-description">Get started with Python and understand its philosophy and applications.</p>
+        <ul class="topics-list">
+          <li>What is Python?</li>
+          <li>Python philosophy (Zen of Python)</li>
+          <li>Installation and setup</li>
+          <li>Python interpreter</li>
+          <li>Interactive vs script mode</li>
+          <li>Python IDEs and editors</li>
+          <li>First Python program</li>
+          <li>Python ecosystem overview</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Variables & Data Types</h3>
+        </div>
+        <p class="unit-description">Learn about Python's dynamic typing and fundamental data types.</p>
+        <ul class="topics-list">
+          <li>Variables and naming conventions</li>
+          <li>Numeric types (int, float, complex)</li>
+          <li>String data type</li>
+          <li>Boolean type</li>
+          <li>Type conversion</li>
+          <li>Dynamic typing</li>
+          <li>Variable scope</li>
+          <li>Constants in Python</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Operators & Expressions</h3>
+        </div>
+        <p class="unit-description">Master Python operators and build complex expressions.</p>
+        <ul class="topics-list">
+          <li>Arithmetic operators</li>
+          <li>Comparison operators</li>
+          <li>Logical operators</li>
+          <li>Assignment operators</li>
+          <li>Bitwise operators</li>
+          <li>Identity operators</li>
+          <li>Membership operators</li>
+          <li>Operator precedence</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Control Flow</h3>
+        </div>
+        <p class="unit-description">Control program execution with conditional statements and loops.</p>
+        <ul class="topics-list">
+          <li>if, elif, else statements</li>
+          <li>Nested conditionals</li>
+          <li>for loops</li>
+          <li>while loops</li>
+          <li>break and continue</li>
+          <li>pass statement</li>
+          <li>Loop else clause</li>
+          <li>Nested loops</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Data Structures</h3>
+        </div>
+        <p class="unit-description">Work with Python's built-in data structures effectively.</p>
+        <ul class="topics-list">
+          <li>Lists and list methods</li>
+          <li>Tuples and immutability</li>
+          <li>Dictionaries and key-value pairs</li>
+          <li>Sets and set operations</li>
+          <li>List comprehensions</li>
+          <li>Dictionary comprehensions</li>
+          <li>Nested data structures</li>
+          <li>Choosing the right structure</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Functions</h3>
+        </div>
+        <p class="unit-description">Create reusable code with functions and understand scope.</p>
+        <ul class="topics-list">
+          <li>Function definition and syntax</li>
+          <li>Parameters and arguments</li>
+          <li>Return statements</li>
+          <li>Default parameters</li>
+          <li>Variable-length arguments</li>
+          <li>Keyword arguments</li>
+          <li>Local and global scope</li>
+          <li>Lambda functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Strings & Text Processing</h3>
+        </div>
+        <p class="unit-description">Master string manipulation and text processing techniques.</p>
+        <ul class="topics-list">
+          <li>String indexing and slicing</li>
+          <li>String methods</li>
+          <li>String formatting</li>
+          <li>f-strings</li>
+          <li>Regular expressions</li>
+          <li>Text file processing</li>
+          <li>Unicode and encoding</li>
+          <li>String validation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">File Handling</h3>
+        </div>
+        <p class="unit-description">Read from and write to files, handle different file formats.</p>
+        <ul class="topics-list">
+          <li>Opening and closing files</li>
+          <li>Reading file content</li>
+          <li>Writing to files</li>
+          <li>File modes</li>
+          <li>Context managers (with statement)</li>
+          <li>File paths and directories</li>
+          <li>CSV file handling</li>
+          <li>JSON file operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Error Handling</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully and debug Python programs.</p>
+        <ul class="topics-list">
+          <li>Understanding exceptions</li>
+          <li>try, except blocks</li>
+          <li>Multiple exception handling</li>
+          <li>else and finally clauses</li>
+          <li>Raising custom exceptions</li>
+          <li>Exception hierarchy</li>
+          <li>Debugging techniques</li>
+          <li>Logging basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Object-Oriented Programming</h3>
+        </div>
+        <p class="unit-description">Learn OOP concepts and implement classes and objects.</p>
+        <ul class="topics-list">
+          <li>Classes and objects</li>
+          <li>Attributes and methods</li>
+          <li>Constructor (__init__)</li>
+          <li>Inheritance</li>
+          <li>Encapsulation</li>
+          <li>Polymorphism</li>
+          <li>Special methods</li>
+          <li>Property decorators</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Modules & Packages</h3>
+        </div>
+        <p class="unit-description">Organize code with modules and explore the Python ecosystem.</p>
+        <ul class="topics-list">
+          <li>Creating modules</li>
+          <li>Importing modules</li>
+          <li>Standard library overview</li>
+          <li>Package structure</li>
+          <li>__init__.py files</li>
+          <li>pip package manager</li>
+          <li>Virtual environments</li>
+          <li>Popular third-party packages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Advanced Functions</h3>
+        </div>
+        <p class="unit-description">Explore advanced function concepts and functional programming.</p>
+        <ul class="topics-list">
+          <li>Decorators</li>
+          <li>Generators and yield</li>
+          <li>Iterator protocol</li>
+          <li>map, filter, reduce</li>
+          <li>Closures</li>
+          <li>Function annotations</li>
+          <li>Recursive functions</li>
+          <li>Functional programming concepts</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Data Analysis Basics</h3>
+        </div>
+        <p class="unit-description">Introduction to data analysis with Python libraries.</p>
+        <ul class="topics-list">
+          <li>NumPy arrays</li>
+          <li>Pandas DataFrames</li>
+          <li>Data cleaning</li>
+          <li>Data visualization with Matplotlib</li>
+          <li>Statistical operations</li>
+          <li>Reading various data formats</li>
+          <li>Data aggregation</li>
+          <li>Basic data analysis workflow</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Web Development Basics</h3>
+        </div>
+        <p class="unit-description">Build web applications with Python frameworks.</p>
+        <ul class="topics-list">
+          <li>Web development overview</li>
+          <li>Flask framework basics</li>
+          <li>Routing and views</li>
+          <li>Templates</li>
+          <li>Forms handling</li>
+          <li>Database integration</li
