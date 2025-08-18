@@ -1,0 +1,911 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning HTML & CSS Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🎨';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #ef4444;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .html-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #dc2626;
+      overflow-x: auto;
+    }
+
+    .css-example {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #0c4a6e;
+      overflow-x: auto;
+    }
+
+    .html-css-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #dc2626;
+    }
+
+    .syntax-highlight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .layout-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .responsive-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .accessibility-note {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #d97706;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .web-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .content-level {
+      background: #ef4444;
+      font-size: 18px;
+    }
+
+    .styling-level {
+      background: #dc2626;
+      font-size: 16px;
+    }
+
+    .browser-level {
+      background: #b91c1c;
+      font-size: 14px;
+    }
+
+    .web-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #ef4444;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #ef4444;
+    }
+
+    .web-results {
+      background: #ef4444;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #ef4444;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .web-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .valid {
+      color: #dc2626;
+    }
+
+    .invalid {
+      color: #dc2626;
+    }
+
+    .loading {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #ef4444;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .tag-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .tag-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .tag-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+
+    .tag-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .layout-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .layout-visual {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .interactive-demo {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .demo-button {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .demo-button:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+    }
+
+    .preview-area {
+      background: white;
+      border: 2px solid #e5e7eb;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      min-height: 100px;
+    }
+
+    .color-palette {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.1);
+    }
+
+    .flexbox-demo {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .flex-container {
+      display: flex;
+      gap: 10px;
+      justify-content: space-around;
+      margin: 10px 0;
+    }
+
+    .flex-item {
+      background: #16a34a;
+      color: white;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .grid-demo {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .grid-item {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // HTML/CSS validation simulation
+    function validateCode() {
+      const results = document.getElementById('web-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="web-status">
+            <span class="valid">✅ HTML Valid</span> | 
+            <span class="valid">🎨 CSS Valid</span> | 
+            <span class="loading">⚡ Rendering</span>
+          </div>
+          <div>W3C Validation passed - Ready for production</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [96, 94, 98, 92];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Interactive demo functions
+    function changeBackgroundColor() {
+      const colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      const preview = document.getElementById('color-preview');
+      if (preview) {
+        preview.style.backgroundColor = randomColor;
+        preview.innerHTML = `<strong>Background changed to: ${randomColor}</strong>`;
+      }
+    }
+
+    function toggleTextStyle() {
+      const preview = document.getElementById('text-preview');
+      if (preview) {
+        if (preview.style.fontWeight === 'bold') {
+          preview.style.fontWeight = 'normal';
+          preview.style.fontStyle = 'italic';
+          preview.innerHTML = 'This text is now italic';
+        } else if (preview.style.fontStyle === 'italic') {
+          preview.style.fontWeight = 'normal';
+          preview.style.fontStyle = 'normal';
+          preview.style.textDecoration = 'underline';
+          preview.innerHTML = 'This text is now underlined';
+        } else {
+          preview.style.fontWeight = 'bold';
+          preview.style.fontStyle = 'normal';
+          preview.style.textDecoration = 'none';
+          preview.innerHTML = 'This text is now bold';
+        }
+      }
+    }
+
+    function animateElement() {
+      const preview = document.getElementById('animation-preview');
+      if (preview) {
+        preview.style.transform = 'scale(1.2) rotate(10deg)';
+        preview.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          preview.style.transform = 'scale(1) rotate(0deg)';
+        }, 300);
+      }
+    }
+
+    function changeLayout() {
+      const container = document.getElementById('layout-preview');
+      if (container) {
+        if (container.style.display === 'flex') {
+          container.style.display = 'grid';
+          container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          container.innerHTML = `
+            <div style="background: #ef4444; color: white; padding: 20px; border-radius: 4px;">Grid Item 1</div>
+            <div style="background: #3b82f6; color: white; padding: 20px; border-radius: 4px;">Grid Item 2</div>
+            <div style="background: #10b981; color: white; padding: 20px; border-radius: 4px;">Grid Item 3</div>
+            <div style="background: #f59e0b; color: white; padding: 20px; border-radius: 4px;">Grid Item 4</div>
+          `;
+        } else {
+          container.style.display = 'flex';
+          container.style.gridTemplateColumns = 'none';
+          container.innerHTML = `
+            <div style="background: #ef4444; color: white; padding: 20px; border-radius: 4px; flex: 1;">Flex Item 1</div>
+            <div style="background: #3b82f6; color: white; padding: 20px; border-radius: 4px; flex: 1;">Flex Item 2</div>
+            <div style="background: #10b981; color: white; padding: 20px; border-radius: 4px; flex: 1;">Flex Item 3</div>
+          `;
+        }
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      updatePerformance();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🎨 HTML & CSS Programming Fundamentals</h1>
+    <p>Master the building blocks of web development with structure and style</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to web development courses')">← Back to Web Development Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">HTML & CSS Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">HTML & CSS Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">HTML5</span>
+          <div class="stat-label">Latest Standard</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">CSS3</span>
+          <div class="stat-label">Modern Styling</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">HTML Introduction</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of HTML and web document structure.</p>
+        <ul class="topics-list">
+          <li>What is HTML?</li>
+          <li>HTML document structure</li>
+          <li>HTML5 overview</li>
+          <li>Setting up development environment</li>
+          <li>Basic HTML syntax</li>
+          <li>HTML tags and elements</li>
+          <li>Attributes and values</li>
+          <li>First HTML page</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">HTML Document Structure</h3>
+        </div>
+        <p class="unit-description">Master the essential structure of HTML documents.</p>
+        <ul class="topics-list">
+          <li>DOCTYPE declaration</li>
+          <li>HTML root element</li>
+          <li>Head section</li>
+          <li>Meta tags</li>
+          <li>Title element</li>
+          <li>Body section</li>
+          <li>Document outline</li>
+          <li>Valid HTML structure</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Text & Typography</h3>
+        </div>
+        <p class="unit-description">Work with text elements and typography in HTML.</p>
+        <ul class="topics-list">
+          <li>Headings (h1-h6)</li>
+          <li>Paragraphs and text</li>
+          <li>Bold and italic text</li>
+          <li>Line breaks and spaces</li>
+          <li>Preformatted text</li>
+          <li>Quotations</li>
+          <li>Text formatting elements</li>
+          <li>Special characters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Links & Navigation</h3>
+        </div>
+        <p class="unit-description">Create hyperlinks and navigation systems.</p>
+        <ul class="topics-list">
+          <li>Anchor tags</li>
+          <li>External links</li>
+          <li>Internal links</li>
+          <li>Email links</li>
+          <li>Phone links</li>
+          <li>Link attributes</li>
+          <li>Navigation menus</li>
+          <li>Link accessibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Images & Media</h3>
+        </div>
+        <p class="unit-description">Embed images, videos, and other media content.</p>
+        <ul class="topics-list">
+          <li>Image elements</li>
+          <li>Image attributes</li>
+          <li>Image formats</li>
+          <li>Responsive images</li>
+          <li>Figure and figcaption</li>
+          <li>Video elements</li>
+          <li>Audio elements</li>
+          <li>Media accessibility</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Lists & Tables</h3>
+        </div>
+        <p class="unit-description">Organize content with lists and tabular data.</p>
+        <ul class="topics-list">
+          <li>Unordered lists</li>
+          <li>Ordered lists</li>
+          <li>Definition lists</li>
+          <li>Nested lists</li>
+          <li>Table structure</li>
+          <li>Table headers</li>
+          <li>Table styling</li>
+          <li>Accessible tables</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
