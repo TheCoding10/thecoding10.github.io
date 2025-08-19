@@ -1,0 +1,1633 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Java Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '☕';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .java-example {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #ea580c;
+      overflow-x: auto;
+    }
+
+    .jvm-example {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #f97316;
+      overflow-x: auto;
+    }
+
+    .java-badge {
+      display: inline-block;
+      background: #fef7f0;
+      color: #ea580c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .syntax-highlight {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .oop-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .framework-showcase {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #16a34a;
+    }
+
+    .thread-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .jvm-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .application-level {
+      background: #f97316;
+      font-size: 18px;
+    }
+
+    .jvm-level {
+      background: #ea580c;
+      font-size: 16px;
+    }
+
+    .os-level {
+      background: #dc2626;
+      font-size: 14px;
+    }
+
+    .java-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #f97316;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #f97316;
+    }
+
+    .java-results {
+      background: #f97316;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #f97316;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .java-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .compiled {
+      color: #ea580c;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .running {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #f97316;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .framework-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .framework-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .framework-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .framework-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ide-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .ide-feature {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .interactive-demo {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .demo-button {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .demo-button:hover {
+      background: #ea580c;
+      transform: translateY(-2px);
+    }
+
+    .output-area {
+      background: #111827;
+      color: #f97316;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-family: monospace;
+      min-height: 50px;
+    }
+
+    .type-system {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .type-category {
+      display: inline-block;
+      background: #ea580c;
+      color: white;
+      padding: 8px 12px;
+      margin: 2px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .package-demo {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .package-visual {
+      background: #3b82f6;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .inheritance-demo {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .inheritance-level {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .parent-class {
+      background: #dc2626;
+      color: white;
+    }
+
+    .child-class {
+      background: #ef4444;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .stream-demo {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .stream-operation {
+      background: #16a34a;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .thread-visualization {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .thread-step {
+      background: #dc2626;
+      color: white;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .thread-step.running {
+      background: #16a34a;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Check for URL hash on load
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#unit-')) {
+        const unitNumber = hash.replace('#unit-', '');
+        showUnitDetail(unitNumber);
+      }
+      updatePerformance();
+    });
+
+    // Java compilation simulation
+    function compileCode() {
+      const results = document.getElementById('java-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="java-status">
+            <span class="compiled">✅ Compilation successful</span> | 
+            <span class="running">☕ Java 21</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>JVM 21.0.1 - Application running</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [95, 92, 98, 94];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Interactive demo functions
+    function demoVariables() {
+      const output = document.getElementById('variable-output');
+      if (output) {
+        output.innerHTML = `int age = 25;<br>String name = "Java";<br>boolean isActive = true;<br>double price = 99.99;`;
+      }
+    }
+
+    function demoClasses() {
+      const output = document.getElementById('class-output');
+      if (output) {
+        output.innerHTML = `public class Person {<br>&nbsp;&nbsp;private String name;<br>&nbsp;&nbsp;private int age;<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;public String getName() {<br>&nbsp;&nbsp;&nbsp;&nbsp;return name;<br>&nbsp;&nbsp;}<br>}`;
+      }
+    }
+
+    function demoStreams() {
+      const output = document.getElementById('stream-output');
+      if (output) {
+        output.innerHTML = `List<Person> adults = people.stream()<br>&nbsp;&nbsp;.filter(p -> p.getAge() >= 18)<br>&nbsp;&nbsp;.sorted(Comparator.comparing(Person::getName))<br>&nbsp;&nbsp;.collect(Collectors.toList());`;
+      }
+    }
+
+    function demoThreads() {
+      const output = document.getElementById('thread-output');
+      if (output) {
+        output.innerHTML = `public class MyThread extends Thread {<br>&nbsp;&nbsp;public void run() {<br>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Thread running: " + getName());<br>&nbsp;&nbsp;}<br>}`;
+      }
+    }
+
+    function demoCollections() {
+      const output = document.getElementById('collection-output');
+      if (output) {
+        output.innerHTML = `List<Integer> numbers = new ArrayList<>();<br>Map<String, Integer> ages = new HashMap<>();<br>ages.put("John", 30);`;
+      }
+    }
+
+    function demoExceptions() {
+      const output = document.getElementById('exception-output');
+      if (output) {
+        output.innerHTML = `try {<br>&nbsp;&nbsp;int result = 10 / 0;<br>} catch (ArithmeticException e) {<br>&nbsp;&nbsp;System.out.println("Cannot divide by zero!");<br>}`;
+      }
+    }
+
+    // Thread visualization
+    function demoThreadFlow() {
+      const steps = document.querySelectorAll('.thread-step');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.add('running');
+        }, index * 1000);
+      });
+      
+      // Reset after demo
+      setTimeout(() => {
+        steps.forEach(step => step.classList.remove('running'));
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>☕ Java Programming Fundamentals</h1>
+    <p>Master the world's most popular enterprise programming language and JVM ecosystem</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Java Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Java Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~150</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Java 21</span>
+          <div class="stat-label">Latest LTS</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Platform</span>
+          <div class="stat-label">Independent</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Java Introduction</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of Java and the JVM ecosystem.</p>
+        <ul class="topics-list">
+          <li>What is Java?</li>
+          <li>Java history and evolution</li>
+          <li>Java Virtual Machine (JVM)</li>
+          <li>Java Runtime Environment (JRE)</li>
+          <li>Java Development Kit (JDK)</li>
+          <li>Write Once, Run Anywhere (WORA)</li>
+          <li>Setting up development environment</li>
+          <li>First Java program</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Basic Syntax & Structure</h3>
+        </div>
+        <p class="unit-description">Master the fundamental syntax and program structure of Java.</p>
+        <ul class="topics-list">
+          <li>Java program structure</li>
+          <li>Classes and objects basics</li>
+          <li>Main method</li>
+          <li>Packages and imports</li>
+          <li>Comments</li>
+          <li>Naming conventions</li>
+          <li>Code organization</li>
+          <li>Compilation process</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Variables & Data Types</h3>
+        </div>
+        <p class="unit-description">Work with Java's type system and variable declarations.</p>
+        <ul class="topics-list">
+          <li>Primitive data types</li>
+          <li>Reference types</li>
+          <li>Variable declaration and initialization</li>
+          <li>Constants (final keyword)</li>
+          <li>Type conversion and casting</li>
+          <li>Wrapper classes</li>
+          <li>Autoboxing and unboxing</li>
+          <li>Default values</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Operators & Expressions</h3>
+        </div>
+        <p class="unit-description">Master Java operators and build complex expressions.</p>
+        <ul class="topics-list">
+          <li>Arithmetic operators</li>
+          <li>Relational operators</li>
+          <li>Logical operators</li>
+          <li>Assignment operators</li>
+          <li>Bitwise operators</li>
+          <li>Ternary operator</li>
+          <li>Operator precedence</li>
+          <li>instanceof operator</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Control Flow</h3>
+        </div>
+        <p class="unit-description">Control program execution with conditionals and loops.</p>
+        <ul class="topics-list">
+          <li>if, else if, else statements</li>
+          <li>switch statements</li>
+          <li>for loops</li>
+          <li>while and do-while loops</li>
+          <li>Enhanced for loop (for-each)</li>
+          <li>break and continue</li>
+          <li>Labeled statements</li>
+          <li>Pattern matching (Java 17+)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Methods & Parameters</h3>
+        </div>
+        <p class="unit-description">Create reusable code with methods and understand parameter passing.</p>
+        <ul class="topics-list">
+          <li>Method declaration and definition</li>
+          <li>Method parameters and arguments</li>
+          <li>Return types and values</li>
+          <li>Method overloading</li>
+          <li>Variable arguments (varargs)</li>
+          <li>Pass by value vs pass by reference</li>
+          <li>Static methods</li>
+          <li>Method visibility modifiers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Arrays & Collections</h3>
+        </div>
+        <p class="unit-description">Work with arrays and various collection types in Java.</p>
+        <ul class="topics-list">
+          <li>Array declaration and initialization</li>
+          <li>Multidimensional arrays</li>
+          <li>Array methods and operations</li>
+          <li>ArrayList and LinkedList</li>
+          <li>HashMap and TreeMap</li>
+          <li>HashSet and TreeSet</li>
+          <li>Collections framework</li>
+          <li>Iterators and enhanced for loops</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Strings & Text Processing</h3>
+        </div>
+        <p class="unit-description">Master string manipulation and text processing in Java.</p>
+        <ul class="topics-list">
+          <li>String class and immutability</li>
+          <li>String methods and operations</li>
+          <li>StringBuilder and StringBuffer</li>
+          <li>String formatting</li>
+          <li>Regular expressions</li>
+          <li>Text parsing techniques</li>
+          <li>Character encoding</li>
+          <li>Locale and internationalization</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Object-Oriented Programming</h3>
+        </div>
+        <p class="unit-description">Master OOP concepts including classes, inheritance, and polymorphism.</p>
+        <ul class="topics-list">
+          <li>Classes and objects</li>
+          <li>Fields, methods, and constructors</li>
+          <li>Access modifiers</li>
+          <li>Encapsulation principles</li>
+          <li>Inheritance</li>
+          <li>Method overriding</li>
+          <li>super keyword</li>
+          <li>Abstract classes</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Interfaces & Polymorphism</h3>
+        </div>
+        <p class="unit-description">Implement interfaces and understand polymorphic behavior.</p>
+        <ul class="topics-list">
+          <li>Interface definition and implementation</li>
+          <li>Multiple interface inheritance</li>
+          <li>Default and static methods in interfaces</li>
+          <li>Polymorphism concepts</li>
+          <li>Dynamic method dispatch</li>
+          <li>Abstract vs interface</li>
+          <li>Marker interfaces</li>
+          <li>Functional interfaces</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Exception Handling</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully with Java's exception handling mechanisms.</p>
+        <ul class="topics-list">
+          <li>Exception hierarchy</li>
+          <li>try, catch, finally blocks</li>
+          <li>Checked vs unchecked exceptions</li>
+          <li>throws and throw keywords</li>
+          <li>Custom exceptions</li>
+          <li>Exception best practices</li>
+          <li>Try-with-resources</li>
+          <li>Suppressed exceptions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Generics</h3>
+        </div>
+        <p class="unit-description">Create type-safe and reusable code with generic programming.</p>
+        <ul class="topics-list">
+          <li>Generic classes and methods</li>
+          <li>Type parameters and bounds</li>
+          <li>Wildcards (? extends, ? super)</li>
+          <li>Generic collections</li>
+          <li>Type erasure</li>
+          <li>Generic interfaces</li>
+          <li>Raw types and compatibility</li>
+          <li>Generic best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Lambda Expressions & Functional Programming</h3>
+        </div>
+        <p class="unit-description">Master functional programming concepts with lambdas and streams.</p>
+        <ul class="topics-list">
+          <li>Lambda expression syntax</li>
+          <li>Functional interfaces</li>
+          <li>Method references</li>
+          <li>Built-in functional interfaces</li>
+          <li>Stream API basics</li>
+          <li>Stream operations</li>
+          <li>Collectors</li>
+          <li>Optional class</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Stream API & Data Processing</h3>
+        </div>
+        <p class="unit-description">Process data efficiently using Java's powerful Stream API.</p>
+        <ul class="topics-list">
+          <li>Stream creation and sources</li>
+          <li>Intermediate operations</li>
+          <li>Terminal operations</li>
+          <li>Parallel streams</li>
+          <li>Custom collectors</li>
+          <li>Stream performance</li>
+          <li>Debugging streams</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">File I/O & NIO</h3>
+        </div>
+        <p class="unit-description">Handle file operations and I/O with Java's IO and NIO libraries.</p>
+        <ul class="topics-list">
+          <li>File and Path classes</li>
+          <li>Reading and writing files</li>
+          <li>InputStream and OutputStream</li>
+          <li>Reader and Writer classes</li>
+          <li>NIO.2 features</li>
+          <li>Files utility class</li>
+          <li>Watching directories</li>
+          <li>Memory-mapped files</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Multithreading & Concurrency</h3>
+        </div>
+        <p class="unit-description">Master concurrent programming with threads and synchronization.</p>
+        <ul class="topics-list">
+          <li>Thread creation and lifecycle</li>
+          <li>Runnable and Callable interfaces</li>
+          <li>Synchronization mechanisms</li>
+          <li>volatile keyword</li>
+          <li>Executor framework</li>
+          <li>Concurrent collections</li>
+          <li>Locks and conditions</li>
+          <li>CompletableFuture</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Advanced Java Features</h3>
+        </div>
+        <p class="unit-description">Explore advanced Java language features and modern syntax.</p>
+        <ul class="topics-list">
+          <li>Annotations and reflection</li>
+          <li>Enum types</li>
+          <li>Nested and inner classes</li>
+          <li>Records (Java 14+)</li>
+          <li>Pattern matching for instanceof</li>
+          <li>Text blocks</li>
+          <li>Switch expressions</li>
+          <li>Sealed classes (Java 17+)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Application Development</h3>
+        </div>
+        <p class="unit-description">Build real-world applications with Java frameworks and libraries.</p>
+        <ul class="topics-list">
+          <li>Console applications</li>
+          <li>GUI with Swing/JavaFX</li>
+          <li>Web development with Spring</li>
+          <li>Database connectivity (JDBC)</li>
+          <li>Build tools (Maven/Gradle)</li>
+          <li>Testing with JUnit</li>
+          <li>Logging frameworks</li>
+          <li>Deployment strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: Java Introduction</h2>
+      <p>Learn the fundamentals of Java and the JVM ecosystem</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Java?</h3>
+        <p>Java is a high-level, object-oriented programming language designed for platform independence.</p>
+        <div class="concept-box">
+          <strong>Key Features:</strong> Platform independent, Object-oriented, Secure, Robust, Multithreaded
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Java Virtual Machine (JVM)</h3>
+        <p>The JVM is the runtime environment that executes Java bytecode.</p>
+        <div class="jvm-architecture">
+          <div class="arch-level application-level">Java Application (.java)</div>
+          <div class="arch-level jvm-level">JVM & Bytecode (.class)</div>
+          <div class="arch-level os-level">Operating System</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Setting up your Java development environment with JDK and IDE.</p>
+        <div class="ide-demo">
+          <div class="ide-feature">JDK 21 LTS Installation</div>
+          <div class="ide-feature">IntelliJ IDEA / Eclipse Setup</div>
+          <div class="ide-feature">PATH Configuration</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Java Program</h3>
+        <p>Write and run your first Java application.</p>
+        <div class="java-example">
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}
+        </div>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="compileCode()">Compile & Run</button>
+          <div class="output-area" id="java-results">Click 'Compile & Run' to see output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Basic Syntax & Structure</h2>
+      <p>Master the fundamental syntax and program structure of Java</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Java Program Structure</h3>
+        <p>Understanding the basic structure of a Java program.</p>
+        <div class="syntax-highlight">
+          Every Java application must have a main method as the entry point
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Packages and Imports</h3>
+        <p>Organizing code with packages and importing classes.</p>
+        <div class="package-demo">
+          <div class="package-visual">package com.example.myapp;</div>
+          <div class="package-visual">import java.util.List;</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Naming Conventions</h3>
+        <p>Java naming conventions for classes, methods, and variables.</p>
+        <div class="best-practice-warning">
+          <strong>Classes:</strong> PascalCase<br>
+          <strong>Methods:</strong> camelCase<br>
+          <strong>Constants:</strong> UPPER_SNAKE_CASE
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Compilation Process</h3>
+        <p>How Java source code becomes executable bytecode.</p>
+        <div class="java-flow">
+          <div class="flow-step">.java</div>
+          <div class="arrow">→</div>
+          <div class="flow-step">javac</div>
+          <div class="arrow">→</div>
+          <div class="flow-step">.class</div>
+          <div class="arrow">→</div>
+          <div class="flow-step">JVM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Variables & Data Types</h2>
+      <p>Work with Java's type system and variable declarations</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Primitive Data Types</h3>
+        <p>Java's eight primitive data types for basic values.</p>
+        <div class="type-system">
+          <span class="type-category">byte</span>
+          <span class="type-category">short</span>
+          <span class="type-category">int</span>
+          <span class="type-category">long</span>
+          <span class="type-category">float</span>
+          <span class="type-category">double</span>
+          <span class="type-category">boolean</span>
+          <span class="type-category">char</span>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Declaration</h3>
+        <p>Declaring and initializing variables in Java.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoVariables()">Show Variables</button>
+          <div class="output-area" id="variable-output">Click to see variable examples</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Wrapper Classes</h3>
+        <p>Object equivalents of primitive types for advanced operations.</p>
+        <div class="concept-box">
+          Autoboxing automatically converts primitives to wrapper objects
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Conversion</h3>
+        <p>Converting between different data types safely.</p>
+        <div class="best-practice-warning">
+          Implicit conversion (widening) is safe, explicit casting may lose data
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 4: Operators & Expressions</h2>
+      <p>Master Java operators and build complex expressions</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arithmetic Operators</h3>
+        <p>Basic mathematical operations in Java.</p>
+        <div class="java-example">
+int a = 10, b = 3;
+int sum = a + b;      // 13
+int remainder = a % b; // 1
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Comparison Operators</h3>
+        <p>Comparing values and returning boolean results.</p>
+        <div class="syntax-highlight">
+          ==, !=, <, >, <=, >= for primitive comparisons<br>
+          .equals() method for object comparisons
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Logical Operators</h3>
+        <p>Combining boolean expressions with logical operators.</p>
+        <div class="concept-box">
+          && (AND), || (OR), ! (NOT) with short-circuit evaluation
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Operator Precedence</h3>
+        <p>Understanding the order of operations in Java expressions.</p>
+        <div class="best-practice-warning">
+          Use parentheses to make complex expressions clear and unambiguous
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 5: Control Flow</h2>
+      <p>Control program execution with conditionals and loops</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Statements</h3>
+        <p>Making decisions with if-else statements.</p>
+        <div class="java-example">
+if (age >= 18) {
+    System.out.println("Adult");
+} else {
+    System.out.println("Minor");
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Switch Statements</h3>
+        <p>Multi-way branching with switch statements.</p>
+        <div class="syntax-highlight">
+          Java 14+ introduced switch expressions with arrow syntax
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Loop Structures</h3>
+        <p>Repeating code execution with various loop types.</p>
+        <div class="concept-box">
+          for, while, do-while, and enhanced for-each loops
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Break and Continue</h3>
+        <p>Controlling loop execution with break and continue statements.</p>
+        <div class="best-practice-warning">
+          Use labeled breaks sparingly; prefer structured control flow
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 6: Methods & Parameters</h2>
+      <p>Create reusable code with methods and understand parameter passing</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method Declaration</h3>
+        <p>Defining methods with proper syntax and conventions.</p>
+        <div class="java-example">
+public static int add(int a, int b) {
+    return a + b;
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method Overloading</h3>
+        <p>Creating multiple methods with the same name but different parameters.</p>
+        <div class="concept-box">
+          Overloading is resolved at compile time based on parameter types
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Arguments</h3>
+        <p>Using varargs for methods that accept variable number of parameters.</p>
+        <div class="syntax-highlight">
+          public void print(String... messages) - varargs syntax
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Parameter Passing</h3>
+        <p>Understanding how Java passes parameters to methods.</p>
+        <div class="best-practice-warning">
+          Java is always pass-by-value, even for object references
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 7: Arrays & Collections</h2>
+      <p>Work with arrays and various collection types in Java</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arrays</h3>
+        <p>Working with fixed-size arrays in Java.</p>
+        <div class="java-example">
+int[] numbers = {1, 2, 3, 4, 5};
+String[] names = new String[10];
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Collections Framework</h3>
+        <p>Dynamic data structures for flexible data management.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoCollections()">Show Collections</button>
+          <div class="output-area" id="collection-output">Click to see collection examples</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">List Interface</h3>
+        <p>Ordered collections with ArrayList and LinkedList implementations.</p>
+        <div class="concept-box">
+          ArrayList for random access, LinkedList for frequent insertions
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Map Interface</h3>
+        <p>Key-value pair collections with HashMap and TreeMap.</p>
+        <div class="framework-showcase">
+          HashMap for O(1) access, TreeMap for sorted keys
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 8: Strings & Text Processing</h2>
+      <p>Master string manipulation and text processing in Java</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">String Immutability</h3>
+        <p>Understanding why String objects cannot be modified.</p>
+        <div class="concept-box">
+          String concatenation creates new objects; use StringBuilder for efficiency
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">StringBuilder</h3>
+        <p>Efficient string building for multiple concatenations.</p>
+        <div class="java-example">
+StringBuilder sb = new StringBuilder();
+sb.append("Hello").append(" ").append("World");
+String result = sb.toString();
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Regular Expressions</h3>
+        <p>Pattern matching and text processing with regex.</p>
+        <div class="syntax-highlight">
+          Pattern and Matcher classes for complex text operations
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">String Methods</h3>
+        <p>Common string operations and manipulations.</p>
+        <div class="best-practice-warning">
+          Always use .equals() for string comparison, not ==
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 9: Object-Oriented Programming</h2>
+      <p>Master OOP concepts including classes, inheritance, and polymorphism</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Classes and Objects</h3>
+        <p>The fundamental building blocks of object-oriented programming.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoClasses()">Show Class Example</button>
+          <div class="output-area" id="class-output">Click to see class definition</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Encapsulation</h3>
+        <p>Hiding internal implementation details with access modifiers.</p>
+        <div class="oop-insight">
+          private fields with public getter/setter methods
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inheritance</h3>
+        <p>Creating new classes based on existing classes.</p>
+        <div class="inheritance-demo">
+          <div class="inheritance-level parent-class">Animal (Parent)</div>
+          <div class="inheritance-level child-class">Dog extends Animal</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Constructors</h3>
+        <p>Special methods for initializing object instances.</p>
+        <div class="concept-box">
+          Default constructor is provided if no constructor is defined
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 10: Interfaces & Polymorphism</h2>
+      <p>Implement interfaces and understand polymorphic behavior</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interface Definition</h3>
+        <p>Contracts that classes must implement.</p>
+        <div class="java-example">
+public interface Drawable {
+    void draw();
+    default void print() {
+        System.out.println("Printing...");
+    }
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiple Inheritance</h3>
+        <p>Implementing multiple interfaces to achieve multiple inheritance.</p>
+        <div class="oop-insight">
+          Java supports multiple interface inheritance but not class inheritance
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Polymorphism</h3>
+        <p>One interface, multiple implementations.</p>
+        <div class="concept-box">
+          Runtime polymorphism through method overriding and dynamic dispatch
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Functional Interfaces</h3>
+        <p>Interfaces with single abstract methods, enabling lambda expressions.</p>
+        <div class="framework-showcase">
+          @FunctionalInterface annotation ensures single abstract method
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 11: Exception Handling</h2>
