@@ -1,0 +1,1635 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning TypeScript Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🔷';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .typescript-example {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #1d4ed8;
+      overflow-x: auto;
+    }
+
+    .compiler-example {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #3b82f6;
+      overflow-x: auto;
+    }
+
+    .typescript-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1d4ed8;
+    }
+
+    .syntax-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .type-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .framework-showcase {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .async-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .compiler-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .typescript-level {
+      background: #3b82f6;
+      font-size: 18px;
+    }
+
+    .compiler-level {
+      background: #1d4ed8;
+      font-size: 16px;
+    }
+
+    .javascript-level {
+      background: #1e40af;
+      font-size: 14px;
+    }
+
+    .typescript-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #3b82f6;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #3b82f6;
+    }
+
+    .typescript-results {
+      background: #3b82f6;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #3b82f6;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .typescript-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .compiled {
+      color: #1d4ed8;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .running {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #3b82f6;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .framework-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .framework-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .framework-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .framework-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ide-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .ide-feature {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .interactive-demo {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .demo-button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .demo-button:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .output-area {
+      background: #111827;
+      color: #3b82f6;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-family: monospace;
+      min-height: 50px;
+    }
+
+    .type-system {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .type-category {
+      display: inline-block;
+      background: #1d4ed8;
+      color: white;
+      padding: 8px 12px;
+      margin: 2px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .module-demo {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .module-visual {
+      background: #16a34a;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .generic-demo {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .generic-level {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .generic-base {
+      background: #dc2626;
+      color: white;
+    }
+
+    .generic-constraint {
+      background: #ef4444;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .decorator-demo {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .decorator-operation {
+      background: #f59e0b;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .async-visualization {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .async-step {
+      background: #dc2626;
+      color: white;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .async-step.completed {
+      background: #16a34a;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Check for URL hash on load
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#unit-')) {
+        const unitNumber = hash.replace('#unit-', '');
+        showUnitDetail(unitNumber);
+      }
+      updatePerformance();
+    });
+
+    // TypeScript compilation simulation
+    function compileCode() {
+      const results = document.getElementById('typescript-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="typescript-status">
+            <span class="compiled">✅ Compilation successful</span> | 
+            <span class="running">🔷 TypeScript 5.3</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>TypeScript Compiler (tsc) - JavaScript generated</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [96, 93, 99, 97];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Interactive demo functions
+    function demoTypes() {
+      const output = document.getElementById('type-output');
+      if (output) {
+        output.innerHTML = `let age: number = 25;<br>let name: string = "TypeScript";<br>let isActive: boolean = true;<br>let items: string[] = ["a", "b"];`;
+      }
+    }
+
+    function demoInterfaces() {
+      const output = document.getElementById('interface-output');
+      if (output) {
+        output.innerHTML = `interface Person {<br>&nbsp;&nbsp;name: string;<br>&nbsp;&nbsp;age: number;<br>&nbsp;&nbsp;email?: string;<br>}`;
+      }
+    }
+
+    function demoGenerics() {
+      const output = document.getElementById('generic-output');
+      if (output) {
+        output.innerHTML = `function identity&lt;T&gt;(arg: T): T {<br>&nbsp;&nbsp;return arg;<br>}<br><br>let result = identity&lt;string&gt;("Hello");`;
+      }
+    }
+
+    function demoClasses() {
+      const output = document.getElementById('class-output');
+      if (output) {
+        output.innerHTML = `class Vehicle {<br>&nbsp;&nbsp;private _speed: number = 0;<br>&nbsp;&nbsp;<br>&nbsp;&nbsp;get speed(): number {<br>&nbsp;&nbsp;&nbsp;&nbsp;return this._speed;<br>&nbsp;&nbsp;}<br>}`;
+      }
+    }
+
+    function demoModules() {
+      const output = document.getElementById('module-output');
+      if (output) {
+        output.innerHTML = `// math.ts<br>export function add(a: number, b: number) {<br>&nbsp;&nbsp;return a + b;<br>}<br><br>// main.ts<br>import { add } from './math';`;
+      }
+    }
+
+    function demoDecorators() {
+      const output = document.getElementById('decorator-output');
+      if (output) {
+        output.innerHTML = `@Component({<br>&nbsp;&nbsp;selector: 'app-user',<br>&nbsp;&nbsp;template: '&lt;h1&gt;{{name}}&lt;/h1&gt;'<br>})<br>class UserComponent { }`;
+      }
+    }
+
+    // Async visualization
+    function demoAsyncFlow() {
+      const steps = document.querySelectorAll('.async-step');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.add('completed');
+        }, index * 1000);
+      });
+      
+      // Reset after demo
+      setTimeout(() => {
+        steps.forEach(step => step.classList.remove('completed'));
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🔷 TypeScript Programming Fundamentals</h1>
+    <p>Master JavaScript's typed superset for scalable application development</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">TypeScript Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">TypeScript Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~130</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">TS 5.3</span>
+          <div class="stat-label">Latest Version</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Type Safe</span>
+          <div class="stat-label">JavaScript++</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">TypeScript Introduction</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of TypeScript and its benefits over JavaScript.</p>
+        <ul class="topics-list">
+          <li>What is TypeScript?</li>
+          <li>TypeScript vs JavaScript</li>
+          <li>Static typing benefits</li>
+          <li>TypeScript compiler (tsc)</li>
+          <li>Setting up development environment</li>
+          <li>VS Code integration</li>
+          <li>First TypeScript program</li>
+          <li>Compilation process</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Basic Types & Annotations</h3>
+        </div>
+        <p class="unit-description">Master TypeScript's type system and type annotations.</p>
+        <ul class="topics-list">
+          <li>Basic types (string, number, boolean)</li>
+          <li>Type annotations</li>
+          <li>Type inference</li>
+          <li>Arrays and tuples</li>
+          <li>Enum types</li>
+          <li>Any and unknown types</li>
+          <li>Void and never types</li>
+          <li>Union and intersection types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Variables & Functions</h3>
+        </div>
+        <p class="unit-description">Work with typed variables and function declarations.</p>
+        <ul class="topics-list">
+          <li>Variable declarations with types</li>
+          <li>Let, const, and var</li>
+          <li>Function type annotations</li>
+          <li>Parameter types</li>
+          <li>Return type annotations</li>
+          <li>Optional parameters</li>
+          <li>Default parameters</li>
+          <li>Rest parameters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Objects & Interfaces</h3>
+        </div>
+        <p class="unit-description">Define object shapes and contracts with interfaces.</p>
+        <ul class="topics-list">
+          <li>Object type annotations</li>
+          <li>Interface declarations</li>
+          <li>Optional properties</li>
+          <li>Readonly properties</li>
+          <li>Index signatures</li>
+          <li>Interface inheritance</li>
+          <li>Function types in interfaces</li>
+          <li>Hybrid types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Classes & Inheritance</h3>
+        </div>
+        <p class="unit-description">Master object-oriented programming with TypeScript classes.</p>
+        <ul class="topics-list">
+          <li>Class declarations</li>
+          <li>Constructor functions</li>
+          <li>Access modifiers (public, private, protected)</li>
+          <li>Readonly modifier</li>
+          <li>Inheritance with extends</li>
+          <li>Abstract classes</li>
+          <li>Static members</li>
+          <li>Getters and setters</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Generics</h3>
+        </div>
+        <p class="unit-description">Create reusable and type-safe code with generic programming.</p>
+        <ul class="topics-list">
+          <li>Generic functions</li>
+          <li>Generic interfaces</li>
+          <li>Generic classes</li>
+          <li>Type constraints</li>
+          <li>Multiple type parameters</li>
+          <li>Generic type aliases</li>
+          <li>Conditional types</li>
+          <li>Mapped types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Advanced Types</h3>
+        </div>
+        <p class="unit-description">Explore TypeScript's advanced type system features.</p>
+        <ul class="topics-list">
+          <li>Union types</li>
+          <li>Intersection types</li>
+          <li>Type guards</li>
+          <li>Discriminated unions</li>
+          <li>Type aliases</li>
+          <li>Literal types</li>
+          <li>Index types</li>
+          <li>Conditional types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Modules & Namespaces</h3>
+        </div>
+        <p class="unit-description">Organize code with modules and understand namespaces.</p>
+        <ul class="topics-list">
+          <li>ES6 modules</li>
+          <li>Import and export statements</li>
+          <li>Default exports</li>
+          <li>Module resolution</li>
+          <li>Namespaces</li>
+          <li>Triple-slash directives</li>
+          <li>Declaration merging</li>
+          <li>Ambient modules</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Type Assertions & Guards</h3>
+        </div>
+        <p class="unit-description">Control type flow and make safe type assertions.</p>
+        <ul class="topics-list">
+          <li>Type assertions</li>
+          <li>User-defined type guards</li>
+          <li>typeof type guards</li>
+          <li>instanceof type guards</li>
+          <li>in operator</li>
+          <li>Discriminated unions</li>
+          <li>Assertion functions</li>
+          <li>Non-null assertion operator</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Decorators & Metadata</h3>
+        </div>
+        <p class="unit-description">Use decorators for meta-programming and framework integration.</p>
+        <ul class="topics-list">
+          <li>Decorator basics</li>
+          <li>Class decorators</li>
+          <li>Method decorators</li>
+          <li>Property decorators</li>
+          <li>Parameter decorators</li>
+          <li>Decorator factories</li>
+          <li>Reflect metadata</li>
+          <li>Framework decorators (Angular, NestJS)</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Error Handling & Debugging</h3>
+        </div>
+        <p class="unit-description">Handle errors effectively and debug TypeScript applications.</p>
+        <ul class="topics-list">
+          <li>Error types and handling</li>
+          <li>Try-catch with types</li>
+          <li>Custom error classes</li>
+          <li>Compiler error messages</li>
+          <li>Source maps</li>
+          <li>Debugging in VS Code</li>
+          <li>Type checking in runtime</li>
+          <li>Error boundaries</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Async Programming</h3>
+        </div>
+        <p class="unit-description">Master asynchronous programming with TypeScript.</p>
+        <ul class="topics-list">
+          <li>Promises with types</li>
+          <li>Async/await syntax</li>
+          <li>Generic Promise types</li>
+          <li>Error handling in async code</li>
+          <li>Observable types (RxJS)</li>
+          <li>Callback type annotations</li>
+          <li>Event handling</li>
+          <li>Concurrent operations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Utility Types</h3>
+        </div>
+        <p class="unit-description">Leverage built-in utility types for type transformations.</p>
+        <ul class="topics-list">
+          <li>Partial&lt;T&gt;</li>
+          <li>Required&lt;T&gt;</li>
+          <li>Readonly&lt;T&gt;</li>
+          <li>Pick&lt;T, K&gt;</li>
+          <li>Omit&lt;T, K&gt;</li>
+          <li>Exclude&lt;T, U&gt;</li>
+          <li>Extract&lt;T, U&gt;</li>
+          <li>Record&lt;K, T&gt;</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Declaration Files</h3>
+        </div>
+        <p class="unit-description">Work with type definitions and create declaration files.</p>
+        <ul class="topics-list">
+          <li>Type definition files (.d.ts)</li>
+          <li>DefinitelyTyped repository</li>
+          <li>Creating declaration files</li>
+          <li>Ambient declarations</li>
+          <li>Module augmentation</li>
+          <li>Global augmentation</li>
+          <li>Publishing type definitions</li>
+          <li>Third-party library types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Configuration & Compilation</h3>
+        </div>
+        <p class="unit-description">Configure TypeScript compiler and build processes.</p>
+        <ul class="topics-list">
+          <li>tsconfig.json configuration</li>
+          <li>Compiler options</li>
+          <li>Project references</li>
+          <li>Build modes</li>
+          <li>Watch mode</li>
+          <li>Incremental compilation</li>
+          <li>Build tools integration</li>
+          <li>Path mapping</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Testing TypeScript</h3>
+        </div>
+        <p class="unit-description">Test TypeScript applications with various testing frameworks.</p>
+        <ul class="topics-list">
+          <li>Jest with TypeScript</li>
+          <li>Mocha and Chai setup</li>
+          <li>Type testing</li>
+          <li>Mocking with types</li>
+          <li>Test-driven development</li>
+          <li>Coverage reports</li>
+          <li>Integration testing</li>
+          <li>E2E testing setup</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Framework Integration</h3>
+        </div>
+        <p class="unit-description">Integrate TypeScript with popular frameworks and libraries.</p>
+        <ul class="topics-list">
+          <li>React with TypeScript</li>
+          <li>Angular TypeScript features</li>
+          <li>Vue.js with TypeScript</li>
+          <li>Node.js applications</li>
+          <li>Express.js typing</li>
+          <li>Database ORM types</li>
+          <li>API client types</li>
+          <li>State management typing</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Production Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy TypeScript applications to production environments.</p>
+        <ul class="topics-list">
+          <li>Build optimization</li>
+          <li>Bundle analysis</li>
+          <li>Production configurations</li>
+          <li>CI/CD integration</li>
+          <li>Docker with TypeScript</li>
+          <li>Performance monitoring</li>
+          <li>Error tracking</li>
+          <li>Deployment strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: TypeScript Introduction</h2>
+      <p>Learn the fundamentals of TypeScript and its benefits over JavaScript</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is TypeScript?</h3>
+        <p>TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.</p>
+        <div class="concept-box">
+          <strong>Key Benefits:</strong> Static typing, Better IDE support, Early error detection, Enhanced refactoring
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">TypeScript Compiler</h3>
+        <p>The TypeScript compiler (tsc) transforms TypeScript code into JavaScript.</p>
+        <div class="compiler-architecture">
+          <div class="arch-level typescript-level">TypeScript Source (.ts)</div>
+          <div class="arch-level compiler-level">TypeScript Compiler (tsc)</div>
+          <div class="arch-level javascript-level">JavaScript Output (.js)</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Setting up your TypeScript development environment.</p>
+        <div class="ide-demo">
+          <div class="ide-feature">Node.js & npm Installation</div>
+          <div class="ide-feature">TypeScript Compiler (npm install -g typescript)</div>
+          <div class="ide-feature">VS Code Extensions</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First TypeScript Program</h3>
+        <p>Write and compile your first TypeScript application.</p>
+        <div class="typescript-example">
+function greet(name: string): string {
+    return `Hello, ${name}!`;
+}
+
+const message = greet("TypeScript");
+console.log(message);
+        </div>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="compileCode()">Compile & Run</button>
+          <div class="output-area" id="typescript-results">Click 'Compile & Run' to see output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Basic Types & Annotations</h2>
+      <p>Master TypeScript's type system and type annotations</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Types</h3>
+        <p>TypeScript's fundamental data types for type safety.</p>
+        <div class="type-system">
+          <span class="type-category">string</span>
+          <span class="type-category">number</span>
+          <span class="type-category">boolean</span>
+          <span class="type-category">array</span>
+          <span class="type-category">tuple</span>
+          <span class="type-category">enum</span>
+          <span class="type-category">any</span>
+          <span class="type-category">unknown</span>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Annotations</h3>
+        <p>Explicitly specify types for variables and functions.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoTypes()">Show Type Examples</button>
+          <div class="output-area" id="type-output">Click to see type annotations</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Inference</h3>
+        <p>TypeScript automatically infers types when not explicitly provided.</p>
+        <div class="syntax-highlight">
+          TypeScript can infer types from initial values and usage patterns
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Union Types</h3>
+        <p>Variables that can hold values of multiple types.</p>
+        <div class="type-insight">
+          Use | operator to create union types: string | number
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Variables & Functions</h2>
+      <p>Work with typed variables and function declarations</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Declarations</h3>
+        <p>Declaring variables with explicit types in TypeScript.</p>
+        <div class="typescript-example">
+let count: number = 0;
+const name: string = "TypeScript";
+var isActive: boolean = true;
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Function Types</h3>
+        <p>Adding type annotations to function parameters and return values.</p>
+        <div class="concept-box">
+          Function signatures include parameter types and return types
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Optional Parameters</h3>
+        <p>Making function parameters optional with the ? operator.</p>
+        <div class="syntax-highlight">
+          function greet(name: string, title?: string): string
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rest Parameters</h3>
+        <p>Handling variable number of arguments with rest parameters.</p>
+        <div class="best-practice-warning">
+          Rest parameters must be the last parameter in function signature
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 4: Objects & Interfaces</h2>
+      <p>Define object shapes and contracts with interfaces</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Object Types</h3>
+        <p>Defining the shape of objects with type annotations.</p>
+        <div class="typescript-example">
+let person: { name: string; age: number } = {
+    name: "John",
+    age: 30
+};
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interface Declarations</h3>
+        <p>Creating reusable object type definitions with interfaces.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoInterfaces()">Show Interface</button>
+          <div class="output-area" id="interface-output">Click to see interface example</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Optional Properties</h3>
+        <p>Making object properties optional with the ? modifier.</p>
+        <div class="type-insight">
+          Optional properties may or may not be present in the object
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Index Signatures</h3>
+        <p>Defining objects with dynamic property names.</p>
+        <div class="concept-box">
+          [key: string]: any allows for dynamic property access
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 5: Classes & Inheritance</h2>
+      <p>Master object-oriented programming with TypeScript classes</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Class Declarations</h3>
+        <p>Creating classes with typed properties and methods.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoClasses()">Show Class Example</button>
+          <div class="output-area" id="class-output">Click to see class definition</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Access Modifiers</h3>
+        <p>Controlling access to class members with modifiers.</p>
+        <div class="type-system">
+          <span class="type-category">public</span>
+          <span class="type-category">private</span>
+          <span class="type-category">protected</span>
+          <span class="type-category">readonly</span>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Inheritance</h3>
+        <p>Creating class hierarchies with extends keyword.</p>
+        <div class="generic-demo">
+          <div class="generic-level generic-base">Animal (Base Class)</div>
+          <div class="generic-level generic-constraint">Dog extends Animal</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Abstract Classes</h3>
+        <p>Defining base classes that cannot be instantiated directly.</p>
+        <div class="best-practice-warning">
+          Abstract classes provide a common interface for derived classes
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 6: Generics</h2>
+      <p>Create reusable and type-safe code with generic programming</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Generic Functions</h3>
+        <p>Creating functions that work with multiple types.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoGenerics()">Show Generic Example</button>
+          <div class="output-area" id="generic-output">Click to see generic function</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Generic Interfaces</h3>
+        <p>Defining interfaces with type parameters.</p>
+        <div class="concept-box">
+          Generic interfaces allow for flexible, reusable type definitions
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Constraints</h3>
+        <p>Limiting generic types with extends keyword.</p>
+        <div class="type-insight">
+          Constraints ensure generic types have specific properties or methods
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mapped Types</h3>
+        <p>Creating new types by transforming existing types.</p>
+        <div class="syntax-highlight">
+          Mapped types iterate over properties of existing types
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 7: Advanced Types</h2>
+      <p>Explore TypeScript's advanced type system features</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Union Types</h3>
+        <p>Types that can be one of several possible types.</p>
+        <div class="typescript-example">
+function formatValue(value: string | number): string {
+    return typeof value === "string" ? value : value.toString();
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Guards</h3>
+        <p>Narrowing types within conditional blocks.</p>
+        <div class="concept-box">
+          Type guards help TypeScript understand type narrowing in runtime checks
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Discriminated Unions</h3>
+        <p>Union types with a common discriminant property.</p>
+        <div class="type-insight">
+          Discriminated unions enable exhaustive pattern matching
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Conditional Types</h3>
+        <p>Types that depend on a condition.</p>
+        <div class="best-practice-warning">
+          Conditional types enable advanced type-level programming
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 8: Modules & Namespaces</h2>
+      <p>Organize code with modules and understand namespaces</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ES6 Modules</h3>
+        <p>Using import and export statements for code organization.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoModules()">Show Module Example</button>
+          <div class="output-area" id="module-output">Click to see module syntax</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Module Resolution</h3>
+        <p>How TypeScript resolves module imports.</p>
+        <div class="module-demo">
+          <div class="module-visual">Relative imports: ./module</div>
+          <div class="module-visual">Absolute imports: node_modules</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Namespaces</h3>
+        <p>Organizing code with TypeScript namespaces.</p>
+        <div class="framework-showcase">
+          Namespaces provide a way to group related functionality
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Declaration Merging</h3>
+        <p>Combining multiple declarations into a single definition.</p>
+        <div class="concept-box">
+          Declaration merging allows extending existing types and modules
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 9: Type Assertions & Guards</h2>
+      <p>Control type flow and make safe type assertions</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Assertions</h3>
+        <p>Telling TypeScript about the type of a value.</p>
+        <div class="typescript-example">
+let value: unknown = "Hello World";
+let length = (value as string).length;
+// or
+let length2 = (&lt;string&gt;value).length;
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">User-Defined Type Guards</h3>
+        <p>Creating functions that act as type guards.</p>
+        <div class="type-insight">
+          Type guard functions return a type predicate
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Built-in Type Guards</h3>
+        <p>Using typeof and instanceof for type narrowing.</p>
+        <div class="syntax-highlight">
+          typeof, instanceof, and in operator for type checking
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Non-null Assertion</h3>
+        <p>Using the ! operator to assert non-null values.</p>
+        <div class="best-practice-warning">
+          Use non-null assertion sparingly and only when certain of non-null value
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 10: Decorators & Metadata</h2>
+      <p>Use decorators for meta-programming and framework integration</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Decorator Basics</h3>
+        <p>Understanding decorator syntax and usage.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoDecorators()">Show Decorator Example</button>
+          <div class="output-area" id="decorator-output">Click to see decorator syntax</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Class Decorators</h3>
+        <p>Decorators that modify or replace class constructors.</p>
+        <div class="decorator-demo">
+          <div class="decorator-operation">@Component - Angular decorator</div>
+          <div class="decorator-operation">@Entity - Database decorator</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Method Decorators</h3>
+        <p>Decorators applied to class methods.</p>
+        <div class="concept-box">
+          Method decorators can modify method behavior or add metadata
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Reflect Metadata</h3>
+        <p>Using reflection to access decorator metadata at runtime.</p>
+        <div class="framework-showcase">
+          Reflect.defineMetadata and Reflect.getMetadata for runtime access
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 11: Error Handling & Debugging</h2>
+      <p>Handle errors effectively and debug TypeScript applications</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Error Types</h3>
+        <p>Different types of errors in TypeScript applications.</p>
+        <div class="type-system">
+          <span class="
