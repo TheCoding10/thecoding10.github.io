@@ -306,275 +306,30 @@
       overflow-x: auto;
     }
 
-    .js-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #d97706;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin: 2px;
-    }
-
-    .concept-box {
-      background: #fffbeb;
-      border: 1px solid #fed7aa;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #d97706;
-    }
-
-    .syntax-highlight {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-left: 4px solid #3b82f6;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #1e40af;
-    }
-
-    .dom-insight {
-      background: #faf5ff;
-      border: 1px solid #d8b4fe;
-      border-left: 4px solid #7c3aed;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #6b21a8;
-    }
-
-    .framework-showcase {
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #0c4a6e;
-    }
-
-    .async-note {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #7f1d1d;
-    }
-
-    .best-practice-warning {
-      background: #fefce8;
-      border: 1px solid #fde047;
-      border-left: 4px solid #eab308;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #713f12;
-    }
-
-    .js-architecture {
-      background: #f8fafc;
-      border: 2px dashed #cbd5e1;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 15px 0;
-      text-align: center;
-    }
-
-    .arch-level {
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 8px;
+    .advanced-card {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
       color: white;
-      font-weight: 600;
     }
 
-    .browser-level {
-      background: #f59e0b;
-      font-size: 18px;
+    .advanced-card .unit-number {
+      background: rgba(255, 255, 255, 0.2);
     }
 
-    .engine-level {
-      background: #d97706;
-      font-size: 16px;
-    }
-
-    .runtime-level {
-      background: #b45309;
-      font-size: 14px;
-    }
-
-    .js-flow {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px 0;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .flow-step {
-      background: #f59e0b;
+    .advanced-card .unit-title {
       color: white;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      flex: 1;
-      min-width: 120px;
     }
 
-    .arrow {
-      font-size: 24px;
-      color: #f59e0b;
+    .advanced-card .unit-description {
+      color: rgba(255, 255, 255, 0.9);
     }
 
-    .js-results {
-      background: #f59e0b;
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      margin: 15px 0;
+    .advanced-card .topics-list li {
+      color: rgba(255, 255, 255, 0.9);
+      border-bottom-color: rgba(255, 255, 255, 0.2);
     }
 
-    .result-item {
-      display: inline-block;
-      background: white;
-      color: #f59e0b;
-      padding: 10px 15px;
-      border-radius: 6px;
-      margin: 5px;
-      font-weight: 600;
-    }
-
-    .js-status {
-      font-size: 24px;
-      margin: 10px 0;
-    }
-
-    .running {
-      color: #d97706;
-    }
-
-    .stopped {
-      color: #dc2626;
-    }
-
-    .starting {
-      color: #eab308;
-    }
-
-    .performance-demo {
-      background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 15px 0;
-    }
-
-    .perf-bar {
-      background: #e5e7eb;
-      border-radius: 6px;
-      height: 20px;
-      margin: 10px 0;
-      overflow: hidden;
-    }
-
-    .perf-fill {
-      background: #f59e0b;
-      height: 100%;
-      transition: width 0.3s ease;
-    }
-
-    .perf-label {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-
-    .library-comparison {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .library-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .library-name {
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 10px;
-    }
-
-    .library-description {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .browser-demo {
-      background: #faf5ff;
-      border: 1px solid #d8b4fe;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 15px 0;
-    }
-
-    .browser-function {
-      background: #f3e8ff;
-      border: 1px solid #c4b5fd;
-      border-radius: 4px;
-      padding: 10px;
-      margin: 5px 0;
-      font-family: monospace;
-      font-size: 12px;
-    }
-
-    .interactive-demo {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 15px 0;
-    }
-
-    .demo-button {
-      background: #f59e0b;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 5px;
-      transition: all 0.3s ease;
-    }
-
-    .demo-button:hover {
-      background: #d97706;
-      transform: translateY(-2px);
-    }
-
-    .output-area {
-      background: #111827;
-      color: #fbbf24;
-      padding: 15px;
-      border-radius: 6px;
-      margin-top: 10px;
-      font-family: monospace;
-      min-height: 50px;
+    .advanced-card .topics-list li:before {
+      content: '🚀';
     }
   </style>
   <script>
@@ -602,33 +357,6 @@
       document.getElementById('overview').style.display = 'block';
     }
 
-    // JavaScript execution simulation
-    function executeJavaScript() {
-      const results = document.getElementById('js-results');
-      if (results) {
-        results.innerHTML = `
-          <div class="js-status">
-            <span class="running">✅ Code executed</span> | 
-            <span class="starting">⚡ V8 Engine</span> | 
-            <span class="stopped">❌ 0 errors</span>
-          </div>
-          <div>JavaScript ES2023 - Execution completed successfully</div>
-        `;
-      }
-    }
-
-    // Performance simulation
-    function updatePerformance() {
-      const bars = document.querySelectorAll('.perf-fill');
-      const performances = [98, 95, 93, 97];
-      
-      bars.forEach((bar, index) => {
-        if (performances[index]) {
-          bar.style.width = performances[index] + '%';
-        }
-      });
-    }
-
     // Interactive demo functions
     function demoAlert() {
       alert('This is a JavaScript alert!');
@@ -652,15 +380,10 @@
       const output = document.getElementById('variable-output');
       if (output) {
         const name = 'JavaScript';
-        const year = 2023;
+        const year = 2024;
         output.textContent = `let name = "${name}"; const year = ${year};`;
       }
     }
-
-    // Initialize on load
-    window.addEventListener('load', () => {
-      updatePerformance();
-    });
   </script>
 </head>
 <body>
@@ -679,11 +402,11 @@
           <div class="stat-label">JavaScript Units</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">~90</span>
+          <span class="stat-number">~120</span>
           <div class="stat-label">Core Concepts</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">ES2023</span>
+          <span class="stat-number">ES2024</span>
           <div class="stat-label">Latest Standard</div>
         </div>
         <div class="stat-item">
@@ -903,4 +626,176 @@
           <li>Export statements</li>
           <li>Import statements</li>
           <li>Default exports</li>
-          <li>Named exports</li
+          <li>Named exports</li>
+          <li>Dynamic imports</li>
+          <li>Module bundlers</li>
+          <li>CommonJS vs ES modules</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Advanced Functions</h3>
+        </div>
+        <p class="unit-description">Deep dive into advanced function concepts and patterns.</p>
+        <ul class="topics-list">
+          <li>Function constructors</li>
+          <li>Call, apply, and bind methods</li>
+          <li>IIFE patterns</li>
+          <li>Currying and partial application</li>
+          <li>Memoization</li>
+          <li>Function composition</li>
+          <li>Generator functions</li>
+          <li>Iterator protocol</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Web APIs & Browser Integration</h3>
+        </div>
+        <p class="unit-description">Work with browser APIs and external services.</p>
+        <ul class="topics-list">
+          <li>Fetch API</li>
+          <li>Local Storage & Session Storage</li>
+          <li>Geolocation API</li>
+          <li>File API</li>
+          <li>Web Workers</li>
+          <li>Service Workers</li>
+          <li>Intersection Observer</li>
+          <li>Notification API</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Performance & Optimization</h3>
+        </div>
+        <p class="unit-description">Optimize JavaScript code for speed and efficiency.</p>
+        <ul class="topics-list">
+          <li>Performance measurement</li>
+          <li>Memory management</li>
+          <li>Garbage collection</li>
+          <li>Event loop optimization</li>
+          <li>Debouncing and throttling</li>
+          <li>Code splitting</li>
+          <li>Tree shaking</li>
+          <li>Performance profiling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Modern JavaScript & Frameworks</h3>
+        </div>
+        <p class="unit-description">Explore modern JavaScript features and framework concepts.</p>
+        <ul class="topics-list">
+          <li>ES2024 features</li>
+          <li>Optional chaining</li>
+          <li>Nullish coalescing</li>
+          <li>BigInt and Symbol</li>
+          <li>Proxy and Reflect</li>
+          <li>Framework introduction</li>
+          <li>Virtual DOM concepts</li>
+          <li>State management patterns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: JavaScript Introduction</h2>
+      <p>Foundation concepts of JavaScript programming</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is JavaScript?</h3>
+        <p>JavaScript is a high-level, interpreted programming language that enables dynamic content on web pages.</p>
+        <div class="js-example">// Your first JavaScript code
+console.log("Hello, World!");</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">JavaScript Engines</h3>
+        <p>Understanding V8, SpiderMonkey, and other engines that execute JavaScript code.</p>
+        <div class="code-example">Browser Engine Examples:
+• Chrome: V8
+• Firefox: SpiderMonkey
+• Safari: JavaScriptCore</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Setting up tools for JavaScript development including editors and debugging tools.</p>
+        <div class="code-example">Recommended Tools:
+• VS Code
+• Chrome DevTools
+• Node.js
+• Browser Console</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">ECMAScript Standards</h3>
+        <p>Learn about JavaScript standards and version history from ES5 to ES2024.</p>
+        <div class="code-example">ES Timeline:
+• ES5 (2009)
+• ES6/ES2015 (2015)
+• ES2024 (Latest)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Variables & Data Types</h2>
+      <p>Master JavaScript's dynamic typing system</p>
+    </div>
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Declarations</h3>
+        <p>Understanding var, let, and const declarations and their differences.</p>
+        <div class="js-example">let name = "JavaScript";
+const year = 2024;
+var oldStyle = "avoid this";</div>
+        <button class="demo-button" onclick="demoVariable()">Try Variable Demo</button>
+        <div class="output-area" id="variable-output">Click the demo button above</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Primitive Data Types</h3>
+        <p>Work with numbers, strings, booleans, null, undefined, symbols, and bigint.</p>
+        <div class="js-example">let number = 42;
+let text = "Hello";
+let isTrue = true;
+let empty = null;</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Coercion</h3>
+        <p>Understanding automatic type conversion in JavaScript operations.</p>
+        <div class="js-example">"5" + 3 // "53" (string)
+"5" - 3 // 2 (number)
+true + 1 // 2 (number)</div>
+      </div>
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Scope</h3>
+        <p>Learn about global, function, and block scope in JavaScript.</p>
+        <div class="js-example">function example() {
+  let blockScope = "visible here";
+  if (true) {
+    let blockScope = "different variable";
+  }
+}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Continue for all 16 units... -->
+  
+  <div class="page-container" id="unit-13">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 13: Advanced Functions</h2>
