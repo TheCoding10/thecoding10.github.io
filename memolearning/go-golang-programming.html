@@ -1,0 +1,1660 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Go (Golang) Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #0e7490 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🐹';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #06b6d4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0891b2;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .go-example {
+      background: #ecfeff;
+      border: 1px solid #a5f3fc;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #0891b2;
+      overflow-x: auto;
+    }
+
+    .compiler-example {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #06b6d4;
+      overflow-x: auto;
+    }
+
+    .go-badge {
+      display: inline-block;
+      background: #ecfeff;
+      color: #0891b2;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #ecfeff;
+      border: 1px solid #a5f3fc;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #0891b2;
+    }
+
+    .syntax-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .concurrency-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .framework-showcase {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .performance-note {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .go-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .application-level {
+      background: #06b6d4;
+      font-size: 18px;
+    }
+
+    .runtime-level {
+      background: #0891b2;
+      font-size: 16px;
+    }
+
+    .system-level {
+      background: #0e7490;
+      font-size: 14px;
+    }
+
+    .go-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #06b6d4;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #06b6d4;
+    }
+
+    .go-results {
+      background: #06b6d4;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #06b6d4;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .go-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .compiled {
+      color: #0891b2;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .running {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #06b6d4;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .framework-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .framework-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .framework-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .framework-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ide-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .ide-feature {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .interactive-demo {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .demo-button {
+      background: #06b6d4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .demo-button:hover {
+      background: #0891b2;
+      transform: translateY(-2px);
+    }
+
+    .output-area {
+      background: #111827;
+      color: #06b6d4;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-family: monospace;
+      min-height: 50px;
+    }
+
+    .type-system {
+      background: #ecfeff;
+      border: 1px solid #a5f3fc;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .type-category {
+      display: inline-block;
+      background: #0891b2;
+      color: white;
+      padding: 8px 12px;
+      margin: 2px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .package-demo {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .package-visual {
+      background: #16a34a;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .interface-demo {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .interface-level {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .interface-definition {
+      background: #dc2626;
+      color: white;
+    }
+
+    .interface-implementation {
+      background: #ef4444;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .goroutine-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .goroutine-operation {
+      background: #7c3aed;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .channel-visualization {
+      background: #fffbeb;
+      border: 1px solid #fed7aa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .channel-step {
+      background: #f59e0b;
+      color: white;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .channel-step.active {
+      background: #16a34a;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Check for URL hash on load
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#unit-')) {
+        const unitNumber = hash.replace('#unit-', '');
+        showUnitDetail(unitNumber);
+      }
+      updatePerformance();
+    });
+
+    // Go compilation simulation
+    function compileCode() {
+      const results = document.getElementById('go-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="go-status">
+            <span class="compiled">✅ Build successful</span> | 
+            <span class="running">🐹 Go 1.21</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>Go Runtime - Application ready</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [98, 95, 99, 96];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Interactive demo functions
+    function demoVariables() {
+      const output = document.getElementById('variable-output');
+      if (output) {
+        output.innerHTML = `var name string = "Go"<br>age := 25<br>isActive := true<br>price := 99.99`;
+      }
+    }
+
+    function demoStructs() {
+      const output = document.getElementById('struct-output');
+      if (output) {
+        output.innerHTML = `type Person struct {<br>&nbsp;&nbsp;Name string<br>&nbsp;&nbsp;Age  int<br>}<br><br>p := Person{Name: "John", Age: 30}`;
+      }
+    }
+
+    function demoGoroutines() {
+      const output = document.getElementById('goroutine-output');
+      if (output) {
+        output.innerHTML = `go func() {<br>&nbsp;&nbsp;fmt.Println("Running in goroutine")<br>}()<br><br>// Concurrent execution`;
+      }
+    }
+
+    function demoChannels() {
+      const output = document.getElementById('channel-output');
+      if (output) {
+        output.innerHTML = `ch := make(chan string)<br><br>go func() {<br>&nbsp;&nbsp;ch <- "Hello from goroutine"<br>}()<br><br>msg := <-ch`;
+      }
+    }
+
+    function demoInterfaces() {
+      const output = document.getElementById('interface-output');
+      if (output) {
+        output.innerHTML = `type Writer interface {<br>&nbsp;&nbsp;Write([]byte) (int, error)<br>}<br><br>// Any type with Write method implements Writer`;
+      }
+    }
+
+    function demoSlices() {
+      const output = document.getElementById('slice-output');
+      if (output) {
+        output.innerHTML = `numbers := []int{1, 2, 3}<br>numbers = append(numbers, 4)<br>slice := numbers[1:3] // [2, 3]`;
+      }
+    }
+
+    // Channel visualization
+    function demoChannelFlow() {
+      const steps = document.querySelectorAll('.channel-step');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.add('active');
+        }, index * 1000);
+      });
+      
+      // Reset after demo
+      setTimeout(() => {
+        steps.forEach(step => step.classList.remove('active'));
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🐹 Go (Golang) Programming Fundamentals</h1>
+    <p>Master Google's fast, simple, and reliable programming language for modern software development</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Go Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Go Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~120</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Go 1.21</span>
+          <div class="stat-label">Latest Version</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Fast & Simple</span>
+          <div class="stat-label">By Design</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Go Introduction</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of Go and its design philosophy.</p>
+        <ul class="topics-list">
+          <li>What is Go?</li>
+          <li>History and creators (Google)</li>
+          <li>Go design principles</li>
+          <li>Compiled vs interpreted</li>
+          <li>Cross-platform compilation</li>
+          <li>Setting up Go environment</li>
+          <li>Go workspace and modules</li>
+          <li>First Go program</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Basic Syntax & Structure</h3>
+        </div>
+        <p class="unit-description">Master the fundamental syntax and program structure of Go.</p>
+        <ul class="topics-list">
+          <li>Go program structure</li>
+          <li>Package declaration</li>
+          <li>Import statements</li>
+          <li>Main function</li>
+          <li>Comments</li>
+          <li>Naming conventions</li>
+          <li>Code formatting (gofmt)</li>
+          <li>Build and run commands</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Variables & Types</h3>
+        </div>
+        <p class="unit-description">Work with Go's static type system and variable declarations.</p>
+        <ul class="topics-list">
+          <li>Variable declaration</li>
+          <li>Short variable declaration (:=)</li>
+          <li>Basic types (int, string, bool)</li>
+          <li>Type inference</li>
+          <li>Constants</li>
+          <li>Zero values</li>
+          <li>Type conversions</li>
+          <li>Pointers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Control Flow</h3>
+        </div>
+        <p class="unit-description">Control program execution with Go's control structures.</p>
+        <ul class="topics-list">
+          <li>if statements</li>
+          <li>if with initialization</li>
+          <li>switch statements</li>
+          <li>Type switches</li>
+          <li>for loops</li>
+          <li>Range loops</li>
+          <li>Break and continue</li>
+          <li>Goto statements</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Functions</h3>
+        </div>
+        <p class="unit-description">Create reusable code with Go's function system.</p>
+        <ul class="topics-list">
+          <li>Function declaration</li>
+          <li>Parameters and arguments</li>
+          <li>Return values</li>
+          <li>Multiple return values</li>
+          <li>Named return values</li>
+          <li>Variadic functions</li>
+          <li>Anonymous functions</li>
+          <li>Closures</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Arrays & Slices</h3>
+        </div>
+        <p class="unit-description">Work with Go's array and slice data structures.</p>
+        <ul class="topics-list">
+          <li>Array declaration and initialization</li>
+          <li>Array literals</li>
+          <li>Slice fundamentals</li>
+          <li>Slice literals</li>
+          <li>make() function</li>
+          <li>append() function</li>
+          <li>Slice operations</li>
+          <li>Slice internals</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Maps & Structs</h3>
+        </div>
+        <p class="unit-description">Work with key-value maps and custom data structures.</p>
+        <ul class="topics-list">
+          <li>Map declaration and initialization</li>
+          <li>Map operations</li>
+          <li>Testing for key existence</li>
+          <li>Struct definition</li>
+          <li>Struct literals</li>
+          <li>Struct fields</li>
+          <li>Embedded structs</li>
+          <li>Struct methods</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Pointers & Memory</h3>
+        </div>
+        <p class="unit-description">Understand memory management and pointer usage in Go.</p>
+        <ul class="topics-list">
+          <li>Pointer basics</li>
+          <li>Address operator (&)</li>
+          <li>Dereference operator (*)</li>
+          <li>Pointer to structs</li>
+          <li>Pointer arithmetic (lack thereof)</li>
+          <li>new() function</li>
+          <li>Memory allocation</li>
+          <li>Garbage collection</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Methods & Interfaces</h3>
+        </div>
+        <p class="unit-description">Create methods and implement Go's interface system.</p>
+        <ul class="topics-list">
+          <li>Method declaration</li>
+          <li>Receiver types</li>
+          <li>Pointer receivers</li>
+          <li>Interface definition</li>
+          <li>Interface implementation</li>
+          <li>Empty interface</li>
+          <li>Type assertions</li>
+          <li>Interface composition</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Error Handling</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully with Go's error handling approach.</p>
+        <ul class="topics-list">
+          <li>Error interface</li>
+          <li>Creating errors</li>
+          <li>Error handling patterns</li>
+          <li>Custom error types</li>
+          <li>Error wrapping</li>
+          <li>panic() and recover()</li>
+          <li>defer statements</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Packages & Modules</h3>
+        </div>
+        <p class="unit-description">Organize code with packages and manage dependencies with modules.</p>
+        <ul class="topics-list">
+          <li>Package fundamentals</li>
+          <li>Package visibility</li>
+          <li>init() functions</li>
+          <li>Go modules</li>
+          <li>go.mod file</li>
+          <li>Dependency management</li>
+          <li>Versioning</li>
+          <li>Publishing packages</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Goroutines & Concurrency</h3>
+        </div>
+        <p class="unit-description">Master Go's powerful concurrency model with goroutines.</p>
+        <ul class="topics-list">
+          <li>Goroutine basics</li>
+          <li>go keyword</li>
+          <li>Concurrent execution</li>
+          <li>Goroutine scheduling</li>
+          <li>Race conditions</li>
+          <li>Synchronization</li>
+          <li>WaitGroups</li>
+          <li>Context package</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Channels</h3>
+        </div>
+        <p class="unit-description">Communicate between goroutines using channels.</p>
+        <ul class="topics-list">
+          <li>Channel basics</li>
+          <li>Channel creation</li>
+          <li>Sending and receiving</li>
+          <li>Buffered channels</li>
+          <li>Channel directions</li>
+          <li>select statement</li>
+          <li>Channel closing</li>
+          <li>Channel patterns</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Standard Library</h3>
+        </div>
+        <p class="unit-description">Explore Go's rich standard library packages.</p>
+        <ul class="topics-list">
+          <li>fmt package</li>
+          <li>strings package</li>
+          <li>strconv package</li>
+          <li>time package</li>
+          <li>math package</li>
+          <li>os package</li>
+          <li>io package</li>
+          <li>Common utilities</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">File I/O & JSON</h3>
+        </div>
+        <p class="unit-description">Handle file operations and JSON data processing.</p>
+        <ul class="topics-list">
+          <li>File reading and writing</li>
+          <li>Working with directories</li>
+          <li>File permissions</li>
+          <li>JSON encoding</li>
+          <li>JSON decoding</li>
+          <li>Struct tags</li>
+          <li>Custom marshaling</li>
+          <li>Error handling</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">HTTP & Web Programming</h3>
+        </div>
+        <p class="unit-description">Build web applications and REST APIs with Go.</p>
+        <ul class="topics-list">
+          <li>HTTP package</li>
+          <li>HTTP handlers</li>
+          <li>HTTP server</li>
+          <li>HTTP client</li>
+          <li>Routing</li>
+          <li>Middleware</li>
+          <li>Templates</li>
+          <li>REST API development</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Testing & Benchmarking</h3>
+        </div>
+        <p class="unit-description">Test and benchmark Go applications effectively.</p>
+        <ul class="topics-list">
+          <li>testing package</li>
+          <li>Writing unit tests</li>
+          <li>Test functions</li>
+          <li>Table-driven tests</li>
+          <li>Benchmarks</li>
+          <li>Examples</li>
+          <li>Test coverage</li>
+          <li>Testing best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Production & Deployment</h3>
+        </div>
+        <p class="unit-description">Deploy Go applications to production environments.</p>
+        <ul class="topics-list">
+          <li>Building executables</li>
+          <li>Cross-compilation</li>
+          <li>Build constraints</li>
+          <li>Optimization techniques</li>
+          <li>Containerization (Docker)</li>
+          <li>Monitoring and logging</li>
+          <li>Performance profiling</li>
+          <li>Deployment strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: Go Introduction</h2>
+      <p>Learn the fundamentals of Go and its design philosophy</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Go?</h3>
+        <p>Go is a statically typed, compiled programming language designed at Google.</p>
+        <div class="concept-box">
+          <strong>Key Features:</strong> Fast compilation, Garbage collection, Concurrency support, Simple syntax
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Go Architecture</h3>
+        <p>Understanding Go's compilation and runtime architecture.</p>
+        <div class="go-architecture">
+          <div class="arch-level application-level">Go Source Code (.go)</div>
+          <div class="arch-level runtime-level">Go Compiler & Runtime</div>
+          <div class="arch-level system-level">Native Machine Code</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Setting up your Go development environment.</p>
+        <div class="ide-demo">
+          <div class="ide-feature">Download Go from golang.org</div>
+          <div class="ide-feature">Set GOPATH and GOROOT</div>
+          <div class="ide-feature">VS Code with Go extension</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Go Program</h3>
+        <p>Write and run your first Go application.</p>
+        <div class="go-example">
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, Go!")
+}
+        </div>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="compileCode()">Build & Run</button>
+          <div class="output-area" id="go-results">Click 'Build & Run' to see output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Basic Syntax & Structure</h2>
+      <p>Master the fundamental syntax and program structure of Go</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Program Structure</h3>
+        <p>Understanding the basic structure of a Go program.</p>
+        <div class="syntax-highlight">
+          Every Go program starts with a package declaration and imports
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Packages and Imports</h3>
+        <p>Organizing code with packages and importing functionality.</p>
+        <div class="package-demo">
+          <div class="package-visual">package main</div>
+          <div class="package-visual">import "fmt"</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Naming Conventions</h3>
+        <p>Go naming conventions and visibility rules.</p>
+        <div class="best-practice-warning">
+          <strong>Exported:</strong> CapitalCase<br>
+          <strong>Unexported:</strong> camelCase<br>
+          <strong>Constants:</strong> CamelCase or UPPER_CASE
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Build Process</h3>
+        <p>How Go source code becomes executable binaries.</p>
+        <div class="go-flow">
+          <div class="flow-step">.go files</div>
+          <div class="arrow">→</div>
+          <div class="flow-step">go build</div>
+          <div class="arrow">→</div>
+          <div class="flow-step">executable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Variables & Types</h2>
+      <p>Work with Go's static type system and variable declarations</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Basic Types</h3>
+        <p>Go's fundamental data types for type safety.</p>
+        <div class="type-system">
+          <span class="type-category">bool</span>
+          <span class="type-category">string</span>
+          <span class="type-category">int</span>
+          <span class="type-category">int8</span>
+          <span class="type-category">int16</span>
+          <span class="type-category">int32</span>
+          <span class="type-category">int64</span>
+          <span class="type-category">uint</span>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variable Declaration</h3>
+        <p>Different ways to declare variables in Go.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoVariables()">Show Variables</button>
+          <div class="output-area" id="variable-output">Click to see variable examples</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Zero Values</h3>
+        <p>Default values for uninitialized variables.</p>
+        <div class="concept-box">
+          Go initializes variables to their zero value: 0, false, "", nil
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pointers</h3>
+        <p>Working with memory addresses and pointers.</p>
+        <div class="performance-note">
+          Pointers allow efficient memory usage and reference passing
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 4: Control Flow</h2>
+      <p>Control program execution with Go's control structures</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">If Statements</h3>
+        <p>Conditional execution with if statements.</p>
+        <div class="go-example">
+if x > 0 {
+    fmt.Println("Positive")
+} else if x < 0 {
+    fmt.Println("Negative")
+} else {
+    fmt.Println("Zero")
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Switch Statements</h3>
+        <p>Multi-way branching with switch statements.</p>
+        <div class="syntax-highlight">
+          Go's switch doesn't fall through by default - no break needed
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">For Loops</h3>
+        <p>Go's only looping construct - the for loop.</p>
+        <div class="concept-box">
+          for init; condition; post { } - traditional C-style loop
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Range Loops</h3>
+        <p>Iterating over collections with range.</p>
+        <div class="best-practice-warning">
+          Use range for iterating over slices, maps, channels, and strings
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 5: Functions</h2>
+      <p>Create reusable code with Go's function system</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Function Declaration</h3>
+        <p>Defining functions with parameters and return values.</p>
+        <div class="go-example">
+func add(x int, y int) int {
+    return x + y
+}
+
+func swap(x, y string) (string, string) {
+    return y, x
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Multiple Return Values</h3>
+        <p>Functions can return multiple values in Go.</p>
+        <div class="concept-box">
+          Multiple returns are commonly used for value, error patterns
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variadic Functions</h3>
+        <p>Functions that accept variable number of arguments.</p>
+        <div class="syntax-highlight">
+          func sum(nums ...int) int - variadic parameter syntax
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Closures</h3>
+        <p>Anonymous functions that capture variables from their scope.</p>
+        <div class="performance-note">
+          Closures can access and modify variables from outer scope
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 6: Arrays & Slices</h2>
+      <p>Work with Go's array and slice data structures</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Arrays</h3>
+        <p>Fixed-size sequences of elements in Go.</p>
+        <div class="go-example">
+var arr [5]int
+arr[0] = 10
+
+// Array literal
+numbers := [3]int{1, 2, 3}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Slices</h3>
+        <p>Dynamic arrays that can grow and shrink.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoSlices()">Show Slice Example</button>
+          <div class="output-area" id="slice-output">Click to see slice operations</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Slice Operations</h3>
+        <p>Common operations like append, copy, and slicing.</p>
+        <div class="concept-box">
+          Slices are references to underlying arrays with length and capacity
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Slice Internals</h3>
+        <p>Understanding how slices work under the hood.</p>
+        <div class="performance-note">
+          Slices have a pointer, length, and capacity - understand memory implications
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 7: Maps & Structs</h2>
+      <p>Work with key-value maps and custom data structures</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Maps</h3>
+        <p>Key-value pairs for associative data storage.</p>
+        <div class="go-example">
+m := make(map[string]int)
+m["key"] = 42
+
+// Map literal
+ages := map[string]int{
+    "Alice": 31,
+    "Bob":   34,
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Structs</h3>
+        <p>Custom types that group related data together.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoStructs()">Show Struct Example</button>
+          <div class="output-area" id="struct-output">Click to see struct definition</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Struct Embedding</h3>
+        <p>Composition through struct embedding.</p>
+        <div class="concept-box">
+          Embedded structs provide a form of inheritance in Go
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Struct Tags</h3>
+        <p>Metadata for struct fields used by reflection.</p>
+        <div class="framework-showcase">
+          Tags are commonly used for JSON serialization and validation
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 8: Pointers & Memory</h2>
+      <p>Understand memory management and pointer usage in Go</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pointer Basics</h3>
+        <p>Working with memory addresses in Go.</p>
+        <div class="go-example">
+var p *int
+i := 42
+p = &i
+
+fmt.Println(*p) // read i through pointer p
+*p = 21         // set i through pointer p
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Pointer to Structs</h3>
+        <p>Using pointers with struct types for efficiency.</p>
+        <div class="performance-note">
+          Pointer receivers avoid copying large structs
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Memory Allocation</h3>
+        <p>How Go manages memory allocation and deallocation.</p>
+        <div class="concept-box">
+          Go uses garbage collection for automatic memory management
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">new() Function</h3>
+        <p>Allocating zeroed memory with the new() function.</p>
+        <div class="syntax-highlight">
+          new(T) allocates zeroed storage for T and returns *T
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 9: Methods & Interfaces</h2>
+      <p>Create methods and implement Go's interface system</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Methods</h3>
+        <p>Functions with receiver arguments attached to types.</p>
+        <div class="go-example">
+type Vertex struct {
+    X, Y float64
+}
+
+func (v Vertex) Abs() float64 {
+    return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interfaces</h3>
+        <p>Defining contracts that types must satisfy.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoInterfaces()">Show Interface Example</button>
+          <div class="output-area" id="interface-output">Click to see interface definition</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Interface Implementation</h3>
+        <p>Implicit interface satisfaction in Go.</p>
+        <div class="interface-demo">
+          <div class="interface-level interface-definition">Interface Definition</div>
+          <div class="interface-level interface-implementation">Implicit Implementation</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Empty Interface</h3>
+        <p>interface{} can hold values of any type.</p>
+        <div class="best-practice-warning">
+          Use empty interface sparingly - prefer specific interfaces when possible
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 10: Error Handling</h2>
+      <p>Handle errors gracefully with Go's error handling approach</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Error Interface</h3>
+        <p>Go's built-in error interface for error handling.</p>
+        <div class="go-example">
+type error interface {
+    Error() string
+}
+
+// Usage
+result, err := someFunction()
+if err != nil {
+    log.Fatal(err)
+}
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Creating Errors</h3>
+        <p>Different ways to create and return errors.</p>
+        <div class="concept-box">
+          Use errors.New() or fmt.Errorf() to create simple errors
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Panic and Recover</h3>
+        <p>Handling exceptional situations with panic and recover.</p>
+        <div class="performance-note">
+          Use panic/recover sparingly - prefer explicit error handling
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Defer Statements</h3>
+        <p>Ensuring cleanup code runs with defer.</p>
+        <div class="syntax-highlight">
+          defer statements execute in LIFO order when function returns
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 11: Packages & Modules</h2>
+      <p>Organize code with packages and manage dependencies with modules
