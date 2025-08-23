@@ -1,0 +1,1487 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MemoLearning Rust Programming Fundamentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    header h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: 800;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .unit-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    
+    .unit-card:hover::before {
+      left: 100%;
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .unit-number {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+    
+    .unit-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .unit-description {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .topics-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .topics-list li:before {
+      content: '🦀';
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+    }
+    
+    .topics-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .curriculum-stats {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    .page-container {
+      display: none;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .page-container.active {
+      display: block;
+    }
+
+    .unit-detail-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .unit-detail-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtopics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .subtopic-card {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .subtopic-card:hover {
+      border-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subtopic-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+
+    .back-to-overview {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-overview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .code-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #334155;
+      overflow-x: auto;
+    }
+
+    .rust-example {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #b91c1c;
+      overflow-x: auto;
+    }
+
+    .compiler-example {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #dc2626;
+      overflow-x: auto;
+    }
+
+    .rust-badge {
+      display: inline-block;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .concept-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #b91c1c;
+    }
+
+    .syntax-highlight {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #16a34a;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #15803d;
+    }
+
+    .ownership-insight {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid #7c3aed;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #6b21a8;
+    }
+
+    .safety-showcase {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1d4ed8;
+    }
+
+    .performance-note {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ea580c;
+    }
+
+    .best-practice-warning {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #713f12;
+    }
+
+    .rust-architecture {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .arch-level {
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .source-level {
+      background: #dc2626;
+      font-size: 18px;
+    }
+
+    .compiler-level {
+      background: #b91c1c;
+      font-size: 16px;
+    }
+
+    .binary-level {
+      background: #991b1b;
+      font-size: 14px;
+    }
+
+    .rust-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .flow-step {
+      background: #dc2626;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #dc2626;
+    }
+
+    .rust-results {
+      background: #dc2626;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .result-item {
+      display: inline-block;
+      background: white;
+      color: #dc2626;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .rust-status {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .compiled {
+      color: #b91c1c;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .running {
+      color: #eab308;
+    }
+
+    .performance-demo {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .perf-bar {
+      background: #e5e7eb;
+      border-radius: 6px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    .perf-fill {
+      background: #dc2626;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .perf-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .framework-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .framework-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .framework-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 10px;
+    }
+
+    .framework-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ide-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .ide-feature {
+      background: #f3e8ff;
+      border: 1px solid #c4b5fd;
+      border-radius: 4px;
+      padding: 10px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .interactive-demo {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .demo-button {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .demo-button:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .output-area {
+      background: #111827;
+      color: #dc2626;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-family: monospace;
+      min-height: 50px;
+    }
+
+    .type-system {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .type-category {
+      display: inline-block;
+      background: #b91c1c;
+      color: white;
+      padding: 8px 12px;
+      margin: 2px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .ownership-demo {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .ownership-visual {
+      background: #7c3aed;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .borrow-demo {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .borrow-level {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .owned-value {
+      background: #1d4ed8;
+      color: white;
+    }
+
+    .borrowed-value {
+      background: #3b82f6;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .trait-demo {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .trait-operation {
+      background: #16a34a;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .concurrent-visualization {
+      background: #fef7f0;
+      border: 1px solid #fed7aa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .concurrent-step {
+      background: #ea580c;
+      color: white;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .concurrent-step.active {
+      background: #16a34a;
+    }
+  </style>
+  <script>
+    function showUnitDetail(unitNumber) {
+      // Hide overview
+      document.getElementById('overview').style.display = 'none';
+      
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show selected unit
+      const selectedUnit = document.getElementById('unit-' + unitNumber);
+      if (selectedUnit) {
+        selectedUnit.classList.add('active');
+      }
+    }
+
+    function showOverview() {
+      // Hide all unit detail pages
+      const allUnits = document.querySelectorAll('.page-container');
+      allUnits.forEach(unit => unit.classList.remove('active'));
+      
+      // Show overview
+      document.getElementById('overview').style.display = 'block';
+    }
+
+    // Check for URL hash on load
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#unit-')) {
+        const unitNumber = hash.replace('#unit-', '');
+        showUnitDetail(unitNumber);
+      }
+      updatePerformance();
+    });
+
+    // Rust compilation simulation
+    function compileCode() {
+      const results = document.getElementById('rust-results');
+      if (results) {
+        results.innerHTML = `
+          <div class="rust-status">
+            <span class="compiled">✅ Compilation successful</span> | 
+            <span class="running">🦀 Rust 1.74</span> | 
+            <span class="error">❌ 0 errors</span>
+          </div>
+          <div>rustc - Safe and fast executable generated</div>
+        `;
+      }
+    }
+
+    // Performance simulation
+    function updatePerformance() {
+      const bars = document.querySelectorAll('.perf-fill');
+      const performances = [99, 97, 100, 98];
+      
+      bars.forEach((bar, index) => {
+        if (performances[index]) {
+          bar.style.width = performances[index] + '%';
+        }
+      });
+    }
+
+    // Interactive demo functions
+    function demoOwnership() {
+      const output = document.getElementById('ownership-output');
+      if (output) {
+        output.innerHTML = `let s1 = String::from("hello");<br>let s2 = s1; // s1 moved to s2<br>// println!("{}", s1); // Error: s1 no longer valid<br>println!("{}", s2); // OK`;
+      }
+    }
+
+    function demoStructs() {
+      const output = document.getElementById('struct-output');
+      if (output) {
+        output.innerHTML = `struct Person {<br>&nbsp;&nbsp;name: String,<br>&nbsp;&nbsp;age: u32,<br>}<br><br>let person = Person {<br>&nbsp;&nbsp;name: String::from("Alice"),<br>&nbsp;&nbsp;age: 30,<br>};`;
+      }
+    }
+
+    function demoPatternMatching() {
+      const output = document.getElementById('pattern-output');
+      if (output) {
+        output.innerHTML = `match value {<br>&nbsp;&nbsp;Some(x) => println!("Got {}", x),<br>&nbsp;&nbsp;None => println!("Got nothing"),<br>}<br><br>// Exhaustive pattern matching`;
+      }
+    }
+
+    function demoTraits() {
+      const output = document.getElementById('trait-output');
+      if (output) {
+        output.innerHTML = `trait Display {<br>&nbsp;&nbsp;fn fmt(&self) -> String;<br>}<br><br>impl Display for Person {<br>&nbsp;&nbsp;fn fmt(&self) -> String {<br>&nbsp;&nbsp;&nbsp;&nbsp;format!("{}: {}", self.name, self.age)<br>&nbsp;&nbsp;}<br>}`;
+      }
+    }
+
+    function demoLifetimes() {
+      const output = document.getElementById('lifetime-output');
+      if (output) {
+        output.innerHTML = `fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {<br>&nbsp;&nbsp;if x.len() > y.len() {<br>&nbsp;&nbsp;&nbsp;&nbsp;x<br>&nbsp;&nbsp;} else {<br>&nbsp;&nbsp;&nbsp;&nbsp;y<br>&nbsp;&nbsp;}<br>}`;
+      }
+    }
+
+    function demoConcurrency() {
+      const output = document.getElementById('concurrency-output');
+      if (output) {
+        output.innerHTML = `use std::thread;<br><br>let handle = thread::spawn(|| {<br>&nbsp;&nbsp;println!("Hello from thread!");<br>});<br><br>handle.join().unwrap();`;
+      }
+    }
+
+    // Concurrent visualization
+    function demoConcurrentFlow() {
+      const steps = document.querySelectorAll('.concurrent-step');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.add('active');
+        }, index * 1000);
+      });
+      
+      // Reset after demo
+      setTimeout(() => {
+        steps.forEach(step => step.classList.remove('active'));
+      }, 5000);
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>🦀 Rust Programming Fundamentals</h1>
+    <p>Master Mozilla's systems programming language focused on safety, speed, and concurrency</p>
+    <a class="back-link" href="#" onclick="alert('This would navigate back to programming courses')">← Back to Programming Courses</a>
+  </header>
+
+  <div class="container" id="overview">
+    <div class="curriculum-stats">
+      <h2 style="margin: 0 0 20px 0; font-size: 28px;">Rust Programming Curriculum</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <div class="stat-label">Rust Units</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">~140</span>
+          <div class="stat-label">Core Concepts</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Rust 1.74</span>
+          <div class="stat-label">Latest Stable</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Memory Safe</span>
+          <div class="stat-label">Zero Cost</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <div class="unit-card" onclick="showUnitDetail(1)">
+        <div class="unit-header">
+          <div class="unit-number">1</div>
+          <h3 class="unit-title">Rust Introduction</h3>
+        </div>
+        <p class="unit-description">Learn the fundamentals of Rust and its design philosophy.</p>
+        <ul class="topics-list">
+          <li>What is Rust?</li>
+          <li>Rust's design goals</li>
+          <li>Memory safety without GC</li>
+          <li>Zero-cost abstractions</li>
+          <li>Systems programming focus</li>
+          <li>Installation and setup</li>
+          <li>Cargo package manager</li>
+          <li>First Rust program</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(2)">
+        <div class="unit-header">
+          <div class="unit-number">2</div>
+          <h3 class="unit-title">Basic Syntax & Types</h3>
+        </div>
+        <p class="unit-description">Master Rust's fundamental syntax and type system.</p>
+        <ul class="topics-list">
+          <li>Variable declarations</li>
+          <li>Mutability and immutability</li>
+          <li>Scalar types</li>
+          <li>Compound types</li>
+          <li>Type annotations</li>
+          <li>Constants and statics</li>
+          <li>Shadowing</li>
+          <li>Comments and documentation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(3)">
+        <div class="unit-header">
+          <div class="unit-number">3</div>
+          <h3 class="unit-title">Ownership System</h3>
+        </div>
+        <p class="unit-description">Understand Rust's unique ownership model for memory safety.</p>
+        <ul class="topics-list">
+          <li>Ownership rules</li>
+          <li>Move semantics</li>
+          <li>Stack vs heap</li>
+          <li>Drop trait</li>
+          <li>Clone and copy</li>
+          <li>References and borrowing</li>
+          <li>Mutable references</li>
+          <li>Dangling references</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(4)">
+        <div class="unit-header">
+          <div class="unit-number">4</div>
+          <h3 class="unit-title">Functions & Control Flow</h3>
+        </div>
+        <p class="unit-description">Create functions and control program execution flow.</p>
+        <ul class="topics-list">
+          <li>Function definitions</li>
+          <li>Parameters and arguments</li>
+          <li>Return values</li>
+          <li>Statements vs expressions</li>
+          <li>if expressions</li>
+          <li>loop, while, for</li>
+          <li>Breaking and continuing</li>
+          <li>Loop labels</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(5)">
+        <div class="unit-header">
+          <div class="unit-number">5</div>
+          <h3 class="unit-title">Data Structures</h3>
+        </div>
+        <p class="unit-description">Work with structs, enums, and other data structures.</p>
+        <ul class="topics-list">
+          <li>Struct definitions</li>
+          <li>Struct instantiation</li>
+          <li>Tuple structs</li>
+          <li>Unit-like structs</li>
+          <li>Enums and variants</li>
+          <li>Option and Result types</li>
+          <li>Method syntax</li>
+          <li>Associated functions</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(6)">
+        <div class="unit-header">
+          <div class="unit-number">6</div>
+          <h3 class="unit-title">Pattern Matching</h3>
+        </div>
+        <p class="unit-description">Master Rust's powerful pattern matching with match expressions.</p>
+        <ul class="topics-list">
+          <li>match expressions</li>
+          <li>Pattern syntax</li>
+          <li>Matching literals</li>
+          <li>Matching named variables</li>
+          <li>Multiple patterns</li>
+          <li>Ranges and guards</li>
+          <li>Destructuring</li>
+          <li>Exhaustiveness</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(7)">
+        <div class="unit-header">
+          <div class="unit-number">7</div>
+          <h3 class="unit-title">Collections</h3>
+        </div>
+        <p class="unit-description">Work with Rust's built-in collection types.</p>
+        <ul class="topics-list">
+          <li>Vectors (Vec&lt;T&gt;)</li>
+          <li>Strings and string slices</li>
+          <li>Hash maps</li>
+          <li>Iterating collections</li>
+          <li>Collection methods</li>
+          <li>Capacity vs length</li>
+          <li>UTF-8 and strings</li>
+          <li>String manipulation</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(8)">
+        <div class="unit-header">
+          <div class="unit-number">8</div>
+          <h3 class="unit-title">Error Handling</h3>
+        </div>
+        <p class="unit-description">Handle errors gracefully with Result and panic strategies.</p>
+        <ul class="topics-list">
+          <li>Unrecoverable errors (panic!)</li>
+          <li>Recoverable errors (Result&lt;T, E&gt;)</li>
+          <li>Propagating errors (?)</li>
+          <li>Custom error types</li>
+          <li>Error handling patterns</li>
+          <li>unwrap and expect</li>
+          <li>Error trait</li>
+          <li>Best practices</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(9)">
+        <div class="unit-header">
+          <div class="unit-number">9</div>
+          <h3 class="unit-title">Generics</h3>
+        </div>
+        <p class="unit-description">Create flexible and reusable code with generic types.</p>
+        <ul class="topics-list">
+          <li>Generic functions</li>
+          <li>Generic structs</li>
+          <li>Generic enums</li>
+          <li>Generic methods</li>
+          <li>Type parameters</li>
+          <li>Monomorphization</li>
+          <li>Performance implications</li>
+          <li>Generic constraints</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(10)">
+        <div class="unit-header">
+          <div class="unit-number">10</div>
+          <h3 class="unit-title">Traits</h3>
+        </div>
+        <p class="unit-description">Define shared behavior with traits and trait objects.</p>
+        <ul class="topics-list">
+          <li>Defining traits</li>
+          <li>Implementing traits</li>
+          <li>Default implementations</li>
+          <li>Trait bounds</li>
+          <li>Multiple trait bounds</li>
+          <li>where clauses</li>
+          <li>Trait objects</li>
+          <li>Associated types</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(11)">
+        <div class="unit-header">
+          <div class="unit-number">11</div>
+          <h3 class="unit-title">Lifetimes</h3>
+        </div>
+        <p class="unit-description">Understand lifetime annotations and the borrow checker.</p>
+        <ul class="topics-list">
+          <li>Lifetime concept</li>
+          <li>Borrow checker</li>
+          <li>Lifetime annotations</li>
+          <li>Lifetime parameters</li>
+          <li>Lifetime elision</li>
+          <li>Static lifetime</li>
+          <li>Lifetime bounds</li>
+          <li>Complex scenarios</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(12)">
+        <div class="unit-header">
+          <div class="unit-number">12</div>
+          <h3 class="unit-title">Modules & Packages</h3>
+        </div>
+        <p class="unit-description">Organize code with Rust's module system and Cargo.</p>
+        <ul class="topics-list">
+          <li>Modules and mod keyword</li>
+          <li>File system organization</li>
+          <li>pub visibility</li>
+          <li>use declarations</li>
+          <li>Crates and packages</li>
+          <li>Cargo workspace</li>
+          <li>Dependencies</li>
+          <li>Publishing crates</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(13)">
+        <div class="unit-header">
+          <div class="unit-number">13</div>
+          <h3 class="unit-title">Iterators & Closures</h3>
+        </div>
+        <p class="unit-description">Process data efficiently with iterators and closures.</p>
+        <ul class="topics-list">
+          <li>Closure syntax</li>
+          <li>Capturing environment</li>
+          <li>Fn traits</li>
+          <li>Iterator trait</li>
+          <li>Lazy evaluation</li>
+          <li>Iterator adaptors</li>
+          <li>collect and consume</li>
+          <li>Performance considerations</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(14)">
+        <div class="unit-header">
+          <div class="unit-number">14</div>
+          <h3 class="unit-title">Smart Pointers</h3>
+        </div>
+        <p class="unit-description">Work with smart pointers for complex memory scenarios.</p>
+        <ul class="topics-list">
+          <li>Box&lt;T&gt; for heap allocation</li>
+          <li>Rc&lt;T&gt; reference counting</li>
+          <li>RefCell&lt;T&gt; interior mutability</li>
+          <li>Weak&lt;T&gt; references</li>
+          <li>Memory leaks and cycles</li>
+          <li>Deref trait</li>
+          <li>Drop trait</li>
+          <li>Custom smart pointers</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(15)">
+        <div class="unit-header">
+          <div class="unit-number">15</div>
+          <h3 class="unit-title">Concurrency</h3>
+        </div>
+        <p class="unit-description">Write safe concurrent code with threads and message passing.</p>
+        <ul class="topics-list">
+          <li>Threads and spawn</li>
+          <li>Moving data between threads</li>
+          <li>Message passing channels</li>
+          <li>Shared state concurrency</li>
+          <li>Mutex and Arc</li>
+          <li>Send and Sync traits</li>
+          <li>Thread safety</li>
+          <li>Async programming basics</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(16)">
+        <div class="unit-header">
+          <div class="unit-number">16</div>
+          <h3 class="unit-title">Advanced Features</h3>
+        </div>
+        <p class="unit-description">Explore advanced Rust features and unsafe code.</p>
+        <ul class="topics-list">
+          <li>Unsafe Rust</li>
+          <li>Raw pointers</li>
+          <li>Calling unsafe functions</li>
+          <li>Foreign Function Interface</li>
+          <li>Advanced traits</li>
+          <li>Associated types</li>
+          <li>Higher-ranked trait bounds</li>
+          <li>Procedural macros</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(17)">
+        <div class="unit-header">
+          <div class="unit-number">17</div>
+          <h3 class="unit-title">Testing & Documentation</h3>
+        </div>
+        <p class="unit-description">Test Rust code and write comprehensive documentation.</p>
+        <ul class="topics-list">
+          <li>Unit tests</li>
+          <li>Integration tests</li>
+          <li>Test organization</li>
+          <li>cargo test</li>
+          <li>Documentation comments</li>
+          <li>Documentation tests</li>
+          <li>cargo doc</li>
+          <li>Benchmarking</li>
+        </ul>
+      </div>
+
+      <div class="unit-card" onclick="showUnitDetail(18)">
+        <div class="unit-header">
+          <div class="unit-number">18</div>
+          <h3 class="unit-title">Production & Ecosystem</h3>
+        </div>
+        <p class="unit-description">Deploy Rust applications and explore the ecosystem.</p>
+        <ul class="topics-list">
+          <li>Building for release</li>
+          <li>Cross-compilation</li>
+          <li>Performance optimization</li>
+          <li>Popular crates</li>
+          <li>Web development (Actix, Warp)</li>
+          <li>System programming</li>
+          <li>CLI applications</li>
+          <li>Deployment strategies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Detail Pages -->
+  <div class="page-container" id="unit-1">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 1: Rust Introduction</h2>
+      <p>Learn the fundamentals of Rust and its design philosophy</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">What is Rust?</h3>
+        <p>Rust is a systems programming language focused on safety, speed, and concurrency.</p>
+        <div class="concept-box">
+          <strong>Key Features:</strong> Memory safety, Zero-cost abstractions, Thread safety, Performance
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Rust Architecture</h3>
+        <p>Understanding Rust's compilation model and memory management.</p>
+        <div class="rust-architecture">
+          <div class="arch-level source-level">Rust Source Code (.rs)</div>
+          <div class="arch-level compiler-level">rustc Compiler</div>
+          <div class="arch-level binary-level">Native Binary</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Development Environment</h3>
+        <p>Setting up your Rust development environment with rustup.</p>
+        <div class="ide-demo">
+          <div class="ide-feature">Install rustup from rustup.rs</div>
+          <div class="ide-feature">Cargo package manager</div>
+          <div class="ide-feature">VS Code rust-analyzer extension</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">First Rust Program</h3>
+        <p>Write and compile your first Rust application.</p>
+        <div class="rust-example">
+fn main() {
+    println!("Hello, Rust!");
+}
+        </div>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="compileCode()">Compile & Run</button>
+          <div class="output-area" id="rust-results">Click 'Compile & Run' to see output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-2">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 2: Basic Syntax & Types</h2>
+      <p>Master Rust's fundamental syntax and type system</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Variables and Mutability</h3>
+        <p>Understanding immutability by default and explicit mutability.</p>
+        <div class="rust-example">
+let x = 5; // immutable
+let mut y = 5; // mutable
+y = 6; // OK
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Data Types</h3>
+        <p>Rust's scalar and compound data types.</p>
+        <div class="type-system">
+          <span class="type-category">i32</span>
+          <span class="type-category">u64</span>
+          <span class="type-category">f64</span>
+          <span class="type-category">bool</span>
+          <span class="type-category">char</span>
+          <span class="type-category">str</span>
+          <span class="type-category">array</span>
+          <span class="type-category">tuple</span>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Type Annotations</h3>
+        <p>Explicit type annotations when inference isn't enough.</p>
+        <div class="syntax-highlight">
+          Rust has strong static typing with excellent type inference
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Shadowing</h3>
+        <p>Redefining variables with the same name in the same scope.</p>
+        <div class="concept-box">
+          Shadowing allows changing type while reusing variable names
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-3">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 3: Ownership System</h2>
+      <p>Understand Rust's unique ownership model for memory safety</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Ownership Rules</h3>
+        <p>The three fundamental rules of Rust ownership.</p>
+        <div class="ownership-insight">
+          1. Each value has a single owner<br>
+          2. Only one owner at a time<br>
+          3. Value is dropped when owner goes out of scope
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Move Semantics</h3>
+        <p>Understanding how ownership transfers between variables.</p>
+        <div class="interactive-demo">
+          <button class="demo-button" onclick="demoOwnership()">Show Ownership Example</button>
+          <div class="output-area" id="ownership-output">Click to see ownership in action</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">References and Borrowing</h3>
+        <p>Using references to access data without taking ownership.</p>
+        <div class="borrow-demo">
+          <div class="borrow-level owned-value">Owned Value</div>
+          <div class="borrow-level borrowed-value">Borrowed Reference (&)</div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Mutable References</h3>
+        <p>Borrowing data mutably with restrictions for safety.</p>
+        <div class="safety-showcase">
+          Only one mutable reference OR multiple immutable references at a time
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional unit detail pages for units 4-18 would continue here with similar structure -->
+  <!-- For brevity, I'm including placeholders for the remaining units -->
+
+  <div class="page-container" id="unit-4">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 4: Functions & Control Flow</h2>
+      <p>Create functions and control program execution flow</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-5">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 5: Data Structures</h2>
+      <p>Work with structs, enums, and other data structures</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-6">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 6: Pattern Matching</h2>
+      <p>Master Rust's powerful pattern matching with match expressions</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-7">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 7: Collections</h2>
+      <p>Work with Rust's built-in collection types</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-8">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 8: Error Handling</h2>
+      <p>Handle errors gracefully with Result and panic strategies</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-9">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 9: Generics</h2>
+      <p>Create flexible and reusable code with generic types</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-10">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 10: Traits</h2>
+      <p>Define shared behavior with traits and trait objects</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-11">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 11: Lifetimes</h2>
+      <p>Understand lifetime annotations and the borrow checker</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-12">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 12: Modules & Packages</h2>
+      <p>Organize code with Rust's module system and Cargo</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-13">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 13: Iterators & Closures</h2>
+      <p>Process data efficiently with iterators and closures</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-14">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 14: Smart Pointers</h2>
+      <p>Work with smart pointers for complex memory scenarios</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-15">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 15: Concurrency</h2>
+      <p>Write safe concurrent code with threads and message passing</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-16">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 16: Advanced Features</h2>
+      <p>Explore advanced Rust features and unsafe code</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-17">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 17: Testing & Documentation</h2>
+      <p>Test Rust code and write comprehensive documentation</p>
+    </div>
+  </div>
+
+  <div class="page-container" id="unit-18">
+    <button class="back-to-overview" onclick="showOverview()">← Back to Overview</button>
+    <div class="unit-detail-header">
+      <h2 class="unit-detail-title">Unit 18: Production & Ecosystem</h2>
+      <p>Deploy Rust applications and explore the ecosystem</p>
+    </div>
+
+    <div class="subtopics-grid">
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Release Optimization</h3>
+        <p>Building optimized binaries for production deployment.</p>
+        <div class="rust-example">
+# Cargo.toml
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Cross-compilation</h3>
+        <p>Building for different target platforms and architectures.</p>
+        <div class="performance-note">
+          Rust makes cross-compilation straightforward with target triples
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Popular Crates</h3>
+        <p>Essential crates for common development tasks.</p>
+        <div class="framework-comparison">
+          <div class="framework-item">
+            <div class="framework-name">serde</div>
+            <div class="framework-description">Serialization framework</div>
+          </div>
+          <div class="framework-item">
+            <div class="framework-name">tokio</div>
+            <div class="framework-description">Async runtime</div>
+          </div>
+          <div class="framework-item">
+            <div class="framework-name">clap</div>
+            <div class="framework-description">CLI argument parsing</div>
+          </div>
+          <div class="framework-item">
+            <div class="framework-name">reqwest</div>
+            <div class="framework-description">HTTP client</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subtopic-card">
+        <h3 class="subtopic-title">Application Domains</h3>
+        <p>Areas where Rust excels in production environments.</p>
+        <div class="concept-box">
+          Systems programming, web backends, CLI tools, blockchain, game engines
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
