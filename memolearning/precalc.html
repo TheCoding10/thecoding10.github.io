@@ -1,638 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemoLearning — Precalculus</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    /* ---------- GLOBAL ---------- */
-    *{box-sizing:border-box}
-    :root{--indigo:#6366f1;--purple:#7c3aed;--slate:#0f172a;--muted:#475569;--card:#ffffff}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--slate);
-      background:linear-gradient(135deg,#667eea 0%,#7c3aed 100%) fixed;}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MemoLearning — Precalculus</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ---------- GLOBAL ---------- */
+*{box-sizing:border-box}
+:root{--indigo:#6366f1;--purple:#7c3aed;--slate:#0f172a;--muted:#475569;--card:#ffffff}
+html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--slate);
+  background:linear-gradient(135deg,#667eea 0%,#7c3aed 100%) fixed}
 
-    /* ---------- OVERVIEW ---------- */
-    .overview-page{display:block}
-    .overview-page.hidden{display:none}
-    .overview-header{background:rgba(255,255,255,.10);backdrop-filter:blur(20px);color:#fff;padding:40px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.25)}
-    .overview-header h1{margin:0;font-weight:800;font-size:42px;text-shadow:0 2px 20px rgba(0,0,0,.35)}
-    .overview-header p{margin:12px 0 0;font-size:18px;opacity:.95}
-    .container{max-width:1400px;margin:0 auto;padding:32px 20px}
-    .curriculum-stats{background:rgba(255,255,255,.10);backdrop-filter:blur(18px);border-radius:20px;padding:26px;color:#fff;margin-bottom:28px}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px}
-    .stat-item{text-align:center}
-    .stat-number{font-size:36px;font-weight:800;display:block}
-    .stat-label{opacity:.9}
+/* ---------- OVERVIEW ---------- */
+.overview-page{display:block}
+.overview-page.hidden{display:none}
+.overview-header{background:rgba(255,255,255,.10);backdrop-filter:blur(20px);color:#fff;padding:40px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.25)}
+.overview-header h1{margin:0;font-weight:800;font-size:42px;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.overview-header p{margin:12px 0 0;font-size:18px;opacity:.95}
+.container{max-width:1400px;margin:0 auto;padding:32px 20px}
+.curriculum-stats{background:rgba(255,255,255,.10);backdrop-filter:blur(18px);border-radius:20px;padding:26px;color:#fff;margin-bottom:28px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px}
+.stat-item{text-align:center}.stat-number{font-size:36px;font-weight:800;display:block}.stat-label{opacity:.9}
 
-    .units-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px}
-    .unit-card{position:relative;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:18px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.10);cursor:pointer;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease}
-    .unit-card:hover{transform:translateY(-6px);box-shadow:0 24px 52px rgba(0,0,0,.14)}
-    .unit-header{display:flex;align-items:center;margin-bottom:10px}
-    .unit-number{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#667eea,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 6px 16px rgba(102,126,234,.4);margin-right:12px}
-    .unit-title{margin:0;font-weight:800;font-size:22px;color:#1f2937}
-    .unit-description{color:#4b5563;margin:6px 0 10px}
-    .topics-list{list-style:none;margin:0;padding:0}
-    .topics-list li{position:relative;padding:7px 0 7px 16px;border-bottom:1px solid #f1f5f9;color:#374151}
-    .topics-list li:last-child{border-bottom:none}
-    .topics-list li::before{content:'▸';position:absolute;left:0;color:#667eea;font-weight:700}
-    .optional-badge{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:10px}
+.units-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px}
+.unit-card{position:relative;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:18px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.10);cursor:pointer;overflow:hidden;transition:transform .25s, box-shadow .25s}
+.unit-card:hover{transform:translateY(-6px);box-shadow:0 24px 52px rgba(0,0,0,.14)}
+.unit-header{display:flex;align-items:center;margin-bottom:10px}
+.unit-number{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#667eea,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 6px 16px rgba(102,126,234,.4);margin-right:12px}
+.unit-title{margin:0;font-weight:800;font-size:22px;color:#1f2937}
+.unit-description{color:#4b5563;margin:6px 0 10px}
+.topics-list{list-style:none;margin:0;padding:0}
+.topics-list li{position:relative;padding:7px 0 7px 16px;border-bottom:1px solid #f1f5f9;color:#374151}
+.topics-list li:last-child{border-bottom:none}
+.topics-list li::before{content:'▸';position:absolute;left:0;color:#667eea;font-weight:700}
+.optional-badge{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:10px}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.unit-card{opacity:0;animation:fadeInUp .6s ease forwards}
 
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-    .unit-card{opacity:0;animation:fadeInUp .6s ease forwards}
-    /* ---------- UNIT 1 SHELL ---------- */
-    .unit1-page{display:none}
-    .unit1-page.active{display:block}
-    .unit1-header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.10);backdrop-filter:saturate(1.15) blur(8px);border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:18px 14px}
-    .unit1-header .wrap{max-width:1200px;margin:0 auto;display:flex;gap:12px;align-items:center}
-    .unit1-header h1{margin:0;font-size:26px;font-weight:800}
-    .unit1-header .sub{opacity:.92}
-    .unit1-header .btn{margin-left:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
+/* ---------- UNIT PAGE ---------- */
+.unit-page{display:none}
+.unit-page.active{display:block}
+.unit-header-stick{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.10);backdrop-filter:saturate(1.15) blur(8px);border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:18px 14px}
+.unit-header-stick .wrap{max-width:1200px;margin:0 auto;display:flex;gap:12px;align-items:center}
+.unit-header-stick h1{margin:0;font-size:26px;font-weight:800}.unit-header-stick .sub{opacity:.92}
+.unit-header-stick .btn{margin-left:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
 
-    .app{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:300px 1fr;gap:18px;padding:0 16px}
-    aside{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);overflow:hidden}
-    .side-head{padding:16px;border-bottom:1px solid #e5e7eb;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(124,58,237,.12))}
-    .lesson-list{list-style:none;margin:0;padding:0;max-height:calc(100vh - 200px);overflow:auto}
-    .lesson-list li{border-bottom:1px solid #eef2ff}
-    .lesson{display:flex;gap:10px;padding:12px 14px;text-decoration:none;color:inherit;cursor:pointer;align-items:center}
-    .lesson:hover{background:#f8fafc}
-    .lesson.active{background:#eef2ff;border-left:4px solid var(--indigo)}
-    .tag{font-size:12px;color:#6366f1;font-weight:800;background:#eef2ff;border-radius:999px;padding:2px 6px}
-    .done{margin-left:auto;font-size:12px;color:#10b981;font-weight:700;display:none}
-    .lesson.completed .done{display:inline}
-    main{min-height:70vh}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);padding:22px}
-    .crumbs{color:#64748b;font-size:12px;margin-bottom:6px}
-    .title{margin:4px 0 6px;font-size:26px;font-weight:800}
-    .lead{color:#334155;margin:0 0 12px}
-    .example{border:1px solid #c7d2fe;background:#eef2ff;padding:12px 14px;border-radius:12px;margin:12px 0}
-    .example h4{margin:0 0 6px;color:#4338ca}
-    .note{border-left:4px solid #22c55e;background:#ecfdf5;padding:10px 12px;border-radius:8px;margin:12px 0}
-    .warn{border-left:4px solid #f97316;background:#fff7ed;padding:10px 12px;border-radius:8px;margin:12px 0}
-    .practice,.quiz{margin-top:16px}
-    .problem,.q{border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:14px;margin:10px 0}
-    .problem h5,.q h5{margin:0 0 8px}
-    .choice{display:flex;gap:10px;align-items:center;border:1px solid #e5e7eb;border-radius:10px;padding:8px;margin:6px 0;cursor:pointer}
-    .input{padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;width:240px}
-    .btn{background:var(--indigo);color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer}
-    .btn.secondary{background:#111827}
-    .ok{color:#065f46;background:#d1fae5;border:1px solid #10b981;padding:8px;border-radius:8px;margin-top:8px}
-    .bad{color:#991b1b;background:#fee2e2;border:1px solid #ef4444;padding:8px;border-radius:8px;margin-top:8px}
-    .help{color:#2563eb;text-decoration:underline;cursor:pointer;display:inline-block;margin-top:8px}
-    .solution{display:none;padding:10px;border:1px dashed #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:8px;margin-top:8px;white-space:pre-line}
-    .footer-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}
-    .progress{height:8px;border-radius:999px;background:#eef2ff;overflow:hidden}
-    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--indigo),var(--purple));width:0%}
-    @media (max-width:920px){.app{grid-template-columns:1fr}}
-  </style>
+.app{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:300px 1fr;gap:18px;padding:0 16px}
+aside{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);overflow:hidden}
+.side-head{padding:16px;border-bottom:1px solid #e5e7eb;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(124,58,237,.12))}
+.lesson-list{list-style:none;margin:0;padding:0;max-height:calc(100vh - 200px);overflow:auto}
+.lesson-list li{border-bottom:1px solid #eef2ff}
+.lesson{display:flex;gap:10px;padding:12px 14px;text-decoration:none;color:inherit;cursor:pointer;align-items:center}
+.lesson:hover{background:#f8fafc}
+.lesson.active{background:#eef2ff;border-left:4px solid var(--indigo)}
+.tag{font-size:12px;color:#6366f1;font-weight:800;background:#eef2ff;border-radius:999px;padding:2px 6px}
+.done{margin-left:auto;font-size:12px;color:#10b981;font-weight:700;display:none}
+.lesson.completed .done{display:inline}
+main{min-height:70vh}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);padding:22px}
+.crumbs{color:#64748b;font-size:12px;margin-bottom:6px}
+.title{margin:4px 0 6px;font-size:26px;font-weight:800}
+.lead{color:#334155;margin:0 0 12px}
+.example{border:1px solid #c7d2fe;background:#eef2ff;padding:12px 14px;border-radius:12px;margin:12px 0}
+.example h4{margin:0 0 6px;color:#4338ca}
+.note{border-left:4px solid #22c55e;background:#ecfdf5;padding:10px 12px;border-radius:8px;margin:12px 0}
+.warn{border-left:4px solid #f97316;background:#fff7ed;padding:10px 12px;border-radius:8px;margin:12px 0}
+.practice,.quiz{margin-top:16px}
+.problem,.q{border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:14px;margin:10px 0}
+.problem h5,.q h5{margin:0 0 8px}
+.choice{display:flex;gap:10px;align-items:center;border:1px solid #e5e7eb;border-radius:10px;padding:8px;margin:6px 0;cursor:pointer}
+.input{padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;width:240px}
+.btn{background:var(--indigo);color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer}
+.btn.secondary{background:#111827}
+.ok{color:#065f46;background:#d1fae5;border:1px solid #10b981;padding:8px;border-radius:8px;margin-top:8px}
+.bad{color:#991b1b;background:#fee2e2;border:1px solid #ef4444;padding:8px;border-radius:8px;margin-top:8px}
+.help{color:#2563eb;text-decoration:underline;cursor:pointer;display:inline-block;margin-top:8px}
+.solution{display:none;padding:10px;border:1px dashed #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:8px;margin-top:8px;white-space:pre-line}
+.footer-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}
+.progress{height:8px;border-radius:999px;background:#eef2ff;overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--indigo),var(--purple));width:0%}
+@media (max-width:920px){.app{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
-  <!-- ================= OVERVIEW ================= -->
-  <div class="overview-page" id="overviewPage">
-    <header class="overview-header">
-      <h1>📚 MemoLearning Precalculus</h1>
-      <p>Complete curriculum with 10 units covering all essential precalculus topics</p>
-    </header>
+<!-- ================= OVERVIEW ================= -->
+<div class="overview-page" id="overviewPage">
+  <header class="overview-header">
+    <h1>📚 MemoLearning Precalculus</h1>
+    <p>Complete curriculum with 10 units covering all essential precalculus topics</p>
+  </header>
 
-    <div class="container">
-      <div class="curriculum-stats">
-        <h2 style="margin:0 0 14px 0;font-size:26px">Curriculum Overview</h2>
-        <div class="stats-grid">
-          <div class="stat-item"><span class="stat-number">10</span><div class="stat-label">Total Units</div></div>
-          <div class="stat-item"><span class="stat-number">~131</span><div class="stat-label">Skills to Master</div></div>
-          <div class="stat-item"><span class="stat-number">8</span><div class="stat-label">Core Units</div></div>
-          <div class="stat-item"><span class="stat-number">2</span><div class="stat-label">Optional Units</div></div>
-        </div>
+  <div class="container">
+    <div class="curriculum-stats">
+      <h2 style="margin:0 0 14px 0;font-size:26px">Curriculum Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-item"><span class="stat-number">10</span><div class="stat-label">Total Units</div></div>
+        <div class="stat-item"><span class="stat-number">~131</span><div class="stat-label">Skills to Master</div></div>
+        <div class="stat-item"><span class="stat-number">8</span><div class="stat-label">Core Units</div></div>
+        <div class="stat-item"><span class="stat-number">2</span><div class="stat-label">Optional Units</div></div>
+      </div>
+    </div>
+
+    <div class="units-grid">
+      <!-- Cards 1-10 -->
+      <div class="unit-card" style="animation-delay:0s" onclick="openUnit(1)">
+        <div class="unit-header"><div class="unit-number">1</div><h3 class="unit-title">Composite and Inverse Functions</h3></div>
+        <p class="unit-description">Master function composition, domains/ranges, and finding inverse functions.</p>
+        <ul class="topics-list">
+          <li>Function composition (f∘g)(x)</li><li>Domains/ranges under composition</li><li>One-to-one functions & horizontal line test</li>
+          <li>Inverse functions: definition, notation, verification</li><li>Restricting domains to create inverses</li><li>Solving equations with inverses</li>
+        </ul>
       </div>
 
-      <div class="units-grid">
-        <!-- Unit 1 (clickable) -->
-        <div class="unit-card" style="animation-delay:0s" onclick="openUnit1()">
-          <div class="unit-header">
-            <div class="unit-number">1</div>
-            <h3 class="unit-title">Composite and Inverse Functions</h3>
-          </div>
-          <p class="unit-description">Master function composition, domains/ranges, and finding inverse functions.</p>
-          <ul class="topics-list">
-            <li>Function composition (f∘g)(x)</li>
-            <li>Domains/ranges under composition</li>
-            <li>One-to-one functions & horizontal line test</li>
-            <li>Inverse functions: definition, notation, verification</li>
-            <li>Restricting domains to create inverses</li>
-            <li>Solving equations with inverses</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.05s" onclick="openUnit(2)">
+        <div class="unit-header"><div class="unit-number">2</div><h3 class="unit-title">Trigonometry</h3></div>
+        <p class="unit-description">Deep dive into trig functions, identities, equations, and their graphs.</p>
+        <ul class="topics-list">
+          <li>Angle measure (degrees ↔ radians) & arc length</li><li>Unit circle values & reference angles</li><li>Trig functions as coordinates on unit circle</li>
+          <li>Graphs of sine, cosine, tangent</li><li>Trig identities (Pythagorean, reciprocal, quotient)</li><li>Sum & difference identities</li><li>Inverse trig functions</li><li>Law of sines & law of cosines</li>
+        </ul>
+      </div>
 
-        <!-- Unit 2 -->
-        <div class="unit-card" style="animation-delay:.05s">
-          <div class="unit-header">
-            <div class="unit-number">2</div>
-            <h3 class="unit-title">Trigonometry</h3>
-          </div>
-          <p class="unit-description">Deep dive into trig functions, identities, equations, and their graphs.</p>
-          <ul class="topics-list">
-            <li>Angle measure (degrees ↔ radians) & arc length</li>
-            <li>Unit circle values & reference angles</li>
-            <li>Trig functions as coordinates on the unit circle</li>
-            <li>Graphs of sine, cosine, tangent</li>
-            <li>Trig identities (Pythagorean, reciprocal, quotient)</li>
-            <li>Sum & difference identities</li>
-            <li>Inverse trig functions</li>
-            <li>Law of sines & law of cosines</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.10s" onclick="openUnit(3)">
+        <div class="unit-header"><div class="unit-number">3</div><h3 class="unit-title">Complex Numbers</h3></div>
+        <p class="unit-description">Work with a+bi algebraically and geometrically, including polar form.</p>
+        <ul class="topics-list">
+          <li>Imaginary unit i and powers of i</li><li>Adding, subtracting, multiplying, dividing</li><li>Complex conjugates & modulus</li>
+          <li>Graphing in the complex plane</li><li>Polar form r(cosθ+isinθ)</li><li>De Moivre's theorem & complex roots</li>
+        </ul>
+      </div>
 
-        <!-- Unit 3 -->
-        <div class="unit-card" style="animation-delay:.10s">
-          <div class="unit-header">
-            <div class="unit-number">3</div>
-            <h3 class="unit-title">Complex Numbers</h3>
-          </div>
-          <p class="unit-description">Work with a+bi algebraically and geometrically, including polar form.</p>
-          <ul class="topics-list">
-            <li>Imaginary unit i and powers of i</li>
-            <li>Adding, subtracting, multiplying, dividing</li>
-            <li>Complex conjugates & modulus</li>
-            <li>Graphing in the complex plane</li>
-            <li>Polar form r(cosθ+isinθ)</li>
-            <li>De Moivre’s theorem & complex roots</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.15s" onclick="openUnit(4)">
+        <div class="unit-header"><div class="unit-number">4</div><h3 class="unit-title">Rational Functions</h3></div>
+        <p class="unit-description">Analyze, simplify, and graph rational expressions and functions.</p>
+        <ul class="topics-list">
+          <li>Domains, intercepts, and holes</li><li>Vertical, horizontal, and slant asymptotes</li><li>End behavior and limits</li>
+          <li>Graphing rational functions</li><li>Simplifying rational expressions</li><li>Partial fraction decomposition</li>
+        </ul>
+      </div>
 
-        <!-- Unit 4 -->
-        <div class="unit-card" style="animation-delay:.15s">
-          <div class="unit-header">
-            <div class="unit-number">4</div>
-            <h3 class="unit-title">Rational Functions</h3>
-          </div>
-          <p class="unit-description">Analyze, simplify, and graph rational expressions and functions.</p>
-          <ul class="topics-list">
-            <li>Domains, intercepts, and holes</li>
-            <li>Vertical, horizontal, and slant asymptotes</li>
-            <li>End behavior and limits</li>
-            <li>Graphing rational functions</li>
-            <li>Simplifying rational expressions</li>
-            <li>Partial fraction decomposition</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.20s" onclick="openUnit(5)">
+        <div class="unit-header"><div class="unit-number">5</div><h3 class="unit-title">Conic Sections</h3></div>
+        <p class="unit-description">Circles, ellipses, parabolas, and hyperbolas from algebraic and geometric viewpoints.</p>
+        <ul class="topics-list">
+          <li>General vs. standard forms</li><li>Parabolas: vertex, focus/directrix form</li><li>Ellipses: center, axes, foci, eccentricity</li>
+          <li>Hyperbolas: axes, asymptotes, foci</li><li>Circles: center-radius form</li><li>Graphing and extracting features</li>
+        </ul>
+      </div>
 
-        <!-- Unit 5 -->
-        <div class="unit-card" style="animation-delay:.20s">
-          <div class="unit-header">
-            <div class="unit-number">5</div>
-            <h3 class="unit-title">Conic Sections</h3>
-          </div>
-          <p class="unit-description">Circles, ellipses, parabolas, and hyperbolas from algebraic and geometric viewpoints.</p>
-          <ul class="topics-list">
-            <li>General vs. standard forms</li>
-            <li>Parabolas: vertex, focus/directrix form</li>
-            <li>Ellipses: center, axes, foci, eccentricity</li>
-            <li>Hyperbolas: axes, asymptotes, foci</li>
-            <li>Circles: center-radius form</li>
-            <li>Graphing and extracting features</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.25s" onclick="openUnit(6)">
+        <div class="unit-header"><div class="unit-number">6</div><h3 class="unit-title">Vectors</h3></div>
+        <p class="unit-description">Algebraic & geometric operations, dot product, and applications.</p>
+        <ul class="topics-list">
+          <li>Magnitude & direction; unit vectors</li><li>Component form vs. magnitude–direction form</li><li>Adding, subtracting, and scaling vectors</li><li>Dot product & angle between vectors</li><li>Word problems: forces, velocity, navigation</li>
+        </ul>
+      </div>
 
-        <!-- Unit 6 -->
-        <div class="unit-card" style="animation-delay:.25s">
-          <div class="unit-header">
-            <div class="unit-number">6</div>
-            <h3 class="unit-title">Vectors</h3>
-          </div>
-          <p class="unit-description">Algebraic & geometric operations, dot product, and applications.</p>
-          <ul class="topics-list">
-            <li>Magnitude & direction; unit vectors</li>
-            <li>Component form vs. magnitude–direction form</li>
-            <li>Adding, subtracting, and scaling vectors</li>
-            <li>Dot product & angle between vectors</li>
-            <li>Word problems: forces, velocity, navigation</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.30s" onclick="openUnit(7)">
+        <div class="unit-header"><div class="unit-number">7</div><h3 class="unit-title">Matrices</h3></div>
+        <p class="unit-description">Matrix arithmetic and using matrices to solve systems & model transformations.</p>
+        <ul class="topics-list">
+          <li>Matrix addition, subtraction, scalar multiplication</li><li>Matrix multiplication & properties</li><li>Determinants & inverses (2×2 focus)</li><li>Solving linear systems with matrices</li><li>Transformations of vectors with matrices</li>
+        </ul>
+      </div>
 
-        <!-- Unit 7 -->
-        <div class="unit-card" style="animation-delay:.30s">
-          <div class="unit-header">
-            <div class="unit-number">7</div>
-            <h3 class="unit-title">Matrices</h3>
-          </div>
-          <p class="unit-description">Matrix arithmetic and using matrices to solve systems & model transformations.</p>
-          <ul class="topics-list">
-            <li>Matrix addition, subtraction, scalar multiplication</li>
-            <li>Matrix multiplication & properties</li>
-            <li>Determinants & inverses (2×2 focus)</li>
-            <li>Solving linear systems with matrices</li>
-            <li>Transformations of vectors with matrices</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.35s" onclick="openUnit(8)">
+        <div class="unit-header"><div class="unit-number">8</div><h3 class="unit-title">Probability & Combinatorics</h3></div>
+        <p class="unit-description">Counting methods and probability structures, including expected value.</p>
+        <ul class="topics-list">
+          <li>Basic probability rules</li><li>Permutations & combinations (nPr, nCr)</li><li>Binomial coefficients & Pascal's triangle</li>
+          <li>Probability distributions</li><li>Expected value & decision making</li>
+        </ul>
+      </div>
 
-        <!-- Unit 8 -->
-        <div class="unit-card" style="animation-delay:.35s">
-          <div class="unit-header">
-            <div class="unit-number">8</div>
-            <h3 class="unit-title">Probability & Combinatorics</h3>
-          </div>
-          <p class="unit-description">Counting methods and probability structures, including expected value.</p>
-          <ul class="topics-list">
-            <li>Basic probability rules</li>
-            <li>Permutations & combinations (nPr, nCr)</li>
-            <li>Binomial coefficients & Pascal’s triangle</li>
-            <li>Probability distributions</li>
-            <li>Expected value & decision making</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.40s" onclick="openUnit(9)">
+        <div class="unit-header"><div class="unit-number">9</div><h3 class="unit-title">Series</h3><span class="optional-badge">Optional</span></div>
+        <p class="unit-description">Arithmetic & geometric sequences/series, sigma notation, and binomial theorem.</p>
+        <ul class="topics-list">
+          <li>Sequences (explicit vs. recursive)</li><li>Arithmetic series: partial sums</li><li>Geometric series: finite & infinite sums</li><li>Sigma (Σ) notation manipulation</li><li>Binomial theorem & combinatorics connection</li>
+        </ul>
+      </div>
 
-        <!-- Unit 9 -->
-        <div class="unit-card" style="animation-delay:.40s">
-          <div class="unit-header">
-            <div class="unit-number">9</div>
-            <h3 class="unit-title">Series</h3>
-            <span class="optional-badge">Optional</span>
-          </div>
-          <p class="unit-description">Arithmetic & geometric sequences/series, sigma notation, and binomial theorem.</p>
-          <ul class="topics-list">
-            <li>Sequences (explicit vs. recursive)</li>
-            <li>Arithmetic series: partial sums</li>
-            <li>Geometric series: finite & infinite sums</li>
-            <li>Sigma (Σ) notation manipulation</li>
-            <li>Binomial theorem & combinatorics connection</li>
-          </ul>
-        </div>
-
-        <!-- Unit 10 -->
-        <div class="unit-card" style="animation-delay:.45s">
-          <div class="unit-header">
-            <div class="unit-number">10</div>
-            <h3 class="unit-title">Limits & Continuity</h3>
-            <span class="optional-badge">Optional</span>
-          </div>
-          <p class="unit-description">Bridge to Calculus: introduce the language and intuition of limits.</p>
-          <ul class="topics-list">
-            <li>Limit notation & evaluating basic limits</li>
-            <li>One-sided & infinite limits</li>
-            <li>Continuity at a point and on intervals</li>
-            <li>Piecewise functions & discontinuities</li>
-            <li>Using limits to describe end behavior</li>
-          </ul>
-        </div>
+      <div class="unit-card" style="animation-delay:.45s" onclick="openUnit(10)">
+        <div class="unit-header"><div class="unit-number">10</div><h3 class="unit-title">Limits & Continuity</h3><span class="optional-badge">Optional</span></div>
+        <p class="unit-description">Bridge to Calculus: introduce the language and intuition of limits.</p>
+        <ul class="topics-list">
+          <li>Limit notation & evaluating basic limits</li><li>One-sided & infinite limits</li><li>Continuity at a point and on intervals</li><li>Piecewise functions & discontinuities</li><li>Using limits to describe end behavior</li>
+        </ul>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ================= UNIT 1 ================= -->
-  <div class="unit1-page" id="unit1Page">
-    <header class="unit1-header">
-      <div class="wrap">
-        <h1>MemoLearning — Precalculus</h1>
-        <div class="sub">Unit 1 • Composite and Inverse Functions</div>
-        <button class="btn" onclick="backToOverview()">← Back to Overview</button>
-      </div>
-    </header>
-
-    <div class="app">
-      <aside>
-        <div class="side-head">
-          <h2>Unit 1 Lessons</h2>
-          <div class="progress" title="Progress"><span id="progressbar"></span></div>
-        </div>
-        <ul class="lesson-list" id="lessonList"></ul>
-      </aside>
-
-      <main>
-        <div class="card" id="article">
-          <div class="crumbs" id="crumbs">Unit 1 / Function Composition / Theory</div>
-          <h2 class="title" id="title">Function Composition</h2>
-          <p class="lead" id="lead">Build complex mappings by feeding outputs of one function into another. Order encodes meaning.</p>
-          <div id="content"></div>
-          <div class="practice" id="practice"></div>
-          <div class="quiz" id="quiz"></div>
-          <div class="footer-nav">
-            <button class="btn secondary" id="prevBtn">← Previous</button>
-            <div style="flex:1"></div>
-            <button class="btn" id="nextBtn">Up next →</button>
-          </div>
-        </div>
-      </main>
+<!-- ================= GENERIC UNIT PAGE ================= -->
+<div class="unit-page" id="unitPage">
+  <header class="unit-header-stick">
+    <div class="wrap">
+      <h1>MemoLearning — Precalculus</h1>
+      <div class="sub" id="unitSub">Unit • …</div>
+      <button class="btn" onclick="backToOverview()">← Back to Overview</button>
     </div>
+  </header>
+
+  <div class="app">
+    <aside>
+      <div class="side-head">
+        <h2 id="sideTitle">Lessons</h2>
+        <div class="progress" title="Progress"><span id="progressbar"></span></div>
+      </div>
+      <ul class="lesson-list" id="lessonList"></ul>
+    </aside>
+
+    <main>
+      <div class="card" id="article">
+        <div class="crumbs" id="crumbs">Unit / Section / Page</div>
+        <h2 class="title" id="title">Title</h2>
+        <p class="lead" id="lead">Lead sentence.</p>
+        <div id="content"></div>
+        <div class="practice" id="practice"></div>
+        <div class="quiz" id="quiz"></div>
+        <div class="footer-nav">
+          <button class="btn secondary" id="prevBtn">← Previous</button>
+          <div style="flex:1"></div>
+          <button class="btn" id="nextBtn">Up next →</button>
+        </div>
+      </div>
+    </main>
   </div>
+</div>
 
-  <script>
-    /* ========= NAVIGATION BETWEEN OVERVIEW & UNIT 1 ========= */
-    function openUnit1(){
-      document.getElementById('overviewPage').classList.add('hidden');
-      document.getElementById('unit1Page').classList.add('active');
-      window.scrollTo(0,0);
-      if(!window.unit1Initialized){ initializeUnit1(); window.unit1Initialized = true; }
-    }
-    function backToOverview(){
-      document.getElementById('unit1Page').classList.remove('active');
-      document.getElementById('overviewPage').classList.remove('hidden');
-      window.scrollTo(0,0);
-    }
-
-    /* ========= UNIT 1 MODULE ========= */
-    function initializeUnit1(){
-      var unit = {
-        id:'u1', title:'Composite and Inverse Functions',
-        sections:[
-          { id:'composition', title:'Function Composition',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'Given functions g: X → Y and f: Y → Z, the composition f∘g maps X to Z by x ↦ f(g(x)). Composition is associative (h∘(f∘g) = (h∘f)∘g when defined) but generally not commutative.'},
-                {type:'note', text:'Domain rule: Dom(f∘g) = { x in Dom(g) such that g(x) ∈ Dom(f) }. Range rule: Ran(f∘g) ⊆ Ran(f).'},
-                {type:'ex', title:'Non-commutativity in action', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=2x−5 while (g∘f)(x)=2x−2. Same parts, different order, different function.'},
-                {type:'warn', text:'Always check types: the output set of g must match the input set of f. Violating this is a type error in algebraic form.'}
-              ]},
-              { id:'decomposition', label:'Decomposition', tag:'Article', blocks:[
-                {type:'p', text:'To analyze a complicated F, we often factor it as F=f∘g. Choose g to isolate an inner structure (affine change, power, exponential, logarithm), and f to complete the mapping.'},
-                {type:'ex', title:'Multiple valid decompositions', text:'F(x)=√(5x+7). One choice: f(u)=√u and g(x)=5x+7. Another: f(u)=√(5u+7) and g(x)=x. Pick the factorization that simplifies your goal (e.g., chain rule, domain analysis).'}
-              ]},
-              { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[
-                {type:'p', text:'Procedure: compute g(x), substitute into f, simplify, then apply the domain rule.'}
-              ],
-                practice:[
-                  {id:'c_p1', kind:'numeric', prompt:'f(x)=3x−2 and g(x)=x². Compute (f∘g)(3).', ans:25, tol:0.001, sol:'g(3)=9, f(9)=27−2=25.'},
-                  {id:'c_p2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:0.001, sol:'g(14)=9, f(9)=3.'},
-                  {id:'c_p3', kind:'numeric', prompt:'f(x)=1/(x−2), g(x)=x². Evaluate (f∘g)(−2).', ans:0.5, tol:0.001, sol:'g(−2)=4, f(4)=1/2.'},
-                  {id:'c_p4', kind:'mc', prompt:'Choose a correct decomposition of H(x)=(3x−1)⁴.', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²','f(u)=u⁴, g(x)=x'], correct:0, sol:'Apply the power after the affine map: f(u)=u⁴, g(x)=3x−1.'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'c_q1', q:'Let f(x)=5−x and g(x)=x². What is (f∘g)(x)?', opts:['5 − x − x²','5 − x²','(5 − x)²','x² − 5'], a:1, exp:'f(g(x)) = 5 − x².'},
-                {id:'c_q2', q:'Composition is commutative.', opts:['True','False'], a:1, exp:'In general f∘g ≠ g∘f.'},
-                {id:'c_q3', q:'Dom(f∘g) equals', opts:['Dom(f) ∩ Dom(g)','{x ∈ Dom(g) with g(x) ∈ Dom(f)}','Dom(f) only','Ran(g) only'], a:1, exp:'x must be allowed by g and map into Dom(f).'}
-              ]}
-            ]},
-          { id:'domains', title:'Domains and Ranges',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'To find Dom(f∘g): start with Dom(g), then impose f’s input constraints on g(x). Intersection gives the legal x. Typical constraints: square roots (argument ≥ 0), logarithms (argument > 0), denominators (≠ 0).'},
-                {type:'ex', title:'Log inside a root', text:'f(u)=√u, g(x)=ln(x−1). Require x−1>0 for g, and ln(x−1)≥0 for f. The second inequality gives x≥2. Hence Dom(f∘g)=[2,∞).'}
-              ]},
-              { id:'examples', label:'Examples', tag:'Article', blocks:[
-                {type:'ex', title:'Rational inside rational', text:'f(u)=1/u and g(x)=1/(x−3). Dom(g) excludes x=3. For f∘g we also need g(x)≠0, i.e., 1/(x−3)≠0, which is automatically true. Final domain: ℝ∖{3}.'},
-                {type:'ex', title:'Power after absolute value', text:'f(u)=u² and g(x)=|x| have no additional restrictions. Dom(f∘g)=ℝ. Ran(f∘g)=[0,∞).'}
-              ]},
-              { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Decide domains precisely; justify the excluded points or intervals.'}],
-                practice:[
-                  {id:'d_p1', kind:'mc', prompt:'f(x)=ln x, g(x)=x²−4. Dom(f∘g)=', options:['all real numbers','−2 < x < 2','x < −2 or x > 2','−2 ≤ x ≤ 2'], correct:2, sol:'Need x²−4>0 so |x|>2.'},
-                  {id:'d_p2', kind:'mc', prompt:'f(x)=√x, g(x)=1/(x−1). Dom(f∘g)=', options:['x ≠ 1','x > 1','x < 1','x > 1 or x < 1'], correct:1, sol:'Require g(x)≥0 and x≠1. Here 1/(x−1)≥0 implies x>1.'},
-                  {id:'d_p3', kind:'mc', prompt:'f(x)=1/x, g(x)=√(x−2). Dom(f∘g)=', options:['x ≥ 2','x > 2','x ≥ 2 and x ≠ 2','x ∈ ℝ'], correct:1, sol:'Need x−2≥0 ⇒ x≥2, and g(x)≠0 ⇒ x≠2, so x>2.'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'d_q1', q:'If f(x)=√x and g(x)=x²−9, Dom(f∘g) is', opts:['ℝ','x ≤ −3 or x ≥ 3','x < −3 or x > 3','x ≥ 0'], a:1, exp:'Need x²−9≥0 ⇒ |x|≥3.'},
-                {id:'d_q2', q:'For f(x)=ln x and g(x)=e^x−5, Dom(f∘g) is', opts:['x ≠ 5','all real numbers','x > 5','x < 5'], a:1, exp:'e^x−5 > 0 for all x.'}
-              ]}
-            ]},
-          { id:'onetoone', title:'One-to-One (Injective)',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'f is injective if f(a)=f(b) implies a=b. Graphically: the horizontal line test. Analytically: monotonicity on an interval is sufficient for injectivity on that interval.'},
-                {type:'ex', title:'Proof template', text:'Suppose f is strictly increasing. If a<b then f(a)<f(b). Thus f(a)=f(b) forces a=b. Hence f is injective.'},
-                {type:'warn', text:'Common pitfall: concluding x² is injective on ℝ because derivative 2x vanishes only at 0. Derivative sign changes; monotonicity fails globally.'}
-              ]},
-              { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Decide whether each function is one-to-one on the stated set.'}],
-                practice:[
-                  {id:'o_p1', kind:'mc', prompt:'Which is injective on ℝ?', options:['x²','|x|','3x−1','cos x'], correct:2, sol:'Linear with nonzero slope is injective.'},
-                  {id:'o_p2', kind:'mc', prompt:'x³−x is injective on', options:['ℝ','x ≥ 0 only','x ≤ 0 only','no interval'], correct:1, sol:'On x ≥ 0 it is increasing; globally it is not injective.'},
-                  {id:'o_p3', kind:'mc', prompt:'e^x is injective on', options:['ℝ','no interval','x ≥ 0 only','x ≤ 0 only'], correct:0, sol:'e^x is strictly increasing on ℝ.'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'o_q1', q:'Horizontal line test characterizes', opts:['surjectivity','injectivity','continuity','differentiability'], a:1, exp:'A horizontal line hitting ≤ 1 point encodes injectivity.'},
-                {id:'o_q2', q:'On which set is x² injective?', opts:['(−∞,∞)','[0,∞)','(−∞,0]','both [0,∞) and (−∞,0] separately'], a:3, exp:'Each half-line works; together they fail the test.'}
-              ]}
-            ]},
-          { id:'inverses', title:'Inverse Functions',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'An inverse f⁻¹ reverses f: f⁻¹(f(x))=x (for x in Dom(f)) and f(f⁻¹(y))=y (for y in Ran(f)). Thus f must be bijective from Dom(f) onto Ran(f). Graphs reflect across y=x; domains and ranges swap.'},
-                {type:'ex', title:'Solving for f⁻¹', text:'For f(x)=4x+3: write y=4x+3, swap to x=4y+3, solve y=(x−3)/4, hence f⁻¹(x)=(x−3)/4.'},
-                {type:'note', text:'Notation: the superscript −1 denotes inverse, not reciprocal. For functions, f⁻¹ is not 1/f.'}
-              ]},
-              { id:'examples', label:'Examples', tag:'Article', blocks:[
-                {type:'ex', title:'Quadratic with restriction', text:'F(x)=x² is not injective on ℝ. Restrict to [0,∞) to obtain inverse √x. Alternatively restrict to (−∞,0] to obtain inverse −√x.'},
-                {type:'ex', title:'Exponential/log pair', text:'e^x and ln x are mutual inverses with domains ℝ and (0,∞) respectively.'}
-              ]},
-              { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Find inverses and evaluate them.'}],
-                practice:[
-                  {id:'i_p1', kind:'mc', prompt:'f(x)=4x+3 ⇒ f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3','1/(4x+3)'], correct:0, sol:'Solve x=4y+3.'},
-                  {id:'i_p2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:0.001, sol:'5y−7=18 ⇒ y=5.'},
-                  {id:'i_p3', kind:'mc', prompt:'The graph of y=f⁻¹(x) is the reflection of y=f(x) across', options:['x-axis','y-axis','y=x','origin'], correct:2, sol:'Inversion swaps coordinates.'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'i_q1', q:'If f is bijective, then (f⁻¹)⁻¹ equals', opts:['f⁻²','1/f','f','id'], a:2, exp:'The inverse of the inverse is the original function.'},
-                {id:'i_q2', q:'Which pair are inverses?', opts:['x³ and x^{1/3}','x² and √x on ℝ','sin x and arcsin x on ℝ','ln x and x'], a:0, exp:'x³ and cube root are mutual inverses on ℝ.'}
-              ]}
-            ]},
-          { id:'restrict', title:'Domain Restrictions for Invertibility',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'To define f⁻¹ for a non-injective f, restrict Dom(f) to a subset on which f is injective. Prefer maximal simple intervals that preserve continuity.'},
-                {type:'ex', title:'Standard trig choices', text:'arcsin uses [−π/2, π/2], arccos uses [0, π], arctan uses (−π/2, π/2). These ensure injectivity and continuity.'},
-                {type:'warn', text:'Different valid restrictions yield different inverses (e.g., √x vs −√x). State the chosen domain explicitly.'}
-              ]},
-              { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Pick intervals that make functions injective.'}],
-                practice:[
-                  {id:'r_p1', kind:'mc', prompt:'To invert x² we can restrict to', options:['(−∞,∞)','[0,∞)','(−∞,0]','both [0,∞) or (−∞,0]'], correct:3, sol:'Either half-line works.'},
-                  {id:'r_p2', kind:'mc', prompt:'Which interval makes sin x one-to-one?', options:['[0,2π]','[−π,π]','[−π/2, π/2]','(−π,π)'], correct:2, sol:'By convention arcsin uses [−π/2, π/2].'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'r_q1', q:'Choosing (−∞,0] for x² yields inverse', opts:['√x','−√x','x²','|x|'], a:1, exp:'On (−∞,0] the inverse is the negative root.'}
-              ]}
-            ]},
-          { id:'solving', title:'Solving with Inverses',
-            pages:[
-              { id:'theory', label:'Theory', tag:'Article', blocks:[
-                {type:'p', text:'To solve f(x)=c for x when f is injective, apply f⁻¹: x=f⁻¹(c). Always verify c lies in Ran(f). For compositions, invert in reverse order: if y=(f∘g)(x), then x=g⁻¹(f⁻¹(y)) when both inverses exist.'},
-                {type:'ex', title:'Linear and restricted quadratic', text:'Solve 3x−5=19 ⇒ x=(19+5)/3=8. For x²=16 with domain x≥0, x=4; with domain x≤0, x=−4.'}
-              ]},
-              { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute exact solutions using inverse operations.'}],
-                practice:[
-                  {id:'s_p1', kind:'numeric', prompt:'Solve f(x)=19 for f(x)=3x−5.', ans:8, tol:0.001, sol:'3x−5=19 ⇒ x=8.'},
-                  {id:'s_p2', kind:'numeric', prompt:'Solve g(x)=10 for g(x)=2√(x+1). Give x.', ans:24, tol:0.001, sol:'2√(x+1)=10 ⇒ √(x+1)=5 ⇒ x=24.'},
-                  {id:'s_p3', kind:'mc', prompt:'If y=(f∘g)(x) and both inverses exist, then x equals', options:['f⁻¹(g⁻¹(y))','g⁻¹(f⁻¹(y))','(f∘g)⁻¹(y) (order irrelevant)','cannot recover x'], correct:1, sol:'Invert in reverse order: (f∘g)⁻¹ = g⁻¹∘f⁻¹.'}
-                ]
-              },
-              { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-                {id:'s_q1', q:'For f(x)=e^x, solving f(x)=k gives x=', opts:['ln k','e^k','k','1/k'], a:0, exp:'Apply ln to both sides.'},
-                {id:'s_q2', q:'If h(x)=√(x−3), the equation h(x)=a is solvable in reals iff', opts:['a>0','a≥0 and x≥3','a≥0','a arbitrary'], a:2, exp:'Outputs of √ are a≥0; domain restriction ensures x≥3 after solving.'}
-              ]}
-            ]}
-        ]};
-
-      /* ---- state & helpers ---- */
-      var key='memolearn_u1_';
-      function save(id,val){ try{localStorage.setItem(key+id,JSON.stringify(val));}catch(e){} }
-      function load(id,def){ try{var v=localStorage.getItem(key+id);return v?JSON.parse(v):def;}catch(e){return def;} }
-      var current={sIdx:0,pIdx:0};
-      function $(sel){return document.querySelector(sel);}
-      function el(t,c){var n=document.createElement(t); if(c) n.className=c; return n;}
-      function clear(n){n.innerHTML='';}
-
-      /* ---- sidebar ---- */
-      function renderSidebar(){
-        var ul=$('#lessonList'); clear(ul);
-        unit.sections.forEach(function(sec,si){
-          sec.pages.forEach(function(pg,pi){
-            var li=el('li');
-            var a=el('a','lesson'); a.href='#'; a.dataset.s=si; a.dataset.p=pi;
-            var tag=el('span','tag'); tag.textContent=pg.tag||'Item';
-            var title=el('span'); title.textContent=sec.title+' — '+pg.label;
-            var done=el('span','done'); done.textContent='✓';
-            if(load('done_'+sec.id+'_'+pg.id,false)) li.classList.add('completed');
-            a.appendChild(tag); a.appendChild(title); a.appendChild(done);
-            li.appendChild(a); ul.appendChild(li);
-          });
-        });
-      }
-
-      /* ---- render content ---- */
-      function renderPage(){
-        var sec=unit.sections[current.sIdx];
-        var pg=sec.pages[current.pIdx];
-
-        document.querySelectorAll('.lesson').forEach(function(x){x.parentElement.classList.remove('active');});
-        var act=document.querySelector('.lesson[data-s="'+current.sIdx+'"][data-p="'+current.pIdx+'"]');
-        if(act) act.parentElement.classList.add('active');
-
-        $('#crumbs').textContent='Unit 1 / '+sec.title+' / '+pg.label;
-        $('#title').textContent=sec.title;
-        $('#lead').textContent=(pg.lead || (pg.tag==='Quiz' ? 'Quick check for understanding.' : ''));
-
-        var content=$('#content'); clear(content);
-        (pg.blocks||[]).forEach(function(b){
-          if(b.type==='p'){ var p=el('p'); p.textContent=b.text; content.appendChild(p); }
-          if(b.type==='ex'){ var d=el('div','example'); var h=el('h4'); h.textContent=b.title||'Example'; d.appendChild(h); var p=el('p'); p.textContent=b.text; d.appendChild(p); content.appendChild(d); }
-          if(b.type==='note'){ var n=el('div','note'); n.textContent=b.text; content.appendChild(n); }
-          if(b.type==='warn'){ var w=el('div','warn'); w.textContent=b.text; content.appendChild(w); }
-        });
-
-        renderPractice(pg); renderQuiz(pg);
-        updateNavButtons(); updateProgress();
-      }
-
-      function renderPractice(pg){
-        var box=$('#practice'); clear(box);
-        if(!pg.practice || !pg.practice.length) return;
-        var h=el('h3'); h.textContent='Practice'; box.appendChild(h);
-        pg.practice.forEach(function(p){
-          var wrap=el('div','problem');
-          var title=el('h5'); title.textContent=p.prompt; wrap.appendChild(title);
-          var result=el('div');
-          if(p.kind==='numeric'){
-            var input=el('input','input'); input.inputMode='decimal'; input.placeholder='Enter a number';
-            var btn=el('button','btn'); btn.textContent='Check'; btn.style.marginLeft='8px';
-            wrap.appendChild(input); wrap.appendChild(btn); wrap.appendChild(result);
-            btn.onclick=function(){
-              var val=parseFloat(String(input.value).replace(/[^0-9+\-\.eE]/g,'')); 
-              if(isNaN(val)){ result.className='bad'; result.textContent='Enter a valid number.'; return; }
-              var ok=Math.abs(val-(p.ans)) <= (p.tol||1e-6);
-              result.className= ok? 'ok':'bad';
-              result.textContent= ok? 'Correct!': 'Not quite. Try again.';
-            };
-          } else if(p.kind==='mc'){
-            var optsWrap=el('div');
-            (p.options||[]).forEach(function(opt,i){
-              var label=el('label','choice');
-              var radio=el('input'); radio.type='radio'; radio.name=p.id; radio.value=String(i);
-              var span=el('span'); span.textContent=opt; label.appendChild(radio); label.appendChild(span); optsWrap.appendChild(label);
-            });
-            var btn2=el('button','btn'); btn2.textContent='Check'; btn2.style.marginTop='6px';
-            wrap.appendChild(optsWrap); wrap.appendChild(btn2); wrap.appendChild(result);
-            btn2.onclick=function(){
-              var chosen=[].slice.call(optsWrap.querySelectorAll('input')).find(function(i){return i.checked;});
-              if(!chosen){ result.className='bad'; result.textContent='Choose an option.'; return; }
-              var ok= Number(chosen.value)===p.correct;
-              result.className= ok? 'ok':'bad';
-              result.textContent= ok? 'Correct!': 'Not quite. Try again.';
-            };
+<script>
+/* =================== DATA: UNITS 1–10 =================== */
+const UNITS = {
+  1: { // Detailed Unit 1
+    id:'u1', title:'Composite and Inverse Functions',
+    sections:[
+      { id:'composition', title:'Function Composition',
+        pages:[
+          { id:'theory', label:'Theory', tag:'Article', blocks:[
+            {type:'p', text:'Given functions g: X → Y and f: Y → Z, the composition f∘g maps X to Z by x ↦ f(g(x)). Composition is associative but generally not commutative.'},
+            {type:'note', text:'Domain rule: Dom(f∘g) = { x ∈ Dom(g) | g(x) ∈ Dom(f) }.'},
+            {type:'ex', title:'Non‑commutativity', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=2x−5 while (g∘f)(x)=2x−2.'},
+            {type:'warn', text:'Make sure codomain(g)=domain(f); otherwise f∘g is undefined.'}
+          ]},
+          { id:'decompose', label:'Decomposition', tag:'Article', blocks:[
+            {type:'p', text:'To analyze a complicated F, factor it as F=f∘g. Choose g to isolate an inner structure (affine change, power, exponential, logarithm), and f to complete the mapping.'},
+            {type:'ex', title:'Example', text:'F(x)=√(5x+7). One choice: f(u)=√u, g(x)=5x+7. Another: f(u)=√(5u+7), g(x)=x.'}
+          ]},
+          { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[{type:'p', text:'Compute g(x), substitute into f, simplify, then apply the domain rule.'}],
+            practice:[
+              {id:'u1_c1', kind:'numeric', prompt:'f(x)=3x−2, g(x)=x². Compute (f∘g)(3).', ans:25, tol:1e-3, sol:'g(3)=9; f(9)=27−2=25.'},
+              {id:'u1_c2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:1e-3, sol:'g(14)=9 ⇒ √9=3.'},
+              {id:'u1_c3', kind:'mc', prompt:'Valid decomposition of H(x)=(3x−1)⁴?', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²'], correct:0, sol:'Power after affine.'}
+            ]
+          },
+          { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+            {id:'u1_q1', q:'f(x)=5−x, g(x)=x². (f∘g)(x)=', opts:['5 − x − x²','5 − x²','(5 − x)²'], a:1, exp:'Substitute: 5 − x².'},
+            {id:'u1_q2', q:'Dom(f∘g) equals', opts:['Dom(f)∩Dom(g)','{x ∈ Dom(g) | g(x) ∈ Dom(f)}','Ran(g)'], a:1, exp:'x must pass g, then be allowed by f.'}
+          ]}
+        ]},
+      { id:'inverses', title:'Inverse Functions',
+        pages:[
+          { id:'theory', label:'Theory', tag:'Article', blocks:[
+            {type:'p', text:'An inverse f⁻¹ reverses f: f⁻¹(f(x))=x and f(f⁻¹(y))=y. Graphs reflect across y=x; domains and ranges swap.'},
+            {type:'ex', title:'Solve for f⁻¹', text:'f(x)=4x+3 ⇒ y=4x+3 ⇒ x=4y+3 ⇒ y=(x−3)/4 ⇒ f⁻¹(x)=(x−3)/4.'},
+            {type:'note', text:'f⁻¹ is not 1/f. The −1 is not an exponent.'}
+          ]},
+          { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Find and use inverses.'}],
+            practice:[
+              {id:'u1_i1', kind:'mc', prompt:'f(x)=4x+3 ⇒ f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3'], correct:0, sol:'Solve x=4y+3.'},
+              {id:'u1_i2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:1e-3, sol:'5y−7=18 ⇒ y=5.'}
+            ]
           }
-          var help=el('span','help'); help.textContent='Show solution';
-          var sol=el('div','solution'); sol.textContent=p.sol||'Solution coming soon.'; 
-          help.onclick=function(){ sol.style.display= sol.style.display==='block' ? 'none' : 'block'; };
-          wrap.appendChild(help); wrap.appendChild(sol);
-          box.appendChild(wrap);
-        });
-      }
+        ]}
+    ]
+  },
 
-      function renderQuiz(pg){
-        var box=$('#quiz'); clear(box);
-        if(!pg.quiz || !pg.quiz.length) return;
-        var h=el('h3'); h.textContent='Quiz'; box.appendChild(h);
-        var qs=el('div'); box.appendChild(qs);
-        (pg.quiz||[]).forEach(function(q,idx){
-          var qEl=el('div','q');
-          var title=el('h5'); title.textContent=(idx+1)+'. '+q.q; qEl.appendChild(title);
-          (q.opts||[]).forEach(function(opt,i){
-            var label=el('label','choice');
-            var radio=el('input'); radio.type='radio'; radio.name=q.id; radio.value=String(i);
-            var span=el('span'); span.textContent=opt; label.appendChild(radio); label.appendChild(span); qEl.appendChild(label);
-          });
-          qs.appendChild(qEl);
-        });
-        var bar=el('div'); bar.style.display='flex'; bar.style.gap='8px'; bar.style.marginTop='8px';
-        var submit=el('button','btn'); submit.textContent='Submit';
-        var reset=el('button','btn secondary'); reset.textContent='Reset'; reset.style.display='none';
-        var score=el('div'); score.style.fontWeight='800'; score.style.marginLeft='auto';
-        bar.appendChild(submit); bar.appendChild(reset); bar.appendChild(score); box.appendChild(bar);
+  /* === Unit 2: Trigonometry === */
+  2:{id:'u2', title:'Trigonometry', sections:[
+    {id:'angles', title:'Angle Measure & Arc Length', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Radians use arc length: θ = s/r. 180° = π. Sector area A = 1/2 r²θ (θ in radians).'},
+        {type:'ex', title:'Arc length', text:'r = 4, θ = π/3 ⇒ s = 4π/3.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Convert and compute.'}], practice:[
+        {id:'t2p1', kind:'mc', prompt:'150° in radians =', options:['2π/3','5π/6','7π/6','3π/4'], correct:1, sol:'150/180 = 5/6 of π.'},
+        {id:'t2p2', kind:'numeric', prompt:'Find sector area for r=3 and θ=π/2. (use ≈)', ans: (9*Math.PI/4), tol:0.02, sol:'A = 1/2 r²θ = 1/2·9·π/2 = 9π/4 ≈ 7.069.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'t2q1', q:'cos(π) =', opts:['1','0','−1'], a:2, exp:'At π, cos = −1.'},
+        {id:'t2q2', q:'Convert π/4 to degrees', opts:['30°','45°','60°'], a:1, exp:'π/4 · 180/π = 45°.'}
+      ]}
+    ]},
+    {id:'unitcircle', title:'Unit Circle & Reference Angles', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'On the unit circle, a point at angle θ has coordinates (cosθ, sinθ). Reference angles give exact values in all quadrants.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Use symmetries to find exact values.'}], practice:[
+        {id:'t2p3', kind:'mc', prompt:'sin(π/6)=', options:['1','√3/2','1/2','0'], correct:2, sol:'Standard exact value.'},
+        {id:'t2p4', kind:'mc', prompt:'cos(2π/3)=', options:['1/2','−1/2','−√3/2','√3/2'], correct:1, sol:'Quadrant II mirror of cos(π/3).'}
+      ]}
+    ]},
+    {id:'graphs', title:'Graphs of sin, cos, tan', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'y=A·sin(B(x−C))+D has amplitude |A|, period 2π/|B|, phase shift C, vertical shift D.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'t2q3', q:'Period of y=sin(3x) is', opts:['2π','2π/3','3π'], a:1, exp:'2π/3.'}]}
+    ]},
+    {id:'ids', title:'Trig Identities', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Key identities: sin²x+cos²x=1; 1+tan²x=sec²x; 1+cot²x=csc²x.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Simplify using identities.'}], practice:[{id:'t2p5', kind:'mc', prompt:'Simplify sin²x+cos²x', options:['0','1','2'], correct:1, sol:'Pythagorean identity.'}]}]
+    },
+    {id:'sums', title:'Sum & Difference Identities', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'sin(α±β)=sinαcosβ±cosαsinβ; cos(α±β)=cosαcosβ∓sinαsinβ.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'t2q4', q:'cos(π/3+π/6)=', opts:['√3/2','1/2','0'], a:2, exp:'cos(π/2)=0.'}]}
+    ]},
+    {id:'inverse', title:'Inverse Trig', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Principal ranges: arcsin∈[−π/2,π/2], arccos∈[0,π], arctan∈(−π/2,π/2).'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Evaluate carefully on principal ranges.'}], practice:[{id:'t2p6', kind:'mc', prompt:'arccos(−1)=', options:['0','π','π/2'], correct:1, sol:'Cosine equals −1 at π.'}]}]
+    },
+    {id:'laws', title:'Law of Sines & Cosines', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'For triangle ABC: a/sinA=b/sinB=c/sinC and c²=a²+b²−2ab cosC.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Solve non-right triangles.'}], practice:[{id:'t2p7', kind:'mc', prompt:'In ΔABC with a=b and C=60°, c equals', options:['a','√3 a','2a'], correct:0, sol:'c²=a²+a²−2a²cos60°=a² ⇒ c=a.'}]}]
+    }
+  ]},
 
-        submit.onclick=function(){
-          var correct=0,total=(pg.quiz||[]).length;
-          (pg.quiz||[]).forEach(function(q,i){
-            var chosen=document.querySelector('input[name="'+q.id+'"]:checked');
-            var block=qs.children[i];
-            var res=el('div');
-            if(chosen && Number(chosen.value)===q.a){ res.className='ok'; res.textContent='Correct — '+q.exp; correct++; }
-            else { res.className='bad'; res.textContent='Incorrect — Answer: '+q.opts[q.a]+'. '+q.exp; }
-            block.appendChild(res);
-          });
-          score.textContent='Score: '+correct+'/'+total+' ('+Math.round(100*correct/Math.max(1,total))+'%)';
-          reset.style.display='inline-block'; submit.disabled=true;
-          var sec=unit.sections[current.sIdx], pgc=sec.pages[current.pIdx];
-          save('done_'+sec.id+'_'+pgc.id,true); renderSidebar();
-        };
-        reset.onclick=function(){ renderPage(); };
-      }
+  /* === Unit 3: Complex Numbers === */
+  3:{id:'u3', title:'Complex Numbers', sections:[
+    {id:'algebra', title:'Algebra of a+bi', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'i²=−1. (a+bi)+(c+di)=(a+c)+(b+d)i; (a+bi)(c+di)=(ac−bd)+(ad+bc)i.'},
+        {type:'note', text:'Modulus |a+bi|=√(a²+b²); conjugate a−bi; z·\u0305z = |z|².'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute and simplify.'}], practice:[
+        {id:'c3p1', kind:'numeric', prompt:'|(3−4i)| = ?', ans:5, tol:1e-3, sol:'√(3²+4²)=5.'},
+        {id:'c3p2', kind:'mc', prompt:'(1+i)(1−i)=', options:['0','1','2'], correct:2, sol:'1−i²=2.'}
+      ]}
+    ]},
+    {id:'polar', title:'Polar Form & De Moivre', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'z=r(cosθ+i sinθ). Powers: z^n=r^n(cos nθ + i sin nθ).'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'c3q1', q:'For z=2(cos π/3 + i sin π/3), z² has modulus', opts:['2','4','8'], a:1, exp:'Modulus squares: 2²=4.'}]}
+    ]}
+  ]},
 
-      function updateNavButtons(){
-        var isFirst=(current.sIdx===0 && current.pIdx===0);
-        var isLast=(current.sIdx===unit.sections.length-1 && current.pIdx===unit.sections[current.sIdx].pages.length-1);
-        document.getElementById('prevBtn').disabled=isFirst;
-        document.getElementById('nextBtn').disabled=isLast;
-      }
-      function goPrev(){ if(current.pIdx>0) current.pIdx--; else if(current.sIdx>0){ current.sIdx--; current.pIdx=unit.sections[current.sIdx].pages.length-1; } renderPage(); }
-      function goNext(){ var sec=unit.sections[current.sIdx]; if(current.pIdx<sec.pages.length-1) current.pIdx++; else if(current.sIdx<unit.sections.length-1){ current.sIdx++; current.pIdx=0; } renderPage(); }
+  /* === Unit 4: Rational Functions === */
+  4:{id:'u4', title:'Rational Functions', sections:[
+    {id:'domain', title:'Domains, Holes, Asymptotes', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Vertical asymptotes occur at zeros of the reduced denominator. Removable discontinuities (holes) occur where a common factor cancels.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Analyze f(x)=(x−1)/(x²−1).'}], practice:[{id:'u4p1', kind:'mc', prompt:'f has a hole at', options:['x=1','x=−1','both ±1'], correct:0, sol:'Cancel (x−1); hole at 1, vertical asymptote at −1.'}]}]
+    },
+    {id:'hslant', title:'Horizontal/Slant Asymptotes', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'If deg(num)=deg(den), horizontal asymptote is ratio of leading coefficients. If deg(num)=deg(den)+1, slant asymptote from long division.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u4q1', q:'For (2x²+1)/(x²−3), the horizontal asymptote is', opts:['y=0','y=2','none'], a:1, exp:'Leading-coefficient ratio 2/1=2.'}]}
+    ]}
+  ]},
 
-      function updateProgress(){
-        var total=0,done=0;
-        unit.sections.forEach(function(sec){ sec.pages.forEach(function(pg){ total++; if(load('done_'+sec.id+'_'+pg.id,false)) done++; }); });
-        var pct=Math.round(100*done/Math.max(1,total));
-        document.getElementById('progressbar').style.width=pct+'%';
-        document.getElementById('nextBtn').textContent=(current.sIdx===unit.sections.length-1 && current.pIdx===unit.sections[current.sIdx].pages.length-1)?'Finish':'Up next →';
-      }
+  /* === Unit 5: Conic Sections === */
+  5:{id:'u5', title:'Conic Sections', sections:[
+    {id:'circles', title:'Circles', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²+(y−k)²=r². Center (h,k), radius r.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Extract features.'}], practice:[{id:'u5p1', kind:'mc', prompt:'x²+y²=25 has radius', options:['3','4','5'], correct:2, sol:'√25=5.'}]}]
+    },
+    {id:'parabolas', title:'Parabolas', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'y−k=a(x−h)² gives vertex (h,k); focus distance 1/(4a).'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u5q2', q:'For y=x², focus is at', opts:['(0,1/4)','(0,1)','(1,0)'], a:0, exp:'a=1 ⇒ p=1/4.'}]}
+    ]},
+    {id:'ellipses', title:'Ellipses', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²/a²+(y−k)²/b²=1 with a≥b. Foci at c²=a²−b².'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u5q3', q:'If a=5, b=4 then c=', opts:['3','√9','√(25−16)'], a:2, exp:'c=√(a²−b²)=3.'}]}
+    ]},
+    {id:'hyperbolas', title:'Hyperbolas', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²/a² − (y−k)²/b² = 1. Asymptotes: y−k=±(b/a)(x−h).'}]}
+    ]}
+  ]},
 
-      function wire(){
-        document.getElementById('lessonList').addEventListener('click',function(e){
-          var a=e.target.closest('a.lesson'); if(!a) return; e.preventDefault();
-          current.sIdx=Number(a.dataset.s); current.pIdx=Number(a.dataset.p); renderPage();
-        });
-        document.getElementById('prevBtn').addEventListener('click',goPrev);
-        document.getElementById('nextBtn').addEventListener('click',goNext);
-        window.addEventListener('keydown',function(e){ if(e.key==='ArrowLeft') goPrev(); if(e.key==='ArrowRight') goNext(); });
-      }
+  /* === Unit 6: Vectors === */
+  6:{id:'u6', title:'Vectors', sections:[
+    {id:'basics', title:'Basics & Operations', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Magnitude |v|=√(v₁²+v₂²). Unit vector u=v/|v| when v≠0.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute dot products.'}], practice:[{id:'u6p1', kind:'numeric', prompt:'(1,2)·(3,4)=', ans:11, tol:1e-3, sol:'1·3+2·4=11.'}]}
+    ]},
+    {id:'dot', title:'Dot Product & Angle', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'u·v=|u||v|cosθ ⇒ θ=arccos((u·v)/(|u||v|)).'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u6q1', q:'If u·v=0 and u,v≠0 then', opts:['parallel','orthogonal','equal'], a:1, exp:'Zero dot ⇒ right angle.'}]}
+    ]}
+  ]},
 
-      renderSidebar(); wire(); renderPage();
-    } // end initializeUnit1
+  /* === Unit 7: Matrices === */
+  7:{id:'u7', title:'Matrices', sections:[
+    {id:'arith', title:'Arithmetic & Properties', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'AB defined when inner dimensions match. (AB)C=A(BC) but AB≠BA in general.'}]}]
+    },
+    {id:'det', title:'Determinants & Inverses (2×2)', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'For a 2×2 matrix [a b; c d], det=ad−bc. Inverse = (1/det) [d −b; −c a] if det≠0.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u7q1', q:'Inverse exists iff', opts:['a+d≠0','ad−bc≠0','ab−cd≠0'], a:1, exp:'Nonzero determinant.'}]}
+    ]},
+    {id:'systems', title:'Solving Linear Systems', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Use augmented matrices and row-reduction; or x=A⁻¹b when A is invertible.'}]}]
+    }
+  ]},
 
-    // Card intro animation staggering
-    document.addEventListener('DOMContentLoaded',function(){
-      document.querySelectorAll('.unit-card').forEach(function(card,i){ card.style.animationDelay=(i*0.05)+'s'; });
+  /* === Unit 8: Probability & Combinatorics === */
+  8:{id:'u8', title:'Probability & Combinatorics', sections:[
+    {id:'counting', title:'Counting', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Permutations nPr and combinations nCr. Multiplication principle for independent stages.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute combinations.'}], practice:[{id:'u8p1', kind:'numeric', prompt:'5C2 =', ans:10, tol:1e-3, sol:'10 ways.'}]}
+    ]},
+    {id:'binom', title:'Binomial & Expected Value', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(a+b)^n = Σ (n choose k) a^{n−k} b^k. For a Bernoulli(p) in n trials, E[X]=np.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u8q1', q:'Coefficient of x² in (1+x)³', opts:['1','3','6'], a:1, exp:'(3 choose 2)=3.'}]}
+    ]}
+  ]},
+
+  /* === Unit 9: Series === */
+  9:{id:'u9', title:'Series', sections:[
+    {id:'seq', title:'Sequences', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Arithmetic: a_n=a_1+(n−1)d. Geometric: a_n=a_1 r^{n−1}.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Work with explicit forms.'}], practice:[{id:'u9p1', kind:'numeric', prompt:'Arithmetic a1=3, d=2 ⇒ a4 =', ans:9, tol:1e-3, sol:'3+3·2=9.'}]}
+    ]},
+    {id:'series', title:'Series & Sigma', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Finite geometric sum: S_n=a_1(1−r^n)/(1−r) for r≠1.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u9q1', q:'Sum of 1+2+3+...+n equals', opts:['n²','n(n+1)/2','(n−1)n/2'], a:1, exp:'Classical formula.'}]}
+    ]},
+    {id:'binom', title:'Binomial Theorem', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Σ_{k=0}^n (n choose k) a^{n−k} b^k; connects to Pascal’s triangle.'}]}]
+    }
+  ]},
+
+  /* === Unit 10: Limits & Continuity === */
+  10:{id:'u10', title:'Limits & Continuity', sections:[
+    {id:'limits', title:'Evaluating Limits', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'lim_{x→a} f(x)=L if values of f approach L arbitrarily closely near a. Algebraic tools: factor/ cancel, rationalize, squeeze.'}]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u10q1', q:'lim_{x→0} (sin x)/x =', opts:['0','1','undefined'], a:1, exp:'Classic limit = 1.'}]}
+    ]},
+    {id:'cont', title:'Continuity & Discontinuities', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'f is continuous at a if limit exists and equals f(a). Types of discontinuity: removable, jump, infinite.'}]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Classify discontinuities.'}], practice:[{id:'u10p1', kind:'mc', prompt:'A hole is a', options:['jump','removable','infinite'], correct:1, sol:'Removable when a factor cancels.'}]}
+    ]}
+  ]}
+};
+
+/* =================== RENDER ENGINE =================== */
+let state = {unitId:null, sIdx:0, pIdx:0};
+
+function $(sel){return document.querySelector(sel)}
+function el(tag, cls){const n=document.createElement(tag); if(cls) n.className=cls; return n}
+function clear(node){node.innerHTML=''}
+
+// Expose globally so inline onclick="openUnit(n)" works
+window.openUnit = function(n){
+  const unit = UNITS[n];
+  if(!unit){ alert('Unit not found.'); return; }
+  state.unitId = n; state.sIdx = 0; state.pIdx = 0;
+  $('#overviewPage').classList.add('hidden');
+  $('#unitPage').classList.add('active');
+  $('#unitSub').textContent = `Unit ${n} • ${unit.title}`;
+  $('#sideTitle').textContent = `Unit ${n} Lessons`;
+  renderSidebar();
+  renderPage();
+  window.scrollTo(0,0);
+};
+
+window.backToOverview = function(){
+  $('#unitPage').classList.remove('active');
+  $('#overviewPage').classList.remove('hidden');
+  window.scrollTo(0,0);
+};
+
+function keyPrefix(){ return 'memolearn_'+UNITS[state.unitId].id+'_'; }
+function save(k,v){ try{ localStorage.setItem(keyPrefix()+k, JSON.stringify(v)); }catch(e){} }
+function load(k,d){ try{ const v=localStorage.getItem(keyPrefix()+k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+
+function renderSidebar(){
+  const unit = UNITS[state.unitId];
+  const ul = $('#lessonList'); clear(ul);
+  unit.sections.forEach((sec, si)=>{
+    sec.pages.forEach((pg, pi)=>{
+      const li = el('li');
+      const a = el('a','lesson'); a.href='#'; a.dataset.s=si; a.dataset.p=pi;
+      const tag = el('span','tag'); tag.textContent = pg.tag||'Item';
+      const title = el('span'); title.textContent = `${sec.title} — ${pg.label}`;
+      const done = el('span','done'); done.textContent='✓';
+      if(load('done_'+sec.id+'_'+pg.id,false)) li.classList.add('completed');
+      a.appendChild(tag); a.appendChild(title); a.appendChild(done); li.appendChild(a); ul.appendChild(li);
     });
-  </script>
+  });
+  // Use property assignment to avoid stacking multiple listeners
+  ul.onclick = (e)=>{
+    const a = e.target.closest('a.lesson'); if(!a) return; e.preventDefault();
+    state.sIdx = Number(a.dataset.s); state.pIdx = Number(a.dataset.p); renderPage();
+  };
+}
+
+function renderPage(){
+  const unit = UNITS[state.unitId];
+  const sec = unit.sections[state.sIdx];
+  const pg  = sec.pages[state.pIdx];
+  $('#crumbs').textContent = `Unit ${state.unitId} / ${sec.title} / ${pg.label}`;
+  $('#title').textContent  = sec.title;
+  $('#lead').textContent   = (pg.lead || (pg.tag==='Quiz'?'Quick check':' '));
+
+  const content = $('#content'); clear(content);
+  (pg.blocks||[]).forEach(b=>{
+    if(b.type==='p'){ const p=el('p'); p.textContent=b.text; content.appendChild(p); }
+    if(b.type==='ex'){ const d=el('div','example'); const h=el('h4'); h.textContent=b.title||'Example'; d.appendChild(h); const p=el('p'); p.textContent=b.text; d.appendChild(p); content.appendChild(d); }
+    if(b.type==='note'){ const n=el('div','note'); n.textContent=b.text; content.appendChild(n); }
+    if(b.type==='warn'){ const w=el('div','warn'); w.textContent=b.text; content.appendChild(w); }
+  });
+
+  renderPractice(pg); renderQuiz(pg); updateNavButtons(); updateProgress();
+}
+
+function renderPractice(pg){
+  const box = $('#practice'); clear(box);
+  if(!pg.practice || !pg.practice.length) return;
+  const h = el('h3'); h.textContent='Practice'; box.appendChild(h);
+  pg.practice.forEach(p=>{
+    const wrap = el('div','problem');
+    const title = el('h5'); title.textContent = p.prompt; wrap.appendChild(title);
+    const result = el('div');
+    if(p.kind==='numeric'){
+      const input = el('input','input'); input.inputMode='decimal'; input.placeholder='Enter a number';
+      const btn = el('button','btn'); btn.textContent='Check'; btn.style.marginLeft='8px';
+      wrap.appendChild(input); wrap.appendChild(btn); wrap.appendChild(result);
+      btn.onclick = ()=>{
+        const val = parseFloat(String(input.value).replace(/[^0-9+\-\.eE]/g,''));
+        if(isNaN(val)){ result.className='bad'; result.textContent='Enter a valid number.'; return; }
+        const ok = Math.abs(val - p.ans) <= (p.tol||1e-6);
+        result.className = ok?'ok':'bad';
+        result.textContent = ok? 'Correct!' : 'Not quite. Try again.';
+      };
+    } else if(p.kind==='mc'){
+      const opts = el('div');
+      (p.options||[]).forEach((opt,i)=>{
+        const lab = el('label','choice');
+        const r = el('input'); r.type='radio'; r.name=p.id; r.value=String(i);
+        const s = el('span'); s.textContent=opt; lab.appendChild(r); lab.appendChild(s); opts.appendChild(lab);
+      });
+      const btn = el('button','btn'); btn.textContent='Check'; btn.style.marginTop='6px';
+      wrap.appendChild(opts); wrap.appendChild(btn); wrap.appendChild(result);
+      btn.onclick = ()=>{
+        const chosen = Array.from(opts.querySelectorAll('input')).find(i=>i.checked);
+        if(!chosen){ result.className='bad'; result.textContent='Choose an option.'; return; }
+        const ok = Number(chosen.value)===p.correct; result.className=ok?'ok':'bad';
+        result.textContent = ok ? 'Correct!' : 'Not quite. Try again.';
+      };
+    }
+    const help = el('span','help'); help.textContent='Show solution';
+    const sol = el('div','solution'); sol.textContent=p.sol||'Solution coming soon.';
+    help.onclick=()=>{ sol.style.display = sol.style.display==='block'?'none':'block'; };
+    wrap.appendChild(help); wrap.appendChild(sol); box.appendChild(wrap);
+  });
+}
+
+function renderQuiz(pg){
+  const box = $('#quiz'); clear(box);
+  if(!pg.quiz || !pg.quiz.length) return;
+  const h = el('h3'); h.textContent='Quiz'; box.appendChild(h);
+  const qs = el('div'); box.appendChild(qs);
+  (pg.quiz||[]).forEach((q,idx)=>{
+    const qEl = el('div','q');
+    const title = el('h5'); title.textContent=`${idx+1}. ${q.q}`; qEl.appendChild(title);
+    (q.opts||[]).forEach((opt,i)=>{
+      const lab = el('label','choice'); const r=el('input'); r.type='radio'; r.name=q.id; r.value=String(i);
+      const s = el('span'); s.textContent=opt; lab.appendChild(r); lab.appendChild(s); qEl.appendChild(lab);
+    });
+    qs.appendChild(qEl);
+  });
+  const toolbar = el('div'); toolbar.style.display='flex'; toolbar.style.gap='8px'; toolbar.style.marginTop='8px';
+  const submit = el('button','btn'); submit.textContent='Submit';
+  const reset = el('button','btn secondary'); reset.textContent='Reset'; reset.style.display='none';
+  const score = el('div'); score.style.fontWeight='800'; score.style.marginLeft='auto';
+  toolbar.appendChild(submit); toolbar.appendChild(reset); toolbar.appendChild(score); box.appendChild(toolbar);
+
+  submit.onclick=()=>{
+    let correct=0; const total=(pg.quiz||[]).length;
+    (pg.quiz||[]).forEach((q,i)=>{
+      const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
+      const block = qs.children[i];
+      const res = el('div');
+      if(chosen && Number(chosen.value)===q.a){ res.className='ok'; res.textContent='Correct — '+q.exp; correct++; }
+      else { res.className='bad'; res.textContent='Incorrect — Answer: '+q.opts[q.a]+'. '+q.exp; }
+      block.appendChild(res);
+    });
+    score.textContent = `Score: ${correct}/${total} (${Math.round(100*correct/Math.max(1,total))}%)`;
+    reset.style.display='inline-block'; submit.disabled=true;
+    const unit = UNITS[state.unitId]; const sec=unit.sections[state.sIdx]; const pgc=sec.pages[state.pIdx];
+    save('done_'+sec.id+'_'+pgc.id,true); renderSidebar();
+  };
+  reset.onclick=()=>{ renderPage(); };
+}
+
+function updateNavButtons(){
+  const unit = UNITS[state.unitId];
+  const isFirst = state.sIdx===0 && state.pIdx===0;
+  const isLast  = state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1;
+  $('#prevBtn').disabled = isFirst; $('#nextBtn').disabled = isLast;
+  $('#prevBtn').onclick = goPrev; $('#nextBtn').onclick = goNext;
+}
+function goPrev(){ const unit=UNITS[state.unitId]; if(state.pIdx>0) state.pIdx--; else if(state.sIdx>0){ state.sIdx--; state.pIdx=unit.sections[state.sIdx].pages.length-1; } renderPage(); }
+function goNext(){ const unit=UNITS[state.unitId]; if(state.pIdx<unit.sections[state.sIdx].pages.length-1) state.pIdx++; else if(state.sIdx<unit.sections.length-1){ state.sIdx++; state.pIdx=0; } renderPage(); }
+
+function updateProgress(){
+  const unit = UNITS[state.unitId]; let total=0, done=0;
+  unit.sections.forEach(sec=>sec.pages.forEach(pg=>{ total++; if(load('done_'+sec.id+'_'+pg.id,false)) done++; }));
+  const pct = Math.round(100*done/Math.max(1,total));
+  $('#progressbar').style.width=pct+'%';
+  $('#nextBtn').textContent = (state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1) ? 'Finish' : 'Up next →';
+}
+
+// ---------- Minimal self-tests (sanity checks without changing behavior) ----------
+console.assert(typeof window.openUnit === 'function', 'openUnit should be defined globally');
+console.assert(typeof window.backToOverview === 'function', 'backToOverview should be defined globally');
+console.assert(document.getElementById('overviewPage'), 'overviewPage element should exist');
+console.assert(Object.keys(UNITS).length === 10, 'There should be 10 units defined');
+console.assert((UNITS[1]||{}).sections && UNITS[1].sections.length>0, 'Unit 1 should have sections');
+</script>
 </body>
 </html>
