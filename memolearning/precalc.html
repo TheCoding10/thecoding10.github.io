@@ -4,84 +4,908 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MemoLearning — Precalculus</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ---------- GLOBAL ---------- */
-*{box-sizing:border-box}
-:root{--indigo:#6366f1;--purple:#7c3aed;--slate:#0f172a;--muted:#475569;--card:#ffffff}
-html,body{height:100%}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--slate);
-  background:linear-gradient(135deg,#667eea 0%,#7c3aed 100%) fixed}
+/* ---------- GLOBAL VARIABLES ---------- */
+:root {
+  --indigo: #6366f1;
+  --indigo-light: #818cf8;
+  --indigo-dark: #4f46e5;
+  --purple: #7c3aed;
+  --purple-light: #8b5cf6;
+  --purple-dark: #6d28d9;
+  --slate: #0f172a;
+  --slate-light: #334155;
+  --muted: #475569;
+  --muted-light: #94a3b8;
+  --card: #ffffff;
+  --card-alt: #f8fafc;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+  --shadow: 0 10px 25px rgba(0,0,0,0.1);
+  --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+  --transition: all 0.3s ease;
+}
 
-/* ---------- OVERVIEW ---------- */
-.overview-page{display:block}
-.overview-page.hidden{display:none}
-.overview-header{background:rgba(255,255,255,.10);backdrop-filter:blur(20px);color:#fff;padding:40px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.25)}
-.overview-header h1{margin:0;font-weight:800;font-size:42px;text-shadow:0 2px 20px rgba(0,0,0,.35)}
-.overview-header p{margin:12px 0 0;font-size:18px;opacity:.95}
-.container{max-width:1400px;margin:0 auto;padding:32px 20px}
-.curriculum-stats{background:rgba(255,255,255,.10);backdrop-filter:blur(18px);border-radius:20px;padding:26px;color:#fff;margin-bottom:28px}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px}
-.stat-item{text-align:center}.stat-number{font-size:36px;font-weight:800;display:block}.stat-label{opacity:.9}
+/* ---------- GLOBAL STYLES ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-.units-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px}
-.unit-card{position:relative;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:18px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,.10);cursor:pointer;overflow:hidden;transition:transform .25s, box-shadow .25s}
-.unit-card:hover{transform:translateY(-6px);box-shadow:0 24px 52px rgba(0,0,0,.14)}
-.unit-header{display:flex;align-items:center;margin-bottom:10px}
-.unit-number{width:36px;height:36px;border-radius:999px;background:linear-gradient(135deg,#667eea,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 6px 16px rgba(102,126,234,.4);margin-right:12px}
-.unit-title{margin:0;font-weight:800;font-size:22px;color:#1f2937}
-.unit-description{color:#4b5563;margin:6px 0 10px}
-.topics-list{list-style:none;margin:0;padding:0}
-.topics-list li{position:relative;padding:7px 0 7px 16px;border-bottom:1px solid #f1f5f9;color:#374151}
-.topics-list li:last-child{border-bottom:none}
-.topics-list li::before{content:'▸';position:absolute;left:0;color:#667eea;font-weight:700}
-.optional-badge{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:10px}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-.unit-card{opacity:0;animation:fadeInUp .6s ease forwards}
+html, body {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--slate);
+  background: linear-gradient(135deg, #667eea 0%, #7c3aed 100%) fixed;
+  line-height: 1.6;
+}
+
+/* ---------- TYPOGRAPHY ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--indigo);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  background: var(--indigo-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.btn.secondary {
+  background: var(--slate);
+}
+
+.btn.secondary:hover {
+  background: #1e293b;
+}
+
+.btn.outline {
+  background: transparent;
+  border: 2px solid var(--indigo);
+  color: var(--indigo);
+}
+
+.btn.outline:hover {
+  background: var(--indigo);
+  color: white;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn i {
+  font-size: 0.9em;
+}
+
+/* ---------- OVERVIEW PAGE ---------- */
+.overview-page {
+  display: block;
+  min-height: 100vh;
+}
+
+.overview-page.hidden {
+  display: none;
+}
+
+.overview-header {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(20px);
+  color: #fff;
+  padding: 60px 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.overview-header h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: 48px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+  letter-spacing: -0.5px;
+}
+
+.overview-header p {
+  margin: 16px 0 0;
+  font-size: 20px;
+  opacity: 0.95;
+  font-weight: 300;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.curriculum-stats {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  color: #fff;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+
+.curriculum-stats h2 {
+  margin: 0 0 20px 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+}
+
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #fff, #e0e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  opacity: 0.9;
+  font-size: 16px;
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 28px;
+}
+
+.unit-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.unit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--indigo), var(--purple));
+}
+
+.unit-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.unit-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.unit-number {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--indigo), var(--purple));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.unit-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--slate);
+}
+
+.unit-description {
+  color: var(--muted);
+  margin: 8px 0 16px;
+  font-size: 15px;
+}
+
+.topics-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.topics-list li {
+  position: relative;
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--slate-light);
+  transition: var(--transition);
+}
+
+.topics-list li:hover {
+  background: #f8fafc;
+  padding-left: 28px;
+}
+
+.topics-list li:last-child {
+  border-bottom: none;
+}
+
+.topics-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 8px;
+  color: var(--indigo);
+  font-weight: 700;
+}
+
+.optional-badge {
+  background: linear-gradient(135deg, var(--warning), #d97706);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-left: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.unit-card {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
 
 /* ---------- UNIT PAGE ---------- */
-.unit-page{display:none}
-.unit-page.active{display:block}
-.unit-header-stick{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.10);backdrop-filter:saturate(1.15) blur(8px);border-bottom:1px solid rgba(255,255,255,.25);color:#fff;padding:18px 14px}
-.unit-header-stick .wrap{max-width:1200px;margin:0 auto;display:flex;gap:12px;align-items:center}
-.unit-header-stick h1{margin:0;font-size:26px;font-weight:800}.unit-header-stick .sub{opacity:.92}
-.unit-header-stick .btn{margin-left:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
+.unit-page {
+  display: none;
+  min-height: 100vh;
+}
 
-.app{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:300px 1fr;gap:18px;padding:0 16px}
-aside{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);overflow:hidden}
-.side-head{padding:16px;border-bottom:1px solid #e5e7eb;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(124,58,237,.12))}
-.lesson-list{list-style:none;margin:0;padding:0;max-height:calc(100vh - 200px);overflow:auto}
-.lesson-list li{border-bottom:1px solid #eef2ff}
-.lesson{display:flex;gap:10px;padding:12px 14px;text-decoration:none;color:inherit;cursor:pointer;align-items:center}
-.lesson:hover{background:#f8fafc}
-.lesson.active{background:#eef2ff;border-left:4px solid var(--indigo)}
-.tag{font-size:12px;color:#6366f1;font-weight:800;background:#eef2ff;border-radius:999px;padding:2px 6px}
-.done{margin-left:auto;font-size:12px;color:#10b981;font-weight:700;display:none}
-.lesson.completed .done{display:inline}
-main{min-height:70vh}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.09);padding:22px}
-.crumbs{color:#64748b;font-size:12px;margin-bottom:6px}
-.title{margin:4px 0 6px;font-size:26px;font-weight:800}
-.lead{color:#334155;margin:0 0 12px}
-.example{border:1px solid #c7d2fe;background:#eef2ff;padding:12px 14px;border-radius:12px;margin:12px 0}
-.example h4{margin:0 0 6px;color:#4338ca}
-.note{border-left:4px solid #22c55e;background:#ecfdf5;padding:10px 12px;border-radius:8px;margin:12px 0}
-.warn{border-left:4px solid #f97316;background:#fff7ed;padding:10px 12px;border-radius:8px;margin:12px 0}
-.practice,.quiz{margin-top:16px}
-.problem,.q{border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:14px;margin:10px 0}
-.problem h5,.q h5{margin:0 0 8px}
-.choice{display:flex;gap:10px;align-items:center;border:1px solid #e5e7eb;border-radius:10px;padding:8px;margin:6px 0;cursor:pointer}
-.input{padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;width:240px}
-.btn{background:var(--indigo);color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer}
-.btn.secondary{background:#111827}
-.ok{color:#065f46;background:#d1fae5;border:1px solid #10b981;padding:8px;border-radius:8px;margin-top:8px}
-.bad{color:#991b1b;background:#fee2e2;border:1px solid #ef4444;padding:8px;border-radius:8px;margin-top:8px}
-.help{color:#2563eb;text-decoration:underline;cursor:pointer;display:inline-block;margin-top:8px}
-.solution{display:none;padding:10px;border:1px dashed #93c5fd;background:#eff6ff;color:#1e3a8a;border-radius:8px;margin-top:8px;white-space:pre-line}
-.footer-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}
-.progress{height:8px;border-radius:999px;background:#eef2ff;overflow:hidden}
-.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--indigo),var(--purple));width:0%}
-@media (max-width:920px){.app{grid-template-columns:1fr}}
+.unit-page.active {
+  display: block;
+}
+
+.unit-header-stick {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: saturate(1.15) blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  padding: 16px 20px;
+}
+
+.unit-header-stick .wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.unit-header-stick h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.unit-header-stick .sub {
+  opacity: 0.92;
+  font-size: 15px;
+}
+
+.unit-header-stick .btn {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.unit-header-stick .btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.app {
+  max-width: 1200px;
+  margin: 24px auto;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  padding: 0 20px;
+}
+
+aside {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  align-self: start;
+  position: sticky;
+  top: 90px;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+}
+
+.side-head {
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(124, 58, 237, 0.12));
+}
+
+.side-head h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: var(--slate);
+}
+
+.lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.lesson-list li {
+  border-bottom: 1px solid #eef2ff;
+}
+
+.lesson {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.lesson:hover {
+  background: #f8fafc;
+}
+
+.lesson.active {
+  background: #eef2ff;
+  border-left: 4px solid var(--indigo);
+}
+
+.tag {
+  font-size: 11px;
+  color: var(--indigo);
+  font-weight: 700;
+  background: #eef2ff;
+  border-radius: 999px;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.done {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--success);
+  font-weight: 700;
+  display: none;
+}
+
+.lesson.completed .done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+main {
+  min-height: 70vh;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.crumbs {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crumbs span:not(:last-child)::after {
+  content: '/';
+  margin: 0 8px;
+  color: var(--muted-light);
+}
+
+.title {
+  margin: 4px 0 8px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--slate);
+  line-height: 1.2;
+}
+
+.lead {
+  color: var(--muted);
+  margin: 0 0 16px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.content-block {
+  margin-bottom: 20px;
+}
+
+.content-block p {
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.example {
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  position: relative;
+}
+
+.example h4 {
+  margin: 0 0 8px;
+  color: var(--indigo-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.example h4 i {
+  font-size: 18px;
+}
+
+.note {
+  border-left: 4px solid var(--success);
+  background: var(--success-light);
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.note::before {
+  content: '💡';
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.warn {
+  border-left: 4px solid var(--warning);
+  background: var(--warning-light);
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.warn::before {
+  content: '⚠️';
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.practice, .quiz {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.problem, .q {
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-lg);
+  background: var(--card-alt);
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.problem h5, .q h5 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: var(--slate);
+}
+
+.choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius);
+  padding: 12px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.choice:hover {
+  background: #f1f5f9;
+  border-color: var(--indigo-light);
+}
+
+.choice input[type="radio"] {
+  accent-color: var(--indigo);
+}
+
+.input {
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 300px;
+  font-family: inherit;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.ok {
+  color: #065f46;
+  background: var(--success-light);
+  border: 1px solid var(--success);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bad {
+  color: #991b1b;
+  background: var(--danger-light);
+  border: 1px solid var(--danger);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help {
+  color: var(--info);
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.solution {
+  display: none;
+  padding: 16px;
+  border: 1px dashed #93c5fd;
+  background: var(--info-light);
+  color: #1e3a8a;
+  border-radius: var(--radius);
+  margin-top: 12px;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress>span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo), var(--purple));
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* Math styling */
+.math {
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+}
+
+.equation {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin: 12px 0;
+  overflow-x: auto;
+}
+
+/* Quiz results */
+.quiz-results {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.score-display {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--indigo-dark);
+}
+
+.correct-answer {
+  color: var(--success);
+}
+
+.incorrect-answer {
+  color: var(--danger);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .app {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  aside {
+    position: static;
+    max-height: none;
+  }
+  
+  .unit-header-stick .wrap {
+    flex-wrap: wrap;
+  }
+  
+  .units-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .overview-header {
+    padding: 40px 20px;
+  }
+  
+  .overview-header h1 {
+    font-size: 36px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .footer-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .footer-nav .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .unit-card {
+    padding: 20px;
+  }
+  
+  .card {
+    padding: 20px;
+  }
+}
+
+/* Animation for correct/incorrect answers */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.correct-pulse {
+  animation: pulse 0.5s ease;
+}
+
+/* Code block styling */
+.code-block {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  overflow-x: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+}
+
+/* Highlight box */
+.highlight {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.1));
+  border-left: 4px solid var(--indigo);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin: 20px 0;
+}
+
+.highlight h4 {
+  margin-top: 0;
+  color: var(--indigo-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Definition box */
+.definition {
+  background: #f0f9ff;
+  border-left: 4px solid var(--info);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin: 20px 0;
+}
+
+.definition h4 {
+  margin-top: 0;
+  color: var(--info);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Key takeaways */
+.key-takeaways {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.key-takeaways h4 {
+  margin-top: 0;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.key-takeaways ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.key-takeaways li {
+  margin-bottom: 8px;
+}
+
+.key-takeaways li:last-child {
+  margin-bottom: 0;
+}
 </style>
 </head>
 <body>
@@ -89,13 +913,13 @@ main{min-height:70vh}
 <!-- ================= OVERVIEW ================= -->
 <div class="overview-page" id="overviewPage">
   <header class="overview-header">
-    <h1>📚 MemoLearning Precalculus</h1>
-    <p>Complete curriculum with 10 units covering all essential precalculus topics</p>
+    <h1><i class="fas fa-graduation-cap"></i> MemoLearning Precalculus</h1>
+    <p>Master precalculus with our comprehensive curriculum featuring interactive lessons, practice problems, and quizzes</p>
   </header>
 
   <div class="container">
     <div class="curriculum-stats">
-      <h2 style="margin:0 0 14px 0;font-size:26px">Curriculum Overview</h2>
+      <h2>Curriculum Overview</h2>
       <div class="stats-grid">
         <div class="stat-item"><span class="stat-number">10</span><div class="stat-label">Total Units</div></div>
         <div class="stat-item"><span class="stat-number">~131</span><div class="stat-label">Skills to Master</div></div>
@@ -199,9 +1023,9 @@ main{min-height:70vh}
 <div class="unit-page" id="unitPage">
   <header class="unit-header-stick">
     <div class="wrap">
-      <h1>MemoLearning — Precalculus</h1>
+      <h1><i class="fas fa-book"></i> MemoLearning — Precalculus</h1>
       <div class="sub" id="unitSub">Unit • …</div>
-      <button class="btn" onclick="backToOverview()">← Back to Overview</button>
+      <button class="btn" onclick="backToOverview()"><i class="fas fa-arrow-left"></i> Back to Overview</button>
     </div>
   </header>
 
@@ -210,22 +1034,27 @@ main{min-height:70vh}
       <div class="side-head">
         <h2 id="sideTitle">Lessons</h2>
         <div class="progress" title="Progress"><span id="progressbar"></span></div>
+        <div class="progress-text" id="progressText">0% Complete</div>
       </div>
       <ul class="lesson-list" id="lessonList"></ul>
     </aside>
 
     <main>
       <div class="card" id="article">
-        <div class="crumbs" id="crumbs">Unit / Section / Page</div>
+        <div class="crumbs" id="crumbs">
+          <span>Unit</span>
+          <span>Section</span>
+          <span>Page</span>
+        </div>
         <h2 class="title" id="title">Title</h2>
         <p class="lead" id="lead">Lead sentence.</p>
         <div id="content"></div>
         <div class="practice" id="practice"></div>
         <div class="quiz" id="quiz"></div>
         <div class="footer-nav">
-          <button class="btn secondary" id="prevBtn">← Previous</button>
+          <button class="btn secondary" id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
           <div style="flex:1"></div>
-          <button class="btn" id="nextBtn">Up next →</button>
+          <button class="btn" id="nextBtn">Up next <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
     </main>
@@ -242,37 +1071,43 @@ const UNITS = {
         pages:[
           { id:'theory', label:'Theory', tag:'Article', blocks:[
             {type:'p', text:'Given functions g: X → Y and f: Y → Z, the composition f∘g maps X to Z by x ↦ f(g(x)). Composition is associative but generally not commutative.'},
+            {type:'definition', title:'Function Composition', text:'The composition of two functions f and g is defined as (f∘g)(x) = f(g(x)), where the output of g becomes the input of f.'},
             {type:'note', text:'Domain rule: Dom(f∘g) = { x ∈ Dom(g) | g(x) ∈ Dom(f) }.'},
-            {type:'ex', title:'Non‑commutativity', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=2x−5 while (g∘f)(x)=2x−2.'},
-            {type:'warn', text:'Make sure codomain(g)=domain(f); otherwise f∘g is undefined.'}
+            {type:'ex', title:'Non‑commutativity Example', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=2x−5 while (g∘f)(x)=2x−2.'},
+            {type:'highlight', title:'Key Insight', text:'The order of composition matters! f∘g is generally different from g∘f.'},
+            {type:'warn', text:'Make sure the codomain of g matches the domain of f; otherwise f∘g is undefined.'}
           ]},
           { id:'decompose', label:'Decomposition', tag:'Article', blocks:[
-            {type:'p', text:'To analyze a complicated F, factor it as F=f∘g. Choose g to isolate an inner structure (affine change, power, exponential, logarithm), and f to complete the mapping.'},
-            {type:'ex', title:'Example', text:'F(x)=√(5x+7). One choice: f(u)=√u, g(x)=5x+7. Another: f(u)=√(5u+7), g(x)=x.'}
+            {type:'p', text:'To analyze a complicated function F, we can often factor it as F = f∘g. Choose g to isolate an inner structure (affine change, power, exponential, logarithm), and f to complete the mapping.'},
+            {type:'ex', title:'Decomposition Example', text:'F(x)=√(5x+7). One valid decomposition: f(u)=√u, g(x)=5x+7. Another: f(u)=√(5u+7), g(x)=x.'},
+            {type:'key-takeaways', title:'Key Takeaways', text:['Decomposition helps understand complex functions','Multiple decompositions are often possible','Choose the decomposition that simplifies your analysis']}
           ]},
-          { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[{type:'p', text:'Compute g(x), substitute into f, simplify, then apply the domain rule.'}],
+          { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[{type:'p', text:'To evaluate a composition, compute g(x), substitute into f, simplify, then apply the domain rule.'}],
             practice:[
-              {id:'u1_c1', kind:'numeric', prompt:'f(x)=3x−2, g(x)=x². Compute (f∘g)(3).', ans:25, tol:1e-3, sol:'g(3)=9; f(9)=27−2=25.'},
-              {id:'u1_c2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:1e-3, sol:'g(14)=9 ⇒ √9=3.'},
-              {id:'u1_c3', kind:'mc', prompt:'Valid decomposition of H(x)=(3x−1)⁴?', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²'], correct:0, sol:'Power after affine.'}
+              {id:'u1_c1', kind:'numeric', prompt:'f(x)=3x−2, g(x)=x². Compute (f∘g)(3).', ans:25, tol:1e-3, sol:'First compute g(3)=9, then f(9)=27−2=25.'},
+              {id:'u1_c2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:1e-3, sol:'First compute g(14)=9, then f(9)=√9=3.'},
+              {id:'u1_c3', kind:'mc', prompt:'Which is a valid decomposition of H(x)=(3x−1)⁴?', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²'], correct:0, sol:'The power function is applied after the affine transformation.'}
             ]
           },
           { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-            {id:'u1_q1', q:'f(x)=5−x, g(x)=x². (f∘g)(x)=', opts:['5 − x − x²','5 − x²','(5 − x)²'], a:1, exp:'Substitute: 5 − x².'},
-            {id:'u1_q2', q:'Dom(f∘g) equals', opts:['Dom(f)∩Dom(g)','{x ∈ Dom(g) | g(x) ∈ Dom(f)}','Ran(g)'], a:1, exp:'x must pass g, then be allowed by f.'}
+            {id:'u1_q1', q:'If f(x)=5−x and g(x)=x², then (f∘g)(x)=', opts:['5 − x − x²','5 − x²','(5 − x)²'], a:1, exp:'Substitute g(x) into f: f(g(x)) = 5 − (x²) = 5 − x².'},
+            {id:'u1_q2', q:'The domain of f∘g equals', opts:['Dom(f)∩Dom(g)','{x ∈ Dom(g) | g(x) ∈ Dom(f)}','Ran(g)'], a:1, exp:'x must be in the domain of g, and g(x) must be in the domain of f.'},
+            {id:'u1_q3', q:'If f(x)=2x+3 and g(x)=x−1, then (g∘f)(2)=', opts:['3','4','5'], a:1, exp:'f(2)=7, then g(7)=6.'}
           ]}
         ]},
       { id:'inverses', title:'Inverse Functions',
         pages:[
           { id:'theory', label:'Theory', tag:'Article', blocks:[
-            {type:'p', text:'An inverse f⁻¹ reverses f: f⁻¹(f(x))=x and f(f⁻¹(y))=y. Graphs reflect across y=x; domains and ranges swap.'},
-            {type:'ex', title:'Solve for f⁻¹', text:'f(x)=4x+3 ⇒ y=4x+3 ⇒ x=4y+3 ⇒ y=(x−3)/4 ⇒ f⁻¹(x)=(x−3)/4.'},
-            {type:'note', text:'f⁻¹ is not 1/f. The −1 is not an exponent.'}
+            {type:'p', text:'An inverse function f⁻¹ reverses the action of f: f⁻¹(f(x))=x and f(f⁻¹(y))=y. The graphs of f and f⁻¹ are symmetric with respect to the line y=x, and their domains and ranges are swapped.'},
+            {type:'ex', title:'Finding an Inverse Function', text:'To find the inverse of f(x)=4x+3: 1) Replace f(x) with y: y=4x+3; 2) Swap x and y: x=4y+3; 3) Solve for y: y=(x−3)/4; 4) Replace y with f⁻¹(x): f⁻¹(x)=(x−3)/4.'},
+            {type:'note', text:'Important: f⁻¹(x) does not mean 1/f(x). The −1 is notation for the inverse function, not an exponent.'},
+            {type:'warn', text:'A function must be one-to-one (pass the horizontal line test) to have an inverse. If not, we may need to restrict its domain.'}
           ]},
-          { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Find and use inverses.'}],
+          { id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Practice finding and using inverse functions with these problems.'}],
             practice:[
-              {id:'u1_i1', kind:'mc', prompt:'f(x)=4x+3 ⇒ f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3'], correct:0, sol:'Solve x=4y+3.'},
-              {id:'u1_i2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:1e-3, sol:'5y−7=18 ⇒ y=5.'}
+              {id:'u1_i1', kind:'mc', prompt:'If f(x)=4x+3, then f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3'], correct:0, sol:'Solve x=4y+3 for y: y=(x−3)/4.'},
+              {id:'u1_i2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:1e-3, sol:'Set 5y−7=18, then solve: 5y=25, y=5.'},
+              {id:'u1_i3', kind:'mc', prompt:'Which function has an inverse?', options:['f(x)=x²','f(x)=sin(x)','f(x)=2x+5'], correct:2, sol:'Linear functions (except constant ones) are one-to-one and have inverses.'}
             ]
           }
         ]}
@@ -283,46 +1118,81 @@ const UNITS = {
   2:{id:'u2', title:'Trigonometry', sections:[
     {id:'angles', title:'Angle Measure & Arc Length', pages:[
       {id:'theory', label:'Theory', tag:'Article', blocks:[
-        {type:'p', text:'Radians use arc length: θ = s/r. 180° = π. Sector area A = 1/2 r²θ (θ in radians).'},
-        {type:'ex', title:'Arc length', text:'r = 4, θ = π/3 ⇒ s = 4π/3.'}
+        {type:'p', text:'Radians provide a natural way to measure angles based on arc length: θ = s/r, where s is arc length and r is radius. 180° = π radians. The area of a circular sector is A = 1/2 r²θ (with θ in radians).'},
+        {type:'ex', title:'Arc Length Example', text:'For a circle with radius r = 4 and central angle θ = π/3, the arc length is s = rθ = 4 × π/3 = 4π/3.'},
+        {type:'highlight', title:'Conversion Formula', text:'To convert between degrees and radians: radians = degrees × π/180, degrees = radians × 180/π.'}
       ]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Convert and compute.'}], practice:[
-        {id:'t2p1', kind:'mc', prompt:'150° in radians =', options:['2π/3','5π/6','7π/6','3π/4'], correct:1, sol:'150/180 = 5/6 of π.'},
-        {id:'t2p2', kind:'numeric', prompt:'Find sector area for r=3 and θ=π/2. (use ≈)', ans: (9*Math.PI/4), tol:0.02, sol:'A = 1/2 r²θ = 1/2·9·π/2 = 9π/4 ≈ 7.069.'}
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Practice converting between degrees and radians and computing arc lengths and sector areas.'}], practice:[
+        {id:'t2p1', kind:'mc', prompt:'150° in radians =', options:['2π/3','5π/6','7π/6','3π/4'], correct:1, sol:'150/180 = 5/6 of π, so 5π/6.'},
+        {id:'t2p2', kind:'numeric', prompt:'Find the area of a sector with radius r=3 and angle θ=π/2.', ans: (9*Math.PI/4), tol:0.02, sol:'A = 1/2 r²θ = 1/2 × 9 × π/2 = 9π/4 ≈ 7.069.'},
+        {id:'t2p3', kind:'numeric', prompt:'Convert 5π/4 radians to degrees.', ans:225, tol:1e-3, sol:'5π/4 × 180/π = 225°.'}
       ]},
       {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-        {id:'t2q1', q:'cos(π) =', opts:['1','0','−1'], a:2, exp:'At π, cos = −1.'},
-        {id:'t2q2', q:'Convert π/4 to degrees', opts:['30°','45°','60°'], a:1, exp:'π/4 · 180/π = 45°.'}
+        {id:'t2q1', q:'cos(π) =', opts:['1','0','−1'], a:2, exp:'At π radians (180°), the cosine value is −1.'},
+        {id:'t2q2', q:'Convert π/4 to degrees', opts:['30°','45°','60°'], a:1, exp:'π/4 × 180/π = 45°.'},
+        {id:'t2q3', q:'An angle of 270° is equivalent to', opts:['3π/2','2π/3','5π/4'], a:0, exp:'270/180 = 3/2, so 3π/2 radians.'}
       ]}
     ]},
     {id:'unitcircle', title:'Unit Circle & Reference Angles', pages:[
       {id:'theory', label:'Theory', tag:'Article', blocks:[
-        {type:'p', text:'On the unit circle, a point at angle θ has coordinates (cosθ, sinθ). Reference angles give exact values in all quadrants.'}
+        {type:'p', text:'On the unit circle (radius = 1), a point at angle θ has coordinates (cosθ, sinθ). Reference angles help find trigonometric values in all quadrants by relating them to values in the first quadrant.'},
+        {type:'ex', title:'Using Reference Angles', text:'To find sin(150°), note that 150° is in QII with reference angle 30°. Since sine is positive in QII, sin(150°) = sin(30°) = 1/2.'}
       ]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Use symmetries to find exact values.'}], practice:[
-        {id:'t2p3', kind:'mc', prompt:'sin(π/6)=', options:['1','√3/2','1/2','0'], correct:2, sol:'Standard exact value.'},
-        {id:'t2p4', kind:'mc', prompt:'cos(2π/3)=', options:['1/2','−1/2','−√3/2','√3/2'], correct:1, sol:'Quadrant II mirror of cos(π/3).'}
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Use the unit circle and reference angles to find exact trigonometric values.'}], practice:[
+        {id:'t2p3', kind:'mc', prompt:'sin(π/6)=', options:['1','√3/2','1/2','0'], correct:2, sol:'Standard exact value from the unit circle.'},
+        {id:'t2p4', kind:'mc', prompt:'cos(2π/3)=', options:['1/2','−1/2','−√3/2','√3/2'], correct:1, sol:'2π/3 is in QII with reference angle π/3, and cosine is negative in QII.'},
+        {id:'t2p5', kind:'mc', prompt:'tan(225°)=', options:['1','−1','√3','0'], correct:0, sol:'225° is in QIII with reference angle 45°, and tan(45°)=1, positive in QIII.'}
       ]}
     ]},
     {id:'graphs', title:'Graphs of sin, cos, tan', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'y=A·sin(B(x−C))+D has amplitude |A|, period 2π/|B|, phase shift C, vertical shift D.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'t2q3', q:'Period of y=sin(3x) is', opts:['2π','2π/3','3π'], a:1, exp:'2π/3.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'The general form for sinusoidal functions is y = A·sin(B(x−C)) + D, where |A| is the amplitude, 2π/|B| is the period, C is the phase shift, and D is the vertical shift.'},
+        {type:'ex', title:'Graph Characteristics', text:'For y = 3sin(2(x−π/4)) + 1: amplitude = 3, period = π, phase shift = π/4 right, vertical shift = 1 up.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'t2q3', q:'The period of y=sin(3x) is', opts:['2π','2π/3','3π'], a:1, exp:'Period = 2π/|B| = 2π/3.'},
+        {id:'t2q4', q:'The amplitude of y=−4cos(x) is', opts:['−4','2','4'], a:2, exp:'Amplitude is always positive = |−4| = 4.'}
+      ]}
     ]},
     {id:'ids', title:'Trig Identities', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Key identities: sin²x+cos²x=1; 1+tan²x=sec²x; 1+cot²x=csc²x.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Simplify using identities.'}], practice:[{id:'t2p5', kind:'mc', prompt:'Simplify sin²x+cos²x', options:['0','1','2'], correct:1, sol:'Pythagorean identity.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Key trigonometric identities include: Pythagorean (sin²x+cos²x=1), reciprocal (cscx=1/sinx, secx=1/cosx, cotx=1/tanx), and quotient (tanx=sinx/cosx, cotx=cosx/sinx).'},
+        {type:'ex', title:'Using Identities', text:'If sinx=3/5 and x is in QII, then cosx=−4/5 (using sin²x+cos²x=1), and tanx=sinx/cosx=−3/4.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Simplify expressions and verify identities using trigonometric identities.'}], practice:[
+        {id:'t2p5', kind:'mc', prompt:'Simplify sin²x+cos²x', options:['0','1','2'], correct:1, sol:'Fundamental Pythagorean identity.'},
+        {id:'t2p6', kind:'mc', prompt:'Express tanx in terms of sinx and cosx', options:['sinx/cosx','cosx/sinx','1/sinx'], correct:0, sol:'Definition of tangent.'}
+      ]}]
     },
     {id:'sums', title:'Sum & Difference Identities', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'sin(α±β)=sinαcosβ±cosαsinβ; cos(α±β)=cosαcosβ∓sinαsinβ.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'t2q4', q:'cos(π/3+π/6)=', opts:['√3/2','1/2','0'], a:2, exp:'cos(π/2)=0.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Sum and difference identities: sin(α±β)=sinαcosβ±cosαsinβ; cos(α±β)=cosαcosβ∓sinαsinβ; tan(α±β)=(tanα±tanβ)/(1∓tanαtanβ).'},
+        {type:'ex', title:'Exact Value Calculation', text:'cos(15°)=cos(45°−30°)=cos45°cos30°+sin45°sin30°=(√2/2)(√3/2)+(√2/2)(1/2)=√2(√3+1)/4.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'t2q4', q:'cos(π/3+π/6)=', opts:['√3/2','1/2','0'], a:2, exp:'cos(π/2)=0.'},
+        {id:'t2q5', q:'sin(π/2 − x)=', opts:['cosx','sinx','−cosx'], a:0, exp:'Cofunction identity.'}
+      ]}
     ]},
-    {id:'inverse', title:'Inverse Trig', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Principal ranges: arcsin∈[−π/2,π/2], arccos∈[0,π], arctan∈(−π/2,π/2).'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Evaluate carefully on principal ranges.'}], practice:[{id:'t2p6', kind:'mc', prompt:'arccos(−1)=', options:['0','π','π/2'], correct:1, sol:'Cosine equals −1 at π.'}]}]
+    {id:'inverse', title:'Inverse Trig Functions', pages:[
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Inverse trigonometric functions have restricted ranges to make them functions: arcsin∈[−π/2,π/2], arccos∈[0,π], arctan∈(−π/2,π/2).'},
+        {type:'warn', text:'Remember that these functions return angles, and we must be careful about their restricted ranges.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Evaluate inverse trigonometric functions, remembering their principal ranges.'}], practice:[
+        {id:'t2p6', kind:'mc', prompt:'arccos(−1)=', options:['0','π','π/2'], correct:1, sol:'Cosine equals −1 at π radians.'},
+        {id:'t2p7', kind:'mc', prompt:'arcsin(1/2)=', options:['π/6','π/3','π/4'], correct:0, sol:'sin(π/6)=1/2 and π/6 is in the range of arcsin.'}
+      ]}]
     },
     {id:'laws', title:'Law of Sines & Cosines', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'For triangle ABC: a/sinA=b/sinB=c/sinC and c²=a²+b²−2ab cosC.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Solve non-right triangles.'}], practice:[{id:'t2p7', kind:'mc', prompt:'In ΔABC with a=b and C=60°, c equals', options:['a','√3 a','2a'], correct:0, sol:'c²=a²+a²−2a²cos60°=a² ⇒ c=a.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'For any triangle ABC: Law of Sines: a/sinA = b/sinB = c/sinC; Law of Cosines: c² = a² + b² − 2ab cosC.'},
+        {type:'ex', title:'Application', text:'Use Law of Sines when you know two angles and a side, or two sides and a non-included angle. Use Law of Cosines when you know two sides and the included angle, or all three sides.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Solve triangles using the Law of Sines and Law of Cosines.'}], practice:[
+        {id:'t2p7', kind:'mc', prompt:'In ΔABC with a=b and C=60°, side c equals', options:['a','√3 a','2a'], correct:0, sol:'By Law of Cosines: c²=a²+a²−2a²cos60°=2a²−2a²(0.5)=a² ⇒ c=a.'},
+        {id:'t2p8', kind:'mc', prompt:'For a triangle with a=7, b=24, c=25, the largest angle is', options:['acute','obtuse','right'], correct:2, sol:'Check with Law of Cosines: cosC=(7²+24²−25²)/(2×7×24)=0, so C=90°.'}
+      ]}]
     }
   ]},
 
@@ -330,113 +1200,217 @@ const UNITS = {
   3:{id:'u3', title:'Complex Numbers', sections:[
     {id:'algebra', title:'Algebra of a+bi', pages:[
       {id:'theory', label:'Theory', tag:'Article', blocks:[
-        {type:'p', text:'i²=−1. (a+bi)+(c+di)=(a+c)+(b+d)i; (a+bi)(c+di)=(ac−bd)+(ad+bc)i.'},
-        {type:'note', text:'Modulus |a+bi|=√(a²+b²); conjugate a−bi; z·\u0305z = |z|².'}
+        {type:'p', text:'Complex numbers have the form a+bi, where i²=−1. Operations: (a+bi)+(c+di)=(a+c)+(b+d)i; (a+bi)(c+di)=(ac−bd)+(ad+bc)i.'},
+        {type:'note', text:'The modulus (absolute value) is |a+bi|=√(a²+b²); the conjugate is a−bi; and z·conjugate(z) = |z|².'},
+        {type:'ex', title:'Multiplication Example', text:'(2+3i)(1−2i)=2×1+2×(−2i)+3i×1+3i×(−2i)=2−4i+3i−6i²=2−i−6(−1)=8−i.'}
       ]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute and simplify.'}], practice:[
-        {id:'c3p1', kind:'numeric', prompt:'|(3−4i)| = ?', ans:5, tol:1e-3, sol:'√(3²+4²)=5.'},
-        {id:'c3p2', kind:'mc', prompt:'(1+i)(1−i)=', options:['0','1','2'], correct:2, sol:'1−i²=2.'}
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Perform arithmetic operations with complex numbers.'}], practice:[
+        {id:'c3p1', kind:'numeric', prompt:'|(3−4i)| = ?', ans:5, tol:1e-3, sol:'√(3²+(-4)²)=√(9+16)=√25=5.'},
+        {id:'c3p2', kind:'mc', prompt:'(1+i)(1−i)=', options:['0','1','2'], correct:2, sol:'(1+i)(1−i)=1−i²=1−(−1)=2.'},
+        {id:'c3p3', kind:'mc', prompt:'The conjugate of 2−5i is', options:['−2+5i','2+5i','−2−5i'], correct:1, sol:'Change the sign of the imaginary part: 2+5i.'}
       ]}
     ]},
     {id:'polar', title:'Polar Form & De Moivre', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'z=r(cosθ+i sinθ). Powers: z^n=r^n(cos nθ + i sin nθ).'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'c3q1', q:'For z=2(cos π/3 + i sin π/3), z² has modulus', opts:['2','4','8'], a:1, exp:'Modulus squares: 2²=4.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'The polar form of a complex number is z=r(cosθ+i sinθ), where r=|z| and θ=arg(z). De Moivre\'s Theorem: zⁿ=rⁿ(cos nθ + i sin nθ).'},
+        {type:'ex', title:'De Moivre\'s Theorem', text:'To compute (1+i)⁸, first convert to polar: r=√2, θ=π/4, so (1+i)⁸=(√2)⁸(cos(8×π/4)+i sin(8×π/4))=16(cos2π+i sin2π)=16.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'c3q1', q:'For z=2(cos π/3 + i sin π/3), z² has modulus', opts:['2','4','8'], a:1, exp:'Modulus squares: 2²=4.'},
+        {id:'c3q2', q:'The argument of i is', opts:['0','π/2','π'], a:1, exp:'i is on the positive imaginary axis, so arg(i)=π/2.'}
+      ]}
     ]}
   ]},
 
   /* === Unit 4: Rational Functions === */
   4:{id:'u4', title:'Rational Functions', sections:[
     {id:'domain', title:'Domains, Holes, Asymptotes', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Vertical asymptotes occur at zeros of the reduced denominator. Removable discontinuities (holes) occur where a common factor cancels.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Analyze f(x)=(x−1)/(x²−1).'}], practice:[{id:'u4p1', kind:'mc', prompt:'f has a hole at', options:['x=1','x=−1','both ±1'], correct:0, sol:'Cancel (x−1); hole at 1, vertical asymptote at −1.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Vertical asymptotes occur at zeros of the denominator after simplification. Removable discontinuities (holes) occur where a common factor cancels from both numerator and denominator.'},
+        {type:'ex', title:'Identifying Features', text:'For f(x)=(x²−4)/(x−2), there is a hole at x=2 (after canceling (x-2)), but no vertical asymptote. For g(x)=(x+1)/(x−3), there is a vertical asymptote at x=3.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Analyze rational functions to find domains, holes, and asymptotes.'}], practice:[
+        {id:'u4p1', kind:'mc', prompt:'f(x)=(x−1)/(x²−1) has a hole at', options:['x=1','x=−1','both ±1'], correct:0, sol:'Factor: (x-1)/((x-1)(x+1)). Cancel (x-1); hole at x=1, vertical asymptote at x=−1.'},
+        {id:'u4p2', kind:'mc', prompt:'The domain of f(x)=1/(x²+1) is', options:['x≠±1','all real numbers','x≠0'], correct:1, sol:'The denominator x²+1 is never zero for real x.'}
+      ]}]
     },
     {id:'hslant', title:'Horizontal/Slant Asymptotes', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'If deg(num)=deg(den), horizontal asymptote is ratio of leading coefficients. If deg(num)=deg(den)+1, slant asymptote from long division.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u4q1', q:'For (2x²+1)/(x²−3), the horizontal asymptote is', opts:['y=0','y=2','none'], a:1, exp:'Leading-coefficient ratio 2/1=2.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Horizontal asymptotes describe end behavior: if deg(num)<deg(den), HA: y=0; if deg(num)=deg(den), HA: y=ratio of leading coefficients; if deg(num)>deg(den), no HA (but possibly a slant asymptote).'},
+        {type:'ex', title:'Slant Asymptote', text:'For f(x)=(x²+1)/(x−1), perform polynomial division: f(x)=x+1+2/(x−1), so the slant asymptote is y=x+1.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u4q1', q:'For (2x²+1)/(x²−3), the horizontal asymptote is', opts:['y=0','y=2','none'], a:1, exp:'Degrees equal, ratio of leading coefficients = 2/1=2.'},
+        {id:'u4q2', q:'Which function has a slant asymptote?', opts:['(x+1)/(x²+1)','(x²+1)/(x+1)','(2x+1)/(3x−1)'], a:1, exp:'Degree of numerator (2) > degree of denominator (1).'}
+      ]}
     ]}
   ]},
 
   /* === Unit 5: Conic Sections === */
   5:{id:'u5', title:'Conic Sections', sections:[
     {id:'circles', title:'Circles', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²+(y−k)²=r². Center (h,k), radius r.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Extract features.'}], practice:[{id:'u5p1', kind:'mc', prompt:'x²+y²=25 has radius', options:['3','4','5'], correct:2, sol:'√25=5.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'The standard form of a circle is (x−h)²+(y−k)²=r², with center (h,k) and radius r.'},
+        {type:'ex', title:'Circle Equation', text:'x²+y²+4x−6y−3=0 can be rewritten as (x²+4x+4)+(y²−6y+9)=3+4+9 ⇒ (x+2)²+(y−3)²=16, so center (−2,3), radius 4.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Find centers and radii of circles from their equations.'}], practice:[
+        {id:'u5p1', kind:'mc', prompt:'x²+y²=25 has radius', options:['3','4','5'], correct:2, sol:'Standard form: r²=25 ⇒ r=5.'},
+        {id:'u5p2', kind:'mc', prompt:'The center of (x−2)²+(y+3)²=9 is', options:['(2,−3)','(−2,3)','(2,3)'], correct:0, sol:'Center is (h,k)=(2,−3).'}
+      ]}]
     },
     {id:'parabolas', title:'Parabolas', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'y−k=a(x−h)² gives vertex (h,k); focus distance 1/(4a).'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u5q2', q:'For y=x², focus is at', opts:['(0,1/4)','(0,1)','(1,0)'], a:0, exp:'a=1 ⇒ p=1/4.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'For a parabola: y−k=a(x−h)² (opens up/down) or x−h=a(y−k)² (opens left/right). Vertex at (h,k), focus distance p=1/(4a).'},
+        {type:'ex', title:'Parabola Features', text:'For y=2(x−1)²+3, vertex at (1,3), a=2>0 so opens upward, p=1/(4×2)=1/8, so focus at (1,3+1/8)=(1,25/8).'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u5q2', q:'For y=x², the focus is at', opts:['(0,1/4)','(0,1)','(1,0)'], a:0, exp:'Standard form: y=1×(x−0)²+0, so a=1, p=1/4, focus at (0,0+1/4).'},
+        {id:'u5q3', q:'The directrix of y=−(1/8)x² is', opts:['y=2','y=−2','y=0'], a:0, sol:'a=−1/8, p=1/(4×|−1/8|)=2, since opens downward, directrix at y=0+2=2.'}
+      ]}
     ]},
     {id:'ellipses', title:'Ellipses', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²/a²+(y−k)²/b²=1 with a≥b. Foci at c²=a²−b².'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u5q3', q:'If a=5, b=4 then c=', opts:['3','√9','√(25−16)'], a:2, exp:'c=√(a²−b²)=3.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Standard forms: (x−h)²/a²+(y−k)²/b²=1 (horizontal major axis) or (x−h)²/b²+(y−k)²/a²=1 (vertical major axis), with a≥b. Foci at distance c from center, where c²=a²−b².'},
+        {type:'ex', title:'Ellipse Features', text:'For x²/25+y²/9=1, a²=25 (a=5), b²=9 (b=3), c²=25−9=16 (c=4). Foci at (±4,0).'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u5q3', q:'If a=5, b=4 in an ellipse, then c=', opts:['3','√9','√(25−16)'], a:2, exp:'c=√(a²−b²)=√(25−16)=√9=3.'},
+        {id:'u5q4', q:'For x²/4+y²/9=1, the major axis is', opts:['horizontal','vertical'], a:1, exp:'Larger denominator under y², so vertical major axis.'}
+      ]}
     ]},
     {id:'hyperbolas', title:'Hyperbolas', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(x−h)²/a² − (y−k)²/b² = 1. Asymptotes: y−k=±(b/a)(x−h).'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Standard forms: (x−h)²/a² − (y−k)²/b² = 1 (opens left/right) or (y−k)²/a² − (x−h)²/b² = 1 (opens up/down). Asymptotes: y−k=±(b/a)(x−h) for horizontal hyperbola.'},
+        {type:'ex', title:'Hyperbola Features', text:'For x²/9−y²/4=1, a=3, b=2, c=√(9+4)=√13. Asymptotes: y=±(2/3)x.'}
+      ]}
     ]}
   ]},
 
   /* === Unit 6: Vectors === */
   6:{id:'u6', title:'Vectors', sections:[
     {id:'basics', title:'Basics & Operations', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Magnitude |v|=√(v₁²+v₂²). Unit vector u=v/|v| when v≠0.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute dot products.'}], practice:[{id:'u6p1', kind:'numeric', prompt:'(1,2)·(3,4)=', ans:11, tol:1e-3, sol:'1·3+2·4=11.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Vectors have magnitude and direction. Magnitude |v|=√(v₁²+v₂²). Unit vector u=v/|v| (when v≠0). Operations: addition (tip-to-tail), scalar multiplication.'},
+        {type:'ex', title:'Vector Operations', text:'For v=⟨3,4⟩, |v|=5, unit vector u=⟨3/5,4/5⟩. For w=⟨1,−2⟩, v+w=⟨4,2⟩, 2v=⟨6,8⟩.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Perform vector operations and compute magnitudes.'}], practice:[
+        {id:'u6p1', kind:'numeric', prompt:'⟨1,2⟩·⟨3,4⟩=', ans:11, tol:1e-3, sol:'Dot product: 1×3+2×4=3+8=11.'},
+        {id:'u6p2', kind:'mc', prompt:'|⟨−3,4⟩|=', options:['5','7','25'], correct:0, sol:'√((-3)²+4²)=√(9+16)=√25=5.'}
+      ]}
     ]},
     {id:'dot', title:'Dot Product & Angle', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'u·v=|u||v|cosθ ⇒ θ=arccos((u·v)/(|u||v|)).'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u6q1', q:'If u·v=0 and u,v≠0 then', opts:['parallel','orthogonal','equal'], a:1, exp:'Zero dot ⇒ right angle.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'The dot product: u·v = u₁v₁+u₂v₂ = |u||v|cosθ, where θ is the angle between vectors. So θ = arccos((u·v)/(|u||v|)).'},
+        {type:'ex', title:'Finding Angle', text:'For u=⟨1,0⟩ and v=⟨1,√3⟩, u·v=1×1+0×√3=1, |u|=1, |v|=2, so cosθ=1/2, θ=60°.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u6q1', q:'If u·v=0 and u,v≠0 then', opts:['parallel','orthogonal','equal'], a:1, exp:'Dot product zero ⇒ cosθ=0 ⇒ θ=90° (orthogonal).'},
+        {id:'u6q2', q:'The angle between ⟨1,1⟩ and ⟨1,0⟩ is', opts:['30°','45°','60°'], a:1, exp:'cosθ=(1×1+1×0)/(√2×1)=1/√2, so θ=45°.'}
+      ]}
     ]}
   ]},
 
   /* === Unit 7: Matrices === */
   7:{id:'u7', title:'Matrices', sections:[
     {id:'arith', title:'Arithmetic & Properties', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'AB defined when inner dimensions match. (AB)C=A(BC) but AB≠BA in general.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Matrix addition/subtraction: element-wise, requires same dimensions. Matrix multiplication: AB defined when columns of A = rows of B. (AB)ₖₗ = Σ AₖᵢBᵢₗ.'},
+        {type:'warn', text:'Matrix multiplication is not commutative: AB ≠ BA in general.'}
+      ]}]
     },
     {id:'det', title:'Determinants & Inverses (2×2)', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'For a 2×2 matrix [a b; c d], det=ad−bc. Inverse = (1/det) [d −b; −c a] if det≠0.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u7q1', q:'Inverse exists iff', opts:['a+d≠0','ad−bc≠0','ab−cd≠0'], a:1, exp:'Nonzero determinant.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'For a 2×2 matrix [a b; c d], the determinant is det = ad−bc. If det≠0, the inverse is (1/det)×[d −b; −c a].'},
+        {type:'ex', title:'Matrix Inverse', text:'For A=[2 1; 1 1], det=2×1−1×1=1, so A⁻¹=(1/1)[1 −1; −1 2]=[1 −1; −1 2].'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u7q1', q:'The inverse exists iff', opts:['a+d≠0','ad−bc≠0','ab−cd≠0'], a:1, exp:'Nonzero determinant.'},
+        {id:'u7q2', q:'det([3 1; 2 4])=', opts:['10','14','12'], a:0, exp:'3×4−1×2=12−2=10.'}
+      ]}
     ]},
     {id:'systems', title:'Solving Linear Systems', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Use augmented matrices and row-reduction; or x=A⁻¹b when A is invertible.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Systems can be solved using augmented matrices and row operations (Gaussian elimination), or using matrix inverses: Ax=b ⇒ x=A⁻¹b (if A is invertible).'},
+        {type:'ex', title:'Matrix Solution', text:'For system {2x+y=3, x+y=2}, write as [2 1; 1 1][x;y]=[3;2]. Then [x;y]=[1 −1; −1 2][3;2]=[1×3+(−1)×2; −1×3+2×2]=[1;1].'}
+      ]}]
     }
   ]},
 
   /* === Unit 8: Probability & Combinatorics === */
   8:{id:'u8', title:'Probability & Combinatorics', sections:[
     {id:'counting', title:'Counting', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Permutations nPr and combinations nCr. Multiplication principle for independent stages.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Compute combinations.'}], practice:[{id:'u8p1', kind:'numeric', prompt:'5C2 =', ans:10, tol:1e-3, sol:'10 ways.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Permutations nPr = n!/(n−r)! (order matters). Combinations nCr = n!/(r!(n−r)!) (order doesn\'t matter). Multiplication principle: if there are m ways to do A and n ways to do B, then m×n ways to do both.'},
+        {type:'ex', title:'Counting Examples', text:'Number of ways to arrange 3 books: 3! = 6. Number of ways to choose 2 books from 5: 5C2 = 10.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Solve counting problems using permutations and combinations.'}], practice:[
+        {id:'u8p1', kind:'numeric', prompt:'5C2 =', ans:10, tol:1e-3, sol:'5!/(2!3!)=120/(2×6)=10.'},
+        {id:'u8p2', kind:'mc', prompt:'Number of ways to arrange 4 people in a line', options:['16','24','64'], correct:1, sol:'4! = 24.'}
+      ]}
     ]},
     {id:'binom', title:'Binomial & Expected Value', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'(a+b)^n = Σ (n choose k) a^{n−k} b^k. For a Bernoulli(p) in n trials, E[X]=np.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u8q1', q:'Coefficient of x² in (1+x)³', opts:['1','3','6'], a:1, exp:'(3 choose 2)=3.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Binomial Theorem: (a+b)^n = Σ (n choose k) a^{n−k} b^k. For a Bernoulli trial with success probability p, E[X]=np for n trials.'},
+        {type:'ex', title:'Expected Value', text:'If you flip a fair coin 100 times, expected number of heads = np = 100×0.5=50.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u8q1', q:'Coefficient of x² in (1+x)³', opts:['1','3','6'], a:1, exp:'(3 choose 2)=3.'},
+        {id:'u8q2', q:'Expected value of rolling a die', opts:['3','3.5','4'], a:1, exp:'(1+2+3+4+5+6)/6=3.5.'}
+      ]}
     ]}
   ]},
 
   /* === Unit 9: Series === */
   9:{id:'u9', title:'Series', sections:[
     {id:'seq', title:'Sequences', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Arithmetic: a_n=a_1+(n−1)d. Geometric: a_n=a_1 r^{n−1}.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Work with explicit forms.'}], practice:[{id:'u9p1', kind:'numeric', prompt:'Arithmetic a1=3, d=2 ⇒ a4 =', ans:9, tol:1e-3, sol:'3+3·2=9.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Arithmetic sequence: a_n=a_1+(n−1)d. Geometric sequence: a_n=a_1 r^{n−1}. Explicit formula gives a_n directly; recursive formula defines terms relative to previous ones.'},
+        {type:'ex', title:'Sequence Examples', text:'Arithmetic: 2,5,8,11,... (d=3). Geometric: 3,6,12,24,... (r=2).'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Find terms of sequences using explicit formulas.'}], practice:[
+        {id:'u9p1', kind:'numeric', prompt:'Arithmetic a1=3, d=2 ⇒ a4 =', ans:9, tol:1e-3, sol:'a4=3+3×2=9.'},
+        {id:'u9p2', kind:'mc', prompt:'Geometric a1=5, r=3 ⇒ a3=', options:['15','30','45'], correct:2, sol:'a3=5×3²=5×9=45.'}
+      ]}
     ]},
     {id:'series', title:'Series & Sigma', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Finite geometric sum: S_n=a_1(1−r^n)/(1−r) for r≠1.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u9q1', q:'Sum of 1+2+3+...+n equals', opts:['n²','n(n+1)/2','(n−1)n/2'], a:1, exp:'Classical formula.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Finite arithmetic series: S_n=n/2×(a_1+a_n). Finite geometric series: S_n=a_1(1−r^n)/(1−r) for r≠1. Infinite geometric series: S=a_1/(1−r) for |r|<1.'},
+        {type:'ex', title:'Series Sums', text:'1+2+3+...+100=100/2×(1+100)=5050. 1+1/2+1/4+1/8+...=1/(1−1/2)=2.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u9q1', q:'Sum of 1+2+3+...+n equals', opts:['n²','n(n+1)/2','(n−1)n/2'], a:1, exp:'Classical formula.'},
+        {id:'u9q2', q:'Sum of infinite geometric series 4+2+1+1/2+...', opts:['8','6','4'], a:0, exp:'a=4, r=1/2, S=4/(1−1/2)=8.'}
+      ]}
     ]},
     {id:'binom', title:'Binomial Theorem', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'Σ_{k=0}^n (n choose k) a^{n−k} b^k; connects to Pascal’s triangle.'}]}]
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'Binomial Theorem: (a+b)^n = Σ_{k=0}^n (n choose k) a^{n−k} b^k. The coefficients correspond to Pascal\'s Triangle.'},
+        {type:'ex', title:'Binomial Expansion', text:'(x+y)³=x³+3x²y+3xy²+y³. The coefficients 1,3,3,1 are row 3 of Pascal\'s Triangle.'}
+      ]}]
     }
   ]},
 
   /* === Unit 10: Limits & Continuity === */
   10:{id:'u10', title:'Limits & Continuity', sections:[
     {id:'limits', title:'Evaluating Limits', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'lim_{x→a} f(x)=L if values of f approach L arbitrarily closely near a. Algebraic tools: factor/ cancel, rationalize, squeeze.'}]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[{id:'u10q1', q:'lim_{x→0} (sin x)/x =', opts:['0','1','undefined'], a:1, exp:'Classic limit = 1.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'lim_{x→a} f(x)=L means f(x) approaches L as x approaches a. Algebraic techniques: direct substitution, factoring/rationalizing, squeeze theorem.'},
+        {type:'ex', title:'Limit Evaluation', text:'lim_{x→2} (x²−4)/(x−2) = lim_{x→2} (x+2)(x-2)/(x-2) = lim_{x→2} (x+2)=4.'}
+      ]},
+      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+        {id:'u10q1', q:'lim_{x→0} (sin x)/x =', opts:['0','1','undefined'], a:1, exp:'Classic limit = 1.'},
+        {id:'u10q2', q:'lim_{x→3} (x²−9)/(x−3)=', opts:['3','6','0'], a:1, exp:'Simplify: (x-3)(x+3)/(x-3)=x+3, then substitute x=3: 6.'}
+      ]}
     ]},
     {id:'cont', title:'Continuity & Discontinuities', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[{type:'p', text:'f is continuous at a if limit exists and equals f(a). Types of discontinuity: removable, jump, infinite.'}]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Classify discontinuities.'}], practice:[{id:'u10p1', kind:'mc', prompt:'A hole is a', options:['jump','removable','infinite'], correct:1, sol:'Removable when a factor cancels.'}]}
+      {id:'theory', label:'Theory', tag:'Article', blocks:[
+        {type:'p', text:'f is continuous at a if: 1) f(a) exists, 2) lim_{x→a} f(x) exists, 3) lim_{x→a} f(x)=f(a). Types of discontinuity: removable (hole), jump, infinite.'},
+        {type:'ex', title:'Continuity Check', text:'f(x)=sin(x)/x has a removable discontinuity at x=0 (limit exists but f(0) undefined). f(x)=1/x has an infinite discontinuity at x=0.'}
+      ]},
+      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Determine continuity and classify discontinuities.'}], practice:[
+        {id:'u10p1', kind:'mc', prompt:'A hole is a', options:['jump','removable','infinite'], correct:1, sol:'Removable when a factor cancels.'},
+        {id:'u10p2', kind:'mc', prompt:'f(x)=|x|/x at x=0 has a', options:['jump','removable','infinite'], correct:0, sol:'Left limit = −1, right limit = 1, so jump discontinuity.'}
+      ]}
     ]}
   ]}
 };
@@ -479,17 +1453,36 @@ function renderSidebar(){
     sec.pages.forEach((pg, pi)=>{
       const li = el('li');
       const a = el('a','lesson'); a.href='#'; a.dataset.s=si; a.dataset.p=pi;
+      
+      // Set active class if this is the current page
+      if(state.sIdx === si && state.pIdx === pi) {
+        a.classList.add('active');
+      }
+      
       const tag = el('span','tag'); tag.textContent = pg.tag||'Item';
       const title = el('span'); title.textContent = `${sec.title} — ${pg.label}`;
-      const done = el('span','done'); done.textContent='✓';
-      if(load('done_'+sec.id+'_'+pg.id,false)) li.classList.add('completed');
-      a.appendChild(tag); a.appendChild(title); a.appendChild(done); li.appendChild(a); ul.appendChild(li);
+      const done = el('span','done'); done.innerHTML = '<i class="fas fa-check"></i> Completed';
+      
+      if(load('done_'+sec.id+'_'+pg.id,false)) {
+        li.classList.add('completed');
+      }
+      
+      a.appendChild(tag); 
+      a.appendChild(title); 
+      a.appendChild(done); 
+      li.appendChild(a); 
+      ul.appendChild(li);
     });
   });
+  
   // Use property assignment to avoid stacking multiple listeners
   ul.onclick = (e)=>{
-    const a = e.target.closest('a.lesson'); if(!a) return; e.preventDefault();
-    state.sIdx = Number(a.dataset.s); state.pIdx = Number(a.dataset.p); renderPage();
+    const a = e.target.closest('a.lesson'); 
+    if(!a) return; 
+    e.preventDefault();
+    state.sIdx = Number(a.dataset.s); 
+    state.pIdx = Number(a.dataset.p); 
+    renderPage();
   };
 }
 
@@ -497,118 +1490,435 @@ function renderPage(){
   const unit = UNITS[state.unitId];
   const sec = unit.sections[state.sIdx];
   const pg  = sec.pages[state.pIdx];
-  $('#crumbs').textContent = `Unit ${state.unitId} / ${sec.title} / ${pg.label}`;
+  
+  $('#crumbs').innerHTML = `
+    <span>Unit ${state.unitId}</span>
+    <span>${sec.title}</span>
+    <span>${pg.label}</span>
+  `;
+  
   $('#title').textContent  = sec.title;
-  $('#lead').textContent   = (pg.lead || (pg.tag==='Quiz'?'Quick check':' '));
+  $('#lead').textContent   = (pg.lead || (pg.tag==='Quiz'?'Test your understanding':'Learn and practice'));
 
   const content = $('#content'); clear(content);
   (pg.blocks||[]).forEach(b=>{
-    if(b.type==='p'){ const p=el('p'); p.textContent=b.text; content.appendChild(p); }
-    if(b.type==='ex'){ const d=el('div','example'); const h=el('h4'); h.textContent=b.title||'Example'; d.appendChild(h); const p=el('p'); p.textContent=b.text; d.appendChild(p); content.appendChild(d); }
-    if(b.type==='note'){ const n=el('div','note'); n.textContent=b.text; content.appendChild(n); }
-    if(b.type==='warn'){ const w=el('div','warn'); w.textContent=b.text; content.appendChild(w); }
+    if(b.type==='p'){
+      const p=el('p'); 
+      p.innerHTML = b.text; 
+      content.appendChild(p); 
+    }
+    if(b.type==='ex'){
+      const d=el('div','example'); 
+      const h=el('h4'); 
+      h.innerHTML = `<i class="fas fa-lightbulb"></i> ${b.title||'Example'}`; 
+      d.appendChild(h); 
+      const p=el('p'); 
+      p.innerHTML = b.text; 
+      d.appendChild(p); 
+      content.appendChild(d); 
+    }
+    if(b.type==='note'){
+      const n=el('div','note'); 
+      n.innerHTML = b.text; 
+      content.appendChild(n); 
+    }
+    if(b.type==='warn'){
+      const w=el('div','warn'); 
+      w.innerHTML = b.text; 
+      content.appendChild(w); 
+    }
+    if(b.type==='definition'){
+      const def=el('div','definition');
+      const h=el('h4');
+      h.innerHTML = `<i class="fas fa-book"></i> ${b.title||'Definition'}`;
+      def.appendChild(h);
+      const p=el('p');
+      p.innerHTML = b.text;
+      def.appendChild(p);
+      content.appendChild(def);
+    }
+    if(b.type==='highlight'){
+      const highlight=el('div','highlight');
+      const h=el('h4');
+      h.innerHTML = `<i class="fas fa-star"></i> ${b.title||'Key Insight'}`;
+      highlight.appendChild(h);
+      const p=el('p');
+      p.innerHTML = b.text;
+      highlight.appendChild(p);
+      content.appendChild(highlight);
+    }
+    if(b.type==='key-takeaways'){
+      const kt=el('div','key-takeaways');
+      const h=el('h4');
+      h.innerHTML = `<i class="fas fa-check-circle"></i> ${b.title||'Key Takeaways'}`;
+      kt.appendChild(h);
+      
+      if (typeof b.text === 'string') {
+        const p=el('p');
+        p.innerHTML = b.text;
+        kt.appendChild(p);
+      } else if (Array.isArray(b.text)) {
+        const ul = el('ul');
+        b.text.forEach(item => {
+          const li = el('li');
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        kt.appendChild(ul);
+      }
+      
+      content.appendChild(kt);
+    }
   });
 
-  renderPractice(pg); renderQuiz(pg); updateNavButtons(); updateProgress();
+  renderPractice(pg); 
+  renderQuiz(pg); 
+  updateNavButtons(); 
+  updateProgress();
+  
+  // Update active lesson in sidebar
+  document.querySelectorAll('.lesson').forEach(lesson => {
+    lesson.classList.remove('active');
+  });
+  
+  const activeLesson = document.querySelector(`.lesson[data-s="${state.sIdx}"][data-p="${state.pIdx}"]`);
+  if (activeLesson) {
+    activeLesson.classList.add('active');
+  }
 }
 
 function renderPractice(pg){
   const box = $('#practice'); clear(box);
   if(!pg.practice || !pg.practice.length) return;
-  const h = el('h3'); h.textContent='Practice'; box.appendChild(h);
+  
+  const h = el('h3'); 
+  h.innerHTML = '<i class="fas fa-pencil-alt"></i> Practice Problems'; 
+  box.appendChild(h);
+  
+  const desc = el('p');
+  desc.textContent = 'Try solving these practice problems. Check your answers and review the solutions to deepen your understanding.';
+  desc.style.marginBottom = '16px';
+  desc.style.color = 'var(--muted)';
+  box.appendChild(desc);
+  
   pg.practice.forEach(p=>{
     const wrap = el('div','problem');
-    const title = el('h5'); title.textContent = p.prompt; wrap.appendChild(title);
+    const title = el('h5'); 
+    title.innerHTML = `<i class="fas fa-question-circle"></i> ${p.prompt}`; 
+    wrap.appendChild(title);
+    
     const result = el('div');
+    
     if(p.kind==='numeric'){
-      const input = el('input','input'); input.inputMode='decimal'; input.placeholder='Enter a number';
-      const btn = el('button','btn'); btn.textContent='Check'; btn.style.marginLeft='8px';
-      wrap.appendChild(input); wrap.appendChild(btn); wrap.appendChild(result);
-      btn.onclick = ()=>{
+      const inputGroup = el('div');
+      inputGroup.style.display = 'flex';
+      inputGroup.style.gap = '8px';
+      inputGroup.style.alignItems = 'center';
+      inputGroup.style.flexWrap = 'wrap';
+      
+      const input = el('input','input'); 
+      input.inputMode='decimal'; 
+      input.placeholder='Enter a number';
+      input.addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') {
+          checkAnswer();
+        }
+      });
+      
+      const btn = el('button','btn'); 
+      btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
+      
+      inputGroup.appendChild(input); 
+      inputGroup.appendChild(btn); 
+      wrap.appendChild(inputGroup); 
+      wrap.appendChild(result);
+      
+      const checkAnswer = () => {
         const val = parseFloat(String(input.value).replace(/[^0-9+\-\.eE]/g,''));
-        if(isNaN(val)){ result.className='bad'; result.textContent='Enter a valid number.'; return; }
+        if(isNaN(val)){ 
+          result.className='bad'; 
+          result.innerHTML = '<i class="fas fa-times-circle"></i> Please enter a valid number.'; 
+          return; 
+        }
         const ok = Math.abs(val - p.ans) <= (p.tol||1e-6);
         result.className = ok?'ok':'bad';
-        result.textContent = ok? 'Correct!' : 'Not quite. Try again.';
+        result.innerHTML = ok 
+          ? '<i class="fas fa-check-circle"></i> Correct! Well done.' 
+          : '<i class="fas fa-times-circle"></i> Not quite. Try again.';
+        
+        if (ok) {
+          wrap.classList.add('correct-pulse');
+          setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
+        }
       };
+      
+      btn.onclick = checkAnswer;
     } else if(p.kind==='mc'){
       const opts = el('div');
       (p.options||[]).forEach((opt,i)=>{
         const lab = el('label','choice');
-        const r = el('input'); r.type='radio'; r.name=p.id; r.value=String(i);
-        const s = el('span'); s.textContent=opt; lab.appendChild(r); lab.appendChild(s); opts.appendChild(lab);
+        const r = el('input'); 
+        r.type='radio'; 
+        r.name=p.id; 
+        r.value=String(i);
+        
+        r.addEventListener('change', function() {
+          // Visual feedback when an option is selected
+          document.querySelectorAll(`input[name="${p.id}"]`).forEach(inp => {
+            inp.parentElement.style.background = '';
+            inp.parentElement.style.borderColor = '';
+          });
+          if (this.checked) {
+            this.parentElement.style.background = '#f0f4ff';
+            this.parentElement.style.borderColor = 'var(--indigo)';
+          }
+        });
+        
+        const s = el('span'); 
+        s.textContent=opt; 
+        lab.appendChild(r); 
+        lab.appendChild(s); 
+        opts.appendChild(lab);
       });
-      const btn = el('button','btn'); btn.textContent='Check'; btn.style.marginTop='6px';
-      wrap.appendChild(opts); wrap.appendChild(btn); wrap.appendChild(result);
+      
+      const btn = el('button','btn'); 
+      btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
+      btn.style.marginTop='12px';
+      
+      wrap.appendChild(opts); 
+      wrap.appendChild(btn); 
+      wrap.appendChild(result);
+      
       btn.onclick = ()=>{
         const chosen = Array.from(opts.querySelectorAll('input')).find(i=>i.checked);
-        if(!chosen){ result.className='bad'; result.textContent='Choose an option.'; return; }
-        const ok = Number(chosen.value)===p.correct; result.className=ok?'ok':'bad';
-        result.textContent = ok ? 'Correct!' : 'Not quite. Try again.';
+        if(!chosen){ 
+          result.className='bad'; 
+          result.innerHTML = '<i class="fas fa-times-circle"></i> Please select an option.'; 
+          return; 
+        }
+        const ok = Number(chosen.value)===p.correct; 
+        result.className=ok?'ok':'bad';
+        result.innerHTML = ok 
+          ? '<i class="fas fa-check-circle"></i> Correct!' 
+          : '<i class="fas fa-times-circle"></i> Incorrect. Try again.';
+        
+        if (ok) {
+          wrap.classList.add('correct-pulse');
+          setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
+        }
       };
     }
-    const help = el('span','help'); help.textContent='Show solution';
-    const sol = el('div','solution'); sol.textContent=p.sol||'Solution coming soon.';
-    help.onclick=()=>{ sol.style.display = sol.style.display==='block'?'none':'block'; };
-    wrap.appendChild(help); wrap.appendChild(sol); box.appendChild(wrap);
+    
+    const help = el('span','help'); 
+    help.innerHTML = '<i class="fas fa-lightbulb"></i> Show solution';
+    const sol = el('div','solution'); 
+    sol.innerHTML = p.sol||'Solution coming soon.';
+    
+    help.onclick=()=>{ 
+      sol.style.display = sol.style.display==='block'?'none':'block'; 
+      help.innerHTML = sol.style.display==='block' 
+        ? '<i class="fas fa-eye-slash"></i> Hide solution' 
+        : '<i class="fas fa-lightbulb"></i> Show solution';
+    };
+    
+    wrap.appendChild(help); 
+    wrap.appendChild(sol); 
+    box.appendChild(wrap);
   });
 }
 
 function renderQuiz(pg){
   const box = $('#quiz'); clear(box);
   if(!pg.quiz || !pg.quiz.length) return;
-  const h = el('h3'); h.textContent='Quiz'; box.appendChild(h);
-  const qs = el('div'); box.appendChild(qs);
+  
+  const h = el('h3'); 
+  h.innerHTML = '<i class="fas fa-tasks"></i> Quiz'; 
+  box.appendChild(h);
+  
+  const desc = el('p');
+  desc.textContent = 'Test your knowledge with this quick quiz. Submit your answers to see your score and review explanations.';
+  desc.style.marginBottom = '16px';
+  desc.style.color = 'var(--muted)';
+  box.appendChild(desc);
+  
+  const qs = el('div'); 
+  box.appendChild(qs);
+  
   (pg.quiz||[]).forEach((q,idx)=>{
     const qEl = el('div','q');
-    const title = el('h5'); title.textContent=`${idx+1}. ${q.q}`; qEl.appendChild(title);
+    const title = el('h5'); 
+    title.innerHTML = `<i class="fas fa-question"></i> ${idx+1}. ${q.q}`; 
+    qEl.appendChild(title);
+    
     (q.opts||[]).forEach((opt,i)=>{
-      const lab = el('label','choice'); const r=el('input'); r.type='radio'; r.name=q.id; r.value=String(i);
-      const s = el('span'); s.textContent=opt; lab.appendChild(r); lab.appendChild(s); qEl.appendChild(lab);
+      const lab = el('label','choice'); 
+      const r=el('input'); 
+      r.type='radio'; 
+      r.name=q.id; 
+      r.value=String(i);
+      
+      const s = el('span'); 
+      s.textContent=opt; 
+      lab.appendChild(r); 
+      lab.appendChild(s); 
+      qEl.appendChild(lab);
     });
     qs.appendChild(qEl);
   });
-  const toolbar = el('div'); toolbar.style.display='flex'; toolbar.style.gap='8px'; toolbar.style.marginTop='8px';
-  const submit = el('button','btn'); submit.textContent='Submit';
-  const reset = el('button','btn secondary'); reset.textContent='Reset'; reset.style.display='none';
-  const score = el('div'); score.style.fontWeight='800'; score.style.marginLeft='auto';
-  toolbar.appendChild(submit); toolbar.appendChild(reset); toolbar.appendChild(score); box.appendChild(toolbar);
+  
+  const toolbar = el('div'); 
+  toolbar.style.display='flex'; 
+  toolbar.style.gap='12px'; 
+  toolbar.style.marginTop='20px';
+  toolbar.style.alignItems = 'center';
+  
+  const submit = el('button','btn'); 
+  submit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; 
+  
+  const reset = el('button','btn secondary'); 
+  reset.innerHTML = '<i class="fas fa-redo"></i> Reset'; 
+  reset.style.display='none';
+  
+  const score = el('div', 'score-display'); 
+  toolbar.appendChild(submit); 
+  toolbar.appendChild(reset); 
+  toolbar.appendChild(score); 
+  box.appendChild(toolbar);
 
   submit.onclick=()=>{
-    let correct=0; const total=(pg.quiz||[]).length;
+    let correct=0; 
+    const total=(pg.quiz||[]).length;
+    
     (pg.quiz||[]).forEach((q,i)=>{
       const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
       const block = qs.children[i];
-      const res = el('div');
-      if(chosen && Number(chosen.value)===q.a){ res.className='ok'; res.textContent='Correct — '+q.exp; correct++; }
-      else { res.className='bad'; res.textContent='Incorrect — Answer: '+q.opts[q.a]+'. '+q.exp; }
+      
+      // Remove any previous result
+      const prevResult = block.querySelector('.quiz-result');
+      if (prevResult) prevResult.remove();
+      
+      const res = el('div', 'quiz-result');
+      res.style.marginTop = '10px';
+      
+      if(chosen && Number(chosen.value)===q.a){
+        res.className='ok'; 
+        res.innerHTML = `<i class="fas fa-check-circle"></i> Correct — ${q.exp}`;
+        correct++; 
+        
+        // Visual feedback
+        chosen.parentElement.style.background = '#d1fae5';
+        chosen.parentElement.style.borderColor = 'var(--success)';
+      } else { 
+        res.className='bad'; 
+        res.innerHTML = `<i class="fas fa-times-circle"></i> Incorrect — Correct answer: ${q.opts[q.a]}. ${q.exp}`;
+        
+        // Highlight correct answer
+        const correctOption = block.querySelector(`input[name="${q.id}"][value="${q.a}"]`);
+        if (correctOption) {
+          correctOption.parentElement.style.background = '#fee2e2';
+          correctOption.parentElement.style.borderColor = 'var(--danger)';
+        }
+        
+        // Highlight incorrect selection if any
+        if (chosen) {
+          chosen.parentElement.style.background = '#fef3c7';
+          chosen.parentElement.style.borderColor = 'var(--warning)';
+        }
+      }
       block.appendChild(res);
     });
-    score.textContent = `Score: ${correct}/${total} (${Math.round(100*correct/Math.max(1,total))}%)`;
-    reset.style.display='inline-block'; submit.disabled=true;
-    const unit = UNITS[state.unitId]; const sec=unit.sections[state.sIdx]; const pgc=sec.pages[state.pIdx];
-    save('done_'+sec.id+'_'+pgc.id,true); renderSidebar();
+    
+    const percentage = Math.round(100*correct/Math.max(1,total));
+    score.textContent = `Score: ${correct}/${total} (${percentage}%)`;
+    
+    // Color code based on performance
+    if (percentage >= 80) {
+      score.style.color = 'var(--success)';
+    } else if (percentage >= 60) {
+      score.style.color = 'var(--warning)';
+    } else {
+      score.style.color = 'var(--danger)';
+    }
+    
+    reset.style.display='inline-block'; 
+    submit.disabled=true;
+    
+    // Mark as completed if score is good (optional)
+    if (correct >= total * 0.7) {
+      const unit = UNITS[state.unitId]; 
+      const sec=unit.sections[state.sIdx]; 
+      const pgc=sec.pages[state.pIdx];
+      save('done_'+sec.id+'_'+pgc.id,true); 
+      renderSidebar();
+    }
   };
-  reset.onclick=()=>{ renderPage(); };
+  
+  reset.onclick=()=>{ 
+    renderPage(); 
+  };
 }
 
 function updateNavButtons(){
   const unit = UNITS[state.unitId];
   const isFirst = state.sIdx===0 && state.pIdx===0;
   const isLast  = state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1;
-  $('#prevBtn').disabled = isFirst; $('#nextBtn').disabled = isLast;
-  $('#prevBtn').onclick = goPrev; $('#nextBtn').onclick = goNext;
+  
+  $('#prevBtn').disabled = isFirst; 
+  $('#nextBtn').disabled = isLast;
+  
+  $('#prevBtn').onclick = goPrev; 
+  $('#nextBtn').onclick = goNext;
+  
+  // Update next button text
+  $('#nextBtn').innerHTML = isLast 
+    ? 'Finish <i class="fas fa-flag-checkered"></i>' 
+    : 'Next <i class="fas fa-arrow-right"></i>';
 }
-function goPrev(){ const unit=UNITS[state.unitId]; if(state.pIdx>0) state.pIdx--; else if(state.sIdx>0){ state.sIdx--; state.pIdx=unit.sections[state.sIdx].pages.length-1; } renderPage(); }
-function goNext(){ const unit=UNITS[state.unitId]; if(state.pIdx<unit.sections[state.sIdx].pages.length-1) state.pIdx++; else if(state.sIdx<unit.sections.length-1){ state.sIdx++; state.pIdx=0; } renderPage(); }
+
+function goPrev(){ 
+  const unit=UNITS[state.unitId]; 
+  if(state.pIdx>0) {
+    state.pIdx--; 
+  } else if(state.sIdx>0){ 
+    state.sIdx--; 
+    state.pIdx=unit.sections[state.sIdx].pages.length-1; 
+  } 
+  renderPage(); 
+  window.scrollTo(0,0);
+}
+
+function goNext(){ 
+  const unit=UNITS[state.unitId]; 
+  if(state.pIdx<unit.sections[state.sIdx].pages.length-1) {
+    state.pIdx++; 
+  } else if(state.sIdx<unit.sections.length-1){ 
+    state.sIdx++; 
+    state.pIdx=0; 
+  } 
+  renderPage(); 
+  window.scrollTo(0,0);
+}
 
 function updateProgress(){
-  const unit = UNITS[state.unitId]; let total=0, done=0;
-  unit.sections.forEach(sec=>sec.pages.forEach(pg=>{ total++; if(load('done_'+sec.id+'_'+pg.id,false)) done++; }));
+  const unit = UNITS[state.unitId]; 
+  let total=0, done=0;
+  
+  unit.sections.forEach(sec=>{
+    sec.pages.forEach(pg=>{ 
+      total++; 
+      if(load('done_'+sec.id+'_'+pg.id,false)) done++; 
+    });
+  });
+  
   const pct = Math.round(100*done/Math.max(1,total));
   $('#progressbar').style.width=pct+'%';
-  $('#nextBtn').textContent = (state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1) ? 'Finish' : 'Up next →';
+  $('#progressText').textContent = `${pct}% Complete`;
 }
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+  // Add any initialization code if needed
+});
 
 // ---------- Minimal self-tests (sanity checks without changing behavior) ----------
 console.assert(typeof window.openUnit === 'function', 'openUnit should be defined globally');
