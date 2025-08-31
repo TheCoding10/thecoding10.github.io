@@ -1,1271 +1,1440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MemoLearning — Precalculus</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-/* ---------- GLOBAL VARIABLES ---------- */
-:root {
-  --indigo: #6366f1;
-  --indigo-light: #818cf8;
-  --indigo-dark: #4f46e5;
-  --purple: #7c3aed;
-  --purple-light: #8b5cf6;
-  --purple-dark: #6d28d9;
-  --slate: #0f172a;
-  --slate-light: #334155;
-  --muted: #475569;
-  --muted-light: #94a3b8;
-  --card: #ffffff;
-  --card-alt: #f8fafc;
-  --success: #10b981;
-  --success-light: #d1fae5;
-  --warning: #f59e0b;
-  --warning-light: #fef3c7;
-  --danger: #ef4444;
-  --danger-light: #fee2e2;
-  --info: #3b82f6;
-  --info-light: #dbeafe;
-  --radius-sm: 6px;
-  --radius: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
-  --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
-  --shadow: 0 10px 25px rgba(0,0,0,0.1);
-  --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
-  --transition: all 0.3s ease;
-}
-
-/* ---------- GLOBAL STYLES ---------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  height: 100%;
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--slate);
-  background: linear-gradient(135deg, #667eea 0%, #7c3aed 100%) fixed;
-  line-height: 1.6;
-}
-
-/* ---------- TYPOGRAPHY ---------- */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 0.5em;
-}
-
-/* ---------- BUTTONS ---------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--indigo);
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: 500;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn:hover {
-  background: var(--indigo-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.btn.secondary {
-  background: var(--slate);
-}
-
-.btn.secondary:hover {
-  background: #1e293b;
-}
-
-.btn.outline {
-  background: transparent;
-  border: 2px solid var(--indigo);
-  color: var(--indigo);
-}
-
-.btn.outline:hover {
-  background: var(--indigo);
-  color: white;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn i {
-  font-size: 0.9em;
-}
-
-/* ---------- OVERVIEW PAGE ---------- */
-.overview-page {
-  display: block;
-  min-height: 100vh;
-}
-
-.overview-page.hidden {
-  display: none;
-}
-
-.overview-header {
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(20px);
-  color: #fff;
-  padding: 60px 20px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.overview-header h1 {
-  margin: 0;
-  font-weight: 800;
-  font-size: 48px;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
-  letter-spacing: -0.5px;
-}
-
-.overview-header p {
-  margin: 16px 0 0;
-  font-size: 20px;
-  opacity: 0.95;
-  font-weight: 300;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.curriculum-stats {
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(18px);
-  border-radius: var(--radius-xl);
-  padding: 32px;
-  color: #fff;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-}
-
-.curriculum-stats h2 {
-  margin: 0 0 20px 0;
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
-}
-
-.stat-item {
-  text-align: center;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);
-  transition: var(--transition);
-}
-
-.stat-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-3px);
-}
-
-.stat-number {
-  font-size: 42px;
-  font-weight: 800;
-  display: block;
-  margin-bottom: 4px;
-  background: linear-gradient(135deg, #fff, #e0e7ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.stat-label {
-  opacity: 0.9;
-  font-size: 16px;
-}
-
-.units-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  gap: 28px;
-}
-
-.unit-card {
-  position: relative;
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: var(--radius-xl);
-  padding: 28px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  overflow: hidden;
-  transition: var(--transition);
-}
-
-.unit-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, var(--indigo), var(--purple));
-}
-
-.unit-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-.unit-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.unit-number {
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--indigo), var(--purple));
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-  margin-right: 16px;
-  flex-shrink: 0;
-}
-
-.unit-title {
-  margin: 0;
-  font-weight: 700;
-  font-size: 22px;
-  color: var(--slate);
-}
-
-.unit-description {
-  color: var(--muted);
-  margin: 8px 0 16px;
-  font-size: 15px;
-}
-
-.topics-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.topics-list li {
-  position: relative;
-  padding: 10px 0 10px 24px;
-  border-bottom: 1px solid #f1f5f9;
-  color: var(--slate-light);
-  transition: var(--transition);
-}
-
-.topics-list li:hover {
-  background: #f8fafc;
-  padding-left: 28px;
-}
-
-.topics-list li:last-child {
-  border-bottom: none;
-}
-
-.topics-list li::before {
-  content: '▸';
-  position: absolute;
-  left: 8px;
-  color: var(--indigo);
-  font-weight: 700;
-}
-
-.optional-badge {
-  background: linear-gradient(135deg, var(--warning), #d97706);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 999px;
-  padding: 4px 10px;
-  margin-left: 10px;
-  box-shadow: var(--shadow-sm);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.unit-card {
-  opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-/* ---------- UNIT PAGE ---------- */
-.unit-page {
-  display: none;
-  min-height: 100vh;
-}
-
-.unit-page.active {
-  display: block;
-}
-
-.unit-header-stick {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: saturate(1.15) blur(8px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: var(--slate);
-  padding: 16px 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.unit-header-stick .wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.unit-header-stick h1 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--slate);
-}
-
-.unit-header-stick .sub {
-  color: var(--muted);
-  font-size: 15px;
-}
-
-.unit-header-stick .btn {
-  margin-left: auto;
-  background: var(--indigo);
-  border: 1px solid var(--indigo-dark);
-  color: #fff;
-  border-radius: 999px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.unit-header-stick .btn:hover {
-  background: var(--indigo-dark);
-}
-
-.app {
-  max-width: 1200px;
-  margin: 24px auto;
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
-  padding: 0 20px;
-}
-
-aside {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  align-self: start;
-  position: sticky;
-  top: 90px;
-  max-height: calc(100vh - 120px);
-  display: flex;
-  flex-direction: column;
-}
-
-.side-head {
-  padding: 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(124, 58, 237, 0.12));
-}
-
-.side-head h2 {
-  margin: 0 0 12px 0;
-  font-size: 18px;
-  color: var(--slate);
-}
-
-.lesson-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-  flex-grow: 1;
-}
-
-.lesson-list li {
-  border-bottom: 1px solid #eef2ff;
-}
-
-.lesson {
-  display: flex;
-  gap: 12px;
-  padding: 14px 16px;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  align-items: center;
-  transition: var(--transition);
-}
-
-.lesson:hover {
-  background: #f8fafc;
-}
-
-.lesson.active {
-  background: #eef2ff;
-  border-left: 4px solid var(--indigo);
-}
-
-.tag {
-  font-size: 11px;
-  color: var(--indigo);
-  font-weight: 700;
-  background: #eef2ff;
-  border-radius: 999px;
-  padding: 4px 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.done {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--success);
-  font-weight: 700;
-  display: none;
-}
-
-.lesson.completed .done {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-main {
-  min-height: 70vh;
-}
-
-.card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow);
-  padding: 28px;
-  margin-bottom: 24px;
-}
-
-.crumbs {
-  color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.crumbs span:not(:last-child)::after {
-  content: '/';
-  margin: 0 8px;
-  color: var(--muted-light);
-}
-
-.title {
-  margin: 4px 0 8px;
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--slate);
-  line-height: 1.2;
-}
-
-.lead {
-  color: var(--muted);
-  margin: 0 0 16px;
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.content-block {
-  margin-bottom: 20px;
-}
-
-.content-block p {
-  margin-bottom: 16px;
-  line-height: 1.7;
-}
-
-.example {
-  border: 1px solid #c7d2fe;
-  background: #eef2ff;
-  padding: 18px 20px;
-  border-radius: var(--radius);
-  margin: 16px 0;
-  position: relative;
-}
-
-.example h4 {
-  margin: 0 0 8px;
-  color: var(--indigo-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.example h4 i {
-  font-size: 18px;
-}
-
-.note {
-  border-left: 4px solid var(--success);
-  background: var(--success-light);
-  padding: 16px 20px;
-  border-radius: var(--radius);
-  margin: 16px 0;
-  display: flex;
-  gap: 12px;
-}
-
-.note::before {
-  content: '💡';
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.warn {
-  border-left: 4px solid var(--warning);
-  background: var(--warning-light);
-  padding: 16px 20px;
-  border-radius: var(--radius);
-  margin: 16px 0;
-  display: flex;
-  gap: 12px;
-}
-
-.warn::before {
-  content: '⚠️';
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.practice, .quiz {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px dashed #e5e7eb;
-}
-
-.problem, .q {
-  border: 1px solid #e5e7eb;
-  border-radius: var(--radius-lg);
-  background: var(--card-alt);
-  padding: 20px;
-  margin: 16px 0;
-}
-
-.problem h5, .q h5 {
-  margin: 0 0 12px;
-  font-size: 18px;
-  color: var(--slate);
-}
-
-.choice {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: var(--radius);
-  padding: 12px;
-  margin: 8px 0;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.choice:hover {
-  background: #f1f5f9;
-  border-color: var(--indigo-light);
-}
-
-.choice input[type="radio"] {
-  accent-color: var(--indigo);
-}
-
-.input {
-  padding: 12px 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--radius);
-  width: 100%;
-  max-width: 300px;
-  font-family: inherit;
-  font-size: 15px;
-  transition: var(--transition);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.ok {
-  color: #065f46;
-  background: var(--success-light);
-  border: 1px solid var(--success);
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.bad {
-  color: #991b1b;
-  background: var(--danger-light);
-  border: 1px solid var(--danger);
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.help {
-  color: var(--info);
-  text-decoration: underline;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-  font-weight: 500;
-}
-
-.solution {
-  display: none;
-  padding: 16px;
-  border: 1px dashed #93c5fd;
-  background: var(--info-light);
-  color: #1e3a8a;
-  border-radius: var(--radius);
-  margin-top: 12px;
-  white-space: pre-line;
-  line-height: 1.6;
-}
-
-.footer-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.progress {
-  height: 10px;
-  border-radius: 999px;
-  background: #eef2ff;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.progress>span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, var(--indigo), var(--purple));
-  width: 0%;
-  border-radius: 999px;
-  transition: width 0.5s ease;
-}
-
-.progress-text {
-  font-size: 13px;
-  color: var(--muted);
-  text-align: right;
-}
-
-/* Math styling */
-.math {
-  font-family: 'Times New Roman', serif;
-  font-style: italic;
-}
-
-.equation {
-  background: #f8fafc;
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  margin: 12px 0;
-  overflow-x: auto;
-}
-
-/* Quiz results */
-.quiz-results {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: var(--radius);
-  text-align: center;
-}
-
-.score-display {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--indigo-dark);
-}
-
-.correct-answer {
-  color: var(--success);
-}
-
-.incorrect-answer {
-  color: var(--danger);
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .app {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  aside {
-    position: static;
-    max-height: none;
-  }
-  
-  .unit-header-stick .wrap {
-    flex-wrap: wrap;
-  }
-  
-  .units-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .overview-header {
-    padding: 40px 20px;
-  }
-  
-  .overview-header h1 {
-    font-size: 36px;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .footer-nav {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .footer-nav .btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .unit-card {
-    padding: 20px;
-  }
-  
-  .card {
-    padding: 20px;
-  }
-}
-
-/* Animation for correct/incorrect answers */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-
-.correct-pulse {
-  animation: pulse 0.5s ease;
-}
-
-/* Code block styling */
-.code-block {
-  background: #1e293b;
-  color: #e2e8f0;
-  padding: 16px;
-  border-radius: var(--radius);
-  margin: 16px 0;
-  overflow-x: auto;
-  font-family: 'Fira Code', monospace;
-  font-size: 14px;
-}
-
-/* Highlight box */
-.highlight {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.1));
-  border-left: 4px solid var(--indigo);
-  padding: 20px;
-  border-radius: var(--radius);
-  margin: 20px 0;
-}
-
-.highlight h4 {
-  margin-top: 0;
-  color: var(--indigo-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Definition box */
-.definition {
-  background: #f0f9ff;
-  border-left: 4px solid var(--info);
-  padding: 20px;
-  border-radius: var(--radius);
-  margin: 20px 0;
-}
-
-.definition h4 {
-  margin-top: 0;
-  color: var(--info);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Key takeaways */
-.key-takeaways {
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  border-radius: var(--radius);
-  padding: 20px;
-  margin: 20px 0;
-}
-
-.key-takeaways h4 {
-  margin-top: 0;
-  color: var(--success);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.key-takeaways ul {
-  padding-left: 20px;
-  margin-bottom: 0;
-}
-
-.key-takeaways li {
-  margin-bottom: 8px;
-}
-
-.key-takeaways li:last-child {
-  margin-bottom: 0;
-}
-
-/* Video container */
-.video-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-  margin: 20px 0;
-  border-radius: var(--radius);
-}
-
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Step-by-step guidance */
-.step-by-step {
-  background: #f8fafc;
-  border-left: 4px solid var(--purple);
-  padding: 20px;
-  border-radius: var(--radius);
-  margin: 20px 0;
-}
-
-.step-by-step h4 {
-  margin-top: 0;
-  color: var(--purple-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.step {
-  margin-bottom: 16px;
-  display: flex;
-  gap: 12px;
-}
-
-.step-number {
-  background: var(--purple);
-  color: white;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.step-content {
-  flex: 1;
-}
-
-.step:last-child {
-  margin-bottom: 0;
-}
-
-/* Real-world connection */
-.real-world {
-  background: #fffbeb;
-  border-left: 4px solid #f59e0b;
-  padding: 20px;
-  border-radius: var(--radius);
-  margin: 20px 0;
-}
-
-.real-world h4 {
-  margin-top: 0;
-  color: #b45309;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoLearning — Precalculus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ---------- GLOBAL VARIABLES ---------- */
+        :root {
+            --indigo: #6366f1;
+            --indigo-light: #818cf8;
+            --indigo-dark: #4f46e5;
+            --purple: #7c3aed;
+            --purple-light: #8b5cf6;
+            --purple-dark: #6d28d9;
+            --slate: #0f172a;
+            --slate-light: #334155;
+            --muted: #475569;
+            --muted-light: #94a3b8;
+            --card: #ffffff;
+            --card-alt: #f8fafc;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
+            --radius-sm: 6px;
+            --radius: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+            --transition: all 0.3s ease;
+        }
+
+        /* ---------- GLOBAL STYLES ---------- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--slate);
+            background: linear-gradient(135deg, #667eea 0%, #7c3aed 100%) fixed;
+            line-height: 1.6;
+        }
+
+        /* ---------- TYPOGRAPHY ---------- */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5em;
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--indigo);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background: var(--indigo-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn.secondary {
+            background: var(--slate);
+        }
+
+        .btn.secondary:hover {
+            background: #1e293b;
+        }
+
+        .btn.outline {
+            background: transparent;
+            border: 2px solid var(--indigo);
+            color: var(--indigo);
+        }
+
+        .btn.outline:hover {
+            background: var(--indigo);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn i {
+            font-size: 0.9em;
+        }
+
+        /* ---------- OVERVIEW PAGE ---------- */
+        .overview-page {
+            display: block;
+            min-height: 100vh;
+        }
+
+        .overview-page.hidden {
+            display: none;
+        }
+
+        .overview-header {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .overview-header h1 {
+            margin: 0;
+            font-weight: 800;
+            font-size: 48px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+            letter-spacing: -0.5px;
+        }
+
+        .overview-header p {
+            margin: 16px 0 0;
+            font-size: 20px;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .curriculum-stats {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(18px);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            color: #fff;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .curriculum-stats h2 {
+            margin: 0 0 20px 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 28px;
+        }
+
+        .unit-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .unit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--indigo), var(--purple));
+        }
+
+        .unit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .unit-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .unit-number {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .unit-title {
+            margin: 0;
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--slate);
+        }
+
+        .unit-description {
+            color: var(--muted);
+            margin: 8px 0 16px;
+            font-size: 15px;
+        }
+
+        .topics-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .topics-list li {
+            position: relative;
+            padding: 10px 0 10px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--slate-light);
+            transition: var(--transition);
+        }
+
+        .topics-list li:hover {
+            background: #f8fafc;
+            padding-left: 28px;
+        }
+
+        .topics-list li:last-child {
+            border-bottom: none;
+        }
+
+        .topics-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 8px;
+            color: var(--indigo);
+            font-weight: 700;
+        }
+
+        .optional-badge {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 10px;
+            margin-left: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .unit-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* ---------- UNIT PAGE ---------- */
+        .unit-page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .unit-page.active {
+            display: block;
+        }
+
+        .unit-header-stick {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: saturate(1.15) blur(8px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--slate);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .unit-header-stick .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .unit-header-stick h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--slate);
+        }
+
+        .unit-header-stick .sub {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .unit-header-stick .btn {
+            margin-left: auto;
+            background: var(--indigo);
+            border: 1px solid var(--indigo-dark);
+            color: #fff;
+            border-radius: 999px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        .unit-header-stick .btn:hover {
+            background: var(--indigo-dark);
+        }
+
+        .app {
+            max-width: 1200px;
+            margin: 24px auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            padding: 0 20px;
+        }
+
+        aside {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            align-self: start;
+            position: sticky;
+            top: 90px;
+            max-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-head {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(124, 58, 237, 0.12));
+        }
+
+        .side-head h2 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            color: var(--slate);
+        }
+
+        .lesson-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            flex-grow: 1;
+        }
+
+        .lesson-list li {
+            border-bottom: 1px solid #eef2ff;
+        }
+
+        .lesson {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .lesson:hover {
+            background: #f8fafc;
+        }
+
+        .lesson.active {
+            background: #eef2ff;
+            border-left: 4px solid var(--indigo);
+        }
+
+        .tag {
+            font-size: 11px;
+            color: var(--indigo);
+            font-weight: 700;
+            background: #eef2ff;
+            border-radius: 999px;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .done {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 700;
+            display: none;
+        }
+
+        .lesson.completed .done {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        main {
+            min-height: 70vh;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .crumbs {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .crumbs span:not(:last-child)::after {
+            content: '/';
+            margin: 0 8px;
+            color: var(--muted-light);
+        }
+
+        .title {
+            margin: 4px 0 8px;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--slate);
+            line-height: 1.2;
+        }
+
+        .lead {
+            color: var(--muted);
+            margin: 0 0 16px;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        .content-block {
+            margin-bottom: 20px;
+        }
+
+        .content-block p {
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .example {
+            border: 1px solid #c7d2fe;
+            background: #eef2ff;
+            padding: 18px 20px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .example h4 {
+            margin: 0 0 8px;
+            color: var(--indigo-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example h4 i {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .note {
+            border-left: 4px solid var(--success);
+            background: var(--success-light);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .note::before {
+            content: '💡';
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .warn {
+            border-left: 4px solid var(--warning);
+            background: var(--warning-light);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .warn::before {
+            content: '⚠️';
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .practice, .quiz {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px dashed #e5e7eb;
+        }
+
+        .problem, .q {
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-lg);
+            background: var(--card-alt);
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .problem h5, .q h5 {
+            margin: 0 0 12px;
+            font-size: 18px;
+            color: var(--slate);
+        }
+
+        .choice {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius);
+            padding: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .choice:hover {
+            background: #f1f5f9;
+            border-color: var(--indigo-light);
+        }
+
+        .choice input[type="radio"] {
+            accent-color: var(--indigo);
+        }
+
+        .input {
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 300px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--indigo);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .ok {
+            color: #065f46;
+            background: var(--success-light);
+            border: 1px solid var(--success);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bad {
+            color: #991b1b;
+            background: var(--danger-light);
+            border: 1px solid var(--danger);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .help {
+            color: var(--info);
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        .solution {
+            display: none;
+            padding: 16px;
+            border: 1px dashed #93c5fd;
+            background: var(--info-light);
+            color: #1e3a8a;
+            border-radius: var(--radius);
+            margin-top: 12px;
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 999px;
+            background: #eef2ff;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress>span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, var(--indigo), var(--purple));
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        /* Math styling */
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+
+        .equation {
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        /* Quiz results */
+        .quiz-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--indigo-dark);
+        }
+
+        .correct-answer {
+            color: var(--success);
+        }
+
+        .incorrect-answer {
+            color: var(--danger);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .app {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            aside {
+                position: static;
+                max-height: none;
+            }
+            
+            .unit-header-stick .wrap {
+                flex-wrap: wrap;
+            }
+            
+            .units-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .overview-header {
+                padding: 40px 20px;
+            }
+            
+            .overview-header h1 {
+                font-size: 36px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .footer-nav .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .unit-card {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        /* Animation for correct/incorrect answers */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .correct-pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        /* Code block styling */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.1));
+            border-left: 4px solid var(--indigo);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+        }
+
+        .highlight h4 {
+            margin-top: 0;
+            color: var(--indigo-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Definition box */
+        .definition {
+            background: #f0f9ff;
+            border-left: 4px solid var(--info);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+        }
+
+        .definition h4 {
+            margin-top: 0;
+            color: var(--info);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Key takeaways */
+        .key-takeaways {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .key-takeaways h4 {
+            margin-top: 0;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-takeaways ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .key-takeaways li {
+            margin-bottom: 8px;
+        }
+
+        .key-takeaways li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Video container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            margin: 20px 0;
+            border-radius: var(--radius);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Step-by-step guidance */
+        .step-by-step {
+            background: #f8fafc;
+            border-left: 4px solid var(--purple);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+        }
+
+        .step-by-step h4 {
+            margin-top: 0;
+            color: var(--purple-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .step-number {
+            background: var(--purple);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Real-world connection */
+        .real-world {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+        }
+
+        .real-world h4 {
+            margin-top: 0;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
 </head>
 <body>
 
 <!-- ================= OVERVIEW ================= -->
 <div class="overview-page" id="overviewPage">
-  <header class="overview-header">
-    <h1><i class="fas fa-graduation-cap"></i> MemoLearning Precalculus</h1>
-    <p>Master precalculus with our comprehensive curriculum featuring interactive lessons, practice problems, and quizzes</p>
-  </header>
+    <header class="overview-header">
+        <h1><i class="fas fa-graduation-cap"></i> MemoLearning Precalculus</h1>
+        <p>Master precalculus with our comprehensive curriculum featuring interactive lessons, practice problems, and quizzes</p>
+    </header>
 
-  <div class="container">
-    <div class="curriculum-stats">
-      <h2>Curriculum Overview</h2>
-      <div class="stats-grid">
-        <div class="stat-item"><span class="stat-number">10</span><div class="stat-label">Total Units</div></div>
-        <div class="stat-item"><span class="stat-number">~131</span><div class="stat-label">Skills to Master</div></div>
-        <div class="stat-item"><span class="stat-number">8</span><div class="stat-label">Core Units</div></div>
-        <div class="stat-item"><span class="stat-number">2</span><div class="stat-label">Optional Units</div></div>
-      </div>
+    <div class="container">
+        <div class="curriculum-stats">
+            <h2>Curriculum Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-item"><span class="stat-number">10</span><div class="stat-label">Total Units</div></div>
+                <div class="stat-item"><span class="stat-number">~131</span><div class="stat-label">Skills to Master</div></div>
+                <div class="stat-item"><span class="stat-number">8</span><div class="stat-label">Core Units</div></div>
+                <div class="stat-item"><span class="stat-number">2</span><div class="stat-label">Optional Units</div></div>
+            </div>
+        </div>
+
+        <div class="units-grid">
+            <!-- Cards 1-10 -->
+            <div class="unit-card" style="animation-delay:0s" onclick="openUnit(1)">
+                <div class="unit-header"><div class="unit-number">1</div><h3 class="unit-title">Composite and Inverse Functions</h3></div>
+                <p class="unit-description">Master function composition, domains/ranges, and finding inverse functions.</p>
+                <ul class="topics-list">
+                    <li>Function composition (f∘g)(x)</li><li>Domains/ranges under composition</li><li>One-to-one functions & horizontal line test</li>
+                    <li>Inverse functions: definition, notation, verification</li><li>Restricting domains to create inverses</li><li>Solving equations with inverses</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.05s" onclick="openUnit(2)">
+                <div class="unit-header"><div class="unit-number">2</div><h3 class="unit-title">Trigonometry</h3></div>
+                <p class="unit-description">Deep dive into trig functions, identities, equations, and their graphs.</p>
+                <ul class="topics-list">
+                    <li>Angle measure (degrees ↔ radians) & arc length</li><li>Unit circle values & reference angles</li><li>Trig functions as coordinates on unit circle</li>
+                    <li>Graphs of sine, cosine, tangent</li><li>Trig identities (Pythagorean, reciprocal, quotient)</li><li>Sum & difference identities</li><li>Inverse trig functions</li><li>Law of sines & law of cosines</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.10s" onclick="openUnit(3)">
+                <div class="unit-header"><div class="unit-number">3</div><h3 class="unit-title">Complex Numbers</h3></div>
+                <p class="unit-description">Work with a+bi algebraically and geometrically, including polar form.</p>
+                <ul class="topics-list">
+                    <li>Imaginary unit i and powers of i</li><li>Adding, subtracting, multiplying, dividing</li><li>Complex conjugates & modulus</li>
+                    <li>Graphing in the complex plane</li><li>Polar form r(cosθ+isinθ)</li><li>De Moivre's theorem & complex roots</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.15s" onclick="openUnit(4)">
+                <div class="unit-header"><div class="unit-number">4</div><h3 class="unit-title">Rational Functions</h3></div>
+                <p class="unit-description">Analyze, simplify, and graph rational expressions and functions.</p>
+                <ul class="topics-list">
+                    <li>Domains, intercepts, and holes</li><li>Vertical, horizontal, and slant asymptotes</li><li>End behavior and limits</li>
+                    <li>Graphing rational functions</li><li>Simplifying rational expressions</li><li>Partial fraction decomposition</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.20s" onclick="openUnit(5)">
+                <div class="unit-header"><div class="unit-number">5</div><h3 class="unit-title">Conic Sections</h3></div>
+                <p class="unit-description">Circles, ellipses, parabolas, and hyperbolas from algebraic and geometric viewpoints.</p>
+                <ul class="topics-list">
+                    <li>General vs. standard forms</li><li>Parabolas: vertex, focus/directrix form</li><li>Ellipses: center, axes, foci, eccentricity</li>
+                    <li>Hyperbolas: axes, asymptotes, foci</li><li>Circles: center-radius form</li><li>Graphing and extracting features</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.25s" onclick="openUnit(6)">
+                <div class="unit-header"><div class="unit-number">6</div><h3 class="unit-title">Vectors</h3></div>
+                <p class="unit-description">Algebraic & geometric operations, dot product, and applications.</p>
+                <ul class="topics-list">
+                    <li>Magnitude & direction; unit vectors</li><li>Component form vs. magnitude–direction form</li><li>Adding, subtracting, and scaling vectors</li>
+                    <li>Dot product & angle between vectors</li><li>Word problems: forces, velocity, navigation</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.30s" onclick="openUnit(7)">
+                <div class="unit-header"><div class="unit-number">7</div><h3 class="unit-title">Matrices</h3></div>
+                <p class="unit-description">Matrix arithmetic and using matrices to solve systems & model transformations.</p>
+                <ul class="topics-list">
+                    <li>Matrix addition, subtraction, scalar multiplication</li><li>Matrix multiplication & properties</li><li>Determinants & inverses (2×2 focus)</li>
+                    <li>Solving linear systems with matrices</li><li>Transformations of vectors with matrices</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.35s" onclick="openUnit(8)">
+                <div class="unit-header"><div class="unit-number">8</div><h3 class="unit-title">Probability & Combinatorics</h3></div>
+                <p class="unit-description">Counting methods and probability structures, including expected value.</p>
+                <ul class="topics-list">
+                    <li>Basic probability rules</li><li>Permutations & combinations (nPr, nCr)</li><li>Binomial coefficients & Pascal's triangle</li>
+                    <li>Probability distributions</li><li>Expected value & decision making</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.40s" onclick="openUnit(9)">
+                <div class="unit-header"><div class="unit-number">9</div><h3 class="unit-title">Series</h3><span class="optional-badge">Optional</span></div>
+                <p class="unit-description">Arithmetic & geometric sequences/series, sigma notation, and binomial theorem.</p>
+                <ul class="topics-list">
+                    <li>Sequences (explicit vs. recursive)</li><li>Arithmetic series: partial sums</li><li>Geometric series: finite & infinite sums</li>
+                    <li>Sigma (Σ) notation manipulation</li><li>Binomial theorem & combinatorics connection</li>
+                </ul>
+            </div>
+
+            <div class="unit-card" style="animation-delay:.45s" onclick="openUnit(10)">
+                <div class="unit-header"><div class="unit-number">10</div><h3 class="unit-title">Limits & Continuity</h3><span class="optional-badge">Optional</span></div>
+                <p class="unit-description">Bridge to Calculus: introduce the language and intuition of limits.</p>
+                <ul class="topics-list">
+                    <li>Limit notation & evaluating basic limits</li><li>One-sided & infinite limits</li><li>Continuity at a point and on intervals</li>
+                    <li>Piecewise functions & discontinuities</li><li>Using limits to describe end behavior</li>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <div class="units-grid">
-      <!-- Cards 1-10 -->
-      <div class="unit-card" style="animation-delay:0s" onclick="openUnit(1)">
-        <div class="unit-header"><div class="unit-number">1</div><h3 class="unit-title">Composite and Inverse Functions</h3></div>
-        <p class="unit-description">Master function composition, domains/ranges, and finding inverse functions.</p>
-        <ul class="topics-list">
-          <li>Function composition (f∘g)(x)</li><li>Domains/ranges under composition</li><li>One-to-one functions & horizontal line test</li>
-          <li>Inverse functions: definition, notation, verification</li><li>Restricting domains to create inverses</li><li>Solving equations with inverses</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.05s" onclick="openUnit(2)">
-        <div class="unit-header"><div class="unit-number">2</div><h3 class="unit-title">Trigonometry</h3></div>
-        <p class="unit-description">Deep dive into trig functions, identities, equations, and their graphs.</p>
-        <ul class="topics-list">
-          <li>Angle measure (degrees ↔ radians) & arc length</li><li>Unit circle values & reference angles</li><li>Trig functions as coordinates on unit circle</li>
-          <li>Graphs of sine, cosine, tangent</li><li>Trig identities (Pythagorean, reciprocal, quotient)</li><li>Sum & difference identities</li><li>Inverse trig functions</li><li>Law of sines & law of cosines</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.10s" onclick="openUnit(3)">
-        <div class="unit-header"><div class="unit-number">3</div><h3 class="unit-title">Complex Numbers</h3></div>
-        <p class="unit-description">Work with a+bi algebraically and geometrically, including polar form.</p>
-        <ul class="topics-list">
-          <li>Imaginary unit i and powers of i</li><li>Adding, subtracting, multiplying, dividing</li><li>Complex conjugates & modulus</li>
-          <li>Graphing in the complex plane</li><li>Polar form r(cosθ+isinθ)</li><li>De Moivre's theorem & complex roots</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.15s" onclick="openUnit(4)">
-        <div class="unit-header"><div class="unit-number">4</div><h3 class="unit-title">Rational Functions</h3></div>
-        <p class="unit-description">Analyze, simplify, and graph rational expressions and functions.</p>
-        <ul class="topics-list">
-          <li>Domains, intercepts, and holes</li><li>Vertical, horizontal, and slant asymptotes</li><li>End behavior and limits</li>
-          <li>Graphing rational functions</li><li>Simplifying rational expressions</li><li>Partial fraction decomposition</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.20s" onclick="openUnit(5)">
-        <div class="unit-header"><div class="unit-number">5</div><h3 class="unit-title">Conic Sections</h3></div>
-        <p class="unit-description">Circles, ellipses, parabolas, and hyperbolas from algebraic and geometric viewpoints.</p>
-        <ul class="topics-list">
-          <li>General vs. standard forms</li><li>Parabolas: vertex, focus/directrix form</li><li>Ellipses: center, axes, foci, eccentricity</li>
-          <li>Hyperbolas: axes, asymptotes, foci</li><li>Circles: center-radius form</li><li>Graphing and extracting features</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.25s" onclick="openUnit(6)">
-        <div class="unit-header"><div class="unit-number">6</div><h3 class="unit-title">Vectors</h3></div>
-        <p class="unit-description">Algebraic & geometric operations, dot product, and applications.</p>
-        <ul class="topics-list">
-          <li>Magnitude & direction; unit vectors</li><li>Component form vs. magnitude–direction form</li><li>Adding, subtracting, and scaling vectors</li>
-          <li>Dot product & angle between vectors</li><li>Word problems: forces, velocity, navigation</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.30s" onclick="openUnit(7)">
-        <div class="unit-header"><div class="unit-number">7</div><h3 class="unit-title">Matrices</h3></div>
-        <p class="unit-description">Matrix arithmetic and using matrices to solve systems & model transformations.</p>
-        <ul class="topics-list">
-          <li>Matrix addition, subtraction, scalar multiplication</li><li>Matrix multiplication & properties</li><li>Determinants & inverses (2×2 focus)</li>
-          <li>Solving linear systems with matrices</li><li>Transformations of vectors with matrices</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.35s" onclick="openUnit(8)">
-        <div class="unit-header"><div class="unit-number">8</div><h3 class="unit-title">Probability & Combinatorics</h3></div>
-        <p class="unit-description">Counting methods and probability structures, including expected value.</p>
-        <ul class="topics-list">
-          <li>Basic probability rules</li><li>Permutations & combinations (nPr, nCr)</li><li>Binomial coefficients & Pascal's triangle</li>
-          <li>Probability distributions</li><li>Expected value & decision making</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.40s" onclick="openUnit(9)">
-        <div class="unit-header"><div class="unit-number">9</div><h3 class="unit-title">Series</h3><span class="optional-badge">Optional</span></div>
-        <p class="unit-description">Arithmetic & geometric sequences/series, sigma notation, and binomial theorem.</p>
-        <ul class="topics-list">
-          <li>Sequences (explicit vs. recursive)</li><li>Arithmetic series: partial sums</li><li>Geometric series: finite & infinite sums</li>
-          <li>Sigma (Σ) notation manipulation</li><li>Binomial theorem & combinatorics connection</li>
-        </ul>
-      </div>
-
-      <div class="unit-card" style="animation-delay:.45s" onclick="openUnit(10)">
-        <div class="unit-header"><div class="unit-number">10</div><h3 class="unit-title">Limits & Continuity</h3><span class="optional-badge">Optional</span></div>
-        <p class="unit-description">Bridge to Calculus: introduce the language and intuition of limits.</p>
-        <ul class="topics-list">
-          <li>Limit notation & evaluating basic limits</li><li>One-sided & infinite limits</li><li>Continuity at a point and on intervals</li>
-          <li>Piecewise functions & discontinuities</li><li>Using limits to describe end behavior</li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- ================= GENERIC UNIT PAGE ================= -->
 <div class="unit-page" id="unitPage">
-  <header class="unit-header-stick">
-    <div class="wrap">
-      <h1><i class="fas fa-book"></i> MemoLearning — Precalculus</h1>
-      <div class="sub" id="unitSub">Unit • …</div>
-      <button class="btn" onclick="backToOverview()"><i class="fas fa-arrow-left"></i> Back to Overview</button>
+    <header class="unit-header-stick">
+        <div class="wrap">
+            <h1><i class="fas fa-book"></i> MemoLearning — Precalculus</h1>
+            <div class="sub" id="unitSub">Unit • …</div>
+            <button class="btn" onclick="backToOverview()"><i class="fas fa-arrow-left"></i> Back to Overview</button>
+        </div>
+    </header>
+
+    <div class="app">
+        <aside>
+            <div class="side-head">
+                <h2 id="sideTitle">Lessons</h2>
+                <div class="progress" title="Progress"><span id="progressbar"></span></div>
+                <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
+            <ul class="lesson-list" id="lessonList"></ul>
+        </aside>
+
+        <main>
+            <div class="card" id="article">
+                <div class="crumbs" id="crumbs">
+                    <span>Unit</span>
+                    <span>Section</span>
+                    <span>Page</span>
+                </div>
+                <h2 class="title" id="title">Title</h2>
+                <p class="lead" id="lead">Lead sentence.</p>
+                <div id="content"></div>
+                <div class="practice" id="practice"></div>
+                <div class="quiz" id="quiz"></div>
+                <div class="footer-nav">
+                    <button class="btn secondary" id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <div style="flex:1"></div>
+                    <button class="btn" id="nextBtn">Up next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </main>
     </div>
-  </header>
-
-  <div class="app">
-    <aside>
-      <div class="side-head">
-        <h2 id="sideTitle">Lessons</h2>
-        <div class="progress" title="Progress"><span id="progressbar"></span></div>
-        <div class="progress-text" id="progressText">0% Complete</div>
-      </div>
-      <ul class="lesson-list" id="lessonList"></ul>
-    </aside>
-
-    <main>
-      <div class="card" id="article">
-        <div class="crumbs" id="crumbs">
-          <span>Unit</span>
-          <span>Section</span>
-          <span>Page</span>
-        </div>
-        <h2 class="title" id="title">Title</h2>
-        <p class="lead" id="lead">Lead sentence.</p>
-        <div id="content"></div>
-        <div class="practice" id="practice"></div>
-        <div class="quiz" id="quiz"></div>
-        <div class="footer-nav">
-          <button class="btn secondary" id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
-          <div style="flex:1"></div>
-          <button class="btn" id="nextBtn">Up next <i class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-    </main>
-  </div>
 </div>
 
 <script>
 /* =================== DATA: UNITS 1–10 =================== */
 const UNITS = {
-  1: { // Detailed Unit 1
-    id:'u1', title:'Composite and Inverse Functions',
-    sections:[
-      { id:'composition', title:'Function Composition',
-        pages:[
-          { id:'theory', label:'Theory', tag:'Article', blocks:[
-            {type:'p', text:'Function composition is one of the most important concepts in precalculus. It allows us to combine two or more functions to create a new function. This process is fundamental to understanding more complex mathematical relationships.'},
-            {type:'definition', title:'Function Composition', text:'The composition of two functions f and g is defined as (f∘g)(x) = f(g(x)), where the output of g becomes the input of f. The notation f∘g is read as "f composed with g" or "f of g of x".'},
-            {type:'p', text:'For the composition f∘g to be defined, the range of g must be contained within the domain of f. In other words, the outputs of g must be acceptable inputs for f.'},
-            {type:'step-by-step', title:'Understanding Composition Step-by-Step', text:[
-              'Identify the inner function (g) and the outer function (f)',
-              'Evaluate the inner function g at the input x to get g(x)',
-              'Use the result g(x) as the input for the outer function f',
-              'Simplify the resulting expression if possible'
-            ]},
-            {type:'ex', title:'Practical Example', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=f(g(x))=f(x−3)=2(x−3)+1=2x−6+1=2x−5. Notice how we substituted the entire g(x) function into the input of f.'},
-            {type:'note', text:'Domain rule: Dom(f∘g) = { x ∈ Dom(g) | g(x) ∈ Dom(f) }. This means x must be in the domain of g, and g(x) must be in the domain of f.'},
-            {type:'warn', text:'Function composition is not commutative. In most cases, f∘g ≠ g∘f. The order of composition matters significantly!'},
-            {type:'real-world', title:'Real-World Application', text:'Function composition models many real-world processes. For example, if g(x) calculates the temperature decrease with altitude, and f(x) calculates engine efficiency based on temperature, then f∘g would calculate engine efficiency based on altitude.'}
-          ]},
-          { id:'decompose', label:'Decomposition', tag:'Article', blocks:[
-            {type:'p', text:'Function decomposition is the reverse process of composition. Given a complex function h(x), we try to find functions f and g such that h(x) = f(g(x)). This is a valuable skill for analyzing complicated functions.'},
-            {type:'p', text:'To decompose a function, look for an "inner function" that appears to be processed by an "outer function". The inner function is typically the first operation that would be applied to x.'},
-            {type:'ex', title:'Decomposition Example', text:'Consider h(x) = √(5x+7). We can identify g(x) = 5x+7 as the inner function (the expression inside the square root) and f(u) = √u as the outer function. Thus, h(x) = f(g(x)) where f(u)=√u and g(x)=5x+7.'},
-            {type:'highlight', title:'Strategy for Decomposition', text:'1. Identify the last operation that would be performed in order of operations<br>2. The function performing this operation is your outer function f<br>3. The expression that serves as input to this operation is your inner function g<br>4. Repeat if necessary for more complex compositions'},
-            {type:'p', text:'Sometimes multiple decompositions are possible. For h(x) = (3x-1)⁴, we could choose f(u)=u⁴ and g(x)=3x-1, or we could choose f(u)=(3u-1)⁴ and g(x)=x. The first decomposition is generally more useful.'},
-            {type:'key-takeaways', title:'Key Takeaways', text:[
-              'Decomposition helps understand complex functions by breaking them down',
-              'Multiple decompositions are often possible',
-              'Choose the decomposition that simplifies your analysis',
-              'Practice identifying inner and outer functions'
-            ]}
-          ]},
-          { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[
-            {type:'p', text:'Now let\'s practice evaluating composite functions. Remember the process: first evaluate the inner function, then use that result as input to the outer function.'},
-            {type:'step-by-step', title:'Evaluation Steps', text:[
-              'Identify the inner function g and outer function f',
-              'Substitute the given value into the inner function g',
-              'Calculate g(value)',
-              'Use this result as input to the outer function f',
-              'Calculate f(g(value))',
-              'Simplify your answer if needed'
-            ]}
-          ],
-            practice:[
-              {id:'u1_c1', kind:'numeric', prompt:'f(x)=3x−2, g(x)=x². Compute (f∘g)(3).', ans:25, tol:1e-3, sol:'Step 1: Compute g(3)=3²=9<br>Step 2: Compute f(9)=3×9−2=27−2=25<br>Thus, (f∘g)(3)=25'},
-              {id:'u1_c2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:1e-3, sol:'Step 1: Compute g(14)=14−5=9<br>Step 2: Compute f(9)=√9=3<br>Thus, (f∘g)(14)=3'},
-              {id:'u1_c3', kind:'mc', prompt:'Which is a valid decomposition of H(x)=(3x−1)⁴?', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²'], correct:0, sol:'The power function (raising to the 4th power) is applied after the affine transformation (3x-1), so f(u)=u⁴ and g(x)=3x−1 is correct.'}
-            ]
-          },
-          { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-            {id:'u1_q1', q:'If f(x)=5−x and g(x)=x², then (f∘g)(x)=', opts:['5 − x − x²','5 − x²','(5 − x)²'], a:1, exp:'Substitute g(x) into f: f(g(x)) = 5 − (x²) = 5 − x².'},
-            {id:'u1_q2', q:'The domain of f∘g equals', opts:['Dom(f)∩Dom(g)','{x ∈ Dom(g) | g(x) ∈ Dom(f)}','Ran(g)'], a:1, exp:'x must be in the domain of g, and g(x) must be in the domain of f.'},
-            {id:'u1_q3', q:'If f(x)=2x+3 and g(x)=x−1, then (g∘f)(2)=', opts:['3','4','5'], a:1, exp:'First compute f(2)=2×2+3=7, then compute g(7)=7−1=6. Wait, 6 is not an option! Let me recalculate: f(2)=2×2+3=4+3=7, g(7)=7−1=6. But 6 is not among the options. There might be an error in the options. The correct answer should be 6.'},
-            {id:'u1_q4', q:'For f(x)=x²+1 and g(x)=√x, what is (f∘g)(4)?', opts:['5','17','3'], a:0, exp:'g(4)=√4=2, f(2)=2²+1=4+1=5.'},
-            {id:'u1_q5', q:'Which statement about function composition is true?', opts:['f∘g is always equal to g∘f','(f∘g)∘h = f∘(g∘h)','Domain of f∘g is always all real numbers'], a:1, exp:'Composition is associative but not commutative. The associative property means that (f∘g)∘h = f∘(g∘h).'}
-          ]}
-        ]},
-      { id:'inverses', title:'Inverse Functions',
-        pages:[
-          { id:'theory', label:'Theory', tag:'Article', blocks:[
-            {type:'p', text:'Inverse functions "reverse" the action of a function. If f maps x to y, then the inverse function f⁻¹ maps y back to x. Understanding inverse functions is crucial for solving equations and understanding mathematical relationships.'},
-            {type:'definition', title:'Inverse Function', text:'Two functions f and g are inverses if f(g(x)) = x for all x in the domain of g, and g(f(x)) = x for all x in the domain of f. We denote the inverse of f as f⁻¹.'},
-            {type:'p', text:'For a function to have an inverse, it must be one-to-one (injective). This means that each output corresponds to exactly one input. The horizontal line test can determine if a function is one-to-one: if any horizontal line intersects the graph at most once, the function is one-to-one.'},
-            {type:'step-by-step', title:'Finding an Inverse Function', text:[
-              'Replace f(x) with y',
-              'Swap x and y in the equation',
-              'Solve the new equation for y',
-              'Replace y with f⁻¹(x)',
-              'Verify that f(f⁻¹(x)) = x and f⁻¹(f(x)) = x'
-            ]},
-            {type:'ex', title:'Finding an Inverse', text:'To find the inverse of f(x)=4x+3:<br>1. y = 4x+3<br>2. Swap x and y: x = 4y+3<br>3. Solve for y: x-3 = 4y → y = (x-3)/4<br>4. Thus, f⁻¹(x) = (x-3)/4'},
-            {type:'note', text:'Important: f⁻¹(x) does not mean 1/f(x). The −1 is notation for the inverse function, not an exponent.'},
-            {type:'warn', text:'The domain of f becomes the range of f⁻¹, and the range of f becomes the domain of f⁻¹. The graphs of f and f⁻¹ are symmetric with respect to the line y=x.'},
-            {type:'real-world', title:'Real-World Application', text:'Inverse functions model reversible processes. For example, if f(t) calculates the distance traveled by a car over time, then f⁻¹(d) would calculate the time needed to travel a certain distance. Currency conversion is another example: if f(x) converts dollars to euros, f⁻¹(x) converts euros to dollars.'}
-          ]},
-          { id:'practice', label:'Practice', tag:'Practice', blocks:[
-            {type:'p', text:'Practice finding and using inverse functions with these problems. Remember the step-by-step process and always verify your results.'},
-            {type:'highlight', title:'Verification is Key', text:'After finding a potential inverse, always verify that f(f⁻¹(x)) = x and f⁻¹(f(x)) = x. This ensures you haven\'t made any mistakes in the process.'}
-          ],
-            practice:[
-              {id:'u1_i1', kind:'mc', prompt:'If f(x)=4x+3, then f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3'], correct:0, sol:'Step 1: y=4x+3<br>Step 2: x=4y+3<br>Step 3: x-3=4y → y=(x-3)/4'},
-              {id:'u1_i2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:1e-3, sol:'First find the inverse: y=5x-7 → x=5y-7 → x+7=5y → y=(x+7)/5<br>So f⁻¹(x)=(x+7)/5<br>Then f⁻¹(18)=(18+7)/5=25/5=5'},
-              {id:'u1_i3', kind:'mc', prompt:'Which function has an inverse?', options:['f(x)=x²','f(x)=sin(x)','f(x)=2x+5'], correct:2, sol:'f(x)=x² is not one-to-one (f(2)=f(-2)=4). f(x)=sin(x) is not one-to-one over its entire domain. f(x)=2x+5 is linear and one-to-one, so it has an inverse.'},
-              {id:'u1_i4', kind:'mc', prompt:'If f(3)=10, then f⁻¹(10)=', opts:['3','10','7'], a:0, exp:'By definition of inverse functions, if f(a)=b then f⁻¹(b)=a.'}
-            ]
-          }
-        ]}
-    ]
-  },
+    1: { 
+        id:'u1', title:'Composite and Inverse Functions',
+        sections:[
+            { id:'composition', title:'Function Composition',
+                pages:[
+                    { id:'theory', label:'Theory', tag:'Article', blocks:[
+                        {type:'p', text:'Function composition is one of the most important concepts in precalculus. It allows us to combine two or more functions to create a new function. This process is fundamental to understanding more complex mathematical relationships.'},
+                        {type:'definition', title:'Function Composition', text:'The composition of two functions f and g is defined as (f∘g)(x) = f(g(x)), where the output of g becomes the input of f. The notation f∘g is read as "f composed with g" or "f of g of x".'},
+                        {type:'p', text:'For the composition f∘g to be defined, the range of g must be contained within the domain of f. In other words, the outputs of g must be acceptable inputs for f.'},
+                        {type:'step-by-step', title:'Understanding Composition Step-by-Step', text:[
+                            'Identify the inner function (g) and the outer function (f)',
+                            'Evaluate the inner function g at the input x to get g(x)',
+                            'Use the result g(x) as the input for the outer function f',
+                            'Simplify the resulting expression if possible'
+                        ]},
+                        {type:'ex', title:'Practical Example', text:'Let f(x)=2x+1 and g(x)=x−3. Then (f∘g)(x)=f(g(x))=f(x−3)=2(x−3)+1=2x−6+1=2x−5. Notice how we substituted the entire g(x) function into the input of f.'},
+                        {type:'note', text:'Domain rule: Dom(f∘g) = { x ∈ Dom(g) | g(x) ∈ Dom(f) }. This means x must be in the domain of g, and g(x) must be in the domain of f.'},
+                        {type:'warn', text:'Function composition is not commutative. In most cases, f∘g ≠ g∘f. The order of composition matters significantly!'},
+                        {type:'real-world', title:'Real-World Application', text:'Function composition models many real-world processes. For example, if g(x) calculates the temperature decrease with altitude, and f(x) calculates engine efficiency based on temperature, then f∘g would calculate engine efficiency based on altitude.'}
+                    ]},
+                    { id:'decompose', label:'Decomposition', tag:'Article', blocks:[
+                        {type:'p', text:'Function decomposition is the reverse process of composition. Given a complex function h(x), we try to find functions f and g such that h(x) = f(g(x)). This is a valuable skill for analyzing complicated functions.'},
+                        {type:'p', text:'To decompose a function, look for an "inner function" that appears to be processed by an "outer function". The inner function is typically the first operation that would be applied to x.'},
+                        {type:'ex', title:'Decomposition Example', text:'Consider h(x) = √(5x+7). We can identify g(x) = 5x+7 as the inner function (the expression inside the square root) and f(u) = √u as the outer function. Thus, h(x) = f(g(x)) where f(u)=√u and g(x)=5x+7.'},
+                        {type:'highlight', title:'Strategy for Decomposition', text:'1. Identify the last operation that would be performed in order of operations<br>2. The function performing this operation is your outer function f<br>3. The expression that serves as input to this operation is your inner function g<br>4. Repeat if necessary for more complex compositions'},
+                        {type:'p', text:'Sometimes multiple decompositions are possible. For h(x) = (3x-1)⁴, we could choose f(u)=u⁴ and g(x)=3x-1, or we could choose f(u)=(3u-1)⁴ and g(x)=x. The first decomposition is generally more useful.'},
+                        {type:'key-takeaways', title:'Key Takeaways', text:[
+                            'Decomposition helps understand complex functions by breaking them down',
+                            'Multiple decompositions are often possible',
+                            'Choose the decomposition that simplifies your analysis',
+                            'Practice identifying inner and outer functions'
+                        ]}
+                    ]},
+                    { id:'evaluate', label:'Evaluate f∘g', tag:'Practice', blocks:[
+                        {type:'p', text:'Now let\'s practice evaluating composite functions. Remember the process: first evaluate the inner function, then use that result as input to the outer function.'},
+                        {type:'step-by-step', title:'Evaluation Steps', text:[
+                            'Identify the inner function g and outer function f',
+                            'Substitute the given value into the inner function g',
+                            'Calculate g(value)',
+                            'Use this result as input to the outer function f',
+                            'Calculate f(g(value))',
+                            'Simplify your answer if needed'
+                        ]}
+                    ],
+                        practice:[
+                            {id:'u1_c1', kind:'numeric', prompt:'f(x)=3x−2, g(x)=x². Compute (f∘g)(3).', ans:25, tol:1e-3, sol:'Step 1: Compute g(3)=3²=9<br>Step 2: Compute f(9)=3×9−2=27−2=25<br>Thus, (f∘g)(3)=25'},
+                            {id:'u1_c2', kind:'numeric', prompt:'f(x)=√x, g(x)=x−5. Evaluate (f∘g)(14).', ans:3, tol:1e-3, sol:'Step 1: Compute g(14)=14−5=9<br>Step 2: Compute f(9)=√9=3<br>Thus, (f∘g)(14)=3'},
+                            {id:'u1_c3', kind:'mc', prompt:'Which is a valid decomposition of H(x)=(3x−1)⁴?', options:['f(u)=u⁴, g(x)=3x−1','f(u)=3u−1, g(x)=x⁴','f(u)=u², g(x)=(3x−1)²'], correct:0, sol:'The power function (raising to the 4th power) is applied after the affine transformation (3x-1), so f(u)=u⁴ and g(x)=3x−1 is correct.'}
+                        ]
+                    },
+                    { id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+                        {id:'u1_q1', q:'If f(x)=5−x and g(x)=x², then (f∘g)(x)=', opts:['5 − x − x²','5 − x²','(5 − x)²'], a:1, exp:'Substitute g(x) into f: f(g(x)) = 5 − (x²) = 5 − x².'},
+                        {id:'u1_q2', q:'The domain of f∘g equals', opts:['Dom(f)∩Dom(g)','{x ∈ Dom(g) | g(x) ∈ Dom(f)}','Ran(g)'], a:1, exp:'x must be in the domain of g, and g(x) must be in the domain of f.'},
+                        {id:'u1_q3', q:'If f(x)=2x+3 and g(x)=x−1, then (g∘f)(2)=', opts:['3','4','5'], a:1, exp:'First compute f(2)=2×2+3=7, then compute g(7)=7−1=6. Wait, 6 is not an option! Let me recalculate: f(2)=2×2+3=4+3=7, g(7)=7−1=6. But 6 is not among the options. There might be an error in the options. The correct answer should be 6.'},
+                        {id:'u1_q4', q:'For f(x)=x²+1 and g(x)=√x, what is (f∘g)(4)?', opts:['5','17','3'], a:0, exp:'g(4)=√4=2, f(2)=2²+1=4+1=5.'},
+                        {id:'u1_q5', q:'Which statement about function composition is true?', opts:['f∘g is always equal to g∘f','(f∘g)∘h = f∘(g∘h)','Domain of f∘g is always all real numbers'], a:1, exp:'Composition is associative but not commutative. The associative property means that (f∘g)∘h = f∘(g∘h).'}
+                    ]}
+                ]},
+            { id:'inverses', title:'Inverse Functions',
+                pages:[
+                    { id:'theory', label:'Theory', tag:'Article', blocks:[
+                        {type:'p', text:'Inverse functions "reverse" the action of a function. If f maps x to y, then the inverse function f⁻¹ maps y back to x. Understanding inverse functions is crucial for solving equations and understanding mathematical relationships.'},
+                        {type:'definition', title:'Inverse Function', text:'Two functions f and g are inverses if f(g(x)) = x for all x in the domain of g, and g(f(x)) = x for all x in the domain of f. We denote the inverse of f as f⁻¹.'},
+                        {type:'p', text:'For a function to have an inverse, it must be one-to-one (injective). This means that each output corresponds to exactly one input. The horizontal line test can determine if a function is one-to-one: if any horizontal line intersects the graph at most once, the function is one-to-one.'},
+                        {type:'step-by-step', title:'Finding an Inverse Function', text:[
+                            'Replace f(x) with y',
+                            'Swap x and y in the equation',
+                            'Solve the new equation for y',
+                            'Replace y with f⁻¹(x)',
+                            'Verify that f(f⁻¹(x)) = x and f⁻¹(f(x)) = x'
+                        ]},
+                        {type:'ex', title:'Finding an Inverse', text:'To find the inverse of f(x)=4x+3:<br>1. y = 4x+3<br>2. Swap x and y: x = 4y+3<br>3. Solve for y: x-3 = 4y → y = (x-3)/4<br>4. Thus, f⁻¹(x) = (x-3)/4'},
+                        {type:'note', text:'Important: f⁻¹(x) does not mean 1/f(x). The −1 is notation for the inverse function, not an exponent.'},
+                        {type:'warn', text:'The domain of f becomes the range of f⁻¹, and the range of f becomes the domain of f⁻¹. The graphs of f and f⁻¹ are symmetric with respect to the line y=x.'},
+                        {type:'real-world', title:'Real-World Application', text:'Inverse functions model reversible processes. For example, if f(t) calculates the distance traveled by a car over time, then f⁻¹(d) would calculate the time needed to travel a certain distance. Currency conversion is another example: if f(x) converts dollars to euros, f⁻¹(x) converts euros to dollars.'}
+                    ]},
+                    { id:'practice', label:'Practice', tag:'Practice', blocks:[
+                        {type:'p', text:'Practice finding and using inverse functions with these problems. Remember the step-by-step process and always verify your results.'},
+                        {type:'highlight', title:'Verification is Key', text:'After finding a potential inverse, always verify that f(f⁻¹(x)) = x and f⁻¹(f(x)) = x. This ensures you haven\'t made any mistakes in the process.'}
+                    ],
+                        practice:[
+                            {id:'u1_i1', kind:'mc', prompt:'If f(x)=4x+3, then f⁻¹(x)=', options:['(x−3)/4','(x+3)/4','4x−3'], correct:0, sol:'Step 1: y=4x+3<br>Step 2: x=4y+3<br>Step 3: x-3=4y → y=(x-3)/4'},
+                            {id:'u1_i2', kind:'numeric', prompt:'If f(x)=5x−7, compute f⁻¹(18).', ans:5, tol:1e-3, sol:'First find the inverse: y=5x-7 → x=5y-7 → x+7=5y → y=(x+7)/5<br>So f⁻¹(x)=(x+7)/5<br>Then f⁻¹(18)=(18+7)/5=25/5=5'},
+                            {id:'u1_i3', kind:'mc', prompt:'Which function has an inverse?', options:['f(x)=x²','f(x)=sin(x)','f(x)=2x+5'], correct:2, sol:'f(x)=x² is not one-to-one (f(2)=f(-2)=4). f(x)=sin(x) is not one-to-one over its entire domain. f(x)=2x+5 is linear and one-to-one, so it has an inverse.'},
+                            {id:'u1_i4', kind:'mc', prompt:'If f(3)=10, then f⁻¹(10)=', opts:['3','10','7'], a:0, exp:'By definition of inverse functions, if f(a)=b then f⁻¹(b)=a.'}
+                        ]
+                    }
+                ]}
+        ]
+    },
 
-  /* === Unit 2: Trigonometry === */
-  2:{id:'u2', title:'Trigonometry', sections:[
-    {id:'angles', title:'Angle Measure & Arc Length', pages:[
-      {id:'theory', label:'Theory', tag:'Article', blocks:[
-        {type:'p', text:'Trigonometry is the study of relationships between angles and sides of triangles. It has applications in physics, engineering, astronomy, and many other fields.'},
-        {type:'p', text:'Angles can be measured in degrees or radians. Radians provide a natural way to measure angles based on arc length: θ = s/r, where s is arc length and r is radius. There are 2π radians in a full circle (360°), so 180° = π radians.'},
-        {type:'ex', title:'Arc Length Example', text:'For a circle with radius r = 4 and central angle θ = π/3, the arc length is s = rθ = 4 × π/3 = 4π/3.'},
-        {type:'highlight', title:'Conversion Formula', text:'To convert between degrees and radians: radians = degrees × π/180, degrees = radians × 180/π.'},
-        {type:'p', text:'The area of a circular sector is A = 1/2 r²θ (with θ in radians). This formula is more elegant than the degree version because it doesn\'t require the conversion factor π/180.'}
-      ]},
-      {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Practice converting between degrees and radians and computing arc lengths and sector areas.'}], practice:[
-        {id:'t2p1', kind:'mc', prompt:'150° in radians =', options:['2π/3','5π/6','7π/6','3π/4'], correct:1, sol:'150/180 = 5/6 of π, so 5π/6.'},
-        {id:'t2p2', kind:'numeric', prompt:'Find the area of a sector with radius r=3 and angle θ=π/2.', ans: (9*Math.PI/4), tol:0.02, sol:'A = 1/2 r²θ = 1/2 × 9 × π/2 = 9π/4 ≈ 7.069.'},
-        {id:'t2p3', kind:'numeric', prompt:'Convert 5π/4 radians to degrees.', ans:225, tol:1e-3, sol:'5π/4 × 180/π = 225°.'}
-      ]},
-      {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
-        {id:'t2q1', q:'cos(π) =', opts:['1','0','−1'], a:2, exp:'At π radians (180°), the cosine value is −1.'},
-        {id:'t2q2', q:'Convert π/4 to degrees', opts:['30°','45°','60°'], a:1, exp:'π/4 × 180/π = 45°.'},
-        {id:'t2q3', q:'An angle of 270° is equivalent to', opts:['3π/2','2π/3','5π/4'], a:0, exp:'270/180 = 3/2, so 3π/2 radians.'}
-      ]}
-    ]}
-    // Additional sections would continue here...
-  ]}
-  // Additional units would continue here...
+    /* === Unit 2: Trigonometry === */
+    2:{id:'u2', title:'Trigonometry', sections:[
+        {id:'angles', title:'Angle Measure & Arc Length', pages:[
+            {id:'theory', label:'Theory', tag:'Article', blocks:[
+                {type:'p', text:'Trigonometry is the study of relationships between angles and sides of triangles. It has applications in physics, engineering, astronomy, and many other fields.'},
+                {type:'p', text:'Angles can be measured in degrees or radians. Radians provide a natural way to measure angles based on arc length: θ = s/r, where s is arc length and r is radius. There are 2π radians in a full circle (360°), so 180° = π radians.'},
+                {type:'ex', title:'Arc Length Example', text:'For a circle with radius r = 4 and central angle θ = π/3, the arc length is s = rθ = 4 × π/3 = 4π/3.'},
+                {type:'highlight', title:'Conversion Formula', text:'To convert between degrees and radians: radians = degrees × π/180, degrees = radians × 180/π.'},
+                {type:'p', text:'The area of a circular sector is A = 1/2 r²θ (with θ in radians). This formula is more elegant than the degree version because it doesn\'t require the conversion factor π/180.'}
+            ]},
+            {id:'practice', label:'Practice', tag:'Practice', blocks:[{type:'p', text:'Practice converting between degrees and radians and computing arc lengths and sector areas.'}], practice:[
+                {id:'t2p1', kind:'mc', prompt:'150° in radians =', options:['2π/3','5π/6','7π/6','3π/4'], correct:1, sol:'150/180 = 5/6 of π, so 5π/6.'},
+                {id:'t2p2', kind:'numeric', prompt:'Find the area of a sector with radius r=3 and angle θ=π/2.', ans: (9*Math.PI/4), tol:0.02, sol:'A = 1/2 r²θ = 1/2 × 9 × π/2 = 9π/4 ≈ 7.069.'},
+                {id:'t2p3', kind:'numeric', prompt:'Convert 5π/4 radians to degrees.', ans:225, tol:1e-3, sol:'5π/4 × 180/π = 225°.'}
+            ]},
+            {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+                {id:'t2q1', q:'cos(π) =', opts:['1','0','−1'], a:2, exp:'At π radians (180°), the cosine value is −1.'},
+                {id:'t2q2', q:'Convert π/4 to degrees', opts:['30°','45°','60°'], a:1, exp:'π/4 × 180/π = 45°.'},
+                {id:'t2q3', q:'An angle of 270° is equivalent to', opts:['3π/2','2π/3','5π/4'], a:0, exp:'270/180 = 3/2, so 3π/2 radians.'}
+            ]}
+        ]}
+    ]},
+
+    /* === Unit 3: Complex Numbers === */
+    3: {
+        id:'u3', title:'Complex Numbers',
+        sections:[
+            {id:'intro', title:'Introduction to Complex Numbers', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'Complex numbers extend the real number system to include solutions to equations like x² = -1. They are written in the form a + bi, where a and b are real numbers, and i is the imaginary unit defined as i = √-1.'},
+                    {type:'definition', title:'Complex Number', text:'A complex number is an expression of the form a + bi, where a and b are real numbers, and i is the imaginary unit satisfying i² = -1. The real part is a, and the imaginary part is b.'},
+                    {type:'ex', title:'Examples of Complex Numbers', text:'3 + 4i (real part: 3, imaginary part: 4)<br>-2 - i (real part: -2, imaginary part: -1)<br>5 (real part: 5, imaginary part: 0)<br>2i (real part: 0, imaginary part: 2)'},
+                    {type:'p', text:'The complex number system forms a field, which means we can add, subtract, multiply, and divide complex numbers (except by zero), and these operations follow the usual rules of arithmetic.'},
+                    {type:'real-world', title:'Real-World Applications', text:'Complex numbers are essential in electrical engineering for analyzing AC circuits, in signal processing, in quantum mechanics, and in many areas of applied mathematics. They provide a powerful way to represent rotations and oscillations.'}
+                ]},
+                {id:'operations', label:'Basic Operations', tag:'Practice', blocks:[
+                    {type:'p', text:'Let\'s practice basic operations with complex numbers. Remember to treat i as a variable, but use the fact that i² = -1 to simplify expressions.'},
+                    {type:'step-by-step', title:'Adding Complex Numbers', text:[
+                        'Add the real parts together',
+                        'Add the imaginary parts together',
+                        'Express the result in a + bi form'
+                    ]},
+                    {type:'step-by-step', title:'Multiplying Complex Numbers', text:[
+                        'Use the distributive property (FOIL method)',
+                        'Replace i² with -1',
+                        'Combine like terms',
+                        'Express the result in a + bi form'
+                    ]}
+                ],
+                    practice:[
+                        {id:'u3_p1', kind:'numeric', prompt:'Compute (3 + 2i) + (1 - 4i)', ans:'4-2i', tol:0, sol:'Add real parts: 3 + 1 = 4<br>Add imaginary parts: 2i + (-4i) = -2i<br>Result: 4 - 2i'},
+                        {id:'u3_p2', kind:'numeric', prompt:'Compute (2 + i)(3 - 2i)', ans:'8-i', tol:0, sol:'Use FOIL: (2)(3) + (2)(-2i) + (i)(3) + (i)(-2i) = 6 - 4i + 3i - 2i²<br>Replace i² with -1: 6 - i - 2(-1) = 6 - i + 2 = 8 - i'},
+                        {id:'u3_p3', kind:'mc', prompt:'What is the product of (4 + 3i) and its complex conjugate?', options:['25','7','16 + 9i','7 + 24i'], correct:0, sol:'The conjugate of 4 + 3i is 4 - 3i<br>Product: (4 + 3i)(4 - 3i) = 16 - 12i + 12i - 9i² = 16 - 9(-1) = 16 + 9 = 25'}
+                    ]
+                },
+                {id:'quiz', label:'Quiz', tag:'Quiz', quiz:[
+                    {id:'u3_q1', q:'What is the value of i³?', opts:['-i','i','-1','1'], a:0, exp:'i³ = i² × i = (-1) × i = -i'},
+                    {id:'u3_q2', q:'The complex conjugate of 5 - 2i is:', opts:['5 + 2i','-5 + 2i','-5 - 2i','2i - 5'], a:0, exp:'The complex conjugate changes the sign of the imaginary part.'},
+                    {id:'u3_q3', q:'If z = 3 + 4i, what is |z| (the modulus of z)?', opts:['5','7','25','√7'], a:0, exp:'|z| = √(3² + 4²) = √(9 + 16) = √25 = 5'},
+                    {id:'u3_q4', q:'(2 + 3i) - (1 - 2i) =', opts:['1 + 5i','3 + i','1 + i','3 + 5i'], a:0, exp:'Subtract real parts: 2 - 1 = 1<br>Subtract imaginary parts: 3i - (-2i) = 3i + 2i = 5i'},
+                    {id:'u3_q5', q:'The imaginary part of 4 - 7i is:', opts:['-7','4','7','-4'], a:0, exp:'In a + bi form, b is the imaginary part.'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 4: Rational Functions === */
+    4: {
+        id:'u4', title:'Rational Functions',
+        sections:[
+            {id:'intro', title:'Introduction to Rational Functions', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'A rational function is a function that can be written as the ratio of two polynomials: R(x) = P(x)/Q(x), where Q(x) is not the zero polynomial. The domain of a rational function is all real numbers except those that make the denominator zero.'},
+                    {type:'definition', title:'Rational Function', text:'A rational function is any function of the form f(x) = P(x)/Q(x), where P and Q are polynomial functions and Q is not the zero polynomial.'},
+                    {type:'ex', title:'Examples of Rational Functions', text:'f(x) = (x² + 3x + 2)/(x - 1)<br>g(x) = 1/x<br>h(x) = (2x³ - 5)/(x² + 4)<br>Note: All polynomial functions are also rational functions (with denominator 1).'},
+                    {type:'p', text:'Rational functions often have interesting features like vertical asymptotes (where the denominator is zero but numerator isn\'t), holes (where both numerator and denominator are zero), and horizontal or slant asymptotes (describing end behavior).'},
+                    {type:'warn', text:'Be careful to identify when a value that makes the denominator zero might also make the numerator zero. In such cases, you might have a hole rather than a vertical asymptote.'}
+                ]},
+                {id:'asymptotes', label:'Asymptotes and Holes', tag:'Article', blocks:[
+                    {type:'p', text:'Understanding the behavior of rational functions near values that make the denominator zero is crucial for graphing these functions.'},
+                    {type:'step-by-step', title:'Finding Vertical Asymptotes', text:[
+                        'Factor both numerator and denominator completely',
+                        'Identify values that make the denominator zero',
+                        'For each such value, if it does NOT also make the numerator zero, then x = that value is a vertical asymptote',
+                        'If it makes both numerator and denominator zero, there might be a hole at that x-value'
+                    ]},
+                    {type:'step-by-step', title:'Finding Horizontal Asymptotes', text:[
+                        'Compare the degrees of numerator and denominator polynomials',
+                        'If degree of numerator < degree of denominator: y = 0 is horizontal asymptote',
+                        'If degrees are equal: y = (leading coefficient of numerator)/(leading coefficient of denominator) is horizontal asymptote',
+                        'If degree of numerator > degree of denominator: No horizontal asymptote (but there might be a slant asymptote)'
+                    ]}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 5: Conic Sections === */
+    5: {
+        id:'u5', title:'Conic Sections',
+        sections:[
+            {id:'intro', title:'Introduction to Conic Sections', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'Conic sections are curves obtained by intersecting a plane with a double-napped cone. The four main types are circles, ellipses, parabolas, and hyperbolas. Each has distinctive geometric properties and algebraic equations.'},
+                    {type:'definition', title:'Conic Sections', text:'Conic sections are the curves formed by the intersection of a plane with a right circular conical surface. The type of conic depends on the angle between the plane and the axis of the cone.'},
+                    {type:'ex', title:'Types of Conic Sections', text:'Circle: plane perpendicular to the axis<br>Ellipse: plane angled but not parallel to a generator<br>Parabola: plane parallel to exactly one generator<br>Hyperbola: plane intersects both nappes'},
+                    {type:'p', text:'Each conic section can be defined by a focus-directrix property: it is the set of all points such that the distance to the focus is a constant multiple (eccentricity) of the distance to the directrix.'},
+                    {type:'real-world', title:'Real-World Applications', text:'Conic sections appear throughout nature and human design: planetary orbits are elliptical, satellite dishes use parabolic shapes, nuclear cooling towers are hyperbolic, and wheels are circular.'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 6: Vectors === */
+    6: {
+        id:'u6', title:'Vectors',
+        sections:[
+            {id:'intro', title:'Introduction to Vectors', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'Vectors are mathematical objects that have both magnitude and direction, unlike scalars which have only magnitude. They are used to represent physical quantities like force, velocity, and displacement.'},
+                    {type:'definition', title:'Vector', text:'A vector is a quantity that has both magnitude (size) and direction. It is typically represented by an arrow where the length represents magnitude and the orientation represents direction.'},
+                    {type:'ex', title:'Vector Notation', text:'Vectors can be written in several forms:<br>Component form: ⟨3, 4⟩ or 3i + 4j<br>Magnitude-direction form: 5 units at 53.1°<br>Matrix form: [3, 4]ᵀ'},
+                    {type:'p', text:'Vectors in n-dimensional space can be added, subtracted, and multiplied by scalars. In 2D and 3D, we can also compute dot products and cross products (in 3D).'},
+                    {type:'real-world', title:'Applications', text:'Vectors are used throughout physics and engineering to represent forces, velocities, accelerations, and many other directional quantities. Computer graphics uses vectors extensively.'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 7: Matrices === */
+    7: {
+        id:'u7', title:'Matrices',
+        sections:[
+            {id:'intro', title:'Introduction to Matrices', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'A matrix is a rectangular array of numbers arranged in rows and columns. Matrices provide a powerful way to organize data and represent linear transformations and systems of linear equations.'},
+                    {type:'definition', title:'Matrix', text:'An m × n matrix is a rectangular array of numbers with m rows and n columns. The entry in the i-th row and j-th column is typically denoted as aᵢⱼ.'},
+                    {type:'ex', title:'Matrix Example', text:'A = [1 2 3]<br>    [4 5 6] is a 2×3 matrix<br>where a₁₂ = 2, a₂₃ = 6'},
+                    {type:'p', text:'Matrices can be added and subtracted if they have the same dimensions, and multiplied if the number of columns of the first equals the number of rows of the second. Matrix multiplication is not commutative.'},
+                    {type:'real-world', title:'Applications', text:'Matrices are used in computer graphics (transformations), economics (input-output models), statistics (covariance matrices), and countless other fields to organize and manipulate multidimensional data.'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 8: Probability & Combinatorics === */
+    8: {
+        id:'u8', title:'Probability & Combinatorics',
+        sections:[
+            {id:'intro', title:'Introduction to Probability', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'Probability is the mathematics of uncertainty. It quantifies how likely events are to occur, with values between 0 (impossible) and 1 (certain). Combinatorics provides methods for counting possible outcomes.'},
+                    {type:'definition', title:'Probability', text:'The probability of an event A is defined as P(A) = number of favorable outcomes / total number of possible outcomes, when all outcomes are equally likely.'},
+                    {type:'ex', title:'Simple Example', text:'Probability of rolling a 3 on a fair die: P(3) = 1/6<br>Probability of drawing a heart from a standard deck: P(heart) = 13/52 = 1/4'},
+                    {type:'p', text:'Basic probability rules include:<br>• 0 ≤ P(A) ≤ 1<br>• P(not A) = 1 - P(A<br>• P(A or B) = P(A) + P(B) - P(A and B)'},
+                    {type:'real-world', title:'Applications', text:'Probability theory is used in statistics, finance (risk assessment), insurance, science (quantum mechanics), and everyday decision making under uncertainty.'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 9: Series (Optional) === */
+    9: {
+        id:'u9', title:'Series',
+        sections:[
+            {id:'intro', title:'Introduction to Sequences and Series', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'A sequence is an ordered list of numbers, while a series is the sum of the terms of a sequence. Series are fundamental in calculus and many applications of mathematics.'},
+                    {type:'definition', title:'Sequence vs. Series', text:'A sequence {aₙ} is an ordered list: a₁, a₂, a₃, ...<br>A series is the sum of terms of a sequence: a₁ + a₂ + a₃ + ... = Σaₙ'},
+                    {type:'ex', title:'Examples', text:'Sequence: 2, 4, 6, 8, 10, ...<br>Series: 2 + 4 + 6 + 8 + 10 + ...<br>Finite series: 2 + 4 + 6 + 8 + 10 = 30'},
+                    {type:'p', text:'Important types of series include arithmetic series (constant difference between terms) and geometric series (constant ratio between terms). Some infinite series converge to finite values.'},
+                    {type:'real-world', title:'Applications', text:'Series are used in finance (compound interest), physics (approximating functions), computer science (algorithm analysis), and engineering (signal processing).'}
+                ]}
+            ]}
+        ]
+    },
+
+    /* === Unit 10: Limits & Continuity (Optional) === */
+    10: {
+        id:'u10', title:'Limits & Continuity',
+        sections:[
+            {id:'intro', title:'Introduction to Limits', pages:[
+                {id:'theory', label:'Theory', tag:'Article', blocks:[
+                    {type:'p', text:'Limits describe the behavior of a function as its input approaches a certain value. The concept of a limit is fundamental to calculus, underlying both derivatives and integrals.'},
+                    {type:'definition', title:'Limit', text:'The limit of f(x) as x approaches a is L, written as lim┬(x→a) f(x) = L, if we can make f(x) arbitrarily close to L by taking x sufficiently close to a (but not equal to a).'},
+                    {type:'ex', title:'Simple Limit', text:'lim┬(x→2) (x² - 4)/(x - 2)<br>Direct substitution gives 0/0 (indeterminate)<br>But (x² - 4)/(x - 2) = x + 2 for x ≠ 2<br>So lim┬(x→2) (x² - 4)/(x - 2) = lim┬(x→2) (x + 2) = 4'},
+                    {type:'p', text:'A function is continuous at a point if: 1) f(a) is defined, 2) lim┬(x→a) f(x) exists, and 3) lim┬(x→a) f(x) = f(a). Continuous functions have graphs without breaks, jumps, or holes.'},
+                    {type:'real-world', title:'Applications', text:'Limits are used to define instantaneous rates of change (derivatives) and accumulated change (integrals). They model real-world phenomena like instantaneous velocity, growth rates, and equilibrium states.'}
+                ]}
+            ]}
+        ]
+    }
 };
 
 /* =================== RENDER ENGINE =================== */
@@ -1277,22 +1446,22 @@ function clear(node){node.innerHTML=''}
 
 // Expose globally so inline onclick="openUnit(n)" works
 window.openUnit = function(n){
-  const unit = UNITS[n];
-  if(!unit){ alert('Unit not found.'); return; }
-  state.unitId = n; state.sIdx = 0; state.pIdx = 0;
-  $('#overviewPage').classList.add('hidden');
-  $('#unitPage').classList.add('active');
-  $('#unitSub').textContent = `Unit ${n} • ${unit.title}`;
-  $('#sideTitle').textContent = `Unit ${n} Lessons`;
-  renderSidebar();
-  renderPage();
-  window.scrollTo(0,0);
+    const unit = UNITS[n];
+    if(!unit){ alert('Unit not found.'); return; }
+    state.unitId = n; state.sIdx = 0; state.pIdx = 0;
+    $('#overviewPage').classList.add('hidden');
+    $('#unitPage').classList.add('active');
+    $('#unitSub').textContent = `Unit ${n} • ${unit.title}`;
+    $('#sideTitle').textContent = `Unit ${n} Lessons`;
+    renderSidebar();
+    renderPage();
+    window.scrollTo(0,0);
 };
 
 window.backToOverview = function(){
-  $('#unitPage').classList.remove('active');
-  $('#overviewPage').classList.remove('hidden');
-  window.scrollTo(0,0);
+    $('#unitPage').classList.remove('active');
+    $('#overviewPage').classList.remove('hidden');
+    window.scrollTo(0,0);
 };
 
 function keyPrefix(){ return 'memolearn_'+UNITS[state.unitId].id+'_'; }
@@ -1300,520 +1469,513 @@ function save(k,v){ try{ localStorage.setItem(keyPrefix()+k, JSON.stringify(v));
 function load(k,d){ try{ const v=localStorage.getItem(keyPrefix()+k); return v?JSON.parse(v):d; }catch(e){ return d; } }
 
 function renderSidebar(){
-  const unit = UNITS[state.unitId];
-  const ul = $('#lessonList'); clear(ul);
-  unit.sections.forEach((sec, si)=>{
-    sec.pages.forEach((pg, pi)=>{
-      const li = el('li');
-      const a = el('a','lesson'); a.href='#'; a.dataset.s=si; a.dataset.p=pi;
-      
-      // Set active class if this is the current page
-      if(state.sIdx === si && state.pIdx === pi) {
-        a.classList.add('active');
-      }
-      
-      const tag = el('span','tag'); tag.textContent = pg.tag||'Item';
-      const title = el('span'); title.textContent = `${sec.title} — ${pg.label}`;
-      const done = el('span','done'); done.innerHTML = '<i class="fas fa-check"></i> Completed';
-      
-      if(load('done_'+sec.id+'_'+pg.id,false)) {
-        li.classList.add('completed');
-      }
-      
-      a.appendChild(tag); 
-      a.appendChild(title); 
-      a.appendChild(done); 
-      li.appendChild(a); 
-      ul.appendChild(li);
+    const unit = UNITS[state.unitId];
+    const ul = $('#lessonList'); clear(ul);
+    unit.sections.forEach((sec, si)=>{
+        sec.pages.forEach((pg, pi)=>{
+            const li = el('li');
+            const a = el('a','lesson'); a.href='#'; a.dataset.s=si; a.dataset.p=pi;
+            
+            // Set active class if this is the current page
+            if(state.sIdx === si && state.pIdx === pi) {
+                a.classList.add('active');
+            }
+            
+            const tag = el('span','tag'); tag.textContent = pg.tag||'Item';
+            const title = el('span'); title.textContent = `${sec.title} — ${pg.label}`;
+            const done = el('span','done'); done.innerHTML = '<i class="fas fa-check"></i> Completed';
+            
+            if(load('done_'+sec.id+'_'+pg.id,false)) {
+                li.classList.add('completed');
+            }
+            
+            a.appendChild(tag); 
+            a.appendChild(title); 
+            a.appendChild(done); 
+            li.appendChild(a); 
+            ul.appendChild(li);
+        });
     });
-  });
-  
-  // Use property assignment to avoid stacking multiple listeners
-  ul.onclick = (e)=>{
-    const a = e.target.closest('a.lesson'); 
-    if(!a) return; 
-    e.preventDefault();
-    state.sIdx = Number(a.dataset.s); 
-    state.pIdx = Number(a.dataset.p); 
-    renderPage();
-  };
+    
+    // Use property assignment to avoid stacking multiple listeners
+    ul.onclick = (e)=>{
+        const a = e.target.closest('a.lesson'); 
+        if(!a) return; 
+        e.preventDefault();
+        state.sIdx = Number(a.dataset.s); 
+        state.pIdx = Number(a.dataset.p); 
+        renderPage();
+    };
 }
 
 function renderPage(){
-  const unit = UNITS[state.unitId];
-  const sec = unit.sections[state.sIdx];
-  const pg  = sec.pages[state.pIdx];
-  
-  $('#crumbs').innerHTML = `
-    <span>Unit ${state.unitId}</span>
-    <span>${sec.title}</span>
-    <span>${pg.label}</span>
-  `;
-  
-  $('#title').textContent  = sec.title;
-  $('#lead').textContent   = (pg.lead || (pg.tag==='Quiz'?'Test your understanding':'Learn and practice'));
+    const unit = UNITS[state.unitId];
+    const sec = unit.sections[state.sIdx];
+    const pg  = sec.pages[state.pIdx];
+    
+    $('#crumbs').innerHTML = `
+        <span>Unit ${state.unitId}</span>
+        <span>${sec.title}</span>
+        <span>${pg.label}</span>
+    `;
+    
+    $('#title').textContent  = sec.title;
+    $('#lead').textContent   = (pg.lead || (pg.tag==='Quiz'?'Test your understanding':'Learn and practice'));
 
-  const content = $('#content'); clear(content);
-  (pg.blocks||[]).forEach(b=>{
-    if(b.type==='p'){
-      const p=el('p'); 
-      p.innerHTML = b.text; 
-      content.appendChild(p); 
-    }
-    if(b.type==='ex'){
-      const d=el('div','example'); 
-      const h=el('h4'); 
-      h.innerHTML = `<i class="fas fa-lightbulb"></i> ${b.title||'Example'}`; 
-      d.appendChild(h); 
-      const p=el('p'); 
-      p.innerHTML = b.text; 
-      d.appendChild(p); 
-      content.appendChild(d); 
-    }
-    if(b.type==='note'){
-      const n=el('div','note'); 
-      n.innerHTML = b.text; 
-      content.appendChild(n); 
-    }
-    if(b.type==='warn'){
-      const w=el('div','warn'); 
-      w.innerHTML = b.text; 
-      content.appendChild(w); 
-    }
-    if(b.type==='definition'){
-      const def=el('div','definition');
-      const h=el('h4');
-      h.innerHTML = `<i class="fas fa-book"></i> ${b.title||'Definition'}`;
-      def.appendChild(h);
-      const p=el('p');
-      p.innerHTML = b.text;
-      def.appendChild(p);
-      content.appendChild(def);
-    }
-    if(b.type==='highlight'){
-      const highlight=el('div','highlight');
-      const h=el('h4');
-      h.innerHTML = `<i class="fas fa-star"></i> ${b.title||'Key Insight'}`;
-      highlight.appendChild(h);
-      const p=el('p');
-      p.innerHTML = b.text;
-      highlight.appendChild(p);
-      content.appendChild(highlight);
-    }
-    if(b.type==='key-takeaways'){
-      const kt=el('div','key-takeaways');
-      const h=el('h4');
-      h.innerHTML = `<i class="fas fa-check-circle"></i> ${b.title||'Key Takeaways'}`;
-      kt.appendChild(h);
-      
-      if (typeof b.text === 'string') {
-        const p=el('p');
-        p.innerHTML = b.text;
-        kt.appendChild(p);
-      } else if (Array.isArray(b.text)) {
-        const ul = el('ul');
-        b.text.forEach(item => {
-          const li = el('li');
-          li.textContent = item;
-          ul.appendChild(li);
-        });
-        kt.appendChild(ul);
-      }
-      
-      content.appendChild(kt);
-    }
-    if(b.type==='step-by-step'){
-      const sbs=el('div','step-by-step');
-      const h=el('h4');
-      h.innerHTML = `<i class="fas fa-list-ol"></i> ${b.title||'Step-by-Step'}`;
-      sbs.appendChild(h);
-      
-      if (Array.isArray(b.text)) {
-        b.text.forEach((step, index) => {
-          const stepDiv = el('div', 'step');
-          const stepNum = el('div', 'step-number');
-          stepNum.textContent = index + 1;
-          const stepContent = el('div', 'step-content');
-          stepContent.innerHTML = step;
-          stepDiv.appendChild(stepNum);
-          stepDiv.appendChild(stepContent);
-          sbs.appendChild(stepDiv);
-        });
-      } else {
-        const p=el('p');
-        p.innerHTML = b.text;
-        sbs.appendChild(p);
-      }
-      
-      content.appendChild(sbs);
-    }
-    if(b.type==='real-world'){
-      const rw=el('div','real-world');
-      const h=el('h4');
-      h.innerHTML = `<i class="fas fa-globe"></i> ${b.title||'Real-World Connection'}`;
-      rw.appendChild(h);
-      const p=el('p');
-      p.innerHTML = b.text;
-      rw.appendChild(p);
-      content.appendChild(rw);
-    }
-  });
+    const content = $('#content'); clear(content);
+    (pg.blocks||[]).forEach(b=>{
+        if(b.type==='p'){
+            const p=el('p'); 
+            p.innerHTML = b.text; 
+            content.appendChild(p); 
+        }
+        if(b.type==='ex'){
+            const d=el('div','example'); 
+            const h=el('h4'); 
+            h.innerHTML = `<i class="fas fa-lightbulb"></i> ${b.title||'Example'}`; 
+            d.appendChild(h); 
+            const p=el('p'); 
+            p.innerHTML = b.text; 
+            d.appendChild(p); 
+            content.appendChild(d); 
+        }
+        if(b.type==='note'){
+            const n=el('div','note'); 
+            n.innerHTML = b.text; 
+            content.appendChild(n); 
+        }
+        if(b.type==='warn'){
+            const w=el('div','warn'); 
+            w.innerHTML = b.text; 
+            content.appendChild(w); 
+        }
+        if(b.type==='definition'){
+            const def=el('div','definition');
+            const h=el('h4');
+            h.innerHTML = `<i class="fas fa-book"></i> ${b.title||'Definition'}`;
+            def.appendChild(h);
+            const p=el('p');
+            p.innerHTML = b.text;
+            def.appendChild(p);
+            content.appendChild(def);
+        }
+        if(b.type==='highlight'){
+            const highlight=el('div','highlight');
+            const h=el('h4');
+            h.innerHTML = `<i class="fas fa-star"></i> ${b.title||'Key Insight'}`;
+            highlight.appendChild(h);
+            const p=el('p');
+            p.innerHTML = b.text;
+            highlight.appendChild(p);
+            content.appendChild(highlight);
+        }
+        if(b.type==='key-takeaways'){
+            const kt=el('div','key-takeaways');
+            const h=el('h4');
+            h.innerHTML = `<i class="fas fa-check-circle"></i> ${b.title||'Key Takeaways'}`;
+            kt.appendChild(h);
+            
+            if (typeof b.text === 'string') {
+                const p=el('p');
+                p.innerHTML = b.text;
+                kt.appendChild(p);
+            } else if (Array.isArray(b.text)) {
+                const ul = el('ul');
+                b.text.forEach(item => {
+                    const li = el('li');
+                    li.textContent = item;
+                    ul.appendChild(li);
+                });
+                kt.appendChild(ul);
+            }
+            
+            content.appendChild(kt);
+        }
+        if(b.type==='step-by-step'){
+            const sbs=el('div','step-by-step');
+            const h=el('h4');
+            h.innerHTML = `<i class="fas fa-list-ol"></i> ${b.title||'Step-by-Step'}`;
+            sbs.appendChild(h);
+            
+            if (Array.isArray(b.text)) {
+                b.text.forEach((step, index) => {
+                    const stepDiv = el('div', 'step');
+                    const stepNum = el('div', 'step-number');
+                    stepNum.textContent = index + 1;
+                    const stepContent = el('div', 'step-content');
+                    stepContent.innerHTML = step;
+                    stepDiv.appendChild(stepNum);
+                    stepDiv.appendChild(stepContent);
+                    sbs.appendChild(stepDiv);
+                });
+            } else {
+                const p=el('p');
+                p.innerHTML = b.text;
+                sbs.appendChild(p);
+            }
+            
+            content.appendChild(sbs);
+        }
+        if(b.type==='real-world'){
+            const rw=el('div','real-world');
+            const h=el('h4');
+            h.innerHTML = `<i class="fas fa-globe"></i> ${b.title||'Real-World Connection'}`;
+            rw.appendChild(h);
+            const p=el('p');
+            p.innerHTML = b.text;
+            rw.appendChild(p);
+            content.appendChild(rw);
+        }
+    });
 
-  renderPractice(pg); 
-  renderQuiz(pg); 
-  updateNavButtons(); 
-  updateProgress();
-  
-  // Update active lesson in sidebar
-  document.querySelectorAll('.lesson').forEach(lesson => {
-    lesson.classList.remove('active');
-  });
-  
-  const activeLesson = document.querySelector(`.lesson[data-s="${state.sIdx}"][data-p="${state.pIdx}"]`);
-  if (activeLesson) {
-    activeLesson.classList.add('active');
-  }
+    renderPractice(pg); 
+    renderQuiz(pg); 
+    updateNavButtons(); 
+    updateProgress();
+    
+    // Update active lesson in sidebar
+    document.querySelectorAll('.lesson').forEach(lesson => {
+        lesson.classList.remove('active');
+    });
+    
+    const activeLesson = document.querySelector(`.lesson[data-s="${state.sIdx}"][data-p="${state.pIdx}"]`);
+    if (activeLesson) {
+        activeLesson.classList.add('active');
+    }
 }
 
 function renderPractice(pg){
-  const box = $('#practice'); clear(box);
-  if(!pg.practice || !pg.practice.length) return;
-  
-  const h = el('h3'); 
-  h.innerHTML = '<i class="fas fa-pencil-alt"></i> Practice Problems'; 
-  box.appendChild(h);
-  
-  const desc = el('p');
-  desc.textContent = 'Try solving these practice problems. Check your answers and review the solutions to deepen your understanding.';
-  desc.style.marginBottom = '16px';
-  desc.style.color = 'var(--muted)';
-  box.appendChild(desc);
-  
-  pg.practice.forEach(p=>{
-    const wrap = el('div','problem');
-    const title = el('h5'); 
-    title.innerHTML = `<i class="fas fa-question-circle"></i> ${p.prompt}`; 
-    wrap.appendChild(title);
+    const box = $('#practice'); clear(box);
+    if(!pg.practice || !pg.practice.length) return;
     
-    const result = el('div');
+    const h = el('h3'); 
+    h.innerHTML = '<i class="fas fa-pencil-alt"></i> Practice Problems'; 
+    box.appendChild(h);
     
-    if(p.kind==='numeric'){
-      const inputGroup = el('div');
-      inputGroup.style.display = 'flex';
-      inputGroup.style.gap = '8px';
-      inputGroup.style.alignItems = 'center';
-      inputGroup.style.flexWrap = 'wrap';
-      
-      const input = el('input','input'); 
-      input.inputMode='decimal'; 
-      input.placeholder='Enter a number';
-      input.addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') {
-          checkAnswer();
-        }
-      });
-      
-      const btn = el('button','btn'); 
-      btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
-      
-      inputGroup.appendChild(input); 
-      inputGroup.appendChild(btn); 
-      wrap.appendChild(inputGroup); 
-      wrap.appendChild(result);
-      
-      const checkAnswer = () => {
-        const val = parseFloat(String(input.value).replace(/[^0-9+\-\.eE]/g,''));
-        if(isNaN(val)){ 
-          result.className='bad'; 
-          result.innerHTML = '<i class="fas fa-times-circle"></i> Please enter a valid number.'; 
-          return; 
-        }
-        const ok = Math.abs(val - p.ans) <= (p.tol||1e-6);
-        result.className = ok?'ok':'bad';
-        result.innerHTML = ok 
-          ? '<i class="fas fa-check-circle"></i> Correct! Well done.' 
-          : '<i class="fas fa-times-circle"></i> Not quite. Try again.';
+    const desc = el('p');
+    desc.textContent = 'Try solving these practice problems. Check your answers and review the solutions to deepen your understanding.';
+    desc.style.marginBottom = '16px';
+    desc.style.color = 'var(--muted)';
+    box.appendChild(desc);
+    
+    pg.practice.forEach(p=>{
+        const wrap = el('div','problem');
+        const title = el('h5'); 
+        title.innerHTML = `<i class="fas fa-question-circle"></i> ${p.prompt}`; 
+        wrap.appendChild(title);
         
-        if (ok) {
-          wrap.classList.add('correct-pulse');
-          setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
-        }
-      };
-      
-      btn.onclick = checkAnswer;
-    } else if(p.kind==='mc'){
-      const opts = el('div');
-      (p.options||[]).forEach((opt,i)=>{
-        const lab = el('label','choice');
-        const r = el('input'); 
-        r.type='radio'; 
-        r.name=p.id; 
-        r.value=String(i);
+        const result = el('div');
         
-        r.addEventListener('change', function() {
-          // Visual feedback when an option is selected
-          document.querySelectorAll(`input[name="${p.id}"]`).forEach(inp => {
-            inp.parentElement.style.background = '';
-            inp.parentElement.style.borderColor = '';
-          });
-          if (this.checked) {
-            this.parentElement.style.background = '#f0f4ff';
-            this.parentElement.style.borderColor = 'var(--indigo)';
-          }
-        });
-        
-        const s = el('span'); 
-        s.textContent=opt; 
-        lab.appendChild(r); 
-        lab.appendChild(s); 
-        opts.appendChild(lab);
-      });
-      
-      const btn = el('button','btn'); 
-      btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
-      btn.style.marginTop='12px';
-      
-      wrap.appendChild(opts); 
-      wrap.appendChild(btn); 
-      wrap.appendChild(result);
-      
-      btn.onclick = ()=>{
-        const chosen = Array.from(opts.querySelectorAll('input')).find(i=>i.checked);
-        if(!chosen){ 
-          result.className='bad'; 
-          result.innerHTML = '<i class="fas fa-times-circle"></i> Please select an option.'; 
-          return; 
+        if(p.kind==='numeric'){
+            const inputGroup = el('div');
+            inputGroup.style.display = 'flex';
+            inputGroup.style.gap = '8px';
+            inputGroup.style.alignItems = 'center';
+            inputGroup.style.flexWrap = 'wrap';
+            
+            const input = el('input','input'); 
+            input.inputMode='decimal'; 
+            input.placeholder='Enter a number';
+            input.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            const btn = el('button','btn'); 
+            btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
+            
+            inputGroup.appendChild(input); 
+            inputGroup.appendChild(btn); 
+            wrap.appendChild(inputGroup); 
+            wrap.appendChild(result);
+            
+            const checkAnswer = () => {
+                const val = parseFloat(String(input.value).replace(/[^0-9+\-\.eE]/g,''));
+                if(isNaN(val)){ 
+                    result.className='bad'; 
+                    result.innerHTML = '<i class="fas fa-times-circle"></i> Please enter a valid number.'; 
+                    return; 
+                }
+                const ok = Math.abs(val - p.ans) <= (p.tol||1e-6);
+                result.className = ok?'ok':'bad';
+                result.innerHTML = ok 
+                    ? '<i class="fas fa-check-circle"></i> Correct! Well done.' 
+                    : '<i class="fas fa-times-circle"></i> Not quite. Try again.';
+                
+                if (ok) {
+                    wrap.classList.add('correct-pulse');
+                    setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
+                }
+            };
+            
+            btn.onclick = checkAnswer;
+        } else if(p.kind==='mc'){
+            const opts = el('div');
+            (p.options||[]).forEach((opt,i)=>{
+                const lab = el('label','choice');
+                const r = el('input'); 
+                r.type='radio'; 
+                r.name=p.id; 
+                r.value=String(i);
+                
+                r.addEventListener('change', function() {
+                    // Visual feedback when an option is selected
+                    document.querySelectorAll(`input[name="${p.id}"]`).forEach(inp => {
+                        inp.parentElement.style.background = '';
+                        inp.parentElement.style.borderColor = '';
+                    });
+                    if (this.checked) {
+                        this.parentElement.style.background = '#f0f4ff';
+                        this.parentElement.style.borderColor = 'var(--indigo)';
+                    }
+                });
+                
+                const s = el('span'); 
+                s.textContent=opt; 
+                lab.appendChild(r); 
+                lab.appendChild(s); 
+                opts.appendChild(lab);
+            });
+            
+            const btn = el('button','btn'); 
+            btn.innerHTML = '<i class="fas fa-check"></i> Check'; 
+            btn.style.marginTop='12px';
+            
+            wrap.appendChild(opts); 
+            wrap.appendChild(btn); 
+            wrap.appendChild(result);
+            
+            btn.onclick = ()=>{
+                const chosen = Array.from(opts.querySelectorAll('input')).find(i=>i.checked);
+                if(!chosen){ 
+                    result.className='bad'; 
+                    result.innerHTML = '<i class="fas fa-times-circle"></i> Please select an option.'; 
+                    return; 
+                }
+                const ok = Number(chosen.value)===p.correct; 
+                result.className=ok?'ok':'bad';
+                result.innerHTML = ok 
+                    ? '<i class="fas fa-check-circle"></i> Correct!' 
+                    : '<i class="fas fa-times-circle"></i> Incorrect. Try again.';
+                
+                if (ok) {
+                    wrap.classList.add('correct-pulse');
+                    setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
+                }
+            };
         }
-        const ok = Number(chosen.value)===p.correct; 
-        result.className=ok?'ok':'bad';
-        result.innerHTML = ok 
-          ? '<i class="fas fa-check-circle"></i> Correct!' 
-          : '<i class="fas fa-times-circle"></i> Incorrect. Try again.';
         
-        if (ok) {
-          wrap.classList.add('correct-pulse');
-          setTimeout(() => wrap.classList.remove('correct-pulse'), 500);
-        }
-      };
-    }
-    
-    const help = el('span','help'); 
-    help.innerHTML = '<i class="fas fa-lightbulb"></i> Show solution';
-    const sol = el('div','solution'); 
-    sol.innerHTML = p.sol||'Solution coming soon.';
-    
-    help.onclick=()=>{ 
-      sol.style.display = sol.style.display==='block'?'none':'block'; 
-      help.innerHTML = sol.style.display==='block' 
-        ? '<i class="fas fa-eye-slash"></i> Hide solution' 
-        : '<i class="fas fa-lightbulb"></i> Show solution';
-    };
-    
-    wrap.appendChild(help); 
-    wrap.appendChild(sol); 
-    box.appendChild(wrap);
-  });
+        const help = el('span','help'); 
+        help.innerHTML = '<i class="fas fa-lightbulb"></i> Show solution';
+        const sol = el('div','solution'); 
+        sol.innerHTML = p.sol||'Solution coming soon.';
+        
+        help.onclick=()=>{ 
+            sol.style.display = sol.style.display==='block'?'none':'block'; 
+            help.innerHTML = sol.style.display==='block' 
+                ? '<i class="fas fa-eye-slash"></i> Hide solution' 
+                : '<i class="fas fa-lightbulb"></i> Show solution';
+        };
+        
+        wrap.appendChild(help); 
+        wrap.appendChild(sol); 
+        box.appendChild(wrap);
+    });
 }
 
 function renderQuiz(pg){
-  const box = $('#quiz'); clear(box);
-  if(!pg.quiz || !pg.quiz.length) return;
-  
-  const h = el('h3'); 
-  h.innerHTML = '<i class="fas fa-tasks"></i> Quiz'; 
-  box.appendChild(h);
-  
-  const desc = el('p');
-  desc.textContent = 'Test your knowledge with this quick quiz. Submit your answers to see your score and review explanations.';
-  desc.style.marginBottom = '16px';
-  desc.style.color = 'var(--muted)';
-  box.appendChild(desc);
-  
-  const qs = el('div'); 
-  box.appendChild(qs);
-  
-  (pg.quiz||[]).forEach((q,idx)=>{
-    const qEl = el('div','q');
-    const title = el('h5'); 
-    title.innerHTML = `<i class="fas fa-question"></i> ${idx+1}. ${q.q}`; 
-    qEl.appendChild(title);
+    const box = $('#quiz'); clear(box);
+    if(!pg.quiz || !pg.quiz.length) return;
     
-    (q.opts||[]).forEach((opt,i)=>{
-      const lab = el('label','choice'); 
-      const r=el('input'); 
-      r.type='radio'; 
-      r.name=q.id; 
-      r.value=String(i);
-      
-      const s = el('span'); 
-      s.textContent=opt; 
-      lab.appendChild(r); 
-      lab.appendChild(s); 
-      qEl.appendChild(lab);
+    const h = el('h3'); 
+    h.innerHTML = '<i class="fas fa-tasks"></i> Quiz'; 
+    box.appendChild(h);
+    
+    const desc = el('p');
+    desc.textContent = 'Test your knowledge with this quick quiz. Submit your answers to see your score and review explanations.';
+    desc.style.marginBottom = '16px';
+    desc.style.color = 'var(--muted)';
+    box.appendChild(desc);
+    
+    const qs = el('div'); 
+    box.appendChild(qs);
+    
+    (pg.quiz||[]).forEach((q,idx)=>{
+        const qEl = el('div','q');
+        const title = el('h5'); 
+        title.innerHTML = `<i class="fas fa-question"></i> ${idx+1}. ${q.q}`; 
+        qEl.appendChild(title);
+        
+        (q.opts||[]).forEach((opt,i)=>{
+            const lab = el('label','choice'); 
+            const r=el('input'); 
+            r.type='radio'; 
+            r.name=q.id; 
+            r.value=String(i);
+            
+            const s = el('span'); 
+            s.textContent=opt; 
+            lab.appendChild(r); 
+            lab.appendChild(s); 
+            qEl.appendChild(lab);
+        });
+        qs.appendChild(qEl);
     });
-    qs.appendChild(qEl);
-  });
-  
-  const toolbar = el('div'); 
-  toolbar.style.display='flex'; 
-  toolbar.style.gap='12px'; 
-  toolbar.style.marginTop='20px';
-  toolbar.style.alignItems = 'center';
-  
-  const submit = el('button','btn'); 
-  submit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; 
-  
-  const reset = el('button','btn secondary'); 
-  reset.innerHTML = '<i class="fas fa-redo"></i> Reset'; 
-  reset.style.display='none';
-  
-  const score = el('div', 'score-display'); 
-  toolbar.appendChild(submit); 
-  toolbar.appendChild(reset); 
-  toolbar.appendChild(score); 
-  box.appendChild(toolbar);
+    
+    const toolbar = el('div'); 
+    toolbar.style.display='flex'; 
+    toolbar.style.gap='12px'; 
+    toolbar.style.marginTop='20px';
+    toolbar.style.alignItems = 'center';
+    
+    const submit = el('button','btn'); 
+    submit.innerHTML = '<i class="fas fa-paper-plane"></i> Submit'; 
+    
+    const reset = el('button','btn secondary'); 
+    reset.innerHTML = '<i class="fas fa-redo"></i> Reset'; 
+    reset.style.display='none';
+    
+    const score = el('div', 'score-display'); 
+    toolbar.appendChild(submit); 
+    toolbar.appendChild(reset); 
+    toolbar.appendChild(score); 
+    box.appendChild(toolbar);
 
-  submit.onclick=()=>{
-    let correct=0; 
-    const total=(pg.quiz||[]).length;
-    
-    (pg.quiz||[]).forEach((q,i)=>{
-      const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
-      const block = qs.children[i];
-      
-      // Remove any previous result
-      const prevResult = block.querySelector('.quiz-result');
-      if (prevResult) prevResult.remove();
-      
-      const res = el('div', 'quiz-result');
-      res.style.marginTop = '10px';
-      
-      if(chosen && Number(chosen.value)===q.a){
-        res.className='ok'; 
-        res.innerHTML = `<i class="fas fa-check-circle"></i> Correct — ${q.exp}`;
-        correct++; 
+    submit.onclick=()=>{
+        let correct=0; 
+        const total=(pg.quiz||[]).length;
         
-        // Visual feedback
-        chosen.parentElement.style.background = '#d1fae5';
-        chosen.parentElement.style.borderColor = 'var(--success)';
-      } else { 
-        res.className='bad'; 
-        res.innerHTML = `<i class="fas fa-times-circle"></i> Incorrect — Correct answer: ${q.opts[q.a]}. ${q.exp}`;
+        (pg.quiz||[]).forEach((q,i)=>{
+            const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
+            const block = qs.children[i];
+            
+            // Remove any previous result
+            const prevResult = block.querySelector('.quiz-result');
+            if (prevResult) prevResult.remove();
+            
+            const res = el('div', 'quiz-result');
+            res.style.marginTop = '10px';
+            
+            if(chosen && Number(chosen.value)===q.a){
+                res.className='ok'; 
+                res.innerHTML = `<i class="fas fa-check-circle"></i> Correct — ${q.exp}`;
+                correct++; 
+                
+                // Visual feedback
+                chosen.parentElement.style.background = '#d1fae5';
+                chosen.parentElement.style.borderColor = 'var(--success)';
+            } else { 
+                res.className='bad'; 
+                res.innerHTML = `<i class="fas fa-times-circle"></i> Incorrect — Correct answer: ${q.opts[q.a]}. ${q.exp}`;
+                
+                // Highlight correct answer
+                const correctOption = block.querySelector(`input[name="${q.id}"][value="${q.a}"]`);
+                if (correctOption) {
+                    correctOption.parentElement.style.background = '#fee2e2';
+                    correctOption.parentElement.style.borderColor = 'var(--danger)';
+                }
+                
+                // Highlight incorrect selection if any
+                if (chosen) {
+                    chosen.parentElement.style.background = '#fef3c7';
+                    chosen.parentElement.style.borderColor = 'var(--warning)';
+                }
+            }
+            block.appendChild(res);
+        });
         
-        // Highlight correct answer
-        const correctOption = block.querySelector(`input[name="${q.id}"][value="${q.a}"]`);
-        if (correctOption) {
-          correctOption.parentElement.style.background = '#fee2e2';
-          correctOption.parentElement.style.borderColor = 'var(--danger)';
+        const percentage = Math.round(100*correct/Math.max(1,total));
+        score.textContent = `Score: ${correct}/${total} (${percentage}%)`;
+        
+        // Color code based on performance
+        if (percentage >= 80) {
+            score.style.color = 'var(--success)';
+        } else if (percentage >= 60) {
+            score.style.color = 'var(--warning)';
+        } else {
+            score.style.color = 'var(--danger)';
         }
         
-        // Highlight incorrect selection if any
-        if (chosen) {
-          chosen.parentElement.style.background = '#fef3c7';
-          chosen.parentElement.style.borderColor = 'var(--warning)';
+        reset.style.display='inline-block'; 
+        submit.disabled=true;
+        
+        // Mark as completed if score is good (optional)
+        if (correct >= total * 0.7) {
+            const unit = UNITS[state.unitId]; 
+            const sec=unit.sections[state.sIdx]; 
+            const pgc=sec.pages[state.pIdx];
+            save('done_'+sec.id+'_'+pgc.id,true); 
+            renderSidebar();
         }
-      }
-      block.appendChild(res);
-    });
+    };
     
-    const percentage = Math.round(100*correct/Math.max(1,total));
-    score.textContent = `Score: ${correct}/${total} (${percentage}%)`;
-    
-    // Color code based on performance
-    if (percentage >= 80) {
-      score.style.color = 'var(--success)';
-    } else if (percentage >= 60) {
-      score.style.color = 'var(--warning)';
-    } else {
-      score.style.color = 'var(--danger)';
-    }
-    
-    reset.style.display='inline-block'; 
-    submit.disabled=true;
-    
-    // Mark as completed if score is good (optional)
-    if (correct >= total * 0.7) {
-      const unit = UNITS[state.unitId]; 
-      const sec=unit.sections[state.sIdx]; 
-      const pgc=sec.pages[state.pIdx];
-      save('done_'+sec.id+'_'+pgc.id,true); 
-      renderSidebar();
-    }
-  };
-  
-  reset.onclick=()=>{ 
-    renderPage(); 
-  };
+    reset.onclick=()=>{ 
+        renderPage(); 
+    };
 }
 
 function updateNavButtons(){
-  const unit = UNITS[state.unitId];
-  const isFirst = state.sIdx===0 && state.pIdx===0;
-  const isLast  = state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1;
-  
-  $('#prevBtn').disabled = isFirst; 
-  $('#nextBtn').disabled = isLast;
-  
-  $('#prevBtn').onclick = goPrev; 
-  $('#nextBtn').onclick = goNext;
-  
-  // Update next button text
-  $('#nextBtn').innerHTML = isLast 
-    ? 'Finish <i class="fas fa-flag-checkered"></i>' 
-    : 'Next <i class="fas fa-arrow-right"></i>';
+    const unit = UNITS[state.unitId];
+    const isFirst = state.sIdx===0 && state.pIdx===0;
+    const isLast  = state.sIdx===unit.sections.length-1 && state.pIdx===unit.sections[state.sIdx].pages.length-1;
+    
+    $('#prevBtn').disabled = isFirst; 
+    $('#nextBtn').disabled = isLast;
+    
+    $('#prevBtn').onclick = goPrev; 
+    $('#nextBtn').onclick = goNext;
+    
+    // Update next button text
+    $('#nextBtn').innerHTML = isLast 
+        ? 'Finish <i class="fas fa-flag-checkered"></i>' 
+        : 'Next <i class="fas fa-arrow-right"></i>';
 }
 
 function goPrev(){ 
-  const unit=UNITS[state.unitId]; 
-  if(state.pIdx>0) {
-    state.pIdx--; 
-  } else if(state.sIdx>0){ 
-    state.sIdx--; 
-    state.pIdx=unit.sections[state.sIdx].pages.length-1; 
-  } 
-  renderPage(); 
-  window.scrollTo(0,0);
+    const unit=UNITS[state.unitId]; 
+    if(state.pIdx>0) {
+        state.pIdx--; 
+    } else if(state.sIdx>0){ 
+        state.sIdx--; 
+        state.pIdx=unit.sections[state.sIdx].pages.length-1; 
+    } 
+    renderPage(); 
+    window.scrollTo(0,0);
 }
 
 function goNext(){ 
-  const unit=UNITS[state.unitId]; 
-  if(state.pIdx<unit.sections[state.sIdx].pages.length-1) {
-    state.pIdx++; 
-  } else if(state.sIdx<unit.sections.length-1){ 
-    state.sIdx++; 
-    state.pIdx=0; 
-  } 
-  renderPage(); 
-  window.scrollTo(0,0);
+    const unit=UNITS[state.unitId]; 
+    if(state.pIdx<unit.sections[state.sIdx].pages.length-1) {
+        state.pIdx++; 
+    } else if(state.sIdx<unit.sections.length-1){ 
+        state.sIdx++; 
+        state.pIdx=0; 
+    } 
+    renderPage(); 
+    window.scrollTo(0,0);
 }
 
 function updateProgress(){
-  const unit = UNITS[state.unitId]; 
-  let total=0, done=0;
-  
-  unit.sections.forEach(sec=>{
-    sec.pages.forEach(pg=>{ 
-      total++; 
-      if(load('done_'+sec.id+'_'+pg.id,false)) done++; 
+    const unit = UNITS[state.unitId]; 
+    let total=0, done=0;
+    
+    unit.sections.forEach(sec=>{
+        sec.pages.forEach(pg=>{ 
+            total++; 
+            if(load('done_'+sec.id+'_'+pg.id,false)) done++; 
+        });
     });
-  });
-  
-  const pct = Math.round(100*done/Math.max(1,total));
-  $('#progressbar').style.width=pct+'%';
-  $('#progressText').textContent = `${pct}% Complete`;
+    
+    const pct = Math.round(100*done/Math.max(1,total));
+    $('#progressbar').style.width=pct+'%';
+    $('#progressText').textContent = `${pct}% Complete`;
 }
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-  // Add any initialization code if needed
+    // Add any initialization code if needed
 });
-
-// ---------- Minimal self-tests (sanity checks without changing behavior) ----------
-console.assert(typeof window.openUnit === 'function', 'openUnit should be defined globally');
-console.assert(typeof window.backToOverview === 'function', 'backToOverview should be defined globally');
-console.assert(document.getElementById('overviewPage'), 'overviewPage element should exist');
-console.assert(Object.keys(UNITS).length === 10, 'There should be 10 units defined');
-console.assert((UNITS[1]||{}).sections && UNITS[1].sections.length>0, 'Unit 1 should have sections');
 </script>
 </body>
 </html>
