@@ -1,3 +1,5 @@
+Front end 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,177 +7,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MemoLearning</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
     :root {
       --primary: #4f46e5;
       --dark-bg: #1a1a2e;
       --light-bg: #f4f4f4;
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    body {
-      background-color: white;
-      color: #333;
-      line-height: 1.6;
-    }
-    header {
-      background-color: var(--dark-bg);
-      color: white;
-      padding: 1.2rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-    }
-    nav ul {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-    nav a:hover {
-      color: var(--primary);
-    }
-    .hero {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: white;
-      padding: 5rem 2rem;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    .btn-primary {
-      background-color: white;
-      color: var(--primary);
-      padding: 0.9rem 2rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 1.5rem;
-    }
-    .btn-primary:hover {
-      background-color: #ddd;
-    }
-    .courses {
-      max-width: 1200px;
-      margin: auto;
-      padding: 4rem 2rem;
-    }
-    .courses h2 {
-      font-size: 2.2rem;
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .course-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-    }
-    .card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background-color: var(--light-bg);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: transform 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-    }
-    .card h3 {
-      margin-bottom: 1rem;
-    }
-    .btn-secondary {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      background-color: var(--primary);
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-    .btn-secondary:hover {
-      background-color: #3730a3;
-    }
-    .about, .contact {
-      background: #fafafa;
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-    .about h2, .contact h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    .about p {
-      max-width: 800px;
-      margin: auto;
-      font-size: 1.1rem;
-    }
-    .contact form {
-      max-width: 600px;
-      margin: 2rem auto 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .contact input, .contact textarea {
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .contact button {
-      padding: 1rem;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .contact button:hover {
-      background-color: #3730a3;
-    }
-    footer {
-      text-align: center;
-      background-color: var(--dark-bg);
-      color: white;
-      padding: 1rem;
-      font-size: 0.9rem;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background-color: white; color: #333; line-height: 1.6; }
+
+    header { background-color: var(--dark-bg); color: white; padding: 1.2rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto; }
+    .logo { font-size: 1.8rem; font-weight: 800; color: #fff; }
+    nav ul { display: flex; gap: 1.5rem; list-style: none; }
+    nav a { color: white; text-decoration: none; font-weight: 600; transition: 0.3s; }
+    nav a:hover { color: var(--primary); }
+
+    .hero { background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 5rem 2rem; text-align: center; }
+    .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .btn-primary { background-color: white; color: var(--primary); padding: 0.9rem 2rem; font-weight: 700; font-size: 1.1rem; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; margin-top: 1.5rem; }
+    .btn-primary:hover { background-color: #ddd; }
+
+    .courses { max-width: 1200px; margin: auto; padding: 4rem 2rem; }
+    .courses h2 { font-size: 2.2rem; text-align: center; margin-bottom: 2.5rem; }
+    .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
+    .card { display: flex; flex-direction: column; justify-content: space-between; background-color: var(--light-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .card:hover { transform: translateY(-8px); }
+    .card h3 { margin-bottom: 1rem; }
+    .btn-secondary { display: inline-block; margin-top: 1rem; padding: 0.6rem 1.2rem; background-color: var(--primary); color: white; text-decoration: none; border-radius: 5px; font-weight: 600; transition: background 0.3s; }
+    .btn-secondary:hover { background-color: #3730a3; }
+
+    footer { text-align: center; background-color: var(--dark-bg); color: white; padding: 1rem; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -195,7 +58,7 @@
 
   <section id="home" class="hero">
     <h1>Learn Smarter. Achieve More.</h1>
-    <p>Master Math, Computer Science, Business, and more with bite-sized, engaging content.</p>
+    <p>Master Math, Computer Science, Finance, and more with bite-sized, engaging content.</p>
     <button class="btn-primary">Explore Courses</button>
   </section>
 
@@ -207,33 +70,14 @@
       <div class="card"><h3>Finance & Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="/memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python & tools.</p><a href="/memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Machine Learning</h3><p>Understand neural networks, AI logic, and ML tools hands-on.</p><a href="/memolearning/machine_learning.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Business</h3><p>Explore entrepreneurship, branding, marketing, and business models.</p><a href="/memolearning/business_courses.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Economics</h3><p>Understand how the economy works from micro to macro with clear examples.</p><a href="/memolearning/economics_courses.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>AI Engineering</h3><p>Deploy real-world AI solutions using ML, APIs, cloud tools, and MLOps.</p><a href="/memolearning/ai_engineering.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Cybersecurity</h3><p>Protect systems, understand ethical hacking, and learn digital forensics.</p><a href="/memolearning/cybersecurity.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Front-End Development</h3><p>Design beautiful interfaces using HTML, CSS, JavaScript, and React.</p><a href="/memolearning/frontend_development.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Back-End Development</h3><p>Learn servers, APIs, authentication, and databases with Node, Django.</p><a href="/memolearning/backend_development.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Full-Stack Development</h3><p>Build complete apps combining front-end and back-end skills.</p><a href="/memolearning/fullstack_development.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Physics</h3><p>Master classical mechanics, E&M, quantum theory, and relativity.</p><a href="/memolearning/physics.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Biology</h3><p>Explore cell biology, genetics, anatomy, ecology, and evolution.</p><a href="/memolearning/biology.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Chemistry</h3><p>Understand atoms, reactions, bonding, and organic chemistry.</p><a href="/memolearning/chemistry.html" class="btn-secondary">Start Learning</a></div>
       <div class="card"><h3>Programming Languages</h3><p>Learn Python, JavaScript, Java, C++, and more for real-world coding applications.</p><a href="/memolearning/programming_languages.html" class="btn-secondary">Start Learning</a></div>
     </div>
-  </section>
-
-  <section id="about" class="about">
-    <h2>Why MemoLearning?</h2>
-    <p>MemoLearning is built to revolutionize your learning experience. Whether you're a student, creator, or professional, we offer clean, engaging, and practical lessons that help you learn deeply and apply confidently.</p>
-  </section>
-
-  <section id="contact" class="contact">
-    <h2>Contact Us</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <textarea placeholder="Your Message" rows="5" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
   </section>
 
   <footer>
@@ -241,3 +85,5 @@
   </footer>
 </body>
 </html>
+
+
