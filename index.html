@@ -80,6 +80,79 @@
 
   footer{text-align:center;color:#6b7280;padding:24px 16px;border-top:1px solid var(--border)}
 </style>
+<style id="courses-ui-override">
+  /* ==== Screenshot-style Courses UI (scoped to #courses only) ==== */
+  #courses .course-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(340px,1fr));
+    gap:2rem;
+    margin-top:2rem;
+  }
+
+  #courses .card{
+    position:relative;
+    background:#fff;
+    border:1px solid #eef2ff;
+    border-radius:24px;
+    padding:2rem;
+    box-shadow:0 16px 28px rgba(2,6,23,.06);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    overflow:hidden;
+  }
+
+  #courses .card::after{
+    content:"";
+    position:absolute;
+    top:-40px; right:-40px;
+    width:180px; height:180px;
+    background:radial-gradient(120px circle at center, rgba(99,102,241,.12), transparent 60%);
+    pointer-events:none;
+  }
+
+  #courses .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 22px 38px rgba(2,6,23,.10);
+    border-color:#e0e7ff;
+  }
+
+  #courses .card h3{
+    margin:0 0 .5rem;
+    font-size:1.4rem;
+    font-weight:800;
+    color:#0f172a;
+  }
+
+  #courses .card p{
+    margin:0 0 1.25rem;
+    color:#475569;
+    font-size:1rem;
+    line-height:1.6;
+  }
+
+  #courses .card .btn.btn-primary{
+    background:linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+    border:none;
+    color:#fff;
+    border-radius:12px;
+    padding:.9rem 1.25rem;
+    box-shadow:0 10px 20px rgba(99,102,241,.25);
+  }
+  #courses .card .btn.btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 28px rgba(99,102,241,.28);
+  }
+
+  [data-theme="dark"] #courses .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    box-shadow:0 16px 28px rgba(0,0,0,.35);
+  }
+  [data-theme="dark"] #courses .card::after{
+    background:radial-gradient(120px circle at center, rgba(99,102,241,.18), transparent 60%);
+  }
+  [data-theme="dark"] #courses .card h3{ color:var(--text); }
+  [data-theme="dark"] #courses .card p{ color:var(--text-secondary); }
+</style>
 </head>
 <body>
   <header class="site-header" id="header">
@@ -110,7 +183,7 @@
   <section id="courses" class="courses">
   <h2>Explore Learning Tracks</h2>
   <div class="course-grid">
-    <div class="card"><h3>Mathematics</h3><p>Precalculus, linear algebra, and problem‑solving, simplified and visualized.</p><a href="/memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Applied Mathematics</h3><p>Precalculus, linear algebra, and problem‑solving, simplified and visualized.</p><a href="/memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
     <div class="card"><h3>Computer Science</h3><p>Learn Python, algorithms, data structures, and system design.</p><a href="/memolearning/cs_courses.html" class="btn-secondary">Start Learning</a></div>
     <div class="card"><h3>Finance &amp; Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="/memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
     <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python &amp; tools.</p><a href="/memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
