@@ -1,5 +1,3 @@
-Front end 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,81 +7,189 @@ Front end
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
-    :root {
-      --primary: #4f46e5;
-      --dark-bg: #1a1a2e;
-      --light-bg: #f4f4f4;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body { background-color: white; color: #333; line-height: 1.6; }
+  :root{
+    --primary:#4f46e5;--primary-600:#4338ca;--ink:#0f172a;--muted:#475569;--bg:#ffffff;--surface:#f8fafc;--border:#e5e7eb;--card:#ffffff;--shadow:0 10px 30px rgba(2,6,23,.08)
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
 
-    header { background-color: var(--dark-bg); color: white; padding: 1.2rem 2rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto; }
-    .logo { font-size: 1.8rem; font-weight: 800; color: #fff; }
-    nav ul { display: flex; gap: 1.5rem; list-style: none; }
-    nav a { color: white; text-decoration: none; font-weight: 600; transition: 0.3s; }
-    nav a:hover { color: var(--primary); }
+  /* Header - white, engaging, sticky with scroll shadow */
+  .site-header{position:sticky;top:0;z-index:60;background:#fff;color:var(--ink);border-bottom:1px solid var(--border);transition:box-shadow .2s ease,border-color .2s ease}
+  .site-header.scrolled{box-shadow:var(--shadow);border-bottom-color:transparent}
+  .site-header .accent{height:2px;background:linear-gradient(90deg,#a78bfa 0%, var(--primary) 50%, #22d3ee 100%);opacity:.7}
+  .navbar{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-weight:900;letter-spacing:.2px;color:#0b1020;text-decoration:none}
+  .menu-toggle{display:none;gap:6px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 10px;cursor:pointer}
+  .menu-toggle .bar{width:18px;height:2px;background:#0f172a;display:block;box-shadow:0 6px 0 #0f172a,0 -6px 0 #0f172a}
+  nav ul{list-style:none;display:flex;gap:1rem;margin:0;padding:0;align-items:center}
+  nav a{position:relative;color:#334155;text-decoration:none;font-weight:700;padding:10px 10px;border-radius:10px}
+  nav a:hover{color:var(--primary)}
+  nav a::after{content:"";position:absolute;left:10px;right:10px;bottom:6px;height:2px;background:linear-gradient(90deg,var(--primary),#8b5cf6);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+  nav a:hover::after, nav a:focus-visible::after{transform:scaleX(1)}
+  .btn-cta{background:linear-gradient(135deg,var(--primary),var(--primary-600));border:1px solid rgba(0,0,0,.06);color:#fff !important;padding:10px 14px;border-radius:999px;box-shadow:var(--shadow)}
+  .btn-cta:hover{filter:brightness(.96)}
 
-    .hero { background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 5rem 2rem; text-align: center; }
-    .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-    .btn-primary { background-color: white; color: var(--primary); padding: 0.9rem 2rem; font-weight: 700; font-size: 1.1rem; border-radius: 8px; border: none; cursor: pointer; transition: 0.3s; margin-top: 1.5rem; }
-    .btn-primary:hover { background-color: #ddd; }
+  /* Mobile nav */
+  @media (max-width: 860px){
+    .menu-toggle{display:inline-flex}
+    nav ul{position:absolute;right:16px;top:64px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:10px;display:none;flex-direction:column;min-width:220px}
+    nav ul.open{display:flex}
+    nav a{padding:10px 12px}
+  }
 
-    .courses { max-width: 1200px; margin: auto; padding: 4rem 2rem; }
-    .courses h2 { font-size: 2.2rem; text-align: center; margin-bottom: 2.5rem; }
-    .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
-    .card { display: flex; flex-direction: column; justify-content: space-between; background-color: var(--light-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s; }
-    .card:hover { transform: translateY(-8px); }
-    .card h3 { margin-bottom: 1rem; }
-    .btn-secondary { display: inline-block; margin-top: 1rem; padding: 0.6rem 1.2rem; background-color: var(--primary); color: white; text-decoration: none; border-radius: 5px; font-weight: 600; transition: background 0.3s; }
-    .btn-secondary:hover { background-color: #3730a3; }
+  /* Hero */
+  .hero{background:linear-gradient(180deg,#f9fafb,#ffffff);padding:72px 20px;text-align:center;border-bottom:1px solid var(--border)}
+  .hero h1{font-size:clamp(2rem,2.5vw+1rem,3rem);margin:0 0 10px}
+  .hero p{max-width:780px;margin:0 auto;color:var(--muted)}
+  .hero-ctas{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .btn-primary{background:#fff;border:1px solid var(--border);padding:10px 16px;border-radius:12px;font-weight:700;color:var(--primary);cursor:pointer}
+  .btn-primary:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
 
-    footer { text-align: center; background-color: var(--dark-bg); color: white; padding: 1rem; font-size: 0.9rem; }
-  </style>
+  /* Courses */
+  .courses{max-width:1200px;margin:0 auto;padding:52px 20px}
+  .courses h2{text-align:center;margin:0 0 28px;font-size:2rem}
+  .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:.2s box-shadow,.2s transform,.2s border-color;position:relative}
+  .card:hover{box-shadow:var(--shadow);transform:translateY(-4px);border-color:#d0d7e2}
+  .badge{position:absolute;top:14px;right:14px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;padding:4px 8px;border-radius:999px;font-size:.75rem;font-weight:800}
+  .card h3{margin:0 0 6px;font-size:1.08rem}
+  .card p{margin:0 0 14px;color:var(--muted);font-size:.98rem}
+  .btn-secondary{display:inline-block;background:var(--primary);color:#fff;text-decoration:none;padding:10px 12px;border-radius:10px;font-weight:700}
+  .btn-secondary:hover{filter:brightness(0.95)}
+
+  /* Modal (Sign up) */
+  .overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);display:none;z-index:60}
+  .modal{position:fixed;inset:0;display:grid;place-items:center;z-index:70;pointer-events:none}
+  .modal .panel{width:min(540px,92vw);background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 30px 100px rgba(2,6,23,.15);padding:22px;transform:translateY(16px);opacity:0;transition:.25s transform,.25s opacity}
+  .modal.show{pointer-events:auto}
+  .modal.show + .overlay{display:block}
+  .modal.show .panel{transform:translateY(0);opacity:1}
+  .panel header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px}
+  .panel h3{margin:0;font-size:1.25rem}
+  .close{background:transparent;border:0;font-size:1.2rem;color:#64748b;cursor:pointer}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .input{display:flex;flex-direction:column;gap:6px}
+  .input label{font-weight:700;font-size:.88rem}
+  .input input{padding:12px 12px;border:1px solid var(--border);border-radius:12px;font-size:.98rem}
+  .row{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .panel .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+  .btn-outline{background:#fff;border:1px solid var(--border);padding:10px 14px;border-radius:12px;font-weight:700;color:#0f172a;cursor:pointer}
+  .btn-fill{background:linear-gradient(135deg,var(--primary),var(--primary-600));border:1px solid rgba(0,0,0,.06);padding:10px 16px;border-radius:12px;color:#fff;font-weight:800;cursor:pointer}
+  .helper{color:#64748b;font-size:.9rem}
+
+  footer{text-align:center;color:#6b7280;padding:24px 16px;border-top:1px solid var(--border)}
+</style>
 </head>
 <body>
-  <header>
-    <div class="navbar">
-      <div class="logo">MemoLearning</div>
-      <nav>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#courses">Courses</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <header class="site-header" id="header">
+  <div class="navbar">
+    <a class="brand" href="#home">MemoLearning</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu"><span class="bar"></span></button>
+    <nav>
+      <ul id="navMenu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#">Sign in</a></li>
+        <li><a href="#" id="signupOpen" class="btn-cta">Sign up</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="accent" aria-hidden="true"></div>
+</header>
 
   <section id="home" class="hero">
-    <h1>Learn Smarter. Achieve More.</h1>
-    <p>Master Math, Computer Science, Finance, and more with bite-sized, engaging content.</p>
-    <button class="btn-primary">Explore Courses</button>
-  </section>
+  <h1>Learn Smarter. Achieve More.</h1>
+  <p>Master Math, CS, AI, Data, and more with clean lessons, quick quizzes, and a distraction‑free UI.</p>
+  <div class="hero-ctas">
+    <button class="btn-primary" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Explore Courses</button>
+    <a href="#" id="signupOpen2" class="btn-cta">Sign up free</a>
+  </div>
+</section>
 
   <section id="courses" class="courses">
-    <h2>Explore Learning Tracks</h2>
-    <div class="course-grid">
-      <div class="card"><h3>Applied Mathematics</h3><p>Precalculus, linear algebra, and problem-solving, simplified and visualized.</p><a href="/memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Computer Science</h3><p>Learn Python, algorithms, data structures, and system design.</p><a href="/memolearning/cs_courses.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Finance & Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="/memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python & tools.</p><a href="/memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Machine Learning</h3><p>Understand neural networks, AI logic, and ML tools hands-on.</p><a href="/memolearning/machine_learning.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Economics</h3><p>Understand how the economy works from micro to macro with clear examples.</p><a href="/memolearning/economics_courses.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>AI Engineering</h3><p>Deploy real-world AI solutions using ML, APIs, cloud tools, and MLOps.</p><a href="/memolearning/ai_engineering.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Cybersecurity</h3><p>Protect systems, understand ethical hacking, and learn digital forensics.</p><a href="/memolearning/cybersecurity.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Front-End Development</h3><p>Design beautiful interfaces using HTML, CSS, JavaScript, and React.</p><a href="/memolearning/frontend_development.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Back-End Development</h3><p>Learn servers, APIs, authentication, and databases with Node, Django.</p><a href="/memolearning/backend_development.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Full-Stack Development</h3><p>Build complete apps combining front-end and back-end skills.</p><a href="/memolearning/fullstack_development.html" class="btn-secondary">Start Learning</a></div>
-      <div class="card"><h3>Programming Languages</h3><p>Learn Python, JavaScript, Java, C++, and more for real-world coding applications.</p><a href="/memolearning/programming_languages.html" class="btn-secondary">Start Learning</a></div>
-    </div>
-  </section>
+  <h2>Explore Learning Tracks</h2>
+  <div class="course-grid">
+    <div class="card"><h3>Applied Mathematics</h3><p>Precalculus, linear algebra, and problem‑solving, simplified and visualized.</p><a href="/memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Computer Science</h3><p>Learn Python, algorithms, data structures, and system design.</p><a href="/memolearning/cs_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Finance &amp; Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="/memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python &amp; tools.</p><a href="/memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Machine Learning</h3><p>Understand neural networks, AI logic, and ML tools hands‑on.</p><a href="/memolearning/machine_learning.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Economics</h3><p>Understand how the economy works from micro to macro with clear examples.</p><a href="/memolearning/economics_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>AI Engineering</h3><p>Deploy real‑world AI solutions using ML, APIs, cloud tools, and MLOps.</p><a href="/memolearning/ai_engineering.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Cybersecurity</h3><p>Protect systems, understand ethical hacking, and learn digital forensics.</p><a href="/memolearning/cybersecurity.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Front‑End Development</h3><p>Design beautiful interfaces using HTML, CSS, JavaScript, and React.</p><a href="/memolearning/frontend_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Back‑End Development</h3><p>Learn servers, APIs, authentication, and databases with Node, Django.</p><a href="/memolearning/backend_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Full‑Stack Development</h3><p>Build complete apps combining front‑end and back‑end skills.</p><a href="/memolearning/fullstack_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Programming Languages</h3><p>Learn Python, JavaScript, Java, C++, and more for real‑world coding applications.</p><a href="/memolearning/programming_languages.html" class="btn-secondary">Start Learning</a></div>
+  </div>
+</section>
 
-  <footer>
+<!-- Sign Up Modal -->
+<div id="signupModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="signupTitle" aria-hidden="true">
+  <div class="panel">
+    <header>
+      <h3 id="signupTitle">Create your MemoLearning account</h3>
+      <button class="close" id="signupClose" aria-label="Close">×</button>
+    </header>
+    <form id="signupForm" novalidate>
+      <div class="grid-2">
+        <div class="input"><label for="first">First name</label><input id="first" name="first" autocomplete="given-name" required /></div>
+        <div class="input"><label for="last">Last name</label><input id="last" name="last" autocomplete="family-name" required /></div>
+      </div>
+      <div class="input" style="margin-top:12px"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
+      <div class="input" style="margin-top:12px"><label for="password">Password</label><input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required /></div>
+      <div class="row"><input id="tos" type="checkbox" required /><label for="tos">I agree to the <a href="#">Terms</a> and <a href="#">Privacy</a>.</label></div>
+      <p class="helper">No credit card needed. You can add Google/Apple sign‑in later.</p>
+      <div class="actions">
+        <button type="button" class="btn-outline" id="signupCancel">Cancel</button>
+        <button type="submit" class="btn-fill">Create account</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="overlay" id="overlay" aria-hidden="true"></div>
+
+<footer>
     <p>&copy; 2025 MemoLearning.</p>
   </footer>
+<script>
+  (function(){
+    // Header scroll shadow
+    const header = document.getElementById('header');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    onScroll(); window.addEventListener('scroll', onScroll);
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menuToggle');
+    const menu = document.getElementById('navMenu');
+    menuBtn?.addEventListener('click', () => menu.classList.toggle('open'));
+
+    // Sign up modal
+    const modal = document.getElementById('signupModal');
+    const overlay = document.getElementById('overlay');
+    const openers = [document.getElementById('signupOpen'), document.getElementById('signupOpen2')].filter(Boolean);
+    const closeBtn = document.getElementById('signupClose');
+    const cancelBtn = document.getElementById('signupCancel');
+    const form = document.getElementById('signupForm');
+
+    function open(){ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); overlay.removeAttribute('aria-hidden'); document.getElementById('first').focus(); }
+    function close(){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); overlay.setAttribute('aria-hidden','true'); }
+
+    openers.forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); open(); }));
+    closeBtn?.addEventListener('click', close);
+    cancelBtn?.addEventListener('click', close);
+    overlay?.addEventListener('click', close);
+    window.addEventListener('keydown', e => { if(e.key==='Escape') close(); });
+
+    form?.addEventListener('submit', e => {
+      e.preventDefault();
+      if(!form.checkValidity()) { form.reportValidity(); return; }
+      const btn = form.querySelector('.btn-fill');
+      btn.disabled = true; btn.textContent = 'Creating…';
+      setTimeout(()=>{ btn.disabled=false; btn.textContent='Create account'; close(); alert('Welcome to MemoLearning! Account created (demo).'); }, 800);
+    });
+  })();
+</script>
 </body>
 </html>
-
-
