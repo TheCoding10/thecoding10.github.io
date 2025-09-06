@@ -1,158 +1,212 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MemoLearning Mathematics Track</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f9fafb;
-      color: #111827;
-      margin: 0;
-      padding: 0;
+      background-color: #fafafa;
+      color: #1f2937;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    header {
-      background-color: #4f46e5;
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
+
+    /* Navigation */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 40px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: sticky; top: 0; z-index: 100;
     }
-    header h1 {
-      font-size: 36px;
-      margin: 0;
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 600; color: #1f2937; text-decoration: none; }
+    .logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg,#8b5cf6 0%,#a855f7 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 1.1rem;
     }
-    header p {
-      margin-top: 10px;
-      font-size: 16px;
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: #6b7280; text-decoration: none; font-weight: 500; transition: color .3s ease; }
+    .nav-links a:hover { color: #8b5cf6; }
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+    .sign-in { color: #6b7280; text-decoration: none; font-weight: 500; transition: color .3s ease; }
+    .sign-in:hover { color: #8b5cf6; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+    .hero h1 .highlight {
+      background: linear-gradient(135deg,#8b5cf6 0%,#a855f7 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    header a.back-link {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 16px;
-      background-color: white;
-      color: #4f46e5;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
+    .hero p {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      color: #6b7280; margin-bottom: 0; max-width: 700px; margin-left: auto; margin-right: auto;
     }
-    .container {
-      padding: 30px 20px;
-      max-width: 1200px;
-      margin: auto;
+
+    /* Back Link */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin: 20px 0 40px 40px;
+      color: #6b7280; text-decoration: none; font-weight: 500; transition: color .3s ease;
     }
+    .back-link:hover { color: #8b5cf6; text-decoration: none; }
+
+    /* Courses */
+    .courses-section { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
+    .section-header { text-align: center; margin-bottom: 40px; }
+    .section-title { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; color: #1f2937; margin-bottom: 16px; }
+    .section-subtitle { font-size: 1.1rem; color: #6b7280; max-width: 600px; margin: 0 auto; }
     .course-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
     }
     .course-card {
-      background-color: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      background: #fff; border-radius: 16px; padding: 32px;
+      text-decoration: none; color: inherit; display: block;
+      transition: all .4s cubic-bezier(0.4,0,0.2,1);
+      border: 1px solid #f3f4f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative; overflow: hidden; opacity: 0; transform: translateY(20px);
+      animation: fadeInUp .6s ease forwards;
     }
-    .course-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-      text-decoration: none;
-      color: inherit;
+    .course-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(135deg,#8b5cf6 0%,#a855f7 100%);
+      transform: scaleX(0); transform-origin: left; transition: transform .4s ease;
     }
-    .course-card h3 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #4f46e5;
-      margin-bottom: 8px;
-    }
-    .course-card p {
-      font-size: 14px;
-      color: #374151;
+    .course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: #e5e7eb; }
+    .course-card:hover::before { transform: scaleX(1); }
+    .course-card h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; color: #1f2937; }
+    .course-card p { font-size: .95rem; color: #6b7280; }
+
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    .course-card:nth-child(1) { animation-delay: .1s; }
+    .course-card:nth-child(2) { animation-delay: .15s; }
+    .course-card:nth-child(3) { animation-delay: .2s; }
+    .course-card:nth-child(4) { animation-delay: .25s; }
+    .course-card:nth-child(5) { animation-delay: .3s; }
+    .course-card:nth-child(6) { animation-delay: .35s; }
+    .course-card:nth-child(7) { animation-delay: .4s; }
+    .course-card:nth-child(8) { animation-delay: .45s; }
+    .course-card:nth-child(9) { animation-delay: .5s; }
+    .course-card:nth-child(10) { animation-delay: .55s; }
+    .course-card:nth-child(11) { animation-delay: .6s; }
+    .course-card:nth-child(12) { animation-delay: .65s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 80px 20px; }
+      .courses-section { padding: 0 16px 80px; }
+      .course-grid { grid-template-columns: 1fr; gap: 20px; }
+      .course-card { padding: 24px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>MemoLearning Mathematics Track</h1>
-    <p>Master math from foundational concepts to advanced theory—interactive, engaging, and structured for growth.</p>
-    <a class="back-link" href="/">← Back to Homepage</a>
-  </header>
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="logo">
+      <div class="logo-icon">M</div>
+      MemoLearning
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/courses">Courses</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/signin" class="sign-in">Sign In</a>
+    </div>
+  </nav>
 
-  <div class="container">
+  <!-- Back Link -->
+  <a href="/" class="back-link">
+    <span>←</span>
+    <span>Back to Homepage</span>
+  </a>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Master <span class="highlight">Mathematics</span></h1>
+    <p>Transform your mathematical understanding with our comprehensive track. From foundational concepts to advanced theory—interactive, engaging, and structured for success.</p>
+  </div>
+
+  <!-- Courses -->
+  <div class="courses-section" id="courses">
+    <div class="section-header">
+      <h2 class="section-title">Mathematics Courses</h2>
+      <p class="section-subtitle">Choose your learning path and master mathematics step by step</p>
+    </div>
+
     <div class="course-grid">
-      <a href="precalc.html" class="course-card">
-        <h3>Precalculus</h3>
-        <p>Functions, trigonometry, and algebraic foundations.</p>
-      </a>
       <a href="calculus1.html" class="course-card">
         <h3>Calculus I</h3>
-        <p>Limits, derivatives, and basic applications.</p>
+        <p>Limits, derivatives, and core applications of single-variable calculus.</p>
       </a>
+
       <a href="calculus2.html" class="course-card">
         <h3>Calculus II</h3>
-        <p>Integration techniques and infinite series.</p>
+        <p>Integration techniques, series, and applications.</p>
       </a>
-      <!-- Updated Link -->
-      <a href="multivariable.html" class="course-card">
-        <h3>Multivariable Calculus</h3>
-        <p>Partial derivatives, multiple integrals, and vector fields.</p>
-      </a>
-      <a href="differential-equations.html" class="course-card">
-        <h3>Differential Equations</h3>
-        <p>Modeling systems using ODEs.</p>
-      </a>
+
       <a href="linear-algebra.html" class="course-card">
         <h3>Linear Algebra</h3>
-        <p>Matrices, eigenvalues, and vector spaces.</p>
+        <p>Vectors, matrices, eigenvalues, and linear transformations.</p>
       </a>
+
+      <a href="multivariable.html" class="course-card">
+        <h3>Multivariable Calculus</h3>
+        <p>Partial derivatives, multiple integrals, and vector calculus.</p>
+      </a>
+
       <a href="discrete-math.html" class="course-card">
         <h3>Discrete Mathematics</h3>
-        <p>Logic, set theory, induction, and combinatorics.</p>
+        <p>Logic, sets, counting, graphs, and proof techniques.</p>
       </a>
-      <a href="real-analysis.html" class="course-card">
-        <h3>Introduction to Real Analysis</h3>
-        <p>Rigor behind limits, continuity, and the real number system.</p>
+
+      <a href="introduction-to-analysis.html" class="course-card">
+        <h3>Introduction to Analysis</h3>
+        <p>Rigorous foundations: limits, continuity, sequences, and series.</p>
       </a>
+
       <a href="abstract-algebra.html" class="course-card">
-        <h3>Abstract Algebra I</h3>
-        <p>Groups, rings, and mathematical structures.</p>
+        <h3>Abstract Algebra</h3>
+        <p>Groups, rings, fields, and isomorphisms.</p>
       </a>
+
+      <a href="intro-quantitative-finance.html" class="course-card">
+        <h3>Introduction to Quantitative Finance</h3>
+        <p>Pricing basics, risk, and discrete-time models for finance.</p>
+      </a>
+
+      <a href="probability-statistics.html" class="course-card">
+        <h3>Probability and Statistics</h3>
+        <p>Probability theory, distributions, estimation, and inference.</p>
+      </a>
+
+      <a href="mathematical-statistics.html" class="course-card">
+        <h3>Mathematical Statistics</h3>
+        <p>Probability foundations for estimation, testing, and asymptotics.</p>
+      </a>
+
       <a href="numerical-analysis.html" class="course-card">
         <h3>Numerical Analysis</h3>
         <p>Algorithms for solving mathematical problems computationally.</p>
       </a>
-      <a href="complex-analysis.html" class="course-card">
-        <h3>Complex Analysis</h3>
-        <p>Functions of a complex variable, contour integration.</p>
-      </a>
-      <a href="stochastic-processes.html" class="course-card">
-        <h3>Stochastic Processes</h3>
-        <p>Random processes, Markov chains, and applications.</p>
-      </a>
-      <a href="differential-geometry.html" class="course-card">
-        <h3>Differential Geometry</h3>
-        <p>Geometry of curves and surfaces.</p>
-      </a>
-      <a href="topology.html" class="course-card">
-        <h3>Topology</h3>
-        <p>Spaces, continuity, and compactness concepts.</p>
-      </a>
-      <a href="pde.html" class="course-card">
-        <h3>Partial Differential Equations (PDEs)</h3>
-        <p>Solving heat, wave, and Laplace equations.</p>
-      </a>
-      <a href="probability.html" class="course-card">
-        <h3>Probability & Statistics</h3>
-        <p>Probability theory, distributions, and inference.</p>
-      </a>
-      <a href="scientific-computing.html" class="course-card">
-        <h3>Scientific Computing</h3>
-        <p>Numerical simulations and high-performance computing.</p>
+
+      <a href="markov-chains.html" class="course-card">
+        <h3>Markov Chains</h3>
+        <p>Discrete-time chains: transition matrices, stationary distributions, hitting times, and applications.</p>
       </a>
     </div>
   </div>
